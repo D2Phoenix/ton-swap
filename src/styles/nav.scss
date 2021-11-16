@@ -1,0 +1,101 @@
+nav {
+  position: static;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #fff;
+  padding: 0 24px 0;
+  width: 100%;
+  -webkit-transition: right .4s;
+  -o-transition: right .4s;
+  transition: right .4s;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  overflow: auto;
+  z-index: 10;
+  display: block !important;
+  -webkit-box-flex: 1;
+  -ms-flex: 1 1 calc(100% - 200px);
+  flex: 1 1 calc(100% - 200px);
+  overflow: unset;
+  max-width: unset;
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  &.open {
+    right: 0;
+    -webkit-transition: right .5s;
+    -o-transition: right .5s;
+    transition: right .5s;
+  }
+  .nav-header {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+  }
+  .nav-list {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    margin-top: 0;
+    -ms-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
+    justify-content: center;
+  }
+  .nav-item__btn {
+    padding: 8px 4px;
+    color: #0088CC;
+    font-size: 19px;
+    line-height: 24px;
+    cursor: pointer;
+    -webkit-transition: color .3s;
+    -o-transition: color .3s;
+    transition: color .3s;
+    font-family: "mulish-bold", serif;
+  }
+  .nav-item__btn:hover {
+    color: #333;
+  }
+  .nav-item {
+    position: relative;
+    width: auto;
+    margin-bottom: 0;
+    &:not(:first-child) {
+      margin-left: 24px;
+    }
+  }
+}
+
+.nav-item__btn {
+  display: block;
+  font-family: "mulish-black", serif;
+  color: #303757;
+  text-decoration: none;
+}
+
+@media screen and (min-width: 600px) {
+  nav {
+    padding-left: 32px;
+    padding-right: 32px;
+    padding-top: 64px;
+    width: 100%;
+    max-width: 400px;
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  nav {
+    padding: 40px 24px 0;
+    .nav-list {
+      justify-content: flex-end;
+    }
+  }
+}

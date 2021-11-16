@@ -1,0 +1,32 @@
+h1, h3 {
+  font-family: "mulish-black", serif;
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: normal;
+}
+
+h1 span,
+h3 span,
+h1 a,
+h3 a {
+  font: inherit;
+}
+
+sup {
+  font-size: 10px;
+  color: inherit;
+}
+
+@media screen and (min-width: 600px) {
+  h1 {
+    font-size: 38px;
+    line-height: 48px;
+  }
+}
+
+@media screen and (min-width: 1000px) {
+  h1 {
+    font-size: 45px;
+    line-height: 56px;
+  }
+}
