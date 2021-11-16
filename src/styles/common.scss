@@ -7,7 +7,7 @@
   line-height: 20px;
   font-family: "mulish", serif;
   -webkit-text-size-adjust: 100%;
-  color: #303757;
+  color: $secondary-color;
   word-break: break-word;
 }
 
@@ -51,7 +51,7 @@ body {
   font-family: "mulish-bold", serif;
   font-size: 19px;
   line-height: 24px;
-  color: #303757;
+  color: $secondary-color;
   vertical-align: middle;
 }
 

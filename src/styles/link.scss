@@ -1,5 +1,5 @@
 a {
-  color: #0088CC;
+  color: $primary-color;
   text-decoration: none;
   -webkit-transition: color .3s;
   -o-transition: color .3s;
@@ -7,7 +7,7 @@ a {
 }
 
 a:hover {
-  color: #333;
+  color: $secondary-color;
   -webkit-transition: color .3s;
   -o-transition: color .3s;
   transition: color .3s;

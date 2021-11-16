@@ -17,6 +17,35 @@ sup {
   color: inherit;
 }
 
+.text-gray,
+.text-gray span {
+  color: $text-gray-color;
+}
+
+.text-medium,
+.text-medium span,
+.text-medium a {
+  font-size: 19px;
+  line-height: 24px;
+}
+
+.text-bold,
+.text-bold span,
+strong, b {
+  font-family: "mulish-black", serif;
+  font-weight: normal;
+}
+
+.text-semibold {
+  font-family: "mulish-bold", serif;
+  font-weight: normal;
+}
+
+.text-small {
+  font-size: 13px;
+  line-height: 16px;
+}
+
 @media screen and (min-width: 600px) {
   h1 {
     font-size: 38px;

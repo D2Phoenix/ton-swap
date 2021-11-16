@@ -51,8 +51,9 @@ nav {
     justify-content: center;
   }
   .nav-item__btn {
+    display: block;
     padding: 8px 4px;
-    color: #0088CC;
+    color: $primary-color;
     font-size: 19px;
     line-height: 24px;
     cursor: pointer;
@@ -60,9 +61,10 @@ nav {
     -o-transition: color .3s;
     transition: color .3s;
     font-family: "mulish-bold", serif;
+    text-decoration: none;
   }
   .nav-item__btn:hover {
-    color: #333;
+    color: $secondary-color;
   }
   .nav-item {
     position: relative;
@@ -74,11 +76,11 @@ nav {
   }
 }
 
-.nav-item__btn {
-  display: block;
-  font-family: "mulish-black", serif;
-  color: #303757;
-  text-decoration: none;
+.nav-wrapper:after {
+  content: "";
+  height: 40px;
+  width: 100%;
+  padding: 20px;
 }
 
 @media screen and (min-width: 600px) {
@@ -93,7 +95,7 @@ nav {
 
 @media screen and (min-width: 1000px) {
   nav {
-    padding: 40px 24px 0;
+    padding: 64px 24px 0;
     .nav-list {
       justify-content: flex-end;
     }
