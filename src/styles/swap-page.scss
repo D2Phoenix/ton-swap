@@ -35,7 +35,14 @@
       .btn {
         position: relative;
         margin-right: 0.75rem;
+        img {
+          position: absolute;
+          left: 6px;
+          width: 24px;
+          height: 24px;
+        }
         span {
+          margin-left: 20px;
           margin-right: 20px;
         }
         svg {

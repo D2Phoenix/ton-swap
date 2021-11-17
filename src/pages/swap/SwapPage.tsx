@@ -15,6 +15,7 @@ function SwapPage() {
             <div className="input-wrapper">
                 <div className="coin-input">
                     <div className="btn btn-outline small text-medium text-semibold">
+                        <img src="https://cloudflare-ipfs.com/ipfs/QmXttGpZrECX5qCyXbBQiqgQNytVGeZW5Anewvh2jc4psg"/>
                         <span>ETH</span>
                         <ChevronRightIcon/>
                     </div>
@@ -30,6 +31,7 @@ function SwapPage() {
             <div className="input-wrapper">
                 <div className="coin-input">
                     <div className="btn btn-outline small text-medium text-semibold">
+                        <img src="https://cloudflare-ipfs.com/ipfs/QmXttGpZrECX5qCyXbBQiqgQNytVGeZW5Anewvh2jc4psg"/>
                         <span>ETH</span>
                         <ChevronRightIcon/>
                     </div>
