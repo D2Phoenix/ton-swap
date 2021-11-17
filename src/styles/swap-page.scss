@@ -6,6 +6,7 @@
   width: 100%;
   padding: 0.5rem;
   border-radius: 8px;
+  position: relative;
   .swap-header {
     display: flex;
     justify-content: space-between;
@@ -35,6 +36,7 @@
       .btn {
         position: relative;
         margin-right: 0.75rem;
+        flex: 0 0 auto;
         img {
           position: absolute;
           left: 6px;
@@ -58,6 +60,7 @@
         border: 0;
         outline: 0;
         -moz-appearance: textfield;
+        padding: 0;
         &:focus {
           outline:none !important;
         }
@@ -92,5 +95,41 @@
   .swap__btn {
     width: 100%;
     margin: 8px 0;
+  }
+  .settings-wrapper {
+    position: absolute;
+    right: 8px;
+    top: 44px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 300px;
+    width: 100%;
+    padding: 1rem;
+    background-color: white;
+    border: 1px solid $border-color;
+    border-radius: 8px;
+  }
+  .swap-info-wrapper {
+    position: absolute;
+    right: 0;
+    top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 300px;
+    padding: 1rem;
+    background-color: white;
+    border: 1px solid $border-color;
+    border-radius: 8px;
+    > h4 {
+      border-bottom: 1px solid $border-color;
+      padding: 0 0 8px;
+    }
+    > div {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
   }
 }

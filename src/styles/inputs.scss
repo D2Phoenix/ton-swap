@@ -1,0 +1,13 @@
+input {
+  border: 1px solid $border-color;
+  border-radius: 0.25rem;
+  padding: 8px;
+  min-width: 0;
+  &.number__input {
+    text-align: end;
+  }
+  &:focus {
+    outline: 0 !important;
+    border-color: $primary-color;
+  }
+}

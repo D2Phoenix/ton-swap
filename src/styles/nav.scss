@@ -83,16 +83,6 @@ nav {
   padding: 20px;
 }
 
-@media screen and (min-width: 600px) {
-  nav {
-    padding-left: 32px;
-    padding-right: 32px;
-    padding-top: 64px;
-    width: 100%;
-    max-width: 400px;
-  }
-}
-
 @media screen and (min-width: 1000px) {
   nav {
     padding: 64px 24px 0;

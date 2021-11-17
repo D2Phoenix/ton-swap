@@ -1,53 +1,42 @@
 import ChevronDownIcon from '../../components/icons/ChevronDownIcon';
 import SettingsIcon from '../../components/icons/SettingsIcon';
 import InfoIcon from '../../components/icons/InfoIcon';
-import ChevronRightIcon from '../../components/icons/ChevronRightIcon';
+import { useState } from 'react';
+import CoinInput from '../../components/CoinInput';
+import SwapSettings from './SwapSettings';
+import SwapInfo from './SwapInfo';
 
 function SwapPage() {
+    const [showSettings, setShowSettings] = useState(false);
+    const [showSwapInfo, setShowSwapInfo] = useState(false);
+
     return (
         <div className="swap-wrapper">
             <div className="swap-header">
                 <span className="text-semibold">Swap</span>
-                <div className="btn-icon">
+                <div className="btn-icon" onClick={() => setShowSettings(!showSettings)}>
                     <SettingsIcon/>
                 </div>
             </div>
-            <div className="input-wrapper">
-                <div className="coin-input">
-                    <div className="btn btn-outline small text-medium text-semibold">
-                        <img src="https://cloudflare-ipfs.com/ipfs/QmXttGpZrECX5qCyXbBQiqgQNytVGeZW5Anewvh2jc4psg"/>
-                        <span>ETH</span>
-                        <ChevronRightIcon/>
-                    </div>
-                    <input type="number" placeholder="0.0"/>
-                </div>
-                <div className="balance text-small">
-                    Balance: 0 ETH
-                </div>
-            </div>
+            <CoinInput/>
             <div className="switch__btn btn-icon">
                 <ChevronDownIcon />
             </div>
-            <div className="input-wrapper">
-                <div className="coin-input">
-                    <div className="btn btn-outline small text-medium text-semibold">
-                        <img src="https://cloudflare-ipfs.com/ipfs/QmXttGpZrECX5qCyXbBQiqgQNytVGeZW5Anewvh2jc4psg"/>
-                        <span>ETH</span>
-                        <ChevronRightIcon/>
-                    </div>
-                    <input type="number" placeholder="0.0"/>
-                </div>
-                <div className="balance text-small">
-                    Balance: 0 ETH
-                </div>
-            </div>
+            <CoinInput/>
             <div className="swap-info text-small">
                 <span>1 ETH = 487.7 DAI</span>
-                <div className="btn-icon">
+                <div className="btn-icon" onMouseOver={() => setShowSwapInfo(true)} onMouseLeave={() => setShowSwapInfo(false)}>
                     <InfoIcon/>
+                    {
+                        showSwapInfo && <SwapInfo />
+                    }
                 </div>
+
             </div>
             <button className="btn btn-primary swap__btn">Swap</button>
+            {
+                showSettings && <SwapSettings />
+            }
         </div>
     )
 }
