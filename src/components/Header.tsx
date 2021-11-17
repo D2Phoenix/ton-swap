@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function Header() {
     return (
@@ -15,13 +16,19 @@ function Header() {
                 <div className="nav-wrapper">
                     <div className="nav-list">
                         <div className="nav-item">
-                            <a className="nav-item__btn">Swap</a>
+                            <Link to="/swap">
+                                <a className="nav-item__btn">Swap</a>
+                            </Link>
                         </div>
                         <div className="nav-item">
-                            <a className="nav-item__btn">Pool</a>
+                            <Link to="/pool">
+                                <a className="nav-item__btn">Pool</a>
+                            </Link>
                         </div>
                         <div className="nav-item">
-                            <a className="nav-item__btn">Top Pools</a>
+                            <Link to="/pools">
+                                <a className="nav-item__btn">Top Pools</a>
+                            </Link>
                         </div>
                     </div>
                 </div>
