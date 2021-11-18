@@ -4,10 +4,13 @@ import { getTokens } from 'api/tokens';
 import TokenInterface from 'interfaces/token.interface';
 
 export const fetchTokens = createAsyncThunk(
-    'app/fetchTokens',
+    'app/tokens',
     async () => {
         const response = await getTokens()
         return response.tokens
-            .sort((a: TokenInterface, b: TokenInterface) => (a.symbol > b.symbol) ? 1 : ((b.symbol > a.symbol) ? -1 : 0));
+            .sort((a: TokenInterface, b: TokenInterface) => ((a.symbol === 'TON' || b.symbol === 'TON') ? 1
+                : (a.symbol > b.symbol)) ? 1
+                    : ((b.symbol > a.symbol) ? -1 : 0)
+            );
     }
 )

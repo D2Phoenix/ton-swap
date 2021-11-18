@@ -30,8 +30,8 @@ function TokenInput({token, balance, onSelect}: TokenInputParams) {
                 <input type="number" placeholder="0.0"/>
             </div>
             {
-                token && <div className="balance text-small">
-                  Balance: {balance || 0} {token.symbol}
+                token && balance !== undefined && <div className="balance text-small">
+                  Balance: {balance} {token.symbol}
                 </div>
             }
         </div>
