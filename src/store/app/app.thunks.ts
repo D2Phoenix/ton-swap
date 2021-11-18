@@ -12,5 +12,5 @@ export const fetchTokens = createAsyncThunk(
                 : (a.symbol > b.symbol)) ? 1
                     : ((b.symbol > a.symbol) ? -1 : 0)
             );
-    }
+    },
 )

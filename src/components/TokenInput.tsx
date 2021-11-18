@@ -5,17 +5,23 @@ import ChevronRightIcon from './icons/ChevronRightIcon';
 import TokenInterface from '../interfaces/token.interface';
 
 interface TokenInputParams {
-    token: TokenInterface | null,
-    onSelect: Function;
     balance: number;
+    token: TokenInterface | null,
+    value: string;
+    onChange: Function;
+    onSelect: Function;
 }
 
 
-function TokenInput({token, balance, onSelect}: TokenInputParams) {
+function TokenInput({balance, token, value, onChange, onSelect}: TokenInputParams) {
 
     const handleClick = useCallback(() => {
         onSelect();
     }, [onSelect]);
+
+    const handleChange = useCallback((event) => {
+        onChange(event.target.value);
+    }, [onChange]);
 
     return (
         <div className="input-wrapper">
@@ -27,7 +33,7 @@ function TokenInput({token, balance, onSelect}: TokenInputParams) {
                     <span>{token ? token.symbol : 'Select'}</span>
                     <ChevronRightIcon/>
                 </div>
-                <input type="number" placeholder="0.0"/>
+                <input type="number" placeholder="0.0" value={value || ''} onChange={handleChange}/>
             </div>
             {
                 token && balance !== undefined && <div className="balance text-small">

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import './SwapPage.scss';
 import ChevronDownIcon from 'components/icons/ChevronDownIcon';
@@ -10,11 +11,16 @@ import SwapInfo from './SwapInfo';
 import TokenSelect from 'components/TokenSelect';
 import { useAppSelector } from 'store/hooks';
 import { selectTokens } from 'store/app/app.slice';
-import { useDispatch } from 'react-redux';
 import { fetchTokens } from 'store/app/app.thunks';
-import { selectSwapFrom, selectSwapTo, setSwapFromToken, setSwapToToken } from 'store/swap/swap.slice';
+import {
+    selectSwapFrom, selectSwapFromAmount,
+    selectSwapTo, selectSwapToAmount,
+    setSwapFromToken, setSwapFromTokenAmount,
+    setSwapToToken, setSwapToTokenAmount,
+    switchSwapTokens
+} from 'store/swap/swap.slice';
 import { selectWalletAdapter, selectWalletBalances } from 'store/wallet/wallet.slice';
-import { getWalletBalance } from '../../store/wallet/wallet.thunks';
+import { getWalletBalance } from 'store/wallet/wallet.thunks';
 
 function SwapPage() {
     const dispatch = useDispatch();
@@ -25,6 +31,8 @@ function SwapPage() {
     const tokens = useAppSelector(selectTokens);
     const fromToken = useAppSelector(selectSwapFrom);
     const toToken = useAppSelector(selectSwapTo);
+    const fromTokenAmount = useAppSelector(selectSwapFromAmount);
+    const toTokenAmount = useAppSelector(selectSwapToAmount);
     const walletBalances = useAppSelector(selectWalletBalances);
     const walletAdapter = useAppSelector(selectWalletAdapter);
     const fromSymbol = fromToken ? fromToken.symbol : '';
@@ -34,12 +42,12 @@ function SwapPage() {
         dispatch(fetchTokens());
     }, [dispatch]);
 
-    const openTokenFromSelect = useCallback(() => {
+    const openFromTokenSelect = useCallback(() => {
         setShowTokenSelect(!showTokenSelect);
         setTokenSelectType('from');
     }, [showTokenSelect, setShowTokenSelect]);
 
-    const openTokenToSelect = useCallback(() => {
+    const openToTokenSelect = useCallback(() => {
         setShowTokenSelect(!showTokenSelect);
         setTokenSelectType('to');
     }, [showTokenSelect, setShowTokenSelect]);
@@ -58,6 +66,18 @@ function SwapPage() {
         dispatch(setSwapToToken(token));
     }, [dispatch, tokenSelectType, walletAdapter]);
 
+    const handleSwitchTokens = useCallback(() => {
+        dispatch(switchSwapTokens());
+    }, [dispatch]);
+
+    const handleFromTokenAmount = useCallback((value) => {
+        dispatch(setSwapFromTokenAmount(value));
+    }, [dispatch]);
+
+    const handleToTokenAmount = useCallback((value) => {
+        dispatch(setSwapToTokenAmount(value));
+    }, [dispatch]);
+
     return (
         <div className="swap-wrapper">
             <div className="swap-header">
@@ -66,11 +86,19 @@ function SwapPage() {
                     <SettingsIcon/>
                 </div>
             </div>
-            <TokenInput token={fromToken} balance={walletBalances[fromSymbol]} onSelect={openTokenFromSelect}/>
-            <div className="switch__btn btn-icon">
+            <TokenInput token={fromToken}
+                        balance={walletBalances[fromSymbol]}
+                        value={fromTokenAmount}
+                        onSelect={openFromTokenSelect}
+                        onChange={handleFromTokenAmount}/>
+            <div className="switch__btn btn-icon" onClick={handleSwitchTokens}>
                 <ChevronDownIcon />
             </div>
-            <TokenInput token={toToken} balance={walletBalances[toSymbol]} onSelect={openTokenToSelect}/>
+            <TokenInput token={toToken}
+                        balance={walletBalances[toSymbol]}
+                        value={toTokenAmount}
+                        onSelect={openToTokenSelect}
+                        onChange={handleToTokenAmount}/>
             <div className="swap-info text-small">
                 <span>1 ETH = 487.7 DAI</span>
                 <div className="btn-icon" onMouseOver={() => setShowSwapInfo(true)} onMouseLeave={() => setShowSwapInfo(false)}>

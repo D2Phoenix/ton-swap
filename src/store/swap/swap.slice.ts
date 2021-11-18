@@ -6,6 +6,8 @@ import TokenInterface from 'interfaces/token.interface';
 interface SwapState {
     from: TokenInterface | null,
     to: TokenInterface | null,
+    fromAmount: string;
+    toAmount: string;
 }
 
 const initialState: SwapState = {
@@ -18,6 +20,8 @@ const initialState: SwapState = {
         symbol: "TON",
     },
     to: null,
+    fromAmount: '',
+    toAmount: '',
 }
 
 export const swapSlice = createSlice({
@@ -25,17 +29,47 @@ export const swapSlice = createSlice({
     initialState,
     reducers: {
         setSwapFromToken: (state, action: PayloadAction<any>) => {
+            const from = state.from;
             state.from = action.payload;
+            if (state.to && state.from && state.from.symbol === state.to.symbol) {
+                state.to = from;
+            }
         },
         setSwapToToken: (state, action: PayloadAction<any>) => {
+            const to = state.to;
             state.to = action.payload;
+            if (state.to && state.from && state.from.symbol === state.to.symbol) {
+                state.from = to;
+            }
+        },
+        setSwapFromTokenAmount: (state, action: PayloadAction<any>) => {
+            state.fromAmount = action.payload;
+        },
+        setSwapToTokenAmount: (state, action: PayloadAction<any>) => {
+            state.toAmount = action.payload;
+        },
+        switchSwapTokens: (state, action: PayloadAction<void>) => {
+            const from = state.to;
+            const fromAmount = state.toAmount;
+            state.to = state.from;
+            state.from = from;
+            state.toAmount = state.fromAmount;
+            state.fromAmount = fromAmount
         },
     },
 })
 
-export const { setSwapFromToken, setSwapToToken } = swapSlice.actions
+export const {
+    setSwapFromToken,
+    setSwapToToken,
+    switchSwapTokens,
+    setSwapFromTokenAmount,
+    setSwapToTokenAmount
+} = swapSlice.actions
 
 export const selectSwapFrom = (state: RootState) => state.swap.from;
 export const selectSwapTo = (state: RootState) => state.swap.to;
+export const selectSwapFromAmount = (state: RootState) => state.swap.fromAmount;
+export const selectSwapToAmount = (state: RootState) => state.swap.toAmount;
 
 export default swapSlice.reducer;
