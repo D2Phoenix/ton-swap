@@ -40,12 +40,13 @@
   -webkit-transition: all .3s;
   -o-transition: all .3s;
   transition: all .3s;
+  font-family: "mulish-bold", serif;
+  color: $primary-color;
   &.small {
     padding: 5px 16px 5px 16px;
   }
   &:hover {
     outline-width: 3px;
-    padding: 9px 31px 9px 27px;
     -webkit-transition: all .3s;
     -o-transition: all .3s;
     transition: all .3s;

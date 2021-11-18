@@ -44,8 +44,9 @@ nav {
     display: -ms-flexbox;
     display: flex;
     margin-top: 0;
-    -ms-flex-wrap: nowrap;
-    flex-wrap: nowrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    gap: 24px;
     -webkit-box-pack: end;
     -ms-flex-pack: end;
     justify-content: center;
@@ -70,9 +71,6 @@ nav {
     position: relative;
     width: auto;
     margin-bottom: 0;
-    &:not(:first-child) {
-      margin-left: 24px;
-    }
   }
 }
 

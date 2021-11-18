@@ -30,6 +30,9 @@ function Header() {
                                 <a className="nav-item__btn">Top Pools</a>
                             </Link>
                         </div>
+                        <div className="nav-item">
+                            <div className="btn btn-outline">Connect Wallet</div>
+                        </div>
                     </div>
                 </div>
             </nav>
