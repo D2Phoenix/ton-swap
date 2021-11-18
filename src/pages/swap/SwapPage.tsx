@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import './SwapPage.scss';
 import ChevronDownIcon from '../../components/icons/ChevronDownIcon';
@@ -8,11 +8,21 @@ import CoinInput from '../../components/CoinInput';
 import SwapSettings from './SwapSettings';
 import SwapInfo from './SwapInfo';
 import TokenSelect from '../../components/TokenSelect';
+import { useAppSelector } from '../../store/hooks';
+import { selectTokens } from '../../store/app/appSlice';
+import { useDispatch } from 'react-redux';
+import { fetchTokens } from '../../store/app/appThunks';
 
 function SwapPage() {
+    const dispatch = useDispatch();
     const [showSettings, setShowSettings] = useState(false);
     const [showSwapInfo, setShowSwapInfo] = useState(false);
     const [showCoinSelect, setShowCoinSelect] = useState(false);
+    const tokens = useAppSelector(selectTokens);
+
+    useEffect(() => {
+        dispatch(fetchTokens());
+    }, [])
 
     return (
         <div className="swap-wrapper">
@@ -42,7 +52,9 @@ function SwapPage() {
                 showSettings && <SwapSettings onClose={() => setShowSettings(false)}/>
             }
             {
-                showCoinSelect && <TokenSelect onClose={() => setShowCoinSelect(false)} onSelect={() => setShowCoinSelect(false)}/>
+                showCoinSelect && <TokenSelect tokens={tokens}
+                                               onClose={() => setShowCoinSelect(false)}
+                                               onSelect={() => setShowCoinSelect(false)}/>
             }
         </div>
     )
