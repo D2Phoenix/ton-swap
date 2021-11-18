@@ -1,3 +1,5 @@
+import './SwapSettings.scss';
+
 function SwapSettings() {
     return (
         <div className="settings-wrapper">

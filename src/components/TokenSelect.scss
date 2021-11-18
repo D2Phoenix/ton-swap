@@ -1,0 +1,34 @@
+@import "../styles/vars";
+
+.token-select-modal.modal-container {
+  .modal-content {
+    height: 600px;
+    width: 50vw;
+    max-width: 420px;
+  }
+}
+.token-select-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  > span {
+    margin-bottom: 8px;
+  }
+  input {
+    width: 100%;
+    padding: 16px;
+    font-size: 18px;
+  }
+  .token-select-list {
+    height: calc(100% - 114px);
+    overflow: auto;
+    padding-bottom: 8px;
+    .token-select-item {
+      height: 56px;
+      cursor: pointer;
+      &:hover {
+        background-color: $hover-color;
+      }
+    }
+  }
+}

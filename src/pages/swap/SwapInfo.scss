@@ -1,0 +1,24 @@
+@import "../../styles/vars";
+
+.swap-info-wrapper {
+  position: absolute;
+  right: 0;
+  top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 300px;
+  padding: 1rem;
+  background-color: white;
+  border: 1px solid $border-color;
+  border-radius: 8px;
+  > h4 {
+    border-bottom: 1px solid $border-color;
+    padding: 0 0 8px;
+  }
+  > div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}

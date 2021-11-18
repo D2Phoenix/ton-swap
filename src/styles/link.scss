@@ -12,3 +12,19 @@ a:hover {
   -o-transition: color .3s;
   transition: color .3s;
 }
+
+.link__btn {
+  display: block;
+  color: $primary-color;
+  font-size: 19px;
+  line-height: 24px;
+  cursor: pointer;
+  -webkit-transition: color .3s;
+  -o-transition: color .3s;
+  transition: color .3s;
+  font-family: "mulish-bold", serif;
+  text-decoration: none;
+  &:hover {
+    color: $secondary-color;
+  }
+}

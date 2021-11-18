@@ -1,3 +1,5 @@
+import './SwapInfo.scss';
+
 function SwapInfo() {
     return (
         <div className="swap-info-wrapper">

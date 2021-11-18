@@ -1,0 +1,16 @@
+@import "../../styles/vars";
+
+.settings-wrapper {
+  position: absolute;
+  right: 8px;
+  top: 44px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 300px;
+  width: 100%;
+  padding: 1rem;
+  background-color: white;
+  border: 1px solid $border-color;
+  border-radius: 8px;
+}
