@@ -36,11 +36,15 @@ function TokenSelect({tokens, onClose, onSelect}: TokenSelectParams) {
         }
     }, [handleObserver]);
 
+    const handleClose = useCallback(() => {
+        onClose();
+    }, [onClose]);
+
     const visibleCoins = tokens.filter((token) => token.symbol.includes(query) || token.address.includes(query))
         .slice(0, (page - 1) * 10);
 
     return (
-        <Modal className={'token-select-modal'} onClose={onClose}>
+        <Modal className={'token-select-modal'} onClose={handleClose}>
             <div className="token-select-wrapper">
                 <span className="text-semibold">Select a token</span>
                 <input placeholder="Search name or paste address"

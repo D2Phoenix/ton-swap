@@ -1,0 +1,59 @@
+@import "../styles/vars";
+
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-radius: 0.25rem;
+  padding: 1rem 1rem 0.75rem;
+  border: 1px solid $border-color;
+  margin-bottom: 8px;
+  &:hover {
+    border-color: $primary-color;
+  }
+  > div {
+    display: flex;
+    flex-direction: row;
+  }
+  .token-input {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    .btn {
+      position: relative;
+      margin-right: 0.75rem;
+      flex: 0 0 auto;
+      img {
+        position: absolute;
+        left: 8px;
+        width: 24px;
+        height: 24px;
+      }
+      span {
+        margin-left: 20px;
+        margin-right: 20px;
+      }
+      svg {
+        position: absolute;
+        right: 10px;
+        float: right;
+      }
+    }
+    input {
+      flex: 1 1 auto;
+      font-size: 24px;
+      text-align: right;
+      border: 0;
+      outline: 0;
+      -moz-appearance: textfield;
+      padding: 0;
+      &:focus {
+        outline:none !important;
+      }
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+      }
+    }
+  }
+}
