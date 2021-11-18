@@ -42,7 +42,7 @@ function SwapPage() {
                 showSettings && <SwapSettings />
             }
             {
-                showCoinSelect && <TokenSelect onClose={() => setShowCoinSelect(false)}/>
+                showCoinSelect && <TokenSelect onClose={() => setShowCoinSelect(false)} onSelect={() => setShowCoinSelect(false)}/>
             }
         </div>
     )

@@ -20,14 +20,27 @@
     font-size: 18px;
   }
   .token-select-list {
-    height: calc(100% - 114px);
+    height: calc(100% - 96px);
     overflow: auto;
     padding-bottom: 8px;
     .token-select-item {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
       height: 56px;
       cursor: pointer;
+      gap: 16px;
+      padding: 8px;
       &:hover {
         background-color: $hover-color;
+      }
+      img {
+        width: 24px;
+        height: 24px;
+      }
+      .token-name {
+        display: flex;
+        flex-direction: column;
       }
     }
   }

@@ -1,7 +1,7 @@
 import './TokenSelect.scss';
 import Modal from './Modal';
 
-function TokenSelect({onClose}: any) {
+function TokenSelect({onClose, onSelect}: any) {
     const tokens = [{}, {}, {}]
     return (
         <Modal className={'token-select-modal'} onClose={onClose}>
@@ -12,15 +12,20 @@ function TokenSelect({onClose}: any) {
                     {
                         tokens.map((token, index) => {
                             return (
-                                <div key={index} className="token-select-item">
+                                <div key={index} className="token-select-item" onClick={onSelect}>
+                                    <img className="token__img" src="https://cloudflare-ipfs.com/ipfs/QmXttGpZrECX5qCyXbBQiqgQNytVGeZW5Anewvh2jc4psg"/>
+                                    <div className="token-name">
+                                        <span className="text-semibold">ETH</span>
+                                        <span className="text-small">Ether</span>
+                                    </div>
                                 </div>
                             )
                         })
                     }
                 </div>
-                <span className="text-center link__btn">
+                {/*<span className="text-center link__btn">
                     Manage Token Lists
-                </span>
+                </span>*/}
             </div>
         </Modal>
     )
