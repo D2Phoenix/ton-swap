@@ -39,7 +39,7 @@ function SwapPage() {
             </div>
             <button className="btn btn-primary swap__btn">Swap</button>
             {
-                showSettings && <SwapSettings />
+                showSettings && <SwapSettings onClose={() => setShowSettings(false)}/>
             }
             {
                 showCoinSelect && <TokenSelect onClose={() => setShowCoinSelect(false)} onSelect={() => setShowCoinSelect(false)}/>
