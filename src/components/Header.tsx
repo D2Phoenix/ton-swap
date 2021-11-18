@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 function Header() {
     return (
@@ -16,19 +16,19 @@ function Header() {
                 <div className="nav-wrapper">
                     <div className="nav-list">
                         <div className="nav-item">
-                            <Link to="/swap">
-                                <a className="nav-item__btn">Swap</a>
-                            </Link>
+                            <NavLink className="nav-item__btn" to="/swap">
+                                Swap
+                            </NavLink>
                         </div>
                         <div className="nav-item">
-                            <Link to="/pool">
-                                <a className="nav-item__btn">Pool</a>
-                            </Link>
+                            <NavLink className="nav-item__btn" to="/pool">
+                                Pool
+                            </NavLink>
                         </div>
                         <div className="nav-item">
-                            <Link to="/pools">
-                                <a className="nav-item__btn">Top Pools</a>
-                            </Link>
+                            <NavLink className="nav-item__btn" to="/pools">
+                                Top Pools
+                            </NavLink>
                         </div>
                         <div className="nav-item">
                             <div className="btn btn-outline">Connect Wallet</div>

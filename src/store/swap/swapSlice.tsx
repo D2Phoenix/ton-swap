@@ -14,8 +14,8 @@ const initialState: SwapState = {
         chainId: 1,
         decimals: 9,
         logoURI: "https://s2.coinmarketcap.com/static/img/coins/64x64/11419.png",
-        name: "Toncoin",
-        symbol: "TONCOIN",
+        name: "Ton",
+        symbol: "TON",
     },
     to: null,
 }

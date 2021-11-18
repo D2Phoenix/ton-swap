@@ -40,7 +40,7 @@ function TokenSelect({tokens, onClose, onSelect}: TokenSelectParams) {
         onClose();
     }, [onClose]);
 
-    const visibleCoins = tokens.filter((token) => token.symbol.includes(query) || token.address.includes(query))
+    const visibleCoins = tokens.filter((token) => token.symbol.startsWith(query) || token.address.startsWith(query))
         .slice(0, (page - 1) * 10);
 
     return (
