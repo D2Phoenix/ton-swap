@@ -13,6 +13,8 @@ import { selectTokens } from 'store/app/app.slice';
 import { useDispatch } from 'react-redux';
 import { fetchTokens } from 'store/app/app.thunks';
 import { selectSwapFrom, selectSwapTo, setSwapFromToken, setSwapToToken } from 'store/swap/swap.slice';
+import { selectWalletAdapter, selectWalletBalances } from 'store/wallet/wallet.slice';
+import { getWalletBalance } from '../../store/wallet/wallet.thunks';
 
 function SwapPage() {
     const dispatch = useDispatch();
@@ -23,6 +25,10 @@ function SwapPage() {
     const tokens = useAppSelector(selectTokens);
     const fromToken = useAppSelector(selectSwapFrom);
     const toToken = useAppSelector(selectSwapTo);
+    const walletBalances = useAppSelector(selectWalletBalances);
+    const walletAdapter = useAppSelector(selectWalletAdapter);
+    const fromSymbol = fromToken ? fromToken.symbol : '';
+    const toSymbol = toToken ? toToken.symbol : '';
 
     useEffect(() => {
         dispatch(fetchTokens());
@@ -43,11 +49,14 @@ function SwapPage() {
         if (!token) {
             return;
         }
+        if (walletAdapter) {
+            dispatch(getWalletBalance(token));
+        }
         if (tokenSelectType === 'from') {
             return dispatch(setSwapFromToken(token));
         }
         dispatch(setSwapToToken(token));
-    }, [dispatch, tokenSelectType]);
+    }, [dispatch, tokenSelectType, walletAdapter]);
 
     return (
         <div className="swap-wrapper">
@@ -57,11 +66,11 @@ function SwapPage() {
                     <SettingsIcon/>
                 </div>
             </div>
-            <TokenInput token={fromToken} onSelect={openTokenFromSelect}/>
+            <TokenInput token={fromToken} balance={walletBalances[fromSymbol]} onSelect={openTokenFromSelect}/>
             <div className="switch__btn btn-icon">
                 <ChevronDownIcon />
             </div>
-            <TokenInput token={toToken} onSelect={openTokenToSelect}/>
+            <TokenInput token={toToken} balance={walletBalances[toSymbol]} onSelect={openTokenToSelect}/>
             <div className="swap-info text-small">
                 <span>1 ETH = 487.7 DAI</span>
                 <div className="btn-icon" onMouseOver={() => setShowSwapInfo(true)} onMouseLeave={() => setShowSwapInfo(false)}>

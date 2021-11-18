@@ -4,13 +4,14 @@ import './TokenInput.scss';
 import ChevronRightIcon from './icons/ChevronRightIcon';
 import TokenInterface from '../interfaces/token.interface';
 
-interface CoinInputParams {
+interface TokenInputParams {
     token: TokenInterface | null,
     onSelect: Function;
+    balance: number;
 }
 
 
-function TokenInput({token, onSelect}: CoinInputParams) {
+function TokenInput({token, balance, onSelect}: TokenInputParams) {
 
     const handleClick = useCallback(() => {
         onSelect();
@@ -19,7 +20,7 @@ function TokenInput({token, onSelect}: CoinInputParams) {
     return (
         <div className="input-wrapper">
             <div className="token-input">
-                <div className="btn btn-outline small text-medium text-semibold" onClick={handleClick}>
+                <div className="btn btn-outline small text-medium" onClick={handleClick}>
                     {
                         token?.logoURI && <img src={token.logoURI} alt={token.name}/>
                     }
@@ -30,7 +31,7 @@ function TokenInput({token, onSelect}: CoinInputParams) {
             </div>
             {
                 token && <div className="balance text-small">
-                  Balance: 0 {token.symbol}
+                  Balance: {balance || 0} {token.symbol}
                 </div>
             }
         </div>

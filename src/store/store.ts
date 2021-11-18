@@ -9,6 +9,13 @@ export const store = configureStore({
         swap: swapReducer,
         wallet: walletReducer,
     },
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: {
+                ignoredActions: ['wallet/connect/fulfilled'],
+                ignoredPaths: ['wallet.adapter'],
+            },
+    }),
 })
 
 export type RootState = ReturnType<typeof store.getState>

@@ -1,7 +1,15 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { NavLink } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { connectWallet } from '../store/wallet/wallet.thunks';
 
 function Header() {
+    const dispatch = useDispatch();
+
+    const handleConnectWallet = useCallback(() => {
+        dispatch(connectWallet());
+    }, [dispatch]);
+
     return (
         <div className="header-wrapper">
             <header>
@@ -31,7 +39,8 @@ function Header() {
                             </NavLink>
                         </div>
                         <div className="nav-item">
-                            <div className="btn btn-outline">Connect Wallet</div>
+                            <div className="btn btn-outline"
+                                 onClick={handleConnectWallet}>Connect Wallet</div>
                         </div>
                     </div>
                 </div>

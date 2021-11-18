@@ -6,8 +6,21 @@ import StubWalletService from '../../api/stub-wallet.service';
 
 export const connectWallet = createAsyncThunk(
     'wallet/connect',
-    async () => {
-        return new StubWalletService();
+    async (request, thunkAPI) => {
+        const state = thunkAPI.getState() as RootState;
+        const adapter = new StubWalletService();
+        const balances: Record<string, number> = {};
+        if (state.swap.from) {
+            balances[state.swap.from.symbol] = await adapter.getBalance(state.swap.from);
+        }
+        if (state.swap.to) {
+            balances[state.swap.to.symbol] = await adapter.getBalance(state.swap.to);
+        }
+        return {
+            adapter,
+            address: await adapter.getWalletAddress(),
+            balances
+        }
     }
 )
 
@@ -20,5 +33,17 @@ export const getWalletBalance = createAsyncThunk(
             token,
             value: walletAdapterService ? await walletAdapterService.getBalance(token) : 0,
         };
+    }
+)
+
+export const getWalletAddress = createAsyncThunk(
+    'wallet/address',
+    async (request, thunkAPI) => {
+        const state = thunkAPI.getState() as RootState;
+        const walletAdapterService = state.wallet.adapter;
+        if (walletAdapterService) {
+            return await walletAdapterService.getWalletAddress()
+        }
+        return '';
     }
 )

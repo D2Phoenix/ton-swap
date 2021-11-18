@@ -40,7 +40,7 @@ function TokenSelect({tokens, onClose, onSelect}: TokenSelectParams) {
         onClose();
     }, [onClose]);
 
-    const visibleCoins = tokens.filter((token) => token.symbol.startsWith(query) || token.address.startsWith(query))
+    const visibleTokens = tokens.filter((token) => token.symbol.startsWith(query) || token.address.startsWith(query))
         .slice(0, (page - 1) * 10);
 
     return (
@@ -52,7 +52,7 @@ function TokenSelect({tokens, onClose, onSelect}: TokenSelectParams) {
                        onChange={(event) => setQuery(event.target.value)}/>
                 <div className="token-select-list" ref={list}>
                     {
-                        visibleCoins.map((token, index) => {
+                        visibleTokens.map((token, index) => {
                             return (
                                 <div key={token.address} className="token-select-item" onClick={() => onSelect(token)}>
                                     <img className="token__img" src={token.logoURI} alt={token.name}/>
