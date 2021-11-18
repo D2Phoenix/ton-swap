@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+
 import { getTokens } from 'api/tokens';
 import TokenInterface from 'interfaces/token.interface';
 

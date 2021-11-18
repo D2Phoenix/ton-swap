@@ -9,10 +9,10 @@ import SwapSettings from './SwapSettings';
 import SwapInfo from './SwapInfo';
 import TokenSelect from 'components/TokenSelect';
 import { useAppSelector } from 'store/hooks';
-import { selectTokens } from 'store/app/appSlice';
+import { selectTokens } from 'store/app/app.slice';
 import { useDispatch } from 'react-redux';
-import { fetchTokens } from 'store/app/appThunks';
-import { selectSwapFrom, selectSwapTo, setSwapFromToken, setSwapToToken } from 'store/swap/swapSlice';
+import { fetchTokens } from 'store/app/app.thunks';
+import { selectSwapFrom, selectSwapTo, setSwapFromToken, setSwapToToken } from 'store/swap/swap.slice';
 
 function SwapPage() {
     const dispatch = useDispatch();

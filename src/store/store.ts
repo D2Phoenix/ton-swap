@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
-import appReducer from './app/appSlice';
-import swapReducer from './swap/swapSlice';
+import appReducer from './app/app.slice';
+import swapReducer from './swap/swap.slice';
+import walletReducer from './wallet/wallet.slice';
 
 export const store = configureStore({
     reducer: {
         app: appReducer,
         swap: swapReducer,
+        wallet: walletReducer,
     },
 })
 
