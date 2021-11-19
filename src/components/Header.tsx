@@ -1,10 +1,16 @@
 import React, { useCallback } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { connectWallet } from '../store/wallet/wallet.thunks';
+
+import './Header.scss';
+import { connectWallet } from 'store/wallet/wallet.thunks';
+import { useAppSelector } from 'store/hooks';
+import { selectWalletAddress } from 'store/wallet/wallet.slice';
 
 function Header() {
     const dispatch = useDispatch();
+
+    const walletAddress = useAppSelector(selectWalletAddress)
 
     const handleConnectWallet = useCallback(() => {
         dispatch(connectWallet());
@@ -38,9 +44,15 @@ function Header() {
                                 Top Pools
                             </NavLink>
                         </div>
-                        <div className="nav-item">
-                            <div className="btn btn-outline"
-                                 onClick={handleConnectWallet}>Connect Wallet</div>
+                        <div className="nav-item wallet">
+                            {
+                                !walletAddress && <div className="btn btn-outline"
+                                                      onClick={handleConnectWallet}>Connect Wallet</div>
+                            }
+                            {
+                                walletAddress && <div className="btn btn-primary"
+                                                       onClick={handleConnectWallet}>{walletAddress}</div>
+                            }
                         </div>
                     </div>
                 </div>

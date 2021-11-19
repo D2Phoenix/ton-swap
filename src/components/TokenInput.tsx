@@ -12,6 +12,8 @@ interface TokenInputParams {
     onSelect: Function;
 }
 
+const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`)
+
 
 function TokenInput({balance, token, value, onChange, onSelect}: TokenInputParams) {
 
@@ -20,7 +22,10 @@ function TokenInput({balance, token, value, onChange, onSelect}: TokenInputParam
     }, [onSelect]);
 
     const handleChange = useCallback((event) => {
-        onChange(event.target.value);
+        const value = event.target.value.replace(/,/g, '.');
+        if (value === '' || inputRegex.test(value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))) {
+            onChange(value);
+        }
     }, [onChange]);
 
     return (
@@ -33,7 +38,16 @@ function TokenInput({balance, token, value, onChange, onSelect}: TokenInputParam
                     <span>{token ? token.symbol : 'Select'}</span>
                     <ChevronRightIcon/>
                 </div>
-                <input type="number" placeholder="0.0" value={value || ''} onChange={handleChange}/>
+                <input type="text"
+                       inputMode="decimal"
+                       autoComplete="off"
+                       autoCorrect="off"
+                       minLength={1}
+                       maxLength={79}
+                       pattern="^[0-9]*[.,]?[0-9]*$"
+                       placeholder="0.0"
+                       value={value || ''}
+                       onChange={handleChange}/>
             </div>
             {
                 token && balance !== undefined && <div className="balance text-small">

@@ -1,13 +1,16 @@
-import { createSlice, PayloadAction} from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import type { RootState } from 'store/store'
 import TokenInterface from 'interfaces/token.interface';
+import { estimateTransaction } from './swap.thunks';
+import { SwapType } from '../../interfaces/swap.type';
 
 interface SwapState {
     from: TokenInterface | null,
     to: TokenInterface | null,
     fromAmount: string;
     toAmount: string;
+    lastSwapType: SwapType;
 }
 
 const initialState: SwapState = {
@@ -22,6 +25,7 @@ const initialState: SwapState = {
     to: null,
     fromAmount: '',
     toAmount: '',
+    lastSwapType: SwapType.EXACT_IN,
 }
 
 export const swapSlice = createSlice({
@@ -54,9 +58,17 @@ export const swapSlice = createSlice({
             state.to = state.from;
             state.from = from;
             state.toAmount = state.fromAmount;
-            state.fromAmount = fromAmount
+            state.fromAmount = fromAmount;
+            state.lastSwapType = state.lastSwapType === SwapType.EXACT_IN ? SwapType.EXACT_OUT : SwapType.EXACT_IN;
         },
     },
+    extraReducers: (builder) => {
+        builder.addCase(estimateTransaction.fulfilled, (state, action) => {
+            state.toAmount = action.payload.toAmount;
+            state.fromAmount = action.payload.fromAmount;
+            state.lastSwapType = action.payload.type;
+        })
+    }
 })
 
 export const {
@@ -71,5 +83,6 @@ export const selectSwapFrom = (state: RootState) => state.swap.from;
 export const selectSwapTo = (state: RootState) => state.swap.to;
 export const selectSwapFromAmount = (state: RootState) => state.swap.fromAmount;
 export const selectSwapToAmount = (state: RootState) => state.swap.toAmount;
+export const selectSwapLastSwapType = (state: RootState) => state.swap.lastSwapType;
 
 export default swapSlice.reducer;

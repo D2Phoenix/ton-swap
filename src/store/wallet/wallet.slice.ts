@@ -42,4 +42,6 @@ export const selectWalletBalances = (state: RootState) => state.wallet.balances;
 
 export const selectWalletAdapter = (state: RootState) => state.wallet.adapter;
 
+export const selectWalletAddress = (state: RootState) => state.wallet.address;
+
 export default walletSlice.reducer;

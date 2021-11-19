@@ -71,6 +71,15 @@ nav {
     position: relative;
     width: auto;
     margin-bottom: 0;
+
+    &.wallet {
+      .btn {
+        width: 178px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+    }
   }
 }
 
