@@ -50,6 +50,7 @@ function SwapPage() {
     const toSymbol = toToken ? toToken.symbol : '';
     const isFilled = useMemo(() => {
         return fromTokenAmount && toTokenAmount && fromToken && toToken
+            && !toTokenAmount.eq('0')
     }, [fromToken, toToken, fromTokenAmount, toTokenAmount]);
     const insufficientBalance = useMemo(() => {
         if (fromToken && fromTokenAmount) {
@@ -70,7 +71,7 @@ function SwapPage() {
     }, [dispatch]);
 
     useEffect(() => {
-        if (!fromTokenAmount) {
+        if (!fromTokenAmount || fromTokenAmount.eq('0')) {
             return setSwapButtonText('Enter an amount');
         }
         if (fromTokenAmount && !toToken) {
@@ -83,7 +84,9 @@ function SwapPage() {
     }, [fromToken, fromTokenAmount, toToken, insufficientBalance])
 
     useEffect(() => {
-        if (toToken && fromToken && (fromTokenAmount || toTokenAmount)) {
+        if (toToken && fromToken &&
+            ((fromTokenAmount && !fromTokenAmount.eq('0')) ||
+                (toTokenAmount && !toTokenAmount.eq('0')))) {
             dispatch(estimateTransaction({
                 from: fromToken,
                 to: toToken,

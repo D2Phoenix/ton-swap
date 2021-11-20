@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
 
 import './TokenInput.scss';
@@ -18,6 +18,7 @@ const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`)
 
 
 function TokenInput({balance, token, value, onChange, onSelect}: TokenInputParams) {
+    const [internalValue, setInternalValue] = useState('')
 
     const handleClick = useCallback(() => {
         onSelect();
@@ -26,22 +27,26 @@ function TokenInput({balance, token, value, onChange, onSelect}: TokenInputParam
     const handleChange = useCallback((event) => {
         const value = event.target.value.replace(/,/g, '.');
         if (value === '') {
+            setInternalValue(value)
             return onChange(null);
         }
         if (inputRegex.test(value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))) {
+            setInternalValue(value);
             onChange(fromDecimals(new BigNumber(value), token ? token.decimals : 0));
         }
     }, [onChange, token]);
 
-    const visibleValue = useMemo(() => {
-        if (!value) {
-            return ''
+    useEffect(() => {
+        if (!value && internalValue) {
+            setInternalValue('');
         }
-        if (!token) {
-            return toDecimals(value, 0).toFixed();
+        if (value) {
+            const compare = fromDecimals(new BigNumber(internalValue), token ? token.decimals : 0);
+            if (!value.eq(compare)) {
+                setInternalValue(toDecimals(value, token ? token.decimals : 0).toFixed());
+            }
         }
-        return toDecimals(value, token.decimals).toFixed()
-    }, [value, token]);
+    }, [value, internalValue, token])
 
     return (
         <div className="input-wrapper">
@@ -61,7 +66,7 @@ function TokenInput({balance, token, value, onChange, onSelect}: TokenInputParam
                        maxLength={79}
                        pattern="^[0-9]*[.,]?[0-9]*$"
                        placeholder="0.0"
-                       value={visibleValue}
+                       value={internalValue}
                        onChange={handleChange}/>
             </div>
             {
