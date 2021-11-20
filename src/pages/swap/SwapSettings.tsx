@@ -5,6 +5,7 @@ import './SwapSettings.scss';
 import Modal from 'components/Modal';
 import { useAppSelector } from 'store/hooks';
 import { selectSwapSettings, setSwapDeadline, setSwapSlippage } from 'store/swap/swap.slice';
+import { DEFAULT_DEADLINE, DEFAULT_SLIPPAGE } from '../../constants/swap';
 
 const SLIPPAGE_INPUT_REGEXP = RegExp(`^\\d*(?:\\\\[.])?\\d*$`);
 const DEADLINE_INPUT_REGEXP = RegExp(`^\\d*(?:\\\\[])?\\d*$`);
@@ -36,7 +37,7 @@ function SwapSettings({onClose}: any) {
                 <div>
                     <input type="text"
                            className="number__input"
-                           placeholder="0.10"
+                           placeholder={DEFAULT_SLIPPAGE}
                            value={settings.slippage}
                            onChange={handleSlippageChange}/>
                     <span>&nbsp;%</span>
@@ -45,6 +46,7 @@ function SwapSettings({onClose}: any) {
                 <div>
                     <input type="text"
                            className="number__input"
+                           placeholder={DEFAULT_DEADLINE}
                            value={settings.deadline}
                            onChange={handleDeadlineChange}/>
                     <span>&nbsp;minutes</span>

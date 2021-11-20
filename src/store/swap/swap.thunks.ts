@@ -9,11 +9,16 @@ const swapService = new SwapService();
 export const estimateTransaction = createAsyncThunk(
     'swap/estimate',
     async (data: SwapTransactionRequestInterface) => {
-        const estimation = await swapService.getTransactionEstimation(data);
+        const transaction = await swapService.getTransactionEstimation(data);
+        const priceImpact = await swapService.getPriceImpact(data, transaction);
+        const insufficientLiquidity = !await swapService.checkLiquidity(data, transaction);
         return {
-            fromAmount: estimation.type === SwapType.EXACT_IN ? estimation.amount : estimation.quote,
-            toAmount: estimation.type === SwapType.EXACT_IN ? estimation.quote : estimation.amount,
+            fromAmount: transaction.type === SwapType.EXACT_IN ? transaction.amount : transaction.quote,
+            toAmount: transaction.type === SwapType.EXACT_IN ? transaction.quote : transaction.amount,
+            fee: transaction.fee,
             type: data.type,
+            priceImpact,
+            insufficientLiquidity,
         }
     }
 )

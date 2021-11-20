@@ -6,6 +6,7 @@ import TokenInterface from 'interfaces/token.interface';
 import { estimateTransaction } from './swap.thunks';
 import { SwapType } from '../../interfaces/swap.type';
 import { shiftDecimals } from '../../utils/decimals';
+import { DEFAULT_DEADLINE, DEFAULT_SLIPPAGE } from '../../constants/swap';
 
 interface SwapState {
     from: TokenInterface | null,
@@ -18,8 +19,8 @@ interface SwapState {
         deadline: string,
     }
     details: {
-        fee: BigNumber | null;
-        priceImpact: BigNumber | null;
+        fee: BigNumber;
+        priceImpact: BigNumber;
         insufficientLiquidity: boolean;
     }
 }
@@ -38,12 +39,12 @@ const initialState: SwapState = {
     toAmount: null,
     lastSwapType: SwapType.EXACT_IN,
     settings: {
-        slippage: '0.5',
-        deadline: '30',
+        slippage: DEFAULT_SLIPPAGE,
+        deadline: DEFAULT_DEADLINE,
     },
     details: {
-        fee: null,
-        priceImpact: null,
+        fee: new BigNumber('0'),
+        priceImpact: new BigNumber('0'),
         insufficientLiquidity: false,
     }
 }
@@ -97,6 +98,9 @@ export const swapSlice = createSlice({
             state.toAmount = action.payload.toAmount;
             state.fromAmount = action.payload.fromAmount;
             state.lastSwapType = action.payload.type;
+            state.details.fee = action.payload.fee;
+            state.details.priceImpact = action.payload.priceImpact;
+            state.details.insufficientLiquidity = action.payload.insufficientLiquidity;
         })
     }
 })
@@ -117,5 +121,6 @@ export const selectSwapFromAmount = (state: RootState) => state.swap.fromAmount;
 export const selectSwapToAmount = (state: RootState) => state.swap.toAmount;
 export const selectSwapLastSwapType = (state: RootState) => state.swap.lastSwapType;
 export const selectSwapSettings = (state: RootState) => state.swap.settings;
+export const selectSwapDetails = (state: RootState) => state.swap.details;
 
 export default swapSlice.reducer;

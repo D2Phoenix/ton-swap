@@ -5,4 +5,5 @@ export interface SwapTransactionInterface {
     amount: BigNumber | null;
     quote: BigNumber | null;
     type: SwapType;
+    fee: BigNumber;
 }

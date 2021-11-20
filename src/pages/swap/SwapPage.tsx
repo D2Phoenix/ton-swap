@@ -205,20 +205,19 @@ function SwapPage() {
                         showMax={false}
                         onSelect={openToTokenSelect}
                         onChange={handleToTokenAmount}/>
-            <div className="swap-info text-small">
-                {
-                    isFilled && <span>
-                      1 {toToken!.symbol} = {calcFrom} {fromToken!.symbol}
-                    </span>
-                }
-                <div className="btn-icon" onMouseOver={() => setShowSwapInfo(true)} onMouseLeave={() => setShowSwapInfo(false)}>
+            {
+                isFilled && <div className="swap-info text-small">
+                <span>
+                  1 {toToken!.symbol} = {calcFrom} {fromToken!.symbol}
+                </span>
+                  <div className="btn-icon" onMouseOver={() => setShowSwapInfo(true)} onMouseLeave={() => setShowSwapInfo(false)}>
                     <InfoIcon/>
-                    {
-                        showSwapInfo && <SwapInfo />
-                    }
+                      {
+                          showSwapInfo && <SwapInfo />
+                      }
+                  </div>
                 </div>
-
-            </div>
+            }
             {
                 walletAdapter && isFilled && !walletPermissions[fromToken!.symbol] && !insufficientBalance &&
                     <button className="btn btn-primary swap__btn"
