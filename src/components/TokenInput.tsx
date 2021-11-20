@@ -82,7 +82,7 @@ function TokenInput({balance, token, value, showMax, onChange, onSelect}: TokenI
                 token && balance !== undefined && <div className="balance text-small">
                   Balance: {toDecimals(balance, token.decimals).toFixed()} {token.symbol}
                     {
-                        showMax && (
+                        showMax && !balance.eq('0') && (
                             <>&nbsp;(<span className="text-primary text-small link__btn" onClick={handleMax}>MAX</span>)</>
                         )
                     }

@@ -74,7 +74,7 @@ function SwapPage() {
         if (!fromTokenAmount || fromTokenAmount.eq('0')) {
             return setSwapButtonText('Enter an amount');
         }
-        if (fromTokenAmount && !toToken) {
+        if (!toToken || !fromToken) {
             return setSwapButtonText('Select a token');
         }
         if (fromToken && insufficientBalance) {
@@ -210,7 +210,7 @@ function SwapPage() {
             </div>
             {
                 walletAdapter && <button className="btn btn-primary swap__btn"
-                                         disabled={!isFilled}>
+                                         disabled={!isFilled || insufficientBalance}>
                     {swapButtonText}
                 </button>
             }
