@@ -36,19 +36,18 @@ export const swapSlice = createSlice({
     reducers: {
         setSwapFromToken: (state, action: PayloadAction<any>) => {
             const oldFrom = state.from;
-            const oldFromAmount = state.fromAmount;
             state.from = action.payload;
             // correct amount with new token decimals
-            if (oldFrom && state.from && state.fromAmount) {
-                state.fromAmount = shiftDecimals(state.fromAmount as BigNumber, state.from.decimals - oldFrom.decimals);
+            if (state.from && state.fromAmount) {
+                state.fromAmount = shiftDecimals(state.fromAmount as BigNumber, state.from.decimals - (oldFrom ? oldFrom.decimals : 0));
             }
         },
         setSwapToToken: (state, action: PayloadAction<any>) => {
             const oldTo = state.to;
             state.to = action.payload;
             // correct amount with new token decimals
-            if (oldTo && state.to && state.toAmount) {
-                state.toAmount = shiftDecimals(state.toAmount as BigNumber, state.to.decimals - oldTo.decimals);
+            if (state.to && state.toAmount) {
+                state.toAmount = shiftDecimals(state.toAmount as BigNumber, state.to.decimals - (oldTo ? oldTo.decimals : 0));
             }
         },
         setSwapFromTokenAmount: (state, action: PayloadAction<any>) => {

@@ -11,10 +11,7 @@ export const store = configureStore({
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
-            serializableCheck: {
-                ignoredActions: ['wallet/connect/fulfilled'],
-                ignoredPaths: ['wallet.adapter'],
-            },
+            serializableCheck: false,
     }),
 })
 

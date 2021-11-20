@@ -83,19 +83,41 @@ function SwapPage() {
         setSwapButtonText('Swap');
     }, [fromToken, fromTokenAmount, toToken, insufficientBalance])
 
-    useEffect(() => {
-        if (toToken && fromToken &&
-            ((fromTokenAmount && !fromTokenAmount.eq('0')) ||
-                (toTokenAmount && !toTokenAmount.eq('0')))) {
-            dispatch(estimateTransaction({
+    useEffect((): any => {
+        if (swapType === SwapType.EXACT_IN && (!fromTokenAmount || fromTokenAmount.eq('0'))) {
+            return dispatch(setSwapToTokenAmount({
+                value: null,
+                swapType: SwapType.EXACT_IN
+            }));
+        }
+        if (swapType === SwapType.EXACT_IN && fromToken && toToken && fromTokenAmount && !fromTokenAmount.eq('0')) {
+            return dispatch(estimateTransaction({
                 from: fromToken,
                 to: toToken,
                 fromAmount: fromTokenAmount,
+                toAmount: null,
+                type: swapType,
+            }))
+        }
+    }, [dispatch, fromToken, toToken, fromTokenAmount, swapType]);
+
+    useEffect((): any => {
+        if (swapType === SwapType.EXACT_OUT && (!toTokenAmount || toTokenAmount.eq('0'))) {
+            return dispatch(setSwapFromTokenAmount({
+                value: null,
+                swapType: SwapType.EXACT_OUT
+            }));
+        }
+        if (swapType === SwapType.EXACT_OUT && fromToken && toToken && toTokenAmount && !toTokenAmount.eq('0')) {
+            return dispatch(estimateTransaction({
+                from: fromToken,
+                to: toToken,
+                fromAmount: null,
                 toAmount: toTokenAmount,
                 type: swapType,
             }))
         }
-    }, [dispatch, fromToken, toToken, fromTokenAmount, toTokenAmount, swapType]);
+    }, [dispatch, fromToken, toToken, toTokenAmount, swapType]);
 
     const openFromTokenSelect = useCallback(() => {
         setShowTokenSelect(!showTokenSelect);
