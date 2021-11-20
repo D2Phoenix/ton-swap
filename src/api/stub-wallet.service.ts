@@ -6,10 +6,10 @@ import TokenInterface from '../interfaces/token.interface';
 class StubWalletService implements WalletAdapterInterface {
     getBalance(token: TokenInterface): Promise<BigNumber> {
         if (token.symbol === 'TON') {
-            return Promise.resolve(new BigNumber('10000'));
+            return Promise.resolve(new BigNumber('1000000000'));
         }
         if (token.symbol === 'SHIB') {
-            return Promise.resolve(new BigNumber('5000'));
+            return Promise.resolve(new BigNumber('5000000000000000000'));
         }
         return Promise.resolve(new BigNumber('0'));
     }

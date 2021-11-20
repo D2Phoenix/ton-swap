@@ -1,4 +1,3 @@
-import BigNumber from 'bignumber.js';
 import { SwapTransactionRequestInterface } from 'interfaces/swap-transaction-request.interface';
 import { SwapTransactionInterface } from 'interfaces/swap-transaction.interface';
 import { SwapType } from 'interfaces/swap.type';

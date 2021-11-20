@@ -41,7 +41,7 @@ function TokenInput({balance, token, value, onChange, onSelect}: TokenInputParam
             return toDecimals(value, 0).toFixed();
         }
         return toDecimals(value, token.decimals).toFixed()
-    }, [value, token])
+    }, [value, token]);
 
     return (
         <div className="input-wrapper">
@@ -66,7 +66,7 @@ function TokenInput({balance, token, value, onChange, onSelect}: TokenInputParam
             </div>
             {
                 token && balance !== undefined && <div className="balance text-small">
-                  Balance: {balance.toString()} {token.symbol}
+                  Balance: {toDecimals(balance, token.decimals).toFixed()} {token.symbol}
                 </div>
             }
         </div>

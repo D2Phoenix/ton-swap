@@ -52,9 +52,9 @@ function SwapPage() {
         return fromTokenAmount && toTokenAmount && fromToken && toToken
     }, [fromToken, toToken, fromTokenAmount, toTokenAmount]);
     const insufficientBalance = useMemo(() => {
-        if (fromToken) {
-            const balance = walletBalances[fromToken.symbol] || new BigNumber('');
-            return fromTokenAmount && balance.gt(fromTokenAmount);
+        if (fromToken && fromTokenAmount) {
+            const balance = walletBalances[fromToken.symbol] || new BigNumber('0');
+            return fromTokenAmount.gt(balance);
         }
         return false;
     }, [fromToken, fromTokenAmount, walletBalances]);
@@ -104,6 +104,10 @@ function SwapPage() {
         setTokenSelectType('to');
     }, [showTokenSelect, setShowTokenSelect]);
 
+    const handleSwitchTokens = useCallback(() => {
+        dispatch(switchSwapTokens());
+    }, [dispatch]);
+
     const handleSelectToken = useCallback((token) => {
         setShowTokenSelect(false);
         if (!token) {
@@ -112,15 +116,17 @@ function SwapPage() {
         if (walletAdapter) {
             dispatch(getWalletBalance(token));
         }
+        if (toToken && tokenSelectType === 'from' && toToken.symbol === token.symbol) {
+            return handleSwitchTokens();
+        }
+        if (fromToken && tokenSelectType === 'to' && fromToken.symbol === token.symbol) {
+            return handleSwitchTokens();
+        }
         if (tokenSelectType === 'from') {
             return dispatch(setSwapFromToken(token));
         }
         dispatch(setSwapToToken(token));
-    }, [dispatch, tokenSelectType, walletAdapter]);
-
-    const handleSwitchTokens = useCallback(() => {
-        dispatch(switchSwapTokens());
-    }, [dispatch]);
+    }, [dispatch, fromToken, toToken, tokenSelectType, walletAdapter, handleSwitchTokens]);
 
     const handleFromTokenAmount = useCallback((value) => {
         dispatch(setSwapFromTokenAmount({
