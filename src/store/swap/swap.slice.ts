@@ -1,15 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import BigNumber from 'bignumber.js';
 
 import type { RootState } from 'store/store'
 import TokenInterface from 'interfaces/token.interface';
 import { estimateTransaction } from './swap.thunks';
 import { SwapType } from '../../interfaces/swap.type';
+import { shiftDecimals } from '../../utils/decimals';
 
 interface SwapState {
     from: TokenInterface | null,
     to: TokenInterface | null,
-    fromAmount: string;
-    toAmount: string;
+    fromAmount: BigNumber | null;
+    toAmount: BigNumber | null;
     lastSwapType: SwapType;
 }
 
@@ -23,8 +25,8 @@ const initialState: SwapState = {
         symbol: "TON",
     },
     to: null,
-    fromAmount: '',
-    toAmount: '',
+    fromAmount: null,
+    toAmount: null,
     lastSwapType: SwapType.EXACT_IN,
 }
 
@@ -33,24 +35,34 @@ export const swapSlice = createSlice({
     initialState,
     reducers: {
         setSwapFromToken: (state, action: PayloadAction<any>) => {
-            const from = state.from;
+            const oldFrom = state.from;
             state.from = action.payload;
+            // correct amount with new token decimals
+            if (oldFrom && state.from && state.fromAmount) {
+                state.fromAmount = shiftDecimals(state.fromAmount as BigNumber, state.from.decimals - oldFrom.decimals);
+            }
             if (state.to && state.from && state.from.symbol === state.to.symbol) {
-                state.to = from;
+                state.to = oldFrom;
             }
         },
         setSwapToToken: (state, action: PayloadAction<any>) => {
-            const to = state.to;
+            const oldTo = state.to;
             state.to = action.payload;
+            // correct amount with new token decimals
+            if (oldTo && state.to && state.toAmount) {
+                state.toAmount = shiftDecimals(state.toAmount as BigNumber, state.to.decimals - oldTo.decimals);
+            }
             if (state.to && state.from && state.from.symbol === state.to.symbol) {
-                state.from = to;
+                state.from = oldTo;
             }
         },
         setSwapFromTokenAmount: (state, action: PayloadAction<any>) => {
-            state.fromAmount = action.payload;
+            state.fromAmount = action.payload.value;
+            state.lastSwapType = action.payload.swapType;
         },
         setSwapToTokenAmount: (state, action: PayloadAction<any>) => {
-            state.toAmount = action.payload;
+            state.toAmount = action.payload.value;
+            state.lastSwapType = action.payload.swapType;
         },
         switchSwapTokens: (state, action: PayloadAction<void>) => {
             const from = state.to;

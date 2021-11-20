@@ -1,15 +1,16 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import BigNumber from 'bignumber.js';
 
 import TokenInterface from 'interfaces/token.interface';
 import { RootState } from 'store/store';
-import StubWalletService from '../../api/stub-wallet.service';
+import StubWalletService from 'api/stub-wallet.service';
 
 export const connectWallet = createAsyncThunk(
     'wallet/connect',
     async (request, thunkAPI) => {
         const state = thunkAPI.getState() as RootState;
         const adapter = new StubWalletService();
-        const balances: Record<string, number> = {};
+        const balances: Record<string, BigNumber> = {};
         if (state.swap.from) {
             balances[state.swap.from.symbol] = await adapter.getBalance(state.swap.from);
         }
@@ -31,7 +32,7 @@ export const getWalletBalance = createAsyncThunk(
         const walletAdapterService = state.wallet.adapter;
         return {
             token,
-            value: walletAdapterService ? await walletAdapterService.getBalance(token) : 0,
+            value: walletAdapterService ? await walletAdapterService.getBalance(token) : new BigNumber(0),
         };
     }
 )

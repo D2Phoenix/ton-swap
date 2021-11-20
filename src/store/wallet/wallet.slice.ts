@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import BigNumber from 'bignumber.js';
 
 import type { RootState } from 'store/store'
 import { connectWallet, getWalletAddress, getWalletBalance } from './wallet.thunks';
@@ -7,7 +8,7 @@ import { WalletAdapterInterface } from 'interfaces/wallet-adapter.interface';
 interface WalletState {
     adapter: WalletAdapterInterface | null,
     address: string;
-    balances: Record<string, number>,
+    balances: Record<string, BigNumber>,
 }
 
 const initialState: WalletState = {

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import BigNumber from 'bignumber.js';
 
 import './SwapPage.scss';
 import ChevronDownIcon from 'components/icons/ChevronDownIcon';
@@ -48,11 +49,21 @@ function SwapPage() {
     const fromSymbol = fromToken ? fromToken.symbol : '';
     const toSymbol = toToken ? toToken.symbol : '';
     const isFilled = useMemo(() => {
-        return fromTokenAmount && toTokenAmount
-    }, [fromTokenAmount, toTokenAmount]);
+        return fromTokenAmount && toTokenAmount && fromToken && toToken
+    }, [fromToken, toToken, fromTokenAmount, toTokenAmount]);
     const insufficientBalance = useMemo(() => {
-        return fromToken && fromTokenAmount && walletBalances[fromToken.symbol] < parseFloat(fromTokenAmount);
+        if (fromToken) {
+            const balance = walletBalances[fromToken.symbol] || new BigNumber('');
+            return fromTokenAmount && balance.gt(fromTokenAmount);
+        }
+        return false;
     }, [fromToken, fromTokenAmount, walletBalances]);
+    const calcFrom = useMemo(() => {
+        if (!fromTokenAmount || !toTokenAmount || !toToken || !fromToken) {
+            return;
+        }
+        return fromTokenAmount.div(toTokenAmount.shiftedBy(fromToken.decimals - toToken.decimals)).toFixed();
+    }, [fromToken, toToken, fromTokenAmount, toTokenAmount])
 
     useEffect(() => {
         dispatch(fetchTokens());
@@ -71,6 +82,18 @@ function SwapPage() {
         setSwapButtonText('Swap');
     }, [fromToken, fromTokenAmount, toToken, insufficientBalance])
 
+    useEffect(() => {
+        if (toToken && fromToken && (fromTokenAmount || toTokenAmount)) {
+            dispatch(estimateTransaction({
+                from: fromToken,
+                to: toToken,
+                fromAmount: fromTokenAmount,
+                toAmount: toTokenAmount,
+                type: swapType,
+            }))
+        }
+    }, [dispatch, fromToken, toToken, fromTokenAmount, toTokenAmount, swapType]);
+
     const openFromTokenSelect = useCallback(() => {
         setShowTokenSelect(!showTokenSelect);
         setTokenSelectType('from');
@@ -81,18 +104,6 @@ function SwapPage() {
         setTokenSelectType('to');
     }, [showTokenSelect, setShowTokenSelect]);
 
-    const handleTransaction = useCallback((fromToken, toToken, fromTokenAmount, toTokenAmount, type) => {
-        if (toToken && fromToken && fromTokenAmount) {
-            dispatch(estimateTransaction({
-                from: fromToken,
-                to: toToken,
-                fromAmount: fromTokenAmount,
-                toAmount: toTokenAmount,
-                type: type,
-            }))
-        }
-    }, [dispatch]);
-
     const handleSelectToken = useCallback((token) => {
         setShowTokenSelect(false);
         if (!token) {
@@ -102,28 +113,28 @@ function SwapPage() {
             dispatch(getWalletBalance(token));
         }
         if (tokenSelectType === 'from') {
-            handleTransaction(token, toToken, fromTokenAmount, toTokenAmount, swapType);
             return dispatch(setSwapFromToken(token));
         }
-        handleTransaction(fromToken, token, fromTokenAmount, toTokenAmount, swapType);
         dispatch(setSwapToToken(token));
-    }, [dispatch, tokenSelectType, walletAdapter, swapType, handleTransaction, toToken, fromToken, toTokenAmount, fromTokenAmount]);
+    }, [dispatch, tokenSelectType, walletAdapter]);
 
     const handleSwitchTokens = useCallback(() => {
         dispatch(switchSwapTokens());
-        const reversedSwapType = swapType === SwapType.EXACT_IN ? SwapType.EXACT_OUT : SwapType.EXACT_IN;
-        handleTransaction(toToken, fromToken, toTokenAmount, fromTokenAmount, reversedSwapType);
-    }, [dispatch, swapType, handleTransaction, toToken, fromToken, toTokenAmount, fromTokenAmount]);
+    }, [dispatch]);
 
     const handleFromTokenAmount = useCallback((value) => {
-        dispatch(setSwapFromTokenAmount(value));
-        handleTransaction(fromToken, toToken, value, toTokenAmount, SwapType.EXACT_IN);
-    }, [dispatch, toToken, fromToken, toTokenAmount, handleTransaction]);
+        dispatch(setSwapFromTokenAmount({
+            value,
+            swapType: SwapType.EXACT_IN
+        }));
+    }, [dispatch]);
 
     const handleToTokenAmount = useCallback((value) => {
-        dispatch(setSwapToTokenAmount(value));
-        handleTransaction(fromToken, toToken, fromTokenAmount, value, SwapType.EXACT_OUT);
-    }, [dispatch, toToken, fromToken, fromTokenAmount, handleTransaction]);
+        dispatch(setSwapToTokenAmount({
+            value,
+            swapType: SwapType.EXACT_OUT
+        }));
+    }, [dispatch]);
 
     const handleConnectWallet = useCallback(() => {
         dispatch(connectWallet());
@@ -151,7 +162,11 @@ function SwapPage() {
                         onSelect={openToTokenSelect}
                         onChange={handleToTokenAmount}/>
             <div className="swap-info text-small">
-                <span>1 ETH = 487.7 DAI</span>
+                {
+                    isFilled && <span>
+                      1 {toToken!.symbol} = {calcFrom} {fromToken!.symbol}
+                    </span>
+                }
                 <div className="btn-icon" onMouseOver={() => setShowSwapInfo(true)} onMouseLeave={() => setShowSwapInfo(false)}>
                     <InfoIcon/>
                     {
