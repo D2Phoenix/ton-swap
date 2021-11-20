@@ -25,8 +25,13 @@ import {
     setSwapToTokenAmount,
     switchSwapTokens
 } from 'store/swap/swap.slice';
-import { selectWalletAdapter, selectWalletBalances } from 'store/wallet/wallet.slice';
-import { connectWallet, getWalletBalance } from 'store/wallet/wallet.thunks';
+import { selectWalletAdapter, selectWalletBalances, selectWalletPermissions } from 'store/wallet/wallet.slice';
+import {
+    connectWallet,
+    getWalletBalance,
+    getWalletUseTokenPermission,
+    setWalletUseTokenPermission
+} from 'store/wallet/wallet.thunks';
 import { estimateTransaction } from '../../store/swap/swap.thunks';
 import { SwapType } from '../../interfaces/swap.type';
 
@@ -42,9 +47,10 @@ function SwapPage() {
     const toToken = useAppSelector(selectSwapTo);
     const fromTokenAmount = useAppSelector(selectSwapFromAmount);
     const toTokenAmount = useAppSelector(selectSwapToAmount);
+    const swapType = useAppSelector(selectSwapLastSwapType);
     const walletBalances = useAppSelector(selectWalletBalances);
     const walletAdapter = useAppSelector(selectWalletAdapter);
-    const swapType = useAppSelector(selectSwapLastSwapType);
+    const walletPermissions = useAppSelector(selectWalletPermissions);
 
     const fromSymbol = fromToken ? fromToken.symbol : '';
     const toSymbol = toToken ? toToken.symbol : '';
@@ -140,6 +146,7 @@ function SwapPage() {
         }
         if (walletAdapter) {
             dispatch(getWalletBalance(token));
+            dispatch(getWalletUseTokenPermission(token));
         }
         if (toToken && tokenSelectType === 'from' && toToken.symbol === token.symbol) {
             return handleSwitchTokens();
@@ -170,6 +177,10 @@ function SwapPage() {
     const handleConnectWallet = useCallback(() => {
         dispatch(connectWallet());
     }, [dispatch]);
+
+    const handleAllowUseToken = useCallback(() => {
+        dispatch(setWalletUseTokenPermission(fromToken!));
+    }, [dispatch, fromToken])
 
     return (
         <div className="swap-wrapper">
@@ -209,8 +220,15 @@ function SwapPage() {
 
             </div>
             {
+                walletAdapter && isFilled && !walletPermissions[fromToken!.symbol] && !insufficientBalance &&
+                    <button className="btn btn-primary swap__btn"
+                            onClick={handleAllowUseToken}>
+                      Allow the TONSwap Protocol to use your {fromToken!.symbol}
+                    </button>
+            }
+            {
                 walletAdapter && <button className="btn btn-primary swap__btn"
-                                         disabled={!isFilled || insufficientBalance}>
+                                         disabled={!isFilled || insufficientBalance || (!!fromToken && !walletPermissions[fromToken.symbol])}>
                     {swapButtonText}
                 </button>
             }

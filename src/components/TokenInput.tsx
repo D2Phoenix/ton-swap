@@ -17,6 +17,7 @@ interface TokenInputParams {
 
 const INPUT_REGEXP = RegExp(`^\\d*(?:\\\\[.])?\\d*$`)
 const INPUT_PRECISION = 6;
+const BALANCE_PRECISION = 4;
 
 function TokenInput({balance, token, value, showMax, onChange, onSelect}: TokenInputParams) {
     const [internalValue, setInternalValue] = useState('');
@@ -58,6 +59,13 @@ function TokenInput({balance, token, value, showMax, onChange, onSelect}: TokenI
         });
     }, [handleChange, balance, token]);
 
+    const balanceVisible = useMemo(() => {
+        if (balance) {
+            return toDecimals(balance, token ? token.decimals : 0).precision(BALANCE_PRECISION).toFixed();
+        }
+        return '0';
+    }, [balance, token])
+
     return (
         <div className="input-wrapper">
             <div className="token-input">
@@ -81,7 +89,7 @@ function TokenInput({balance, token, value, showMax, onChange, onSelect}: TokenI
             </div>
             {
                 token && balance !== undefined && <div className="balance text-small">
-                  Balance: {toDecimals(balance, token.decimals).toFixed()} {token.symbol}
+                  Balance: {balanceVisible} {token.symbol}
                     {
                         showMax && !balance.eq('0') && (
                             <>&nbsp;(<span className="text-primary text-small link__btn" onClick={handleMax}>MAX</span>)</>
