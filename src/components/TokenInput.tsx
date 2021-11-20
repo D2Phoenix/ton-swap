@@ -10,6 +10,7 @@ interface TokenInputParams {
     balance: BigNumber;
     token: TokenInterface | null,
     value: BigNumber | null;
+    showMax: boolean;
     onChange: Function;
     onSelect: Function;
 }
@@ -17,8 +18,20 @@ interface TokenInputParams {
 const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`)
 
 
-function TokenInput({balance, token, value, onChange, onSelect}: TokenInputParams) {
-    const [internalValue, setInternalValue] = useState('')
+function TokenInput({balance, token, value, showMax, onChange, onSelect}: TokenInputParams) {
+    const [internalValue, setInternalValue] = useState('');
+
+    useEffect(() => {
+        if (!value && internalValue) {
+            setInternalValue('');
+        }
+        if (value) {
+            const compare = fromDecimals(new BigNumber(internalValue), token ? token.decimals : 0);
+            if (!value.eq(compare)) {
+                setInternalValue(toDecimals(value, token ? token.decimals : 0).toFixed());
+            }
+        }
+    }, [value, internalValue, token])
 
     const handleClick = useCallback(() => {
         onSelect();
@@ -36,17 +49,13 @@ function TokenInput({balance, token, value, onChange, onSelect}: TokenInputParam
         }
     }, [onChange, token]);
 
-    useEffect(() => {
-        if (!value && internalValue) {
-            setInternalValue('');
-        }
-        if (value) {
-            const compare = fromDecimals(new BigNumber(internalValue), token ? token.decimals : 0);
-            if (!value.eq(compare)) {
-                setInternalValue(toDecimals(value, token ? token.decimals : 0).toFixed());
+    const handleMax = useCallback((event) => {
+        handleChange({
+            target: {
+                value: toDecimals(balance, token ? token.decimals : 0).toFixed()
             }
-        }
-    }, [value, internalValue, token])
+        });
+    }, [handleChange, balance, token]);
 
     return (
         <div className="input-wrapper">
@@ -72,6 +81,11 @@ function TokenInput({balance, token, value, onChange, onSelect}: TokenInputParam
             {
                 token && balance !== undefined && <div className="balance text-small">
                   Balance: {toDecimals(balance, token.decimals).toFixed()} {token.symbol}
+                    {
+                        showMax && (
+                            <>&nbsp;(<span className="text-primary text-small link__btn" onClick={handleMax}>MAX</span>)</>
+                        )
+                    }
                 </div>
             }
         </div>

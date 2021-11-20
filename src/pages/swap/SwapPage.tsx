@@ -182,6 +182,7 @@ function SwapPage() {
             <TokenInput token={fromToken}
                         balance={walletBalances[fromSymbol]}
                         value={fromTokenAmount}
+                        showMax={true}
                         onSelect={openFromTokenSelect}
                         onChange={handleFromTokenAmount}/>
             <div className="switch__btn btn-icon" onClick={handleSwitchTokens}>
@@ -190,6 +191,7 @@ function SwapPage() {
             <TokenInput token={toToken}
                         balance={walletBalances[toSymbol]}
                         value={toTokenAmount}
+                        showMax={false}
                         onSelect={openToTokenSelect}
                         onChange={handleToTokenAmount}/>
             <div className="swap-info text-small">

@@ -21,6 +21,10 @@ sup {
   color: inherit;
 }
 
+.text-primary {
+  color: $primary-color;
+}
+
 .text-gray,
 .text-gray span {
   color: $text-gray-color;
