@@ -12,7 +12,6 @@ interface TokenSelectParams {
 }
 
 function TokenSelect({tokens, onClose, onSelect}: TokenSelectParams) {
-    const list = useRef(null);
     const loader = useRef(null);
     const [page, setPage] = useState(1);
     const [query, setQuery] = useState('');
@@ -26,9 +25,9 @@ function TokenSelect({tokens, onClose, onSelect}: TokenSelectParams) {
 
     useEffect(() => {
         const option = {
-            root: list.current,
+            root: null,
             rootMargin: "0px",
-            threshold: 1.0
+            threshold: 0.9
         };
         const observer = new IntersectionObserver(handleObserver, option);
         if (loader.current) {
@@ -50,7 +49,7 @@ function TokenSelect({tokens, onClose, onSelect}: TokenSelectParams) {
                 <input placeholder="Search name or paste address"
                        value={query}
                        onChange={(event) => setQuery(event.target.value)}/>
-                <div className="token-select-list" ref={list}>
+                <div className="token-select-list">
                     {
                         visibleTokens.map((token, index) => {
                             return (
