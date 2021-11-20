@@ -15,8 +15,8 @@ interface TokenInputParams {
     onSelect: Function;
 }
 
-const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`)
-
+const INPUT_REGEXP = RegExp(`^\\d*(?:\\\\[.])?\\d*$`)
+const INPUT_PRECISION = 6;
 
 function TokenInput({balance, token, value, showMax, onChange, onSelect}: TokenInputParams) {
     const [internalValue, setInternalValue] = useState('');
@@ -28,7 +28,8 @@ function TokenInput({balance, token, value, showMax, onChange, onSelect}: TokenI
         if (value) {
             const compare = fromDecimals(new BigNumber(internalValue), token ? token.decimals : 0);
             if (!value.eq(compare)) {
-                setInternalValue(toDecimals(value, token ? token.decimals : 0).toFixed());
+                const newValue = toDecimals(value, token ? token.decimals : 0);
+                setInternalValue(newValue.precision(INPUT_PRECISION).toFixed());
             }
         }
     }, [value, internalValue, token])
@@ -43,7 +44,7 @@ function TokenInput({balance, token, value, showMax, onChange, onSelect}: TokenI
             setInternalValue(value)
             return onChange(null);
         }
-        if (inputRegex.test(value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))) {
+        if (INPUT_REGEXP.test(value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))) {
             setInternalValue(value);
             onChange(fromDecimals(new BigNumber(value), token ? token.decimals : 0));
         }

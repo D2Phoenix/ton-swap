@@ -50,8 +50,7 @@ function Header() {
                                                       onClick={handleConnectWallet}>Connect Wallet</div>
                             }
                             {
-                                walletAddress && <div className="btn btn-primary"
-                                                       onClick={handleConnectWallet}>{walletAddress}</div>
+                                walletAddress && <div className="btn btn-primary">{walletAddress}</div>
                             }
                         </div>
                     </div>
