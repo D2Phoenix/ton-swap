@@ -13,6 +13,15 @@ interface SwapState {
     fromAmount: BigNumber | null;
     toAmount: BigNumber | null;
     lastSwapType: SwapType;
+    settings: {
+        slippage: string,
+        deadline: string,
+    }
+    details: {
+        fee: BigNumber | null;
+        priceImpact: BigNumber | null;
+        insufficientLiquidity: boolean;
+    }
 }
 
 const initialState: SwapState = {
@@ -28,6 +37,15 @@ const initialState: SwapState = {
     fromAmount: null,
     toAmount: null,
     lastSwapType: SwapType.EXACT_IN,
+    settings: {
+        slippage: '0.5',
+        deadline: '30',
+    },
+    details: {
+        fee: null,
+        priceImpact: null,
+        insufficientLiquidity: false,
+    }
 }
 
 export const swapSlice = createSlice({
@@ -67,6 +85,12 @@ export const swapSlice = createSlice({
             state.fromAmount = fromAmount;
             state.lastSwapType = state.lastSwapType === SwapType.EXACT_IN ? SwapType.EXACT_OUT : SwapType.EXACT_IN;
         },
+        setSwapSlippage: (state, action: PayloadAction<any>) => {
+            state.settings.slippage = action.payload;
+        },
+        setSwapDeadline: (state, action: PayloadAction<any>) => {
+            state.settings.deadline = action.payload;
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(estimateTransaction.fulfilled, (state, action) => {
@@ -82,7 +106,9 @@ export const {
     setSwapToToken,
     switchSwapTokens,
     setSwapFromTokenAmount,
-    setSwapToTokenAmount
+    setSwapToTokenAmount,
+    setSwapSlippage,
+    setSwapDeadline
 } = swapSlice.actions
 
 export const selectSwapFrom = (state: RootState) => state.swap.from;
@@ -90,5 +116,6 @@ export const selectSwapTo = (state: RootState) => state.swap.to;
 export const selectSwapFromAmount = (state: RootState) => state.swap.fromAmount;
 export const selectSwapToAmount = (state: RootState) => state.swap.toAmount;
 export const selectSwapLastSwapType = (state: RootState) => state.swap.lastSwapType;
+export const selectSwapSettings = (state: RootState) => state.swap.settings;
 
 export default swapSlice.reducer;
