@@ -50,10 +50,8 @@ function SwapPage() {
     const walletAdapter = useAppSelector(selectWalletAdapter);
     const walletPermissions = useAppSelector(selectWalletPermissions);
 
-    const fromSymbol = from.token ? from.token.symbol : '';
-    const toSymbol = to.token ? to.token.symbol : '';
     const isFilled = useMemo(() => {
-        return from.amount && to.amount && from && to
+        return from.amount && to.amount && from.token && to.token
             && !to.amount.eq('0')
     }, [from, to]);
     const insufficientBalance = useMemo(() => {
@@ -94,7 +92,7 @@ function SwapPage() {
                 swapType,
             }));
         }
-        if (swapType === SwapTypes.EXACT_IN && to.token && from && from.amount && !from.amount.eq('0')) {
+        if (swapType === SwapTypes.EXACT_IN && to.token && from.token && from.amount && !from.amount.eq('0')) {
             return dispatch(estimateTransaction({
                 from: from,
                 to: {
@@ -112,7 +110,7 @@ function SwapPage() {
                 swapType,
             }));
         }
-        if (swapType === SwapTypes.EXACT_OUT && from.token && to && to.amount && !to.amount.eq('0')) {
+        if (swapType === SwapTypes.EXACT_OUT && from.token && to.token && to.amount && !to.amount.eq('0')) {
             return dispatch(estimateTransaction({
                 from: {
                     token: from.token,
@@ -193,7 +191,7 @@ function SwapPage() {
                 </div>
             </div>
             <TokenInput token={from.token}
-                        balance={walletBalances[fromSymbol]}
+                        balance={walletBalances[from.token?.symbol || '']}
                         value={from.amount}
                         showMax={true}
                         onSelect={openFromTokenSelect}
@@ -203,7 +201,7 @@ function SwapPage() {
                 <ChevronDownIcon />
             </div>
             <TokenInput token={to.token}
-                        balance={walletBalances[toSymbol]}
+                        balance={walletBalances[to.token?.symbol || '']}
                         value={to.amount}
                         showMax={false}
                         onSelect={openToTokenSelect}
