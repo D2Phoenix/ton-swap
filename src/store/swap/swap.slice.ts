@@ -2,20 +2,16 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import BigNumber from 'bignumber.js';
 
 import type { RootState } from 'store/store'
-import TokenInterface from 'interfaces/token.interface';
 import { estimateTransaction } from './swap.thunks';
-import { shiftDecimals } from '../../utils/decimals';
-import { DEFAULT_DEADLINE, DEFAULT_SLIPPAGE } from '../../constants/swap';
-import { SettingsInterface } from '../../interfaces/settings.interface';
-import { SwapTypes } from '../../interfaces/swap.types';
+import { shiftDecimals } from 'utils/decimals';
+import { SwapTypes } from 'interfaces/swap.types';
+import { InputTokenInterface } from 'interfaces/input-token.interface';
+
 
 export interface SwapState {
-    from: TokenInterface | null,
-    to: TokenInterface | null,
-    fromAmount: BigNumber | null;
-    toAmount: BigNumber | null;
-    lastSwapType: SwapTypes;
-    settings: SettingsInterface;
+    from: InputTokenInterface,
+    to: InputTokenInterface,
+    swapType: SwapTypes;
     details: {
         fee: BigNumber;
         priceImpact: BigNumber;
@@ -25,21 +21,17 @@ export interface SwapState {
 
 const initialState: SwapState = {
     from: {
-        address: "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
-        chainId: 1,
-        decimals: 9,
-        logoURI: "https://s2.coinmarketcap.com/static/img/coins/64x64/11419.png",
-        name: "Ton",
-        symbol: "TON",
+        token: {
+            address: "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+            chainId: 1,
+            decimals: 9,
+            logoURI: "https://s2.coinmarketcap.com/static/img/coins/64x64/11419.png",
+            name: "Ton",
+            symbol: "TON",
+        },
     },
-    to: null,
-    fromAmount: null,
-    toAmount: null,
-    lastSwapType: SwapTypes.EXACT_IN,
-    settings: {
-        slippage: DEFAULT_SLIPPAGE,
-        deadline: DEFAULT_DEADLINE,
-    },
+    to: {},
+    swapType: SwapTypes.EXACT_IN,
     details: {
         fee: new BigNumber('0'),
         priceImpact: new BigNumber('0'),
@@ -52,50 +44,41 @@ export const swapSlice = createSlice({
     initialState,
     reducers: {
         setSwapFromToken: (state, action: PayloadAction<any>) => {
-            const oldFrom = state.from;
-            state.from = action.payload;
+            const prevToken = state.from.token;
+            state.from.token = action.payload;
             // correct amount with new token decimals
-            if (state.from && state.fromAmount) {
-                state.fromAmount = shiftDecimals(state.fromAmount as BigNumber, state.from.decimals - (oldFrom ? oldFrom.decimals : 0));
+            if (state.from.token && state.from.amount) {
+                state.from.amount = shiftDecimals(state.from.amount as BigNumber, state.from.token.decimals - (prevToken ? prevToken.decimals : 0));
             }
         },
         setSwapToToken: (state, action: PayloadAction<any>) => {
-            const oldTo = state.to;
-            state.to = action.payload;
+            const prevToken = state.to.token;
+            state.to.token = action.payload;
             // correct amount with new token decimals
-            if (state.to && state.toAmount) {
-                state.toAmount = shiftDecimals(state.toAmount as BigNumber, state.to.decimals - (oldTo ? oldTo.decimals : 0));
+            if (state.to.token && state.to.amount) {
+                state.to.amount = shiftDecimals(state.to.amount as BigNumber, state.to.token.decimals - (prevToken ? prevToken.decimals : 0));
             }
         },
         setSwapFromTokenAmount: (state, action: PayloadAction<any>) => {
-            state.fromAmount = action.payload.value;
-            state.lastSwapType = action.payload.swapType;
+            state.from.amount = action.payload.value;
+            state.swapType = action.payload.swapType;
         },
         setSwapToTokenAmount: (state, action: PayloadAction<any>) => {
-            state.toAmount = action.payload.value;
-            state.lastSwapType = action.payload.swapType;
+            state.to.amount = action.payload.value;
+            state.swapType = action.payload.swapType;
         },
         switchSwapTokens: (state, action: PayloadAction<void>) => {
             const from = state.to;
-            const fromAmount = state.toAmount;
             state.to = state.from;
             state.from = from;
-            state.toAmount = state.fromAmount;
-            state.fromAmount = fromAmount;
-            state.lastSwapType = state.lastSwapType === SwapTypes.EXACT_IN ? SwapTypes.EXACT_OUT : SwapTypes.EXACT_IN;
-        },
-        setSwapSlippage: (state, action: PayloadAction<any>) => {
-            state.settings.slippage = action.payload;
-        },
-        setSwapDeadline: (state, action: PayloadAction<any>) => {
-            state.settings.deadline = action.payload;
+            state.swapType = state.swapType === SwapTypes.EXACT_IN ? SwapTypes.EXACT_OUT : SwapTypes.EXACT_IN;
         },
     },
     extraReducers: (builder) => {
         builder.addCase(estimateTransaction.fulfilled, (state, action) => {
-            state.toAmount = action.payload.toAmount;
-            state.fromAmount = action.payload.fromAmount;
-            state.lastSwapType = action.payload.type;
+            state.to.amount = action.payload.toAmount;
+            state.from.amount = action.payload.fromAmount;
+            state.swapType = action.payload.type;
             state.details.fee = action.payload.fee;
             state.details.priceImpact = action.payload.priceImpact;
             state.details.insufficientLiquidity = action.payload.insufficientLiquidity;
@@ -109,16 +92,11 @@ export const {
     switchSwapTokens,
     setSwapFromTokenAmount,
     setSwapToTokenAmount,
-    setSwapSlippage,
-    setSwapDeadline
 } = swapSlice.actions
 
 export const selectSwapFrom = (state: RootState) => state.swap.from;
 export const selectSwapTo = (state: RootState) => state.swap.to;
-export const selectSwapFromAmount = (state: RootState) => state.swap.fromAmount;
-export const selectSwapToAmount = (state: RootState) => state.swap.toAmount;
-export const selectSwapLastSwapType = (state: RootState) => state.swap.lastSwapType;
-export const selectSwapSettings = (state: RootState) => state.swap.settings;
+export const selectSwapSwapType = (state: RootState) => state.swap.swapType;
 export const selectSwapDetails = (state: RootState) => state.swap.details;
 
 export default swapSlice.reducer;

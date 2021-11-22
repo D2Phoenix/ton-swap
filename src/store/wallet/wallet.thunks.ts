@@ -13,13 +13,13 @@ export const connectWallet = createAsyncThunk(
         const adapter = new StubWalletService();
         const balances: Record<string, BigNumber> = {};
         const permissions: Record<string, boolean> = {};
-        if (state.swap.from) {
-            balances[state.swap.from.symbol] = await adapter.getBalance(state.swap.from);
-            permissions[state.swap.from.symbol] = await adapter.getTokenUsePermission(state.swap.from);
+        if (state.swap.from.token) {
+            balances[state.swap.from.token.symbol] = await adapter.getBalance(state.swap.from.token);
+            permissions[state.swap.from.token.symbol] = await adapter.getTokenUsePermission(state.swap.from.token);
         }
-        if (state.swap.to) {
-            balances[state.swap.to.symbol] = await adapter.getBalance(state.swap.to);
-            permissions[state.swap.to.symbol] = await adapter.getTokenUsePermission(state.swap.to);
+        if (state.swap.to.token) {
+            balances[state.swap.to.token.symbol] = await adapter.getBalance(state.swap.to.token);
+            permissions[state.swap.to.token.symbol] = await adapter.getTokenUsePermission(state.swap.to.token);
         }
         return {
             adapter,

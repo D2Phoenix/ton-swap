@@ -8,8 +8,8 @@ import { fromDecimals, toDecimals } from '../utils/decimals';
 
 interface TokenInputParams {
     balance: BigNumber;
-    token: TokenInterface | null,
-    value: BigNumber | null;
+    token: TokenInterface | undefined,
+    value: BigNumber | undefined;
     editable: boolean;
     showMax: boolean;
     onChange?: Function;

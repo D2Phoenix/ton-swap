@@ -7,11 +7,9 @@ import { SwapTypes } from 'interfaces/swap.types';
 class SwapService {
     getTransactionEstimation(data: SwapTransactionRequestInterface): Promise<SwapTransactionInterface> {
         // TODO: Implement real api for transaction estimation
-        const fromAmount = data.fromAmount ? data.fromAmount : null;
-        const toAmount = data.toAmount ? data.toAmount : null;
         return Promise.resolve({
-            amount: data.type === SwapTypes.EXACT_IN ? fromAmount : toAmount,
-            quote: data.type === SwapTypes.EXACT_IN ? fromAmount : toAmount,
+            amount: data.type === SwapTypes.EXACT_IN ? data.from!.amount! : data.to!.amount!,
+            quote: data.type === SwapTypes.EXACT_IN ? data.from!.amount! : data.to!.amount!,
             type: data.type,
             fee: new BigNumber('0.003'),
         });

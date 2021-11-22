@@ -4,28 +4,28 @@ import { useDispatch } from 'react-redux';
 import './SwapSettings.scss';
 import Modal from 'components/Modal';
 import { useAppSelector } from 'store/hooks';
-import { selectSwapSettings, setSwapDeadline, setSwapSlippage } from 'store/swap/swap.slice';
-import { DEFAULT_DEADLINE, DEFAULT_SLIPPAGE } from '../../constants/swap';
+import { DEFAULT_DEADLINE, DEFAULT_SLIPPAGE } from 'constants/swap';
+import { selectSettings, setSettingsDeadline, setSettingsSlippage } from 'store/app/app.slice';
 
 const SLIPPAGE_INPUT_REGEXP = RegExp(`^\\d*(?:\\\\[.])?\\d*$`);
 const DEADLINE_INPUT_REGEXP = RegExp(`^\\d*(?:\\\\[])?\\d*$`);
 
 function SwapSettings({onClose}: any) {
     const dispatch = useDispatch();
-    const settings = useAppSelector(selectSwapSettings);
+    const settings = useAppSelector(selectSettings);
 
 
     const handleSlippageChange = useCallback((event) => {
         const value = event.target.value.replace(/,/g, '.');
         if (SLIPPAGE_INPUT_REGEXP.test(value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))) {
-            dispatch(setSwapSlippage(value));
+            dispatch(setSettingsSlippage(value));
         }
     }, [dispatch]);
 
     const handleDeadlineChange = useCallback((event) => {
         const value = event.target.value.replace(/,/g, '.');
         if (DEADLINE_INPUT_REGEXP.test(value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))) {
-            dispatch(setSwapDeadline(value));
+            dispatch(setSettingsDeadline(value));
         }
     }, [dispatch]);
 

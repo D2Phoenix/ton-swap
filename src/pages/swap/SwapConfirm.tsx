@@ -1,4 +1,6 @@
+import { useCallback, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
+import BigNumber from 'bignumber.js';
 
 import './SwapConfirm.scss';
 import Modal from 'components/Modal';
@@ -8,59 +10,55 @@ import SwapInfo from './SwapInfo';
 import { useAppSelector } from 'store/hooks';
 import {
     selectSwapFrom,
-    selectSwapFromAmount, selectSwapLastSwapType, selectSwapSettings,
+    selectSwapSwapType,
     selectSwapTo,
-    selectSwapToAmount
 } from 'store/swap/swap.slice';
 import { resetTransaction, selectWalletBalances, selectWalletTransaction } from 'store/wallet/wallet.slice';
-import { useCallback, useMemo } from 'react';
-import { toDecimals } from '../../utils/decimals';
-import BigNumber from 'bignumber.js';
-import { DEFAULT_SLIPPAGE } from '../../constants/swap';
-import { WalletTransactionStatus, SwapTypes } from '../../interfaces/swap.types';
-import { walletSwap } from '../../store/wallet/wallet.thunks';
-import Spinner from '../../components/Spinner';
+import { toDecimals } from 'utils/decimals';
+import { DEFAULT_SLIPPAGE } from 'constants/swap';
+import { WalletTransactionStatus, SwapTypes } from 'interfaces/swap.types';
+import { walletSwap } from 'store/wallet/wallet.thunks';
+import Spinner from 'components/Spinner';
+import { selectSettings } from '../../store/app/app.slice';
 
 const PRECISION = 6;
 
 function SwapConfirm({onClose}: any) {
     const dispatch = useDispatch();
-    const fromToken = useAppSelector(selectSwapFrom);
-    const toToken = useAppSelector(selectSwapTo);
-    const fromTokenAmount = useAppSelector(selectSwapFromAmount);
-    const toTokenAmount = useAppSelector(selectSwapToAmount);
+    const from = useAppSelector(selectSwapFrom);
+    const to = useAppSelector(selectSwapTo);
     const walletBalances = useAppSelector(selectWalletBalances);
-    const swapType = useAppSelector(selectSwapLastSwapType);
-    const swapSettings = useAppSelector(selectSwapSettings);
+    const swapType = useAppSelector(selectSwapSwapType);
+    const settings = useAppSelector(selectSettings);
     const walletTransaction = useAppSelector(selectWalletTransaction);
 
     const className = useMemo(() => {
         return walletTransaction.status !== WalletTransactionStatus.INITIAL ? 'swap-confirm-modal mini' : 'swap-confirm-modal';
     }, [walletTransaction]);
     const calcFrom = useMemo(() => {
-        if (!fromTokenAmount || !toTokenAmount || !toToken || !fromToken) {
+        if (!from.amount || !to.amount || !to.token || !from.token) {
             return;
         }
-        return fromTokenAmount.div(toTokenAmount.shiftedBy(fromToken.decimals - toToken.decimals)).precision(PRECISION).toFixed();
-    }, [fromToken, toToken, fromTokenAmount, toTokenAmount]);
+        return from.amount.div(to.amount.shiftedBy(from.token.decimals - to.token.decimals)).precision(PRECISION).toFixed();
+    }, [from, to]);
     const minimumReceived = useMemo(() => {
-        return toDecimals(toTokenAmount!, toToken!.decimals)
-            .multipliedBy(new BigNumber('100').minus(new BigNumber(swapSettings.slippage || DEFAULT_SLIPPAGE)).div('100'))
+        return toDecimals(to.amount!, to.token!.decimals)
+            .multipliedBy(new BigNumber('100').minus(new BigNumber(settings.slippage || DEFAULT_SLIPPAGE)).div('100'))
             .precision(PRECISION).toFixed();
-    }, [toToken, toTokenAmount, swapSettings]);
+    }, [to, settings]);
     const maximumSent = useMemo(() => {
-        return toDecimals(fromTokenAmount!, fromToken!.decimals)
-            .multipliedBy(new BigNumber('100').plus(new BigNumber(swapSettings.slippage || DEFAULT_SLIPPAGE)).div('100'))
+        return toDecimals(from.amount!, from.token!.decimals)
+            .multipliedBy(new BigNumber('100').plus(new BigNumber(settings.slippage || DEFAULT_SLIPPAGE)).div('100'))
             .precision(PRECISION).toFixed();
-    }, [fromToken, fromTokenAmount, swapSettings]);
+    }, [from, settings]);
     const toAmount = useMemo(() => {
-        return toDecimals(toTokenAmount!, toToken!.decimals)
+        return toDecimals(to.amount!, to.token!.decimals)
             .precision(PRECISION).toFixed();
-    }, [toToken, toTokenAmount]);
+    }, [to]);
     const fromAmount = useMemo(() => {
-        return toDecimals(fromTokenAmount!, fromToken!.decimals)
+        return toDecimals(from.amount!, from.token!.decimals)
             .precision(PRECISION).toFixed();
-    }, [fromToken, fromTokenAmount]);
+    }, [from]);
 
     const handleConfirmSwap = useCallback(() => {
         dispatch(walletSwap());
@@ -76,38 +74,38 @@ function SwapConfirm({onClose}: any) {
                 walletTransaction.status === WalletTransactionStatus.INITIAL && <>
                   <h4>Confirm Swap</h4>
                   <div className="swap-confirm-wrapper">
-                    <TokenInput token={fromToken}
-                                balance={walletBalances[fromToken!.symbol]}
-                                value={fromTokenAmount}
+                    <TokenInput token={from.token}
+                                balance={walletBalances[from.token!.symbol]}
+                                value={from.amount}
                                 showMax={true}
                                 editable={false}
                     />
                     <div className="switch__btn btn-icon">
                       <ChevronDownIcon/>
                     </div>
-                    <TokenInput token={toToken}
-                                balance={walletBalances[toToken!.symbol]}
-                                value={toTokenAmount}
+                    <TokenInput token={to.token}
+                                balance={walletBalances[to.token!.symbol]}
+                                value={to.amount}
                                 showMax={false}
                                 editable={false}
                     />
                     <div className="swap-info">
                       <span className="text-small">Price</span>
                       <span className="text-small">
-                1 {toToken!.symbol} = {calcFrom} {fromToken!.symbol}
+                1 {to.token!.symbol} = {calcFrom} {from.token!.symbol}
                 </span>
                     </div>
                     <SwapInfo/>
                       {
                           swapType === SwapTypes.EXACT_IN && <span className="help-text text-small">
                 Output is estimated. You will receive at least <span
-                            className="text-semibold text-small">{minimumReceived} {toToken!.symbol}</span>  or the transaction will revert.
+                            className="text-semibold text-small">{minimumReceived} {to.token!.symbol}</span>  or the transaction will revert.
                 </span>
                       }
                       {
                           swapType === SwapTypes.EXACT_OUT && <span className="help-text text-small">
                 Input is estimated. You will sell at most <span
-                            className="text-semibold text-small">{maximumSent} {fromToken!.symbol}</span> or the transaction will revert.
+                            className="text-semibold text-small">{maximumSent} {from.token!.symbol}</span> or the transaction will revert.
                 </span>
                       }
                     <button className="btn btn-primary swap__btn"
@@ -123,7 +121,7 @@ function SwapConfirm({onClose}: any) {
                       <div className="swap-status">
                         <Spinner />
                         <span>
-                            Swapping {fromAmount} {fromToken!.symbol} for {toAmount} {toToken!.symbol}
+                            Swapping {fromAmount} {from.token!.symbol} for {toAmount} {to.token!.symbol}
                         </span>
                         <span className="text-small">
                           Confirm this transaction in your wallet
