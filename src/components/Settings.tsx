@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 
-import './SwapSettings.scss';
+import './Settings.scss';
 import Modal from 'components/Modal';
 import { useAppSelector } from 'store/hooks';
 import { DEFAULT_DEADLINE, DEFAULT_SLIPPAGE } from 'constants/swap';
@@ -10,7 +10,7 @@ import { selectSettings, setSettingsDeadline, setSettingsSlippage } from 'store/
 const SLIPPAGE_INPUT_REGEXP = RegExp(`^\\d*(?:\\\\[.])?\\d*$`);
 const DEADLINE_INPUT_REGEXP = RegExp(`^\\d*(?:\\\\[])?\\d*$`);
 
-function SwapSettings({onClose}: any) {
+function Settings({onClose}: any) {
     const dispatch = useDispatch();
     const settings = useAppSelector(selectSettings);
 
@@ -56,4 +56,4 @@ function SwapSettings({onClose}: any) {
     )
 }
 
-export default SwapSettings;
+export default Settings;

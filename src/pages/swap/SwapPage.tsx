@@ -7,7 +7,7 @@ import ChevronDownIcon from 'components/icons/ChevronDownIcon';
 import SettingsIcon from 'components/icons/SettingsIcon';
 import InfoIcon from 'components/icons/InfoIcon';
 import TokenInput from 'components/TokenInput';
-import SwapSettings from './SwapSettings';
+import Settings from '../../components/Settings';
 import SwapInfo from './SwapInfo';
 import TokenSelect from 'components/TokenSelect';
 import { useAppSelector } from 'store/hooks';
@@ -239,7 +239,7 @@ function SwapPage() {
                                           onClick={handleConnectWallet}>Connect Wallet</button>
             }
             {
-                showSettings && <SwapSettings onClose={() => setShowSettings(false)}/>
+                showSettings && <Settings onClose={() => setShowSettings(false)}/>
             }
             {
                 showTokenSelect && <TokenSelect tokens={tokens}
