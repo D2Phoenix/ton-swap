@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { SwapTransactionRequestInterface } from 'interfaces/swap-transaction-request.interface';
 import { SwapTransactionInterface } from 'interfaces/swap-transaction.interface';
-import { SwapType } from 'interfaces/swap.type';
+import { SwapTypes } from 'interfaces/swap.types';
 
 
 class SwapService {
@@ -10,8 +10,8 @@ class SwapService {
         const fromAmount = data.fromAmount ? data.fromAmount : null;
         const toAmount = data.toAmount ? data.toAmount : null;
         return Promise.resolve({
-            amount: data.type === SwapType.EXACT_IN ? fromAmount : toAmount,
-            quote: data.type === SwapType.EXACT_IN ? fromAmount : toAmount,
+            amount: data.type === SwapTypes.EXACT_IN ? fromAmount : toAmount,
+            quote: data.type === SwapTypes.EXACT_IN ? fromAmount : toAmount,
             type: data.type,
             fee: new BigNumber('0.003'),
         });

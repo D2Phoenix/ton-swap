@@ -10,16 +10,17 @@ interface TokenInputParams {
     balance: BigNumber;
     token: TokenInterface | null,
     value: BigNumber | null;
+    editable: boolean;
     showMax: boolean;
-    onChange: Function;
-    onSelect: Function;
+    onChange?: Function;
+    onSelect?: Function;
 }
 
 const INPUT_REGEXP = RegExp(`^\\d*(?:\\\\[.])?\\d*$`)
 const INPUT_PRECISION = 6;
 const BALANCE_PRECISION = 4;
 
-function TokenInput({balance, token, value, showMax, onChange, onSelect}: TokenInputParams) {
+function TokenInput({balance, token, value, showMax, editable, onChange, onSelect}: TokenInputParams) {
     const [internalValue, setInternalValue] = useState('');
 
     useEffect(() => {
@@ -36,18 +37,18 @@ function TokenInput({balance, token, value, showMax, onChange, onSelect}: TokenI
     }, [value, internalValue, token])
 
     const handleClick = useCallback(() => {
-        onSelect();
+        onSelect && onSelect();
     }, [onSelect]);
 
     const handleChange = useCallback((event) => {
         const value = event.target.value.replace(/,/g, '.');
         if (value === '') {
             setInternalValue(value)
-            return onChange(null);
+            return onChange && onChange(null);
         }
         if (INPUT_REGEXP.test(value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))) {
             setInternalValue(value);
-            onChange(fromDecimals(new BigNumber(value), token ? token.decimals : 0));
+            onChange && onChange(fromDecimals(new BigNumber(value), token ? token.decimals : 0));
         }
     }, [onChange, token]);
 
@@ -67,14 +68,16 @@ function TokenInput({balance, token, value, showMax, onChange, onSelect}: TokenI
     }, [balance, token])
 
     return (
-        <div className="input-wrapper">
+        <div className={"input-wrapper" + (!editable ? ' view-only' : '')}>
             <div className="token-input">
                 <div className="btn btn-outline small text-medium" onClick={handleClick}>
                     {
                         token?.logoURI && <img src={token.logoURI} alt={token.name}/>
                     }
                     <span>{token ? token.symbol : 'Select'}</span>
-                    <ChevronRightIcon/>
+                    {
+                        editable && <ChevronRightIcon/>
+                    }
                 </div>
                 <input type="text"
                        inputMode="decimal"
@@ -84,11 +87,12 @@ function TokenInput({balance, token, value, showMax, onChange, onSelect}: TokenI
                        maxLength={79}
                        pattern="^[0-9]*[.,]?[0-9]*$"
                        placeholder="0.0"
+                       readOnly={!editable}
                        value={internalValue}
                        onChange={handleChange}/>
             </div>
             {
-                token && balance !== undefined && <div className="balance text-small">
+                editable && token && balance !== undefined && <div className="balance text-small">
                   Balance: {balanceVisible} {token.symbol}
                     {
                         showMax && !balance.eq('0') && (

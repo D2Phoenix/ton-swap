@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import BigNumber from 'bignumber.js';
 
 import type { RootState } from 'store/store'
@@ -7,15 +7,19 @@ import {
     getWalletAddress,
     getWalletBalance,
     getWalletUseTokenPermission,
-    setWalletUseTokenPermission
+    setWalletUseTokenPermission, walletSwap
 } from './wallet.thunks';
 import { WalletAdapterInterface } from 'interfaces/wallet-adapter.interface';
+import { WalletTransactionStatus } from '../../interfaces/swap.types';
 
 interface WalletState {
     adapter: WalletAdapterInterface | null,
     address: string;
     balances: Record<string, BigNumber>,
     permissions: Record<string, boolean>,
+    transaction: {
+        status: WalletTransactionStatus;
+    },
 }
 
 const initialState: WalletState = {
@@ -23,12 +27,18 @@ const initialState: WalletState = {
     address: '',
     balances: {},
     permissions: {},
+    transaction: {
+        status: WalletTransactionStatus.INITIAL,
+    }
 }
 
 export const walletSlice = createSlice({
     name: 'wallet',
     initialState,
     reducers: {
+        resetTransaction: (state, action: PayloadAction<void>) => {
+            state.transaction.status = WalletTransactionStatus.INITIAL;
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(connectWallet.fulfilled,  (state, action) => {
@@ -49,10 +59,16 @@ export const walletSlice = createSlice({
         builder.addCase(setWalletUseTokenPermission.fulfilled, (state, action) => {
             state.permissions[action.payload.token.symbol] = action.payload.value;
         });
+        builder.addCase(walletSwap.pending, (state, action) => {
+            state.transaction.status = WalletTransactionStatus.PENDING;
+        });
+        builder.addCase(walletSwap.fulfilled, (state, action) => {
+            state.transaction.status = action.payload;
+        });
     },
 })
 
-export const {  } = walletSlice.actions
+export const { resetTransaction } = walletSlice.actions
 
 export const selectWalletBalances = (state: RootState) => state.wallet.balances;
 
@@ -61,5 +77,7 @@ export const selectWalletAdapter = (state: RootState) => state.wallet.adapter;
 export const selectWalletAddress = (state: RootState) => state.wallet.address;
 
 export const selectWalletPermissions = (state: RootState) => state.wallet.permissions;
+
+export const selectWalletTransaction = (state: RootState) => state.wallet.transaction;
 
 export default walletSlice.reducer;

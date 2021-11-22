@@ -4,25 +4,23 @@ import BigNumber from 'bignumber.js';
 import type { RootState } from 'store/store'
 import TokenInterface from 'interfaces/token.interface';
 import { estimateTransaction } from './swap.thunks';
-import { SwapType } from '../../interfaces/swap.type';
 import { shiftDecimals } from '../../utils/decimals';
 import { DEFAULT_DEADLINE, DEFAULT_SLIPPAGE } from '../../constants/swap';
+import { SettingsInterface } from '../../interfaces/settings.interface';
+import { SwapTypes } from '../../interfaces/swap.types';
 
-interface SwapState {
+export interface SwapState {
     from: TokenInterface | null,
     to: TokenInterface | null,
     fromAmount: BigNumber | null;
     toAmount: BigNumber | null;
-    lastSwapType: SwapType;
-    settings: {
-        slippage: string,
-        deadline: string,
-    }
+    lastSwapType: SwapTypes;
+    settings: SettingsInterface;
     details: {
         fee: BigNumber;
         priceImpact: BigNumber;
         insufficientLiquidity: boolean;
-    }
+    };
 }
 
 const initialState: SwapState = {
@@ -37,7 +35,7 @@ const initialState: SwapState = {
     to: null,
     fromAmount: null,
     toAmount: null,
-    lastSwapType: SwapType.EXACT_IN,
+    lastSwapType: SwapTypes.EXACT_IN,
     settings: {
         slippage: DEFAULT_SLIPPAGE,
         deadline: DEFAULT_DEADLINE,
@@ -46,7 +44,7 @@ const initialState: SwapState = {
         fee: new BigNumber('0'),
         priceImpact: new BigNumber('0'),
         insufficientLiquidity: false,
-    }
+    },
 }
 
 export const swapSlice = createSlice({
@@ -84,7 +82,7 @@ export const swapSlice = createSlice({
             state.from = from;
             state.toAmount = state.fromAmount;
             state.fromAmount = fromAmount;
-            state.lastSwapType = state.lastSwapType === SwapType.EXACT_IN ? SwapType.EXACT_OUT : SwapType.EXACT_IN;
+            state.lastSwapType = state.lastSwapType === SwapTypes.EXACT_IN ? SwapTypes.EXACT_OUT : SwapTypes.EXACT_IN;
         },
         setSwapSlippage: (state, action: PayloadAction<any>) => {
             state.settings.slippage = action.payload;

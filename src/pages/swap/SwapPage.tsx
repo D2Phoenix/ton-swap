@@ -33,13 +33,15 @@ import {
     setWalletUseTokenPermission
 } from 'store/wallet/wallet.thunks';
 import { estimateTransaction } from '../../store/swap/swap.thunks';
-import { SwapType } from '../../interfaces/swap.type';
+import { SwapTypes } from '../../interfaces/swap.types';
+import SwapConfirm from './SwapConfirm';
 
 function SwapPage() {
     const dispatch = useDispatch();
     const [showSettings, setShowSettings] = useState(false);
     const [showSwapInfo, setShowSwapInfo] = useState(false);
     const [showTokenSelect, setShowTokenSelect] = useState(false);
+    const [showSwapConfirm, setShowSwapConfirm] = useState(false);
     const [tokenSelectType, setTokenSelectType] = useState('from');
     const [swapButtonText, setSwapButtonText] = useState('Swap');
     const tokens = useAppSelector(selectTokens);
@@ -69,7 +71,7 @@ function SwapPage() {
         if (!fromTokenAmount || !toTokenAmount || !toToken || !fromToken) {
             return;
         }
-        return fromTokenAmount.div(toTokenAmount.shiftedBy(fromToken.decimals - toToken.decimals)).toFixed();
+        return fromTokenAmount.div(toTokenAmount.shiftedBy(fromToken.decimals - toToken.decimals)).precision(6).toFixed();
     }, [fromToken, toToken, fromTokenAmount, toTokenAmount])
 
     useEffect(() => {
@@ -90,13 +92,13 @@ function SwapPage() {
     }, [fromToken, fromTokenAmount, toToken, insufficientBalance])
 
     useEffect((): any => {
-        if (swapType === SwapType.EXACT_IN && (!fromTokenAmount || fromTokenAmount.eq('0'))) {
+        if (swapType === SwapTypes.EXACT_IN && (!fromTokenAmount || fromTokenAmount.eq('0'))) {
             return dispatch(setSwapToTokenAmount({
                 value: null,
-                swapType: SwapType.EXACT_IN
+                swapType: SwapTypes.EXACT_IN
             }));
         }
-        if (swapType === SwapType.EXACT_IN && fromToken && toToken && fromTokenAmount && !fromTokenAmount.eq('0')) {
+        if (swapType === SwapTypes.EXACT_IN && fromToken && toToken && fromTokenAmount && !fromTokenAmount.eq('0')) {
             return dispatch(estimateTransaction({
                 from: fromToken,
                 to: toToken,
@@ -108,13 +110,13 @@ function SwapPage() {
     }, [dispatch, fromToken, toToken, fromTokenAmount, swapType]);
 
     useEffect((): any => {
-        if (swapType === SwapType.EXACT_OUT && (!toTokenAmount || toTokenAmount.eq('0'))) {
+        if (swapType === SwapTypes.EXACT_OUT && (!toTokenAmount || toTokenAmount.eq('0'))) {
             return dispatch(setSwapFromTokenAmount({
                 value: null,
-                swapType: SwapType.EXACT_OUT
+                swapType: SwapTypes.EXACT_OUT
             }));
         }
-        if (swapType === SwapType.EXACT_OUT && fromToken && toToken && toTokenAmount && !toTokenAmount.eq('0')) {
+        if (swapType === SwapTypes.EXACT_OUT && fromToken && toToken && toTokenAmount && !toTokenAmount.eq('0')) {
             return dispatch(estimateTransaction({
                 from: fromToken,
                 to: toToken,
@@ -128,12 +130,12 @@ function SwapPage() {
     const openFromTokenSelect = useCallback(() => {
         setShowTokenSelect(!showTokenSelect);
         setTokenSelectType('from');
-    }, [showTokenSelect, setShowTokenSelect]);
+    }, [showTokenSelect]);
 
     const openToTokenSelect = useCallback(() => {
         setShowTokenSelect(!showTokenSelect);
         setTokenSelectType('to');
-    }, [showTokenSelect, setShowTokenSelect]);
+    }, [showTokenSelect]);
 
     const handleSwitchTokens = useCallback(() => {
         dispatch(switchSwapTokens());
@@ -163,14 +165,14 @@ function SwapPage() {
     const handleFromTokenAmount = useCallback((value) => {
         dispatch(setSwapFromTokenAmount({
             value,
-            swapType: SwapType.EXACT_IN
+            swapType: SwapTypes.EXACT_IN
         }));
     }, [dispatch]);
 
     const handleToTokenAmount = useCallback((value) => {
         dispatch(setSwapToTokenAmount({
             value,
-            swapType: SwapType.EXACT_OUT
+            swapType: SwapTypes.EXACT_OUT
         }));
     }, [dispatch]);
 
@@ -180,7 +182,11 @@ function SwapPage() {
 
     const handleAllowUseToken = useCallback(() => {
         dispatch(setWalletUseTokenPermission(fromToken!));
-    }, [dispatch, fromToken])
+    }, [dispatch, fromToken]);
+
+    const handleSwap = useCallback(() => {
+        setShowSwapConfirm(true);
+    }, [])
 
     return (
         <div className="swap-wrapper">
@@ -195,7 +201,8 @@ function SwapPage() {
                         value={fromTokenAmount}
                         showMax={true}
                         onSelect={openFromTokenSelect}
-                        onChange={handleFromTokenAmount}/>
+                        onChange={handleFromTokenAmount}
+                        editable={true}/>
             <div className="switch__btn btn-icon" onClick={handleSwitchTokens}>
                 <ChevronDownIcon />
             </div>
@@ -204,7 +211,8 @@ function SwapPage() {
                         value={toTokenAmount}
                         showMax={false}
                         onSelect={openToTokenSelect}
-                        onChange={handleToTokenAmount}/>
+                        onChange={handleToTokenAmount}
+                        editable={true}/>
             {
                 isFilled && <div className="swap-info text-small">
                 <span>
@@ -213,7 +221,7 @@ function SwapPage() {
                   <div className="btn-icon" onMouseOver={() => setShowSwapInfo(true)} onMouseLeave={() => setShowSwapInfo(false)}>
                     <InfoIcon/>
                       {
-                          showSwapInfo && <SwapInfo />
+                          showSwapInfo && <SwapInfo className={"swap-info-popup"}/>
                       }
                   </div>
                 </div>
@@ -227,7 +235,8 @@ function SwapPage() {
             }
             {
                 walletAdapter && <button className="btn btn-primary swap__btn"
-                                         disabled={!isFilled || insufficientBalance || (!!fromToken && !walletPermissions[fromToken.symbol])}>
+                                         disabled={!isFilled || insufficientBalance || (!!fromToken && !walletPermissions[fromToken.symbol])}
+                                         onClick={handleSwap}>
                     {swapButtonText}
                 </button>
             }
@@ -242,6 +251,9 @@ function SwapPage() {
                 showTokenSelect && <TokenSelect tokens={tokens}
                                                onClose={handleSelectToken}
                                                onSelect={handleSelectToken}/>
+            }
+            {
+                showSwapConfirm && <SwapConfirm onClose={() => setShowSwapConfirm(false)} />
             }
         </div>
     )

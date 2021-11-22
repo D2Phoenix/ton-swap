@@ -4,6 +4,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 8px;
   max-width: 480px;
   width: 100%;
   padding: 0.5rem;
@@ -14,7 +15,6 @@
     justify-content: space-between;
     width: 100%;
     padding: 0 16px;
-    margin-bottom: 8px;
   }
   .swap-info {
     display: flex;
@@ -34,7 +34,6 @@
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    margin-bottom: 8px;
     cursor: pointer;
   }
   .swap__btn {

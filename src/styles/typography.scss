@@ -54,6 +54,10 @@ strong, b {
   line-height: 16px;
 }
 
+.text-error {
+  color: $error-color;
+}
+
 @media screen and (min-width: 600px) {
   h1 {
     font-size: 38px;

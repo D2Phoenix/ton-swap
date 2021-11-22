@@ -4,6 +4,7 @@ import BigNumber from 'bignumber.js';
 import TokenInterface from 'interfaces/token.interface';
 import { RootState } from 'store/store';
 import StubWalletService from 'api/stub-wallet.service';
+import { WalletTransactionStatus } from '../../interfaces/swap.types';
 
 export const connectWallet = createAsyncThunk(
     'wallet/connect',
@@ -74,5 +75,17 @@ export const getWalletAddress = createAsyncThunk(
             return await walletAdapterService.getWalletAddress()
         }
         return '';
+    }
+)
+
+export const walletSwap = createAsyncThunk(
+    'wallet/swap',
+    async (request, thunkAPI) => {
+        const state = thunkAPI.getState() as RootState;
+        const walletAdapterService = state.wallet.adapter;
+        if (walletAdapterService) {
+            return await walletAdapterService.swap(state.swap)
+        }
+        return WalletTransactionStatus.INITIAL;
     }
 )
