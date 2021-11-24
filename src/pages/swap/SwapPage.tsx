@@ -32,11 +32,11 @@ import {
 } from 'store/swap/swap.slice';
 import SwapInfo from './SwapInfo';
 import SwapConfirm from './SwapConfirm';
+import Tooltip from '../../components/Tooltip';
 
 function SwapPage() {
     const dispatch = useAppDispatch();
     const [showSettings, setShowSettings] = useState(false);
-    const [showSwapInfo, setShowSwapInfo] = useState(false);
     const [showTokenSelect, setShowTokenSelect] = useState(false);
     const [showSwapConfirm, setShowSwapConfirm] = useState(false);
     const [tokenSelectType, setTokenSelectType] = useState('from');
@@ -95,7 +95,7 @@ function SwapPage() {
             return dispatch(estimateTransaction({
                 from: from,
                 to: {
-                  token: to.token,
+                    token: to.token,
                 },
                 type: swapType,
             }))
@@ -197,7 +197,7 @@ function SwapPage() {
                         onChange={handleFromTokenAmount}
                         editable={true}/>
             <div className="switch__btn btn-icon" onClick={handleSwitchTokens}>
-                <ChevronDownIcon />
+                <ChevronDownIcon/>
             </div>
             <TokenInput token={to.token}
                         balance={walletBalances[to.token?.symbol || '']}
@@ -208,23 +208,22 @@ function SwapPage() {
                         editable={true}/>
             {
                 isFilled && <div className="swap-info text-small">
-                <span>
-                  1 {to.token!.symbol} = {calcFrom} {from.token!.symbol}
-                </span>
-                  <div className="btn-icon" onMouseOver={() => setShowSwapInfo(true)} onMouseLeave={() => setShowSwapInfo(false)}>
-                    <InfoIcon/>
-                      {
-                          showSwapInfo && <SwapInfo className={"swap-info-popup"}/>
-                      }
-                  </div>
+                    <span>
+                      1 {to.token!.symbol} = {calcFrom} {from.token!.symbol}
+                    </span>
+                  <Tooltip content={<SwapInfo/>} direction="left">
+                    <div className="btn-icon">
+                      <InfoIcon/>
+                    </div>
+                  </Tooltip>
                 </div>
             }
             {
                 walletAdapter && isFilled && !walletPermissions[from.token!.symbol] && !insufficientBalance &&
-                    <button className="btn btn-primary swap__btn"
-                            onClick={handleAllowUseToken}>
-                      Allow the TONSwap Protocol to use your {from.token!.symbol}
-                    </button>
+                <button className="btn btn-primary swap__btn"
+                        onClick={handleAllowUseToken}>
+                  Allow the TONSwap Protocol to use your {from.token!.symbol}
+                </button>
             }
             {
                 walletAdapter && <button className="btn btn-primary swap__btn"
@@ -246,7 +245,7 @@ function SwapPage() {
                                                 onSelect={handleSelectToken}/>
             }
             {
-                showSwapConfirm && <SwapConfirm onClose={() => setShowSwapConfirm(false)} />
+                showSwapConfirm && <SwapConfirm onClose={() => setShowSwapConfirm(false)}/>
             }
         </div>
     )

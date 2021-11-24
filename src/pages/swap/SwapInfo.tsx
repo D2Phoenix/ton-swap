@@ -16,7 +16,7 @@ import { selectSettings } from 'store/app/app.slice';
 const PRECISION = 6;
 const FEE_PRECISION = 2;
 
-function SwapInfo({className}: any) {
+function SwapInfo() {
     const from = useAppSelector(selectSwapFrom);
     const to = useAppSelector(selectSwapTo);
     const type = useAppSelector(selectSwapSwapType);
@@ -41,7 +41,7 @@ function SwapInfo({className}: any) {
     }, [from, settings]);
 
     return (
-        <div className={"swap-info-wrapper " + className}>
+        <div className={"swap-info-wrapper"}>
             <h4>Transaction Details</h4>
             <div>
                 <span className="text-small">Liquidity Provider Fee</span>
