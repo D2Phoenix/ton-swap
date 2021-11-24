@@ -9,16 +9,15 @@ const permissions: any = {
     'TON': true,
 };
 
+const balances: Record<string, BigNumber> = {
+    'TON': new BigNumber('10000000000000'),
+    'SHIB': new BigNumber('5000000000000000000')
+}
+
 class StubWalletService implements WalletAdapterInterface {
     getBalance(token: TokenInterface): Promise<BigNumber> {
         // TODO: Implement real api for wallet operation
-        if (token.symbol === 'TON') {
-            return Promise.resolve(new BigNumber('10000000000000'));
-        }
-        if (token.symbol === 'SHIB') {
-            return Promise.resolve(new BigNumber('5000000000000000000'));
-        }
-        return Promise.resolve(new BigNumber('0'));
+        return Promise.resolve(balances[token.symbol] || new BigNumber('0'));
     }
 
     getWalletAddress(): Promise<string> {
@@ -37,10 +36,12 @@ class StubWalletService implements WalletAdapterInterface {
         return Promise.resolve(permissions[token.symbol])
     };
 
-    swap(fromToken: SwapState): Promise<WalletTransactionStatus> {
+    swap(state: SwapState): Promise<WalletTransactionStatus> {
         // TODO: Implement real api for wallet operation
         return new Promise<WalletTransactionStatus>((resolve) => {
             setTimeout(() => {
+                balances[state.from.token!.symbol] = balances[state.from.token!.symbol].minus(state.from.amount!);
+                balances[state.to.token!.symbol] = (balances[state.to.token!.symbol] || new BigNumber('0')).plus(state.to.amount!)
                 resolve(WalletTransactionStatus.CONFIRMED);
             }, 3000)
         });

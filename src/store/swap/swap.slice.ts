@@ -75,6 +75,9 @@ export const swapSlice = createSlice({
             state.from = from;
             state.swapType = state.swapType === SwapTypes.EXACT_IN ? SwapTypes.EXACT_OUT : SwapTypes.EXACT_IN;
         },
+        resetSwap: () => {
+            return initialState;
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(estimateTransaction.fulfilled, (state, action) => {
@@ -94,6 +97,7 @@ export const {
     switchSwapTokens,
     setSwapFromAmount,
     setSwapToAmount,
+    resetSwap,
 } = swapSlice.actions
 
 export const selectSwapFrom = (state: RootState) => state.swap.from;

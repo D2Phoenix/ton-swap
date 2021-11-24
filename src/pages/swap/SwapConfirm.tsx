@@ -8,6 +8,7 @@ import ChevronDownIcon from 'components/icons/ChevronDownIcon';
 import SwapInfo from './SwapInfo';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import {
+    resetSwap,
     selectSwapFrom,
     selectSwapSwapType,
     selectSwapTo,
@@ -64,8 +65,11 @@ function SwapConfirm({onClose}: any) {
     }, [dispatch]);
     const handleClose = useCallback(() => {
         dispatch(resetTransaction());
+        if (walletTransaction.status === WalletTransactionStatus.CONFIRMED) {
+            dispatch(resetSwap());
+        }
         onClose && onClose();
-    }, [dispatch, onClose]);
+    }, [dispatch, walletTransaction, onClose]);
 
     return (
         <Modal className={className} onClose={handleClose}>
