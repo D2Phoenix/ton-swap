@@ -25,9 +25,9 @@ import {
     selectSwapTo,
     selectSwapSwapType,
     setSwapFromToken,
-    setSwapFromTokenAmount,
+    setSwapFromAmount,
     setSwapToToken,
-    setSwapToTokenAmount,
+    setSwapToAmount,
     switchSwapTokens
 } from 'store/swap/swap.slice';
 import SwapInfo from './SwapInfo';
@@ -86,7 +86,7 @@ function SwapPage() {
 
     useEffect((): any => {
         if (swapType === SwapTypes.EXACT_IN && (!from.amount || from.amount.eq('0'))) {
-            return dispatch(setSwapToTokenAmount({
+            return dispatch(setSwapToAmount({
                 value: null,
                 swapType,
             }));
@@ -104,7 +104,7 @@ function SwapPage() {
 
     useEffect((): any => {
         if (swapType === SwapTypes.EXACT_OUT && (!to.amount || to.amount.eq('0'))) {
-            return dispatch(setSwapFromTokenAmount({
+            return dispatch(setSwapFromAmount({
                 value: null,
                 swapType,
             }));
@@ -156,14 +156,14 @@ function SwapPage() {
     }, [dispatch, from, to, tokenSelectType, walletAdapter, handleSwitchTokens]);
 
     const handleFromTokenAmount = useCallback((value) => {
-        dispatch(setSwapFromTokenAmount({
+        dispatch(setSwapFromAmount({
             value,
             swapType: SwapTypes.EXACT_IN
         }));
     }, [dispatch]);
 
     const handleToTokenAmount = useCallback((value) => {
-        dispatch(setSwapToTokenAmount({
+        dispatch(setSwapToAmount({
             value,
             swapType: SwapTypes.EXACT_OUT
         }));
@@ -242,8 +242,8 @@ function SwapPage() {
             }
             {
                 showTokenSelect && <TokenSelect tokens={tokens}
-                                               onClose={handleSelectToken}
-                                               onSelect={handleSelectToken}/>
+                                                onClose={handleSelectToken}
+                                                onSelect={handleSelectToken}/>
             }
             {
                 showSwapConfirm && <SwapConfirm onClose={() => setShowSwapConfirm(false)} />
