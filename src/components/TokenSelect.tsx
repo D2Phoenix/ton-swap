@@ -39,8 +39,8 @@ function TokenSelect({tokens, onClose, onSelect}: TokenSelectParams) {
         onClose();
     }, [onClose]);
 
-    const visibleTokens = tokens.filter((token) => token.symbol.startsWith(query) || token.address.startsWith(query))
-        .slice(0, (page - 1) * 10);
+    const visibleTokens = tokens.filter((token) => token.symbol.toLowerCase().startsWith(query.toLowerCase())
+        || token.address.toLowerCase().startsWith(query.toLowerCase())).slice(0, (page - 1) * 10);
 
     return (
         <Modal className={'token-select-modal'} onClose={handleClose}>
