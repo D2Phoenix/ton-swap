@@ -33,6 +33,7 @@ import {
 import SwapInfo from './SwapInfo';
 import SwapConfirm from './SwapConfirm';
 import Tooltip from '../../components/Tooltip';
+import { WALLET_TX_UPDATE_INTERVAL } from 'constants/swap';
 
 function SwapPage() {
     const dispatch = useAppDispatch();
@@ -70,7 +71,7 @@ function SwapPage() {
     useEffect(() => {
         dispatch(fetchTokens());
     }, [dispatch]);
-
+    //Handle swap button text
     useEffect(() => {
         if (!from.amount || from.amount.eq('0')) {
             return setSwapButtonText('Enter an amount');
@@ -82,8 +83,8 @@ function SwapPage() {
             return setSwapButtonText(`Insufficient ${from.token.symbol} balance`);
         }
         setSwapButtonText('Swap');
-    }, [from, to, insufficientBalance])
-
+    }, [from, to, insufficientBalance]);
+    // Estimate EXACT_IN transaction
     useEffect((): any => {
         if (swapType === SwapTypes.EXACT_IN && (!from.amount || from.amount.eq('0'))) {
             return dispatch(setSwapToAmount({
@@ -101,7 +102,7 @@ function SwapPage() {
             }))
         }
     }, [dispatch, from, to.token, swapType]);
-
+    // Estimate EXACT_OUT transaction
     useEffect((): any => {
         if (swapType === SwapTypes.EXACT_OUT && (!to.amount || to.amount.eq('0'))) {
             return dispatch(setSwapFromAmount({
@@ -119,6 +120,28 @@ function SwapPage() {
             }))
         }
     }, [dispatch, from.token, to, swapType]);
+    // Update balances and transaction estimation every {WALLET_TX_UPDATE_INTERVAL} milliseconds
+    useEffect((): any => {
+        if (!walletAdapter) {
+            return;
+        }
+        const intervalId = setInterval(() => {
+            if (to.token) {
+                dispatch(getWalletBalance(to.token));
+            }
+            if (from.token) {
+                dispatch(getWalletBalance(from.token));
+            }
+            if (from.token && to.token && from.amount && !from.amount.eq('0')) {
+                dispatch(estimateTransaction({
+                    from: from,
+                    to: to,
+                    type: swapType,
+                }));
+            }
+        }, WALLET_TX_UPDATE_INTERVAL);
+        return () => clearInterval(intervalId);
+    },[dispatch, walletAdapter, from, to, swapType]);
 
     const openFromTokenSelect = useCallback(() => {
         setShowTokenSelect(!showTokenSelect);
