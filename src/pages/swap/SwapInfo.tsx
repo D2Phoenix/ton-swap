@@ -7,14 +7,11 @@ import {
     selectSwapTo
 } from 'store/swap/swap.slice';
 import { SwapTypes } from 'interfaces/swap.types';
-import { DEFAULT_SLIPPAGE } from 'constants/swap';
+import { DEFAULT_SLIPPAGE, FEE_PRECISION, TOKEN_PRECISION } from 'constants/swap';
 import { useMemo } from 'react';
 import { toDecimals } from 'utils/decimals';
 import BigNumber from 'bignumber.js';
 import { selectSettings } from 'store/app/app.slice';
-
-const PRECISION = 6;
-const FEE_PRECISION = 2;
 
 function SwapInfo() {
     const from = useAppSelector(selectSwapFrom);
@@ -31,18 +28,18 @@ function SwapInfo() {
     const minimumReceived = useMemo(() => {
         return toDecimals(to.amount!, to.token!.decimals)
             .multipliedBy(new BigNumber('100').minus(new BigNumber(settings.slippage || DEFAULT_SLIPPAGE)).div('100'))
-            .precision(PRECISION).toFixed();
+            .precision(TOKEN_PRECISION).toFixed();
     }, [to, settings]);
 
     const maximumSent = useMemo(() => {
         return toDecimals(from.amount!, from.token!.decimals)
             .multipliedBy(new BigNumber('100').plus(new BigNumber(settings.slippage || DEFAULT_SLIPPAGE)).div('100'))
-            .precision(PRECISION).toFixed();
+            .precision(TOKEN_PRECISION).toFixed();
     }, [from, settings]);
 
     return (
         <div className={"swap-info-wrapper"}>
-            <h4>Transaction Details</h4>
+            <span className="text-semibold">Transaction Details</span>
             <div>
                 <span className="text-small">Liquidity Provider Fee</span>
                 <span className="text-small text-semibold">{liquidityFee} {from.token!.symbol}</span>

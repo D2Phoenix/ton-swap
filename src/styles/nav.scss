@@ -63,6 +63,9 @@ nav {
     transition: color .3s;
     font-family: "mulish-bold", serif;
     text-decoration: none;
+    &.active {
+      color: $secondary-color;
+    }
   }
   .nav-item__btn:hover {
     color: $secondary-color;

@@ -15,13 +15,11 @@ import {
 } from 'store/swap/swap.slice';
 import { resetTransaction, selectWalletBalances, selectWalletTransaction } from 'store/wallet/wallet.slice';
 import { toDecimals } from 'utils/decimals';
-import { DEFAULT_SLIPPAGE } from 'constants/swap';
+import { DEFAULT_SLIPPAGE, TOKEN_PRECISION } from 'constants/swap';
 import { WalletTransactionStatus, SwapTypes } from 'interfaces/swap.types';
 import { walletSwap } from 'store/wallet/wallet.thunks';
 import Spinner from 'components/Spinner';
 import { selectSettings } from '../../store/app/app.slice';
-
-const PRECISION = 6;
 
 function SwapConfirm({onClose}: any) {
     const dispatch = useAppDispatch();
@@ -39,25 +37,25 @@ function SwapConfirm({onClose}: any) {
         if (!from.amount || !to.amount || !to.token || !from.token) {
             return;
         }
-        return from.amount.div(to.amount.shiftedBy(from.token.decimals - to.token.decimals)).precision(PRECISION).toFixed();
+        return from.amount.div(to.amount.shiftedBy(from.token.decimals - to.token.decimals)).precision(TOKEN_PRECISION).toFixed();
     }, [from, to]);
     const minimumReceived = useMemo(() => {
         return toDecimals(to.amount!, to.token!.decimals)
             .multipliedBy(new BigNumber('100').minus(new BigNumber(settings.slippage || DEFAULT_SLIPPAGE)).div('100'))
-            .precision(PRECISION).toFixed();
+            .precision(TOKEN_PRECISION).toFixed();
     }, [to, settings]);
     const maximumSent = useMemo(() => {
         return toDecimals(from.amount!, from.token!.decimals)
             .multipliedBy(new BigNumber('100').plus(new BigNumber(settings.slippage || DEFAULT_SLIPPAGE)).div('100'))
-            .precision(PRECISION).toFixed();
+            .precision(TOKEN_PRECISION).toFixed();
     }, [from, settings]);
     const toAmount = useMemo(() => {
         return toDecimals(to.amount!, to.token!.decimals)
-            .precision(PRECISION).toFixed();
+            .precision(TOKEN_PRECISION).toFixed();
     }, [to]);
     const fromAmount = useMemo(() => {
         return toDecimals(from.amount!, from.token!.decimals)
-            .precision(PRECISION).toFixed();
+            .precision(TOKEN_PRECISION).toFixed();
     }, [from]);
 
     const handleConfirmSwap = useCallback(() => {

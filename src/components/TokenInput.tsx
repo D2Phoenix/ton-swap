@@ -5,6 +5,7 @@ import './TokenInput.scss';
 import ChevronRightIcon from './icons/ChevronRightIcon';
 import TokenInterface from '../interfaces/token.interface';
 import { fromDecimals, toDecimals } from '../utils/decimals';
+import { BALANCE_PRECISION, TOKEN_PRECISION } from '../constants/swap';
 
 interface TokenInputParams {
     balance: BigNumber;
@@ -17,8 +18,6 @@ interface TokenInputParams {
 }
 
 const INPUT_REGEXP = RegExp(`^\\d*(?:\\\\[.])?\\d*$`)
-const INPUT_PRECISION = 6;
-const BALANCE_PRECISION = 4;
 
 function TokenInput({balance, token, value, showMax, editable, onChange, onSelect}: TokenInputParams) {
     const [internalValue, setInternalValue] = useState('');
@@ -31,7 +30,7 @@ function TokenInput({balance, token, value, showMax, editable, onChange, onSelec
             const compare = fromDecimals(new BigNumber(internalValue), token ? token.decimals : 0);
             if (!value.eq(compare)) {
                 const newValue = toDecimals(value, token ? token.decimals : 0);
-                setInternalValue(newValue.precision(INPUT_PRECISION).toFixed());
+                setInternalValue(newValue.precision(TOKEN_PRECISION).toFixed());
             }
         }
     }, [value, internalValue, token])
