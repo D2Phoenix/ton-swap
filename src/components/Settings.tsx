@@ -1,9 +1,8 @@
 import { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
 
 import './Settings.scss';
 import Modal from 'components/Modal';
-import { useAppSelector } from 'store/hooks';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { DEFAULT_DEADLINE, DEFAULT_SLIPPAGE } from 'constants/swap';
 import { selectSettings, setSettingsDeadline, setSettingsSlippage } from 'store/app/app.slice';
 
@@ -11,7 +10,7 @@ const SLIPPAGE_INPUT_REGEXP = RegExp(`^\\d*(?:\\\\[.])?\\d*$`);
 const DEADLINE_INPUT_REGEXP = RegExp(`^\\d*(?:\\\\[])?\\d*$`);
 
 function Settings({onClose}: any) {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const settings = useAppSelector(selectSettings);
 
 

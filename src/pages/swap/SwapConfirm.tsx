@@ -1,5 +1,4 @@
 import { useCallback, useMemo } from 'react';
-import { useDispatch } from 'react-redux';
 import BigNumber from 'bignumber.js';
 
 import './SwapConfirm.scss';
@@ -7,7 +6,7 @@ import Modal from 'components/Modal';
 import TokenInput from 'components/TokenInput';
 import ChevronDownIcon from 'components/icons/ChevronDownIcon';
 import SwapInfo from './SwapInfo';
-import { useAppSelector } from 'store/hooks';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
 import {
     selectSwapFrom,
     selectSwapSwapType,
@@ -24,7 +23,7 @@ import { selectSettings } from '../../store/app/app.slice';
 const PRECISION = 6;
 
 function SwapConfirm({onClose}: any) {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const from = useAppSelector(selectSwapFrom);
     const to = useAppSelector(selectSwapTo);
     const walletBalances = useAppSelector(selectWalletBalances);

@@ -1,14 +1,13 @@
 import React, { useCallback } from 'react';
 import { NavLink } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 
 import './Header.scss';
 import { connectWallet } from 'store/wallet/wallet.thunks';
-import { useAppSelector } from 'store/hooks';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { selectWalletAddress } from 'store/wallet/wallet.slice';
 
 function Header() {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const walletAddress = useAppSelector(selectWalletAddress)
 

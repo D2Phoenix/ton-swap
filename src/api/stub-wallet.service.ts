@@ -13,7 +13,7 @@ class StubWalletService implements WalletAdapterInterface {
     getBalance(token: TokenInterface): Promise<BigNumber> {
         // TODO: Implement real api for wallet operation
         if (token.symbol === 'TON') {
-            return Promise.resolve(new BigNumber('1001000111'));
+            return Promise.resolve(new BigNumber('10000000000000'));
         }
         if (token.symbol === 'SHIB') {
             return Promise.resolve(new BigNumber('5000000000000000000'));

@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import BigNumber from 'bignumber.js';
 
 import './SwapPage.scss';
@@ -7,12 +6,20 @@ import ChevronDownIcon from 'components/icons/ChevronDownIcon';
 import SettingsIcon from 'components/icons/SettingsIcon';
 import InfoIcon from 'components/icons/InfoIcon';
 import TokenInput from 'components/TokenInput';
-import Settings from '../../components/Settings';
-import SwapInfo from './SwapInfo';
+import Settings from 'components/Settings';
 import TokenSelect from 'components/TokenSelect';
-import { useAppSelector } from 'store/hooks';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { selectTokens } from 'store/app/app.slice';
 import { fetchTokens } from 'store/app/app.thunks';
+import { selectWalletAdapter, selectWalletBalances, selectWalletPermissions } from 'store/wallet/wallet.slice';
+import {
+    connectWallet,
+    getWalletBalance,
+    getWalletUseTokenPermission,
+    setWalletUseTokenPermission
+} from 'store/wallet/wallet.thunks';
+import { estimateTransaction } from 'store/swap/swap.thunks';
+import { SwapTypes } from 'interfaces/swap.types';
 import {
     selectSwapFrom,
     selectSwapTo,
@@ -23,19 +30,11 @@ import {
     setSwapToTokenAmount,
     switchSwapTokens
 } from 'store/swap/swap.slice';
-import { selectWalletAdapter, selectWalletBalances, selectWalletPermissions } from 'store/wallet/wallet.slice';
-import {
-    connectWallet,
-    getWalletBalance,
-    getWalletUseTokenPermission,
-    setWalletUseTokenPermission
-} from 'store/wallet/wallet.thunks';
-import { estimateTransaction } from '../../store/swap/swap.thunks';
-import { SwapTypes } from '../../interfaces/swap.types';
+import SwapInfo from './SwapInfo';
 import SwapConfirm from './SwapConfirm';
 
 function SwapPage() {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const [showSettings, setShowSettings] = useState(false);
     const [showSwapInfo, setShowSwapInfo] = useState(false);
     const [showTokenSelect, setShowTokenSelect] = useState(false);
