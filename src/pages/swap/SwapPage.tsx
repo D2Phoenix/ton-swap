@@ -27,7 +27,7 @@ import {
     setSwapFromAmount,
     setSwapToToken,
     setSwapToAmount,
-    switchSwapTokens
+    switchSwapTokens, resetSwap
 } from 'store/swap/swap.slice';
 import SwapInfo from './SwapInfo';
 import SwapConfirm from './SwapConfirm';
@@ -66,6 +66,13 @@ function SwapPage() {
         }
         return from.amount.div(to.amount.shiftedBy(from.token.decimals - to.token.decimals)).precision(6).toFixed();
     }, [from, to])
+
+    useEffect(() => {
+        return () => {
+            dispatch(resetSwap());
+        };
+    }, [dispatch]);
+
     //Handle swap button text
     useEffect(() => {
         if (!from.amount || from.amount.eq('0')) {

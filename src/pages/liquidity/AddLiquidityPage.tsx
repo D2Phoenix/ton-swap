@@ -12,7 +12,8 @@ import {
     setLiquidityOneToken,
     setLiquidityTwoAmount,
     setLiquidityTwoToken,
-    switchLiquidityTokens
+    switchLiquidityTokens,
+    resetLiquidity,
 } from '../../store/liquidity/liquidity.slice';
 import {
     connectWallet,
@@ -64,7 +65,13 @@ export function AddLiquidityPage() {
     }, [two, walletBalances]);
     const insufficientBalance = useMemo(() => {
         return insufficientFromBalance || insufficientToBalance;
-    }, [insufficientFromBalance, insufficientToBalance])
+    }, [insufficientFromBalance, insufficientToBalance]);
+
+    useEffect(() => {
+        return () => {
+            dispatch(resetLiquidity());
+        };
+    }, [dispatch]);
 
     //Handle swap button text
     useEffect(() => {
