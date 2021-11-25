@@ -5,6 +5,7 @@ import TokenInterface from '../interfaces/tokenInterface';
 import { WalletTxStatus } from '../interfaces/transactionInterfaces';
 import { SwapState } from '../store/swap/swap.slice';
 import { LiquidityState } from '../store/liquidity/liquidity.slice';
+import PoolInterface from '../interfaces/poolInterface';
 
 const permissions: any = {
     'TON': true,
@@ -14,6 +15,9 @@ const balances: Record<string, BigNumber> = {
     'TON': new BigNumber('10000000000000'),
     'SHIB': new BigNumber('5000000000000000000')
 }
+
+const liquidity: Record<string, PoolInterface> = {
+};
 
 class StubWalletService implements WalletAdapterInterface {
     getBalance(token: TokenInterface): Promise<BigNumber> {
@@ -53,11 +57,42 @@ class StubWalletService implements WalletAdapterInterface {
         return new Promise<WalletTxStatus>((resolve) => {
             setTimeout(() => {
                 balances[state.one.token!.symbol] = balances[state.one.token!.symbol].minus(state.one.amount!);
-                balances[state.two.token!.symbol] = (balances[state.two.token!.symbol] || new BigNumber('0')).minus(state.two.amount!)
+                balances[state.two.token!.symbol] = (balances[state.two.token!.symbol] || new BigNumber('0')).minus(state.two.amount!);
+                const poolName = liquidity[`${state.two.token!.symbol}_${state.one.token!.symbol}`] ?
+                    `${state.two.token!.symbol}_${state.one.token!.symbol}` :
+                    `${state.one.token!.symbol}_${state.two.token!.symbol}`
+                const pool = liquidity[poolName];
+                if (pool) {
+                    liquidity[poolName] = {
+                        one: {
+                            token: liquidity[poolName].one.token,
+                            amount: liquidity[poolName].one.amount!.plus(state.one.amount!),
+                        },
+                        two: {
+                            token: liquidity[poolName].two.token,
+                            amount: liquidity[poolName].two.amount!.plus(state.two.amount!),
+                        },
+                        details: {
+                            poolAmount: liquidity[poolName].details.poolAmount.plus(state.details.poolAmount),
+                            poolTokens: liquidity[poolName].details.poolTokens,
+                        },
+                    };
+                } else {
+                    liquidity[poolName] = {
+                        one: state.one,
+                        two: state.two,
+                        details: state.details,
+                    };
+                }
                 resolve(WalletTxStatus.CONFIRMED);
             }, 3000)
         });
+    };
+
+    getPools(): Promise<PoolInterface[]> {
+        return Promise.resolve(Object.values(liquidity));
     }
+
 
 }
 
