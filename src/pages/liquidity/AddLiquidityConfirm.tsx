@@ -1,5 +1,4 @@
 import { useCallback, useMemo } from 'react';
-import BigNumber from 'bignumber.js';
 
 import './AddLiquidityConfirm.scss';
 import Modal from 'components/Modal';
@@ -7,7 +6,8 @@ import TokenInput from 'components/TokenInput';
 import LiquidityInfo from './LiquidityInfo';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import {
-    resetLiquidity, selectLiquidityDetails,
+    resetLiquidity,
+    selectLiquidityDetails,
     selectLiquidityOne,
     selectLiquidityTwo,
 } from 'store/liquidity/liquidity.slice';

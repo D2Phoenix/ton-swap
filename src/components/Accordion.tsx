@@ -32,9 +32,9 @@ function Panel({label, content, activeTab, index, activateTab}: any) {
             <div className='panel__inner'
                  style={ innerStyle }
                  aria-hidden={ !isActive }>
-                <p className='panel__content'>
+                <div className='panel__content'>
                     { content }
-                </p>
+                </div>
             </div>
         </div>
     );

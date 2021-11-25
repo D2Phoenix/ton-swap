@@ -52,6 +52,10 @@ class StubWalletService implements WalletAdapterInterface {
         });
     }
 
+    getPools(): Promise<PoolInterface[]> {
+        return Promise.resolve(Object.values(liquidity));
+    }
+
     addLiquidity(state: LiquidityState): Promise<WalletTxStatus> {
         // TODO: Implement real api for wallet operation
         return new Promise<WalletTxStatus>((resolve) => {
@@ -88,10 +92,6 @@ class StubWalletService implements WalletAdapterInterface {
             }, 3000)
         });
     };
-
-    getPools(): Promise<PoolInterface[]> {
-        return Promise.resolve(Object.values(liquidity));
-    }
 
 
 }

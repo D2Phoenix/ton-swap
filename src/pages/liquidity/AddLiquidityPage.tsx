@@ -162,6 +162,21 @@ export function AddLiquidityPage() {
         }, WALLET_TX_UPDATE_INTERVAL);
         return () => clearInterval(intervalId);
     },[dispatch, walletAdapter, one, two, txType]);
+    //Update balance and check token permissions on one token update
+    useEffect(() => {
+        if (walletAdapter && one.token) {
+            dispatch(getWalletBalance(one.token));
+            dispatch(getWalletUseTokenPermission(one.token));
+        }
+    }, [dispatch, one.token, walletAdapter]);
+    //Update balance and check token permissions on two token update
+    useEffect(() => {
+        if (walletAdapter && two.token) {
+            dispatch(getWalletBalance(two.token));
+            dispatch(getWalletUseTokenPermission(two.token));
+        }
+    }, [dispatch, two.token, walletAdapter])
+
 
     const openFromTokenSelect = useCallback(() => {
         setShowTokenSelect(!showTokenSelect);
@@ -188,10 +203,6 @@ export function AddLiquidityPage() {
         if (!token) {
             return;
         }
-        if (walletAdapter) {
-            dispatch(getWalletBalance(token));
-            dispatch(getWalletUseTokenPermission(token));
-        }
         if (two.token && tokenSelectType === 'from' && two.token.symbol === token.symbol) {
             return handleSwitchTokens();
         }
@@ -202,7 +213,7 @@ export function AddLiquidityPage() {
             return dispatch(setLiquidityOneToken(token));
         }
         dispatch(setLiquidityTwoToken(token));
-    }, [dispatch, one, two, tokenSelectType, walletAdapter, handleSwitchTokens]);
+    }, [dispatch, one, two, tokenSelectType, handleSwitchTokens]);
 
     const handleFromTokenAmount = useCallback((value) => {
         dispatch(setLiquidityOneAmount({

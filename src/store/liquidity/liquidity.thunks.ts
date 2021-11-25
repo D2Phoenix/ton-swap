@@ -28,7 +28,7 @@ export const fetchOneToken = createAsyncThunk(
     async (tokenSymbol:string, thunkAPI) => {
         const state = thunkAPI.getState() as RootState;
         const tokens: TokenInterface[] = state.app.tokens.length ? state.app.tokens : (await getTokens()).tokens;
-        return tokens.find((token) => token.symbol === tokenSymbol)
+        return tokens.find((token) => token.symbol === tokenSymbol);
     },
 )
 
