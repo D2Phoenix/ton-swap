@@ -9,7 +9,7 @@ const swapService = new SmartContractsService();
 export const estimateLiquidityTransaction = createAsyncThunk(
     'liquidity/estimate',
     async (data: LiquidityTxRequestInterface) => {
-        const transaction = await swapService.getLiquidityTransactionEstimation(data);
+        const transaction = await swapService.getLiquidityTxEstimation(data);
         return {
             oneAmount: transaction.txType === TxType.EXACT_IN ? transaction.amount : transaction.quote,
             twoAmount: transaction.txType === TxType.EXACT_IN ? transaction.quote : transaction.amount,

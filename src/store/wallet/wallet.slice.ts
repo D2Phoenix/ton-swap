@@ -7,7 +7,7 @@ import {
     getWalletAddress,
     getWalletBalance,
     getWalletUseTokenPermission,
-    setWalletUseTokenPermission, walletSwap
+    setWalletUseTokenPermission, walletAddLiquidity, walletSwap
 } from './wallet.thunks';
 import { WalletAdapterInterface } from 'interfaces/walletAdapterInterface';
 import { WalletTxStatus } from '../../interfaces/transactionInterfaces';
@@ -63,6 +63,12 @@ export const walletSlice = createSlice({
             state.tx.status = WalletTxStatus.PENDING;
         });
         builder.addCase(walletSwap.fulfilled, (state, action) => {
+            state.tx.status = action.payload;
+        });
+        builder.addCase(walletAddLiquidity.pending, (state, action) => {
+            state.tx.status = WalletTxStatus.PENDING;
+        });
+        builder.addCase(walletAddLiquidity.fulfilled, (state, action) => {
             state.tx.status = action.payload;
         });
     },

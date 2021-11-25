@@ -1,0 +1,77 @@
+@import "../../styles/vars";
+.add-liquidity-confirm-modal.modal-container {
+  .modal-content {
+    height: 526px;
+    width: 50vw;
+    max-width: 420px;
+  }
+  &.mini {
+    .modal-content {
+      height: 226px;
+    }
+  }
+}
+.add-liquidity-confirm-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  background-color: white;
+  border-radius: 8px;
+  overflow: auto;
+  height: calc(100% - 20px);
+  padding-top: 2px;
+  .btn-icon {
+    align-self: center;
+  }
+  .liquidity-info-wrapper {
+    > span {
+      padding: 0 0 8px;
+    }
+    .liquidity-price {
+      padding: 0.5rem 0;
+    }
+  }
+  .pool-tokens-info {
+    text-align: center;
+    margin-top: auto;
+  }
+  .help-text {
+    padding: 8px 0;
+    text-align: center;
+    margin-top: auto;
+  }
+  .supply__btn {
+    margin-top: auto;
+  }
+  .add-liquidity-status {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 8px;
+    padding-top: 20px;
+    > span {
+      text-align: center;
+    }
+    .btn {
+      width: 100%;
+      margin-top: auto;
+    }
+  }
+}
+
+@media screen and (max-width: 599px) {
+  .add-liquidity-confirm-modal.modal-container  {
+    .modal-content {
+      height: 82% !important;
+      max-height: 82%;
+    }
+    &.mini {
+      .modal-content {
+        height: 40% !important;
+      }
+    }
+  }
+}

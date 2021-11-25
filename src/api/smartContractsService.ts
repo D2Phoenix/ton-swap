@@ -33,7 +33,7 @@ const prices: Record<string, string> = {
 
 
 class SmartContractsService {
-    getTransactionEstimation(data: SwapTxRequestInterface): Promise<SwapTxInterface> {
+    getTxEstimation(data: SwapTxRequestInterface): Promise<SwapTxInterface> {
         // TODO: Implement real api for transaction estimation
         const amount = data.txType === TxType.EXACT_IN ? data.from!.amount! : data.to!.amount!;
         const amountToken = data.txType === TxType.EXACT_IN ? data.from!.token! : data.to!.token!;
@@ -50,7 +50,7 @@ class SmartContractsService {
         });
     }
 
-    getLiquidityTransactionEstimation(data: LiquidityTxRequestInterface): Promise<LiquidityTxInterface> {
+    getLiquidityTxEstimation(data: LiquidityTxRequestInterface): Promise<LiquidityTxInterface> {
         // TODO: Implement real api for transaction estimation
         const amount = data.txType === TxType.EXACT_IN ? data.one!.amount! : data.two!.amount!;
         const amountToken = data.txType === TxType.EXACT_IN ? data.one!.token! : data.two!.token!;

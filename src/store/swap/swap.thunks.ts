@@ -9,7 +9,7 @@ const swapService = new SmartContractsService();
 export const estimateTransaction = createAsyncThunk(
     'swap/estimate',
     async (data: SwapTxRequestInterface) => {
-        const transaction = await swapService.getTransactionEstimation(data);
+        const transaction = await swapService.getTxEstimation(data);
         const priceImpact = await swapService.getPriceImpact(data, transaction);
         const insufficientLiquidity = !await swapService.checkLiquidity(data, transaction);
         return {

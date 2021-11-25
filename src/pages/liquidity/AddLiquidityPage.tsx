@@ -31,6 +31,7 @@ import { WALLET_TX_UPDATE_INTERVAL } from '../../constants/swap';
 import { Link } from 'react-router-dom';
 import ChevronRightIcon from '../../components/icons/ChevronRightIcon';
 import LiquidityInfo from './LiquidityInfo';
+import AddLiquidityConfirm from './AddLiquidityConfirm';
 
 export function AddLiquidityPage() {
     const dispatch = useAppDispatch();
@@ -38,6 +39,7 @@ export function AddLiquidityPage() {
     const [showTokenSelect, setShowTokenSelect] = useState(false);
     const [tokenSelectType, setTokenSelectType] = useState('from');
     const [supplyButtonText, setSupplyButtonText] = useState('Supply');
+    const [showAddLiquidityConfirm, setShowAddLiquidityConfirm] = useState(false);
     const walletAdapter = useAppSelector(selectWalletAdapter);
     const tokens = useAppSelector(selectTokens);
     const one = useAppSelector(selectLiquidityOne);
@@ -212,6 +214,7 @@ export function AddLiquidityPage() {
     }, [dispatch]);
 
     const handleSupply = useCallback(() => {
+        setShowAddLiquidityConfirm(true);
     }, []);
 
     return (
@@ -281,6 +284,9 @@ export function AddLiquidityPage() {
                 showTokenSelect && <TokenSelect tokens={tokens}
                                                 onClose={handleSelectToken}
                                                 onSelect={handleSelectToken}/>
+            }
+            {
+                showAddLiquidityConfirm && <AddLiquidityConfirm onClose={() => setShowAddLiquidityConfirm(false)}/>
             }
         </div>
     )

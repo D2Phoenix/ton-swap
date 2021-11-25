@@ -4,6 +4,7 @@ import { WalletAdapterInterface } from 'interfaces/walletAdapterInterface';
 import TokenInterface from '../interfaces/tokenInterface';
 import { WalletTxStatus } from '../interfaces/transactionInterfaces';
 import { SwapState } from '../store/swap/swap.slice';
+import { LiquidityState } from '../store/liquidity/liquidity.slice';
 
 const permissions: any = {
     'TON': true,
@@ -42,6 +43,17 @@ class StubWalletService implements WalletAdapterInterface {
             setTimeout(() => {
                 balances[state.from.token!.symbol] = balances[state.from.token!.symbol].minus(state.from.amount!);
                 balances[state.to.token!.symbol] = (balances[state.to.token!.symbol] || new BigNumber('0')).plus(state.to.amount!)
+                resolve(WalletTxStatus.CONFIRMED);
+            }, 3000)
+        });
+    }
+
+    addLiquidity(state: LiquidityState): Promise<WalletTxStatus> {
+        // TODO: Implement real api for wallet operation
+        return new Promise<WalletTxStatus>((resolve) => {
+            setTimeout(() => {
+                balances[state.one.token!.symbol] = balances[state.one.token!.symbol].minus(state.one.amount!);
+                balances[state.two.token!.symbol] = (balances[state.two.token!.symbol] || new BigNumber('0')).minus(state.two.amount!)
                 resolve(WalletTxStatus.CONFIRMED);
             }, 3000)
         });

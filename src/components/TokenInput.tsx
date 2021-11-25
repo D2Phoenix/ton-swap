@@ -8,7 +8,7 @@ import { fromDecimals, toDecimals } from '../utils/decimals';
 import { BALANCE_PRECISION, TOKEN_PRECISION } from '../constants/swap';
 
 interface TokenInputParams {
-    balance: BigNumber;
+    balance?: BigNumber;
     token: TokenInterface | undefined,
     value: BigNumber | undefined;
     editable: boolean;
@@ -52,11 +52,13 @@ function TokenInput({balance, token, value, showMax, editable, onChange, onSelec
     }, [onChange, token]);
 
     const handleMax = useCallback((event) => {
-        handleChange({
-            target: {
-                value: toDecimals(balance, token ? token.decimals : 0).toFixed()
-            }
-        });
+        if (balance) {
+            handleChange({
+                target: {
+                    value: toDecimals(balance, token ? token.decimals : 0).toFixed()
+                }
+            });
+        }
     }, [handleChange, balance, token]);
 
     const balanceVisible = useMemo(() => {
