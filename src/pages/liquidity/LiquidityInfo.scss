@@ -12,13 +12,15 @@
   .liquidity-price-wrapper {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
     text-align: center;
-    justify-content: space-between;
+    justify-content: center;
     gap: 8px;
     width: 100%;
     .liquidity-price {
       display: flex;
+      flex: 1 1 auto;
       flex-direction: column;
       gap: 4px;
       padding: 0.5rem 1rem;
