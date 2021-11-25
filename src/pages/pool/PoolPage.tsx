@@ -88,7 +88,7 @@ function PoolPage() {
                                             <div>{shareText}</div>
                                         </div>
                                         <div>
-                                            <Link className="btn btn-primary" to="add">
+                                            <Link className="btn btn-primary" to={`add/${pool.one.token!.symbol}/${pool.two.token!.symbol}`}>
                                                 Add
                                             </Link>
                                             <Link className="btn btn-primary" to="remove">

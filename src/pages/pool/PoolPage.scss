@@ -37,6 +37,9 @@
   padding: 0 1rem;
   border: 1px solid $border-color;
   border-radius: 0.25rem;
+  > span {
+    padding: 1rem;
+  }
   .pool-item-wrapper {
     display: flex;
     flex-direction: row;

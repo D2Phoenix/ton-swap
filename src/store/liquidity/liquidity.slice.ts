@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import BigNumber from 'bignumber.js';
 
 import type { RootState } from 'store/store'
-import { estimateLiquidityTransaction } from './liquidity.thunks';
+import { estimateLiquidityTransaction, fetchOneToken, fetchTwoToken } from './liquidity.thunks';
 import { shiftDecimals } from 'utils/decimals';
 import { TxType } from 'interfaces/transactionInterfaces';
 import { InputTokenInterface } from 'interfaces/inputTokenInterface';
@@ -84,6 +84,12 @@ export const liquiditySlice = createSlice({
             state.txType = action.payload.txType;
             state.details.poolTokens = action.payload.poolTokens;
             state.details.poolAmount = action.payload.poolAmount;
+        });
+        builder.addCase(fetchOneToken.fulfilled, (state, action) => {
+            state.one.token = action.payload;
+        })
+        builder.addCase(fetchTwoToken.fulfilled, (state, action) => {
+            state.two.token = action.payload;
         })
     }
 })

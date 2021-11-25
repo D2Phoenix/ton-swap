@@ -9,10 +9,6 @@
   width: 100%;
   background: none;
   border: none;
-  text-align: left;
-  font-weight: 500;
-  font-size: 17px;
-  font-family: inherit;
   transition: color 0.2s linear;
   cursor: pointer;
   &:hover {
@@ -63,7 +59,4 @@
 }
 .panel:not(:last-child) {
   margin-bottom: 3px;
-}
-.panel[aria-expanded='true']:last-child {
-  margin-bottom: 16px;
 }

@@ -26,15 +26,17 @@ import TokenSelect from '../../components/TokenSelect';
 import { selectTokens } from '../../store/app/app.slice';
 import Settings from '../../components/Settings';
 import BigNumber from 'bignumber.js';
-import { estimateLiquidityTransaction } from '../../store/liquidity/liquidity.thunks';
+import { estimateLiquidityTransaction, fetchOneToken, fetchTwoToken } from '../../store/liquidity/liquidity.thunks';
 import { WALLET_TX_UPDATE_INTERVAL } from '../../constants/swap';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import ChevronRightIcon from '../../components/icons/ChevronRightIcon';
 import LiquidityInfo from './LiquidityInfo';
 import AddLiquidityConfirm from './AddLiquidityConfirm';
 
 export function AddLiquidityPage() {
     const dispatch = useAppDispatch();
+    const params = useParams();
+
     const [showSettings, setShowSettings] = useState(false);
     const [showTokenSelect, setShowTokenSelect] = useState(false);
     const [tokenSelectType, setTokenSelectType] = useState('from');
@@ -75,6 +77,15 @@ export function AddLiquidityPage() {
             dispatch(resetLiquidity());
         };
     }, [dispatch]);
+
+    useEffect(() => {
+        if (params.oneToken) {
+            dispatch(fetchOneToken(params.oneToken));
+        }
+        if (params.twoToken) {
+            dispatch(fetchTwoToken(params.twoToken));
+        }
+    }, [dispatch, params]);
 
     //Handle swap button text
     useEffect(() => {

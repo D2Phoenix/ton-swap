@@ -24,6 +24,8 @@ function App() {
                       <Route path="swap" element={<SwapPage />} />
                       <Route path="pool" element={<PoolPage />} />
                       <Route path="pool/add" element={<AddLiquidityPage />} />
+                      <Route path="pool/add/:oneToken" element={<AddLiquidityPage />} />
+                      <Route path="pool/add/:oneToken/:twoToken" element={<AddLiquidityPage />} />
                       <Route path="pools" element={<SwapPage />} />
                   </Routes>
               </div>
