@@ -30,6 +30,7 @@ import { estimateLiquidityTransaction } from '../../store/liquidity/liquidity.th
 import { WALLET_TX_UPDATE_INTERVAL } from '../../constants/swap';
 import { Link } from 'react-router-dom';
 import ChevronRightIcon from '../../components/icons/ChevronRightIcon';
+import LiquidityInfo from './LiquidityInfo';
 
 export function AddLiquidityPage() {
     const dispatch = useAppDispatch();
@@ -241,6 +242,9 @@ export function AddLiquidityPage() {
                         onSelect={openToTokenSelect}
                         onChange={handleToTokenAmount}
                         editable={true}/>
+            {
+                isFilled && <LiquidityInfo />
+            }
             {
                 walletAdapter && isFilled && !walletPermissions[one.token!.symbol] && !insufficientFromBalance &&
                 <button className="btn btn-primary supply__btn"

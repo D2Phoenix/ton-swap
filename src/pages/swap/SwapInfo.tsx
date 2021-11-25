@@ -39,7 +39,7 @@ function SwapInfo() {
 
     return (
         <div className={"swap-info-wrapper"}>
-            <span className="text-semibold">Transaction Details</span>
+            <span>Transaction Details</span>
             <div>
                 <span className="text-small">Liquidity Provider Fee</span>
                 <span className="text-small text-semibold">{liquidityFee} {from.token!.symbol}</span>
