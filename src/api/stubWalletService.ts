@@ -5,7 +5,7 @@ import TokenInterface from '../interfaces/tokenInterface';
 import { WalletTxStatus } from '../interfaces/transactionInterfaces';
 import { SwapState } from '../store/swap/swap.slice';
 import { LiquidityState } from '../store/liquidity/liquidity.slice';
-import PoolInterface from '../interfaces/poolInterface';
+import WalletPoolInterface from '../interfaces/walletPoolInterface';
 
 const permissions: any = {
     'TON': true,
@@ -16,7 +16,7 @@ const balances: Record<string, BigNumber> = {
     'SHIB': new BigNumber('5000000000000000000')
 }
 
-const liquidity: Record<string, PoolInterface> = {
+const liquidity: Record<string, WalletPoolInterface> = {
 };
 
 class StubWalletService implements WalletAdapterInterface {
@@ -52,7 +52,7 @@ class StubWalletService implements WalletAdapterInterface {
         });
     }
 
-    getPools(): Promise<PoolInterface[]> {
+    getPools(): Promise<WalletPoolInterface[]> {
         return Promise.resolve(Object.values(liquidity));
     }
 
@@ -62,9 +62,9 @@ class StubWalletService implements WalletAdapterInterface {
             setTimeout(() => {
                 balances[state.one.token!.symbol] = balances[state.one.token!.symbol].minus(state.one.amount!);
                 balances[state.two.token!.symbol] = (balances[state.two.token!.symbol] || new BigNumber('0')).minus(state.two.amount!);
-                const poolName = liquidity[`${state.two.token!.symbol}_${state.one.token!.symbol}`] ?
-                    `${state.two.token!.symbol}_${state.one.token!.symbol}` :
-                    `${state.one.token!.symbol}_${state.two.token!.symbol}`
+                const poolName = liquidity[`${state.two.token!.symbol}:${state.one.token!.symbol}`] ?
+                    `${state.two.token!.symbol}:${state.one.token!.symbol}` :
+                    `${state.one.token!.symbol}:${state.two.token!.symbol}`
                 const pool = liquidity[poolName];
                 if (pool) {
                     liquidity[poolName] = {
@@ -76,22 +76,51 @@ class StubWalletService implements WalletAdapterInterface {
                             token: liquidity[poolName].two.token,
                             amount: liquidity[poolName].two.amount!.plus(state.two.amount!),
                         },
-                        details: {
-                            poolAmount: liquidity[poolName].details.poolAmount.plus(state.details.poolAmount),
-                            poolTokens: liquidity[poolName].details.poolTokens,
+                        pool: {
+                            token: {
+                              symbol: poolName,
+                              name: poolName,
+                              logoOneURI: liquidity[poolName].one.token!.logoURI,
+                              logoTwoURI: liquidity[poolName].one.token!.logoURI,
+                              decimals: 0,
+                              chainId: 1,
+                              address: poolName,
+                            },
+                            amount: liquidity[poolName].pool.amount!.plus(state.pool.amount!),
+                            overallAmount: liquidity[poolName].pool.overallAmount,
                         },
                     };
                 } else {
                     liquidity[poolName] = {
                         one: state.one,
                         two: state.two,
-                        details: state.details,
+                        pool: {
+                            ...state.pool,
+                            token: {
+                                symbol: poolName,
+                                name: poolName,
+                                logoOneURI: state.one.token!.logoURI,
+                                logoTwoURI: state.two.token!.logoURI,
+                                decimals: 0,
+                                chainId: 1,
+                                address: poolName,
+                            },
+                        }
                     };
                 }
                 resolve(WalletTxStatus.CONFIRMED);
             }, 3000)
         });
     };
+
+    getPool(one: TokenInterface, two: TokenInterface): Promise<WalletPoolInterface> {
+        const result = liquidity[`${one.symbol}:${two.symbol}`];
+        return Promise.resolve({
+            one: result.one,
+            two: result.two,
+            pool: result.pool
+        });
+    }
 
 
 }

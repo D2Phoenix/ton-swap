@@ -2,20 +2,18 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import BigNumber from 'bignumber.js';
 
 import type { RootState } from 'store/store'
-import { estimateLiquidityTransaction, fetchOneToken, fetchTwoToken } from './liquidity.thunks';
+import { estimateLiquidityTransaction, fetchOneToken, fetchPoolToken, fetchTwoToken } from './liquidity.thunks';
 import { shiftDecimals } from 'utils/decimals';
 import { TxType } from 'interfaces/transactionInterfaces';
 import { InputTokenInterface } from 'interfaces/inputTokenInterface';
+import { InputPoolInterface } from '../../interfaces/inputPoolInterface';
 
 
 export interface LiquidityState {
     one: InputTokenInterface,
     two: InputTokenInterface,
     txType: TxType;
-    details: {
-        poolTokens: BigNumber;
-        poolAmount: BigNumber;
-    };
+    pool: InputPoolInterface;
 }
 
 const initialState: LiquidityState = {
@@ -31,9 +29,10 @@ const initialState: LiquidityState = {
     },
     two: {},
     txType: TxType.EXACT_IN,
-    details: {
-        poolTokens: new BigNumber('0'),
-        poolAmount: new BigNumber('0'),
+    pool: {
+        overallAmount: new BigNumber('0'),
+        amount: new BigNumber('0'),
+        burnAmount: new BigNumber('0'),
     },
 }
 
@@ -82,14 +81,19 @@ export const liquiditySlice = createSlice({
             state.two.amount = action.payload.twoAmount;
             state.one.amount = action.payload.oneAmount;
             state.txType = action.payload.txType;
-            state.details.poolTokens = action.payload.poolTokens;
-            state.details.poolAmount = action.payload.poolAmount;
+            state.pool.overallAmount = action.payload.poolTokens;
+            state.pool.amount = action.payload.poolAmount;
         });
         builder.addCase(fetchOneToken.fulfilled, (state, action) => {
             state.one.token = action.payload;
-        })
+        });
         builder.addCase(fetchTwoToken.fulfilled, (state, action) => {
             state.two.token = action.payload;
+        });
+        builder.addCase(fetchPoolToken.fulfilled, (state, action) => {
+            state.one = action.payload.one;
+            state.two = action.payload.two;
+            state.pool = action.payload.pool;
         })
     }
 })
@@ -106,6 +110,6 @@ export const {
 export const selectLiquidityOne = (state: RootState) => state.liquidity.one;
 export const selectLiquidityTwo = (state: RootState) => state.liquidity.two;
 export const selectLiquidityTxType = (state: RootState) => state.liquidity.txType;
-export const selectLiquidityDetails = (state: RootState) => state.liquidity.details;
+export const selectLiquidityPool = (state: RootState) => state.liquidity.pool;
 
 export default liquiditySlice.reducer;

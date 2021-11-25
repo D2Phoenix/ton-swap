@@ -1,0 +1,33 @@
+.remove-liquidity-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  max-width: 480px;
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 8px;
+  position: relative;
+
+  .remove-liquidity-header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 16px;
+    .btn-icon {
+      svg {
+        transform: rotate(180deg);
+      }
+    }
+  }
+  .actions-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    width: 100%;
+  }
+  .remove__btn {
+    width: 100%;
+    margin: 8px 0;
+  }
+}

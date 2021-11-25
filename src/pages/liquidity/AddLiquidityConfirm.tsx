@@ -7,7 +7,7 @@ import LiquidityInfo from './LiquidityInfo';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import {
     resetLiquidity,
-    selectLiquidityDetails,
+    selectLiquidityPool,
     selectLiquidityOne,
     selectLiquidityTwo,
 } from 'store/liquidity/liquidity.slice';
@@ -25,7 +25,7 @@ function AddLiquidityConfirm({onClose}: any) {
     const two = useAppSelector(selectLiquidityTwo);
     const settings = useAppSelector(selectSettings);
     const walletTransaction = useAppSelector(selectWalletTransaction);
-    const details = useAppSelector(selectLiquidityDetails);
+    const pool = useAppSelector(selectLiquidityPool);
 
     const className = useMemo(() => {
         return walletTransaction.status !== WalletTxStatus.INITIAL ? 'add-liquidity-confirm-modal mini' : 'add-liquidity-confirm-modal';
@@ -59,6 +59,7 @@ function AddLiquidityConfirm({onClose}: any) {
                     <TokenInput token={one.token}
                                 value={one.amount}
                                 showMax={true}
+                                selectable={false}
                                 editable={false}
                     />
                     <div className="btn-icon">
@@ -67,12 +68,13 @@ function AddLiquidityConfirm({onClose}: any) {
                     <TokenInput token={two.token}
                                 value={two.amount}
                                 showMax={false}
+                                selectable={false}
                                 editable={false}
                     />
                     <LiquidityInfo/>
                     <div className="pool-tokens-info">
                       <span>You will receive </span>
-                      <span className="text-semibold">{details.poolAmount.precision(TOKEN_PRECISION).toFixed()}</span>
+                      <span className="text-semibold">{pool.amount!.precision(TOKEN_PRECISION).toFixed()}</span>
                       <span> {one.token!.symbol}/{two.token!.symbol} Pool Tokens</span>
                     </div>
                       {

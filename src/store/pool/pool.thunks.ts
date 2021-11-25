@@ -1,11 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { RootState } from '../store';
-import PoolInterface from '../../interfaces/poolInterface';
+import WalletPoolInterface from '../../interfaces/walletPoolInterface';
 
 export const getPoolPools = createAsyncThunk(
     'pool/pools',
-    async (request, thunkAPI): Promise<PoolInterface[]> => {
+    async (request, thunkAPI): Promise<WalletPoolInterface[]> => {
         const state = thunkAPI.getState() as RootState;
         const walletAdapterService = state.wallet.adapter;
         if (walletAdapterService) {

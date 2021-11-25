@@ -1,11 +1,9 @@
-import { InputTokenInterface } from './inputTokenInterface';
-import BigNumber from 'bignumber.js';
-
 export default interface PoolInterface {
-    one: InputTokenInterface;
-    two: InputTokenInterface;
-    details: {
-        poolTokens: BigNumber;
-        poolAmount: BigNumber;
-    }
+    address: string;
+    chainId: number;
+    decimals: number;
+    logoOneURI: string;
+    logoTwoURI: string;
+    name: string;
+    symbol: string;
 }

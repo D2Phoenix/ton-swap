@@ -33,6 +33,12 @@
         left: 8px;
         width: 24px;
         height: 24px;
+        + img {
+          left: 32px;
+          + span {
+            margin-left: 44px;
+          }
+        }
       }
       img + span {
         margin-left: 20px;

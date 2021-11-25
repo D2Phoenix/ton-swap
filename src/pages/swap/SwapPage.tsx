@@ -226,6 +226,7 @@ function SwapPage() {
                         showMax={true}
                         onSelect={openFromTokenSelect}
                         onChange={handleFromTokenAmount}
+                        selectable={true}
                         editable={true}/>
             <div className="switch__btn btn-icon" onClick={handleSwitchTokens}>
                 <ChevronDownIcon/>
@@ -236,6 +237,7 @@ function SwapPage() {
                         showMax={false}
                         onSelect={openToTokenSelect}
                         onChange={handleToTokenAmount}
+                        selectable={true}
                         editable={true}/>
             {
                 isFilled && <div className="swap-info text-small">

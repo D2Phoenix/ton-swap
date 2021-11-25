@@ -76,18 +76,18 @@ function SwapConfirm({onClose}: any) {
                   <h4>Confirm Swap</h4>
                   <div className="swap-confirm-wrapper">
                     <TokenInput token={from.token}
-                                balance={walletBalances[from.token!.symbol]}
                                 value={from.amount}
                                 showMax={true}
+                                selectable={false}
                                 editable={false}
                     />
                     <div className="switch__btn btn-icon">
                       <ChevronDownIcon/>
                     </div>
                     <TokenInput token={to.token}
-                                balance={walletBalances[to.token!.symbol]}
                                 value={to.amount}
                                 showMax={false}
+                                selectable={false}
                                 editable={false}
                     />
                     <div className="swap-info">

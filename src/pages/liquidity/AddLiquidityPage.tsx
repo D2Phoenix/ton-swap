@@ -262,6 +262,7 @@ export function AddLiquidityPage() {
                         showMax={true}
                         onSelect={openFromTokenSelect}
                         onChange={handleFromTokenAmount}
+                        selectable={true}
                         editable={true}/>
             <div className="btn-icon">
                 +
@@ -272,6 +273,7 @@ export function AddLiquidityPage() {
                         showMax={true}
                         onSelect={openToTokenSelect}
                         onChange={handleToTokenAmount}
+                        selectable={true}
                         editable={true}/>
             {
                 isFilled && <LiquidityInfo />

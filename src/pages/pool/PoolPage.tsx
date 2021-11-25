@@ -50,7 +50,7 @@ function PoolPage() {
                 {
                     walletAdapter && pools.length > 0 && (
                         <Accordion panels={pools.map((pool, index) => {
-                            const share = pool.details.poolAmount.multipliedBy('100').div(pool.details.poolTokens).precision(2);
+                            const share = pool.pool.amount!.multipliedBy('100').div(pool.pool.overallAmount!).precision(2);
                             const shareText = share.lt('0.01') ? '<0.01%' : `${share.toFixed()}%`;
 
                             return {
@@ -81,7 +81,7 @@ function PoolPage() {
                                         </div>
                                         <div>
                                             <div>Your pool tokens</div>
-                                            <div>{pool.details.poolAmount!.precision(TOKEN_PRECISION).toFixed()}</div>
+                                            <div>{pool.pool.amount!.precision(TOKEN_PRECISION).toFixed()}</div>
                                         </div>
                                         <div>
                                             <div>Your pool share</div>
@@ -91,7 +91,7 @@ function PoolPage() {
                                             <Link className="btn btn-primary" to={`add/${pool.one.token!.symbol}/${pool.two.token!.symbol}`}>
                                                 Add
                                             </Link>
-                                            <Link className="btn btn-primary" to="remove">
+                                            <Link className="btn btn-primary" to={`remove/${pool.one.token!.symbol}/${pool.two.token!.symbol}`}>
                                                 Remove
                                             </Link>
                                         </div>

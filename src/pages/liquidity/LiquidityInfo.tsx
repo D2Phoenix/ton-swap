@@ -1,13 +1,13 @@
 import './LiquidityInfo.scss';
 import { useAppSelector } from '../../store/hooks';
-import { selectLiquidityDetails, selectLiquidityOne, selectLiquidityTwo } from '../../store/liquidity/liquidity.slice';
+import { selectLiquidityPool, selectLiquidityOne, selectLiquidityTwo } from '../../store/liquidity/liquidity.slice';
 import { useMemo } from 'react';
 import { TOKEN_PRECISION } from '../../constants/swap';
 
 function LiquidityInfo() {
     const one = useAppSelector(selectLiquidityOne);
     const two = useAppSelector(selectLiquidityTwo);
-    const details = useAppSelector(selectLiquidityDetails);
+    const pool = useAppSelector(selectLiquidityPool);
 
     const onePerTwo = useMemo(() => {
         if (!one.amount || !two.amount || !two.token || !one.token) {
@@ -24,12 +24,12 @@ function LiquidityInfo() {
     }, [one, two]);
 
     const share = useMemo(() => {
-        const result = details.poolAmount.multipliedBy('100').div(details.poolTokens).precision(2);
+        const result = pool.amount!.multipliedBy('100').div(pool.overallAmount!).precision(2);
         if (result.lt('0.01')) {
             return '<0.01%';
         }
         return `${result.toFixed()}%`;
-    }, [details]);
+    }, [pool]);
 
     return (
         <div className="liquidity-info-wrapper">

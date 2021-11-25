@@ -40,3 +40,15 @@ export const fetchTwoToken = createAsyncThunk(
         return tokens.find((token) => token.symbol === tokenSymbol)
     },
 )
+
+export const fetchPoolToken = createAsyncThunk(
+    'liquidity/pool',
+    async (pool: string, thunkAPI) => {
+        const state = thunkAPI.getState() as RootState;
+        const walletAdapterService = state.wallet.adapter;
+        const tokens: TokenInterface[] = state.app.tokens.length ? state.app.tokens : (await getTokens()).tokens;
+        const oneToken = tokens.find((token) => token.symbol === pool.split(':')[0]);
+        const twoToken = tokens.find((token) => token.symbol === pool.split(':')[1]);
+        return walletAdapterService!.getPool(oneToken!, twoToken!);
+    },
+)

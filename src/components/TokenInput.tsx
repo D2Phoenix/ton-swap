@@ -6,12 +6,14 @@ import ChevronRightIcon from './icons/ChevronRightIcon';
 import TokenInterface from '../interfaces/tokenInterface';
 import { fromDecimals, toDecimals } from '../utils/decimals';
 import { BALANCE_PRECISION, TOKEN_PRECISION } from '../constants/swap';
+import PoolInterface from '../interfaces/poolInterface';
 
 interface TokenInputParams {
     balance?: BigNumber;
-    token: TokenInterface | undefined,
+    token: TokenInterface | PoolInterface | undefined,
     value: BigNumber | undefined;
     editable: boolean;
+    selectable: boolean;
     showMax: boolean;
     onChange?: Function;
     onSelect?: Function;
@@ -19,7 +21,7 @@ interface TokenInputParams {
 
 const INPUT_REGEXP = RegExp(`^\\d*(?:\\\\[.])?\\d*$`)
 
-function TokenInput({balance, token, value, showMax, editable, onChange, onSelect}: TokenInputParams) {
+function TokenInput({balance, token, value, showMax, editable, selectable, onChange, onSelect}: TokenInputParams) {
     const [internalValue, setInternalValue] = useState('');
 
     useEffect(() => {
@@ -66,18 +68,27 @@ function TokenInput({balance, token, value, showMax, editable, onChange, onSelec
             return toDecimals(balance, token ? token.decimals : 0).precision(BALANCE_PRECISION).toFixed();
         }
         return '0';
-    }, [balance, token])
+    }, [balance, token]);
+
+    const simpleToken = (token as TokenInterface);
+    const poolToken = (token as PoolInterface);
 
     return (
-        <div className={"input-wrapper" + (!editable ? ' view-only' : '')}>
+        <div className={"input-wrapper" + (!selectable ? ' view-only' : '')}>
             <div className="token-input">
                 <div className="btn btn-outline small text-medium" onClick={handleClick}>
                     {
-                        token?.logoURI && <img src={token.logoURI} alt={token.name}/>
+                        simpleToken?.logoURI && <img src={simpleToken.logoURI} alt={simpleToken.name}/>
+                    }
+                    {
+                        poolToken?.logoOneURI && <img src={poolToken.logoOneURI} alt={poolToken.name}/>
+                    }
+                    {
+                        poolToken?.logoTwoURI && <img src={poolToken.logoTwoURI} alt={poolToken.name}/>
                     }
                     <span>{token ? token.symbol : 'Select'}</span>
                     {
-                        editable && <ChevronRightIcon/>
+                        selectable && <ChevronRightIcon/>
                     }
                 </div>
                 <input type="text"
@@ -93,7 +104,7 @@ function TokenInput({balance, token, value, showMax, editable, onChange, onSelec
                        onChange={handleChange}/>
             </div>
             {
-                editable && token && balance !== undefined && <div className="balance text-small">
+                token && balance !== undefined && <div className="balance text-small">
                   Balance: {balanceVisible} {token.symbol}
                     {
                         showMax && !balance.eq('0') && (
