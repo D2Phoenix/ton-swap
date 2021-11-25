@@ -16,7 +16,7 @@ function Panel({label, content, activeTab, index, activateTab}: any) {
             const el = ReactDOM.findDOMNode(element.current) as Element;
             const height = el.querySelector('.panel__inner')!.scrollHeight;
             setHeight(height);
-        }, 1000);
+        }, 300);
     }, []);
 
     return (

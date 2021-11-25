@@ -67,7 +67,7 @@
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
-      min-height: 24px;
+      gap: 1rem;
       > div {
         display: flex;
         flex-direction: row;
@@ -75,9 +75,9 @@
       }
     }
     img {
-      width: 24px;
-      height: 24px;
-      margin-left: 0.5rem;
+      width: 20px;
+      height: 20px;
+      margin-left: 0.25rem;
     }
   }
 }

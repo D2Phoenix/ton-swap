@@ -87,11 +87,18 @@ function PoolPage() {
                                             <div>Your pool share</div>
                                             <div>{shareText}</div>
                                         </div>
+                                        <div>
+                                            <Link className="btn btn-primary" to="add">
+                                                Add
+                                            </Link>
+                                            <Link className="btn btn-primary" to="remove">
+                                                Remove
+                                            </Link>
+                                        </div>
                                     </div>
                                 )
                             }
                         })} />
-
                     )
                 }
             </div>
