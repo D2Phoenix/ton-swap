@@ -10,7 +10,6 @@ import Settings from 'components/Settings';
 import TokenSelect from 'components/TokenSelect';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { selectTokens } from 'store/app/app.slice';
-import { fetchTokens } from 'store/app/app.thunks';
 import { selectWalletAdapter, selectWalletBalances, selectWalletPermissions } from 'store/wallet/wallet.slice';
 import {
     connectWallet,
@@ -19,11 +18,11 @@ import {
     setWalletUseTokenPermission
 } from 'store/wallet/wallet.thunks';
 import { estimateTransaction } from 'store/swap/swap.thunks';
-import { SwapTypes } from 'interfaces/swap.types';
+import { TransactionType } from 'interfaces/transactionInterfaces';
 import {
     selectSwapFrom,
     selectSwapTo,
-    selectSwapSwapType,
+    selectSwapTxType,
     setSwapFromToken,
     setSwapFromAmount,
     setSwapToToken,
@@ -45,7 +44,7 @@ function SwapPage() {
     const tokens = useAppSelector(selectTokens);
     const from = useAppSelector(selectSwapFrom);
     const to = useAppSelector(selectSwapTo);
-    const swapType = useAppSelector(selectSwapSwapType);
+    const txType = useAppSelector(selectSwapTxType);
     const walletBalances = useAppSelector(selectWalletBalances);
     const walletAdapter = useAppSelector(selectWalletAdapter);
     const walletPermissions = useAppSelector(selectWalletPermissions);
@@ -67,10 +66,6 @@ function SwapPage() {
         }
         return from.amount.div(to.amount.shiftedBy(from.token.decimals - to.token.decimals)).precision(6).toFixed();
     }, [from, to])
-
-    useEffect(() => {
-        dispatch(fetchTokens());
-    }, [dispatch]);
     //Handle swap button text
     useEffect(() => {
         if (!from.amount || from.amount.eq('0')) {
@@ -86,40 +81,40 @@ function SwapPage() {
     }, [from, to, insufficientBalance]);
     // Estimate EXACT_IN transaction
     useEffect((): any => {
-        if (swapType === SwapTypes.EXACT_IN && (!from.amount || from.amount.eq('0'))) {
+        if (txType === TransactionType.EXACT_IN && (!from.amount || from.amount.eq('0'))) {
             return dispatch(setSwapToAmount({
                 value: null,
-                swapType,
+                txType,
             }));
         }
-        if (swapType === SwapTypes.EXACT_IN && to.token && from.token && from.amount && !from.amount.eq('0')) {
+        if (txType === TransactionType.EXACT_IN && to.token && from.token && from.amount && !from.amount.eq('0')) {
             return dispatch(estimateTransaction({
                 from: from,
                 to: {
                     token: to.token,
                 },
-                type: swapType,
+                txType,
             }))
         }
-    }, [dispatch, from, to.token, swapType]);
+    }, [dispatch, from, to.token, txType]);
     // Estimate EXACT_OUT transaction
     useEffect((): any => {
-        if (swapType === SwapTypes.EXACT_OUT && (!to.amount || to.amount.eq('0'))) {
+        if (txType === TransactionType.EXACT_OUT && (!to.amount || to.amount.eq('0'))) {
             return dispatch(setSwapFromAmount({
                 value: null,
-                swapType,
+                txType,
             }));
         }
-        if (swapType === SwapTypes.EXACT_OUT && from.token && to.token && to.amount && !to.amount.eq('0')) {
+        if (txType === TransactionType.EXACT_OUT && from.token && to.token && to.amount && !to.amount.eq('0')) {
             return dispatch(estimateTransaction({
                 from: {
                     token: from.token,
                 },
                 to: to,
-                type: swapType,
+                txType,
             }))
         }
-    }, [dispatch, from.token, to, swapType]);
+    }, [dispatch, from.token, to, txType]);
     // Update balances and transaction estimation every {WALLET_TX_UPDATE_INTERVAL} milliseconds
     useEffect((): any => {
         if (!walletAdapter) {
@@ -136,12 +131,12 @@ function SwapPage() {
                 dispatch(estimateTransaction({
                     from: from,
                     to: to,
-                    type: swapType,
+                    txType,
                 }));
             }
         }, WALLET_TX_UPDATE_INTERVAL);
         return () => clearInterval(intervalId);
-    },[dispatch, walletAdapter, from, to, swapType]);
+    },[dispatch, walletAdapter, from, to, txType]);
 
     const openFromTokenSelect = useCallback(() => {
         setShowTokenSelect(!showTokenSelect);
@@ -181,14 +176,14 @@ function SwapPage() {
     const handleFromTokenAmount = useCallback((value) => {
         dispatch(setSwapFromAmount({
             value,
-            swapType: SwapTypes.EXACT_IN
+            txType: TransactionType.EXACT_IN
         }));
     }, [dispatch]);
 
     const handleToTokenAmount = useCallback((value) => {
         dispatch(setSwapToAmount({
             value,
-            swapType: SwapTypes.EXACT_OUT
+            txType: TransactionType.EXACT_OUT
         }));
     }, [dispatch]);
 

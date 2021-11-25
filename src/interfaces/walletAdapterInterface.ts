@@ -1,6 +1,6 @@
-import TokenInterface from './token.interface';
+import TokenInterface from './tokenInterface';
 import BigNumber from 'bignumber.js';
-import { WalletTransactionStatus } from './swap.types';
+import { WalletTransactionStatus } from './transactionInterfaces';
 import { SwapState } from '../store/swap/swap.slice';
 
 export interface WalletAdapterInterface {

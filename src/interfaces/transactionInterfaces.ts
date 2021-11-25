@@ -1,4 +1,4 @@
-export enum SwapTypes {
+export enum TransactionType {
     EXACT_IN = 'EXACT_IN',
     EXACT_OUT = 'EXACT_OUT',
 }

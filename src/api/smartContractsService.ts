@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
-import { SwapTransactionRequestInterface } from 'interfaces/swap-transaction-request.interface';
-import { SwapTransactionInterface } from 'interfaces/swap-transaction.interface';
-import { SwapTypes } from 'interfaces/swap.types';
+import { SwapTransactionRequestInterface } from 'interfaces/swapTransactionRequestInterface';
+import { SwapTransactionInterface } from 'interfaces/swapTransactionInterface';
+import { TransactionType } from 'interfaces/transactionInterfaces';
 import { fromDecimals, toDecimals } from '../utils/decimals';
 
 const prices: Record<string, string> = {
@@ -30,20 +30,20 @@ const prices: Record<string, string> = {
 }
 
 
-class SwapService {
+class SmartContractsService {
     getTransactionEstimation(data: SwapTransactionRequestInterface): Promise<SwapTransactionInterface> {
         // TODO: Implement real api for transaction estimation
-        const amount = data.type === SwapTypes.EXACT_IN ? data.from!.amount! : data.to!.amount!;
-        const amountToken = data.type === SwapTypes.EXACT_IN ? data.from!.token! : data.to!.token!;
-        const quoteToken = data.type === SwapTypes.EXACT_IN ? data.to!.token! : data.from!.token!;
-        const fromSymbol =  data.type === SwapTypes.EXACT_IN ? data.from!.token!.symbol : data.to!.token!.symbol;
-        const toSymbol =  data.type === SwapTypes.EXACT_IN ? data.to!.token!.symbol : data.from!.token!.symbol;
+        const amount = data.txType === TransactionType.EXACT_IN ? data.from!.amount! : data.to!.amount!;
+        const amountToken = data.txType === TransactionType.EXACT_IN ? data.from!.token! : data.to!.token!;
+        const quoteToken = data.txType === TransactionType.EXACT_IN ? data.to!.token! : data.from!.token!;
+        const fromSymbol =  data.txType === TransactionType.EXACT_IN ? data.from!.token!.symbol : data.to!.token!.symbol;
+        const toSymbol =  data.txType === TransactionType.EXACT_IN ? data.to!.token!.symbol : data.from!.token!.symbol;
         const price = prices[`${fromSymbol}_${toSymbol}`];
         const quote = new BigNumber(price || fromDecimals(new BigNumber('1'), quoteToken.decimals)).multipliedBy(toDecimals(amount, amountToken.decimals));
         return Promise.resolve({
             amount,
             quote,
-            type: data.type,
+            txType: data.txType,
             fee: new BigNumber('0.003'),
         });
     }
@@ -59,4 +59,4 @@ class SwapService {
     }
 }
 
-export default SwapService
+export default SmartContractsService

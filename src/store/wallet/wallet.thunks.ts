@@ -1,10 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import BigNumber from 'bignumber.js';
 
-import TokenInterface from 'interfaces/token.interface';
+import TokenInterface from 'interfaces/tokenInterface';
 import { RootState } from 'store/store';
-import StubWalletService from 'api/stub-wallet.service';
-import { WalletTransactionStatus } from '../../interfaces/swap.types';
+import StubWalletService from 'api/stubWalletService';
+import { WalletTransactionStatus } from '../../interfaces/transactionInterfaces';
 
 export const connectWallet = createAsyncThunk(
     'wallet/connect',

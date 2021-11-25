@@ -6,8 +6,8 @@ import { TransactionType } from '../../interfaces/transactionInterfaces';
 
 const swapService = new SmartContractsService();
 
-export const estimateTransaction = createAsyncThunk(
-    'swap/estimate',
+export const estimateLiquidityTransaction = createAsyncThunk(
+    'liquidity/estimate',
     async (data: SwapTransactionRequestInterface) => {
         const transaction = await swapService.getTransactionEstimation(data);
         const priceImpact = await swapService.getPriceImpact(data, transaction);
@@ -16,7 +16,7 @@ export const estimateTransaction = createAsyncThunk(
             fromAmount: transaction.txType === TransactionType.EXACT_IN ? transaction.amount : transaction.quote,
             toAmount: transaction.txType === TransactionType.EXACT_IN ? transaction.quote : transaction.amount,
             fee: transaction.fee,
-            type: data.txType,
+            txType: data.txType,
             priceImpact,
             insufficientLiquidity,
         }

@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 
 import './TokenInput.scss';
 import ChevronRightIcon from './icons/ChevronRightIcon';
-import TokenInterface from '../interfaces/token.interface';
+import TokenInterface from '../interfaces/tokenInterface';
 import { fromDecimals, toDecimals } from '../utils/decimals';
 import { BALANCE_PRECISION, TOKEN_PRECISION } from '../constants/swap';
 

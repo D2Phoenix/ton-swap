@@ -4,14 +4,14 @@ import BigNumber from 'bignumber.js';
 import type { RootState } from 'store/store'
 import { estimateTransaction } from './swap.thunks';
 import { shiftDecimals } from 'utils/decimals';
-import { SwapTypes } from 'interfaces/swap.types';
-import { InputTokenInterface } from 'interfaces/input-token.interface';
+import { TransactionType } from 'interfaces/transactionInterfaces';
+import { InputTokenInterface } from 'interfaces/inputTokenInterface';
 
 
 export interface SwapState {
     from: InputTokenInterface,
     to: InputTokenInterface,
-    swapType: SwapTypes;
+    txType: TransactionType;
     details: {
         fee: BigNumber;
         priceImpact: BigNumber;
@@ -31,7 +31,7 @@ const initialState: SwapState = {
         },
     },
     to: {},
-    swapType: SwapTypes.EXACT_IN,
+    txType: TransactionType.EXACT_IN,
     details: {
         fee: new BigNumber('0'),
         priceImpact: new BigNumber('0'),
@@ -63,17 +63,17 @@ export const swapSlice = createSlice({
         },
         setSwapFromAmount: (state, action: PayloadAction<any>) => {
             state.from.amount = action.payload.value;
-            state.swapType = action.payload.swapType;
+            state.txType = action.payload.txType;
         },
         setSwapToAmount: (state, action: PayloadAction<any>) => {
             state.to.amount = action.payload.value;
-            state.swapType = action.payload.swapType;
+            state.txType = action.payload.txType;
         },
         switchSwapTokens: (state, action: PayloadAction<void>) => {
             const from = state.to;
             state.to = state.from;
             state.from = from;
-            state.swapType = state.swapType === SwapTypes.EXACT_IN ? SwapTypes.EXACT_OUT : SwapTypes.EXACT_IN;
+            state.txType = state.txType === TransactionType.EXACT_IN ? TransactionType.EXACT_OUT : TransactionType.EXACT_IN;
         },
         resetSwap: () => {
             return initialState;
@@ -83,7 +83,7 @@ export const swapSlice = createSlice({
         builder.addCase(estimateTransaction.fulfilled, (state, action) => {
             state.to.amount = action.payload.toAmount;
             state.from.amount = action.payload.fromAmount;
-            state.swapType = action.payload.type;
+            state.txType = action.payload.type;
             state.details.fee = action.payload.fee;
             state.details.priceImpact = action.payload.priceImpact;
             state.details.insufficientLiquidity = action.payload.insufficientLiquidity;
@@ -102,7 +102,7 @@ export const {
 
 export const selectSwapFrom = (state: RootState) => state.swap.from;
 export const selectSwapTo = (state: RootState) => state.swap.to;
-export const selectSwapSwapType = (state: RootState) => state.swap.swapType;
+export const selectSwapTxType = (state: RootState) => state.swap.txType;
 export const selectSwapDetails = (state: RootState) => state.swap.details;
 
 export default swapSlice.reducer;

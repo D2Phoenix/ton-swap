@@ -1,8 +1,8 @@
 import BigNumber from 'bignumber.js';
 
-import { WalletAdapterInterface } from 'interfaces/wallet-adapter.interface';
-import TokenInterface from '../interfaces/token.interface';
-import { WalletTransactionStatus } from '../interfaces/swap.types';
+import { WalletAdapterInterface } from 'interfaces/walletAdapterInterface';
+import TokenInterface from '../interfaces/tokenInterface';
+import { WalletTransactionStatus } from '../interfaces/transactionInterfaces';
 import { SwapState } from '../store/swap/swap.slice';
 
 const permissions: any = {

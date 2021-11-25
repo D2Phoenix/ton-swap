@@ -10,13 +10,13 @@ import { useAppDispatch, useAppSelector } from 'store/hooks';
 import {
     resetSwap,
     selectSwapFrom,
-    selectSwapSwapType,
+    selectSwapTxType,
     selectSwapTo,
 } from 'store/swap/swap.slice';
 import { resetTransaction, selectWalletBalances, selectWalletTransaction } from 'store/wallet/wallet.slice';
 import { toDecimals } from 'utils/decimals';
 import { DEFAULT_SLIPPAGE, TOKEN_PRECISION } from 'constants/swap';
-import { WalletTransactionStatus, SwapTypes } from 'interfaces/swap.types';
+import { WalletTransactionStatus, TransactionType } from 'interfaces/transactionInterfaces';
 import { walletSwap } from 'store/wallet/wallet.thunks';
 import Spinner from 'components/Spinner';
 import { selectSettings } from '../../store/app/app.slice';
@@ -26,7 +26,7 @@ function SwapConfirm({onClose}: any) {
     const from = useAppSelector(selectSwapFrom);
     const to = useAppSelector(selectSwapTo);
     const walletBalances = useAppSelector(selectWalletBalances);
-    const swapType = useAppSelector(selectSwapSwapType);
+    const txType = useAppSelector(selectSwapTxType);
     const settings = useAppSelector(selectSettings);
     const walletTransaction = useAppSelector(selectWalletTransaction);
 
@@ -98,13 +98,13 @@ function SwapConfirm({onClose}: any) {
                     </div>
                     <SwapInfo/>
                       {
-                          swapType === SwapTypes.EXACT_IN && <span className="help-text text-small">
+                          txType === TransactionType.EXACT_IN && <span className="help-text text-small">
                 Output is estimated. You will receive at least <span
                             className="text-semibold text-small">{minimumReceived} {to.token!.symbol}</span>  or the transaction will revert.
                 </span>
                       }
                       {
-                          swapType === SwapTypes.EXACT_OUT && <span className="help-text text-small">
+                          txType === TransactionType.EXACT_OUT && <span className="help-text text-small">
                 Input is estimated. You will sell at most <span
                             className="text-semibold text-small">{maximumSent} {from.token!.symbol}</span> or the transaction will revert.
                 </span>

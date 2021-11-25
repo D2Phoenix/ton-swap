@@ -9,8 +9,8 @@ import {
     getWalletUseTokenPermission,
     setWalletUseTokenPermission, walletSwap
 } from './wallet.thunks';
-import { WalletAdapterInterface } from 'interfaces/wallet-adapter.interface';
-import { WalletTransactionStatus } from '../../interfaces/swap.types';
+import { WalletAdapterInterface } from 'interfaces/walletAdapterInterface';
+import { WalletTransactionStatus } from '../../interfaces/transactionInterfaces';
 
 interface WalletState {
     adapter: WalletAdapterInterface | null,

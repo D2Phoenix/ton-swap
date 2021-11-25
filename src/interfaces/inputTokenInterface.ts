@@ -1,4 +1,4 @@
-import TokenInterface from './token.interface';
+import TokenInterface from './tokenInterface';
 import BigNumber from 'bignumber.js';
 
 export interface InputTokenInterface {

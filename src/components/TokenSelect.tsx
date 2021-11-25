@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import './TokenSelect.scss';
 import Modal from './Modal';
-import TokenInterface from 'interfaces/token.interface';
+import TokenInterface from 'interfaces/tokenInterface';
 
 
 interface TokenSelectParams {

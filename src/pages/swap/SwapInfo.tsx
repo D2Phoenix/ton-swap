@@ -3,10 +3,10 @@ import { useAppSelector } from 'store/hooks';
 import {
     selectSwapDetails,
     selectSwapFrom,
-    selectSwapSwapType,
+    selectSwapTxType,
     selectSwapTo
 } from 'store/swap/swap.slice';
-import { SwapTypes } from 'interfaces/swap.types';
+import { TransactionType } from 'interfaces/transactionInterfaces';
 import { DEFAULT_SLIPPAGE, FEE_PRECISION, TOKEN_PRECISION } from 'constants/swap';
 import { useMemo } from 'react';
 import { toDecimals } from 'utils/decimals';
@@ -16,7 +16,7 @@ import { selectSettings } from 'store/app/app.slice';
 function SwapInfo() {
     const from = useAppSelector(selectSwapFrom);
     const to = useAppSelector(selectSwapTo);
-    const type = useAppSelector(selectSwapSwapType);
+    const type = useAppSelector(selectSwapTxType);
     const settings = useAppSelector(selectSettings);
     const details = useAppSelector(selectSwapDetails);
 
@@ -53,13 +53,13 @@ function SwapInfo() {
                 <span className="text-small text-semibold">{settings.slippage || DEFAULT_SLIPPAGE} %</span>
             </div>
             {
-                type === SwapTypes.EXACT_IN && to && <div>
+                type === TransactionType.EXACT_IN && to && <div>
                   <span className="text-small">Minimum received</span>
                   <span className="text-small text-semibold">{minimumReceived} {to.token!.symbol}</span>
                 </div>
             }
             {
-                type === SwapTypes.EXACT_OUT && from && <div>
+                type === TransactionType.EXACT_OUT && from && <div>
                   <span className="text-small">Maximum sent</span>
                   <span className="text-small text-semibold">{maximumSent} {from.token!.symbol}</span>
                 </div>

@@ -1,9 +1,9 @@
-import { SwapTypes } from './swap.types';
+import { TransactionType } from './transactionInterfaces';
 import BigNumber from 'bignumber.js';
 
 export interface SwapTransactionInterface {
     amount: BigNumber;
     quote: BigNumber;
-    type: SwapTypes;
+    txType: TransactionType;
     fee: BigNumber;
 }

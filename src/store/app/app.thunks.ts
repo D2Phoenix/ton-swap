@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { getTokens } from 'api/tokens';
-import TokenInterface from 'interfaces/token.interface';
+import TokenInterface from 'interfaces/tokenInterface';
 
 export const fetchTokens = createAsyncThunk(
     'app/tokens',
