@@ -18,25 +18,28 @@
   &:hover {
     &:after,
     &:before {
-      background-color: $primary-color;
+      border-color: $primary-color;
     }
   }
   &:focus {
     outline: none;
   }
-  &:after,
   &:before {
     content: '';
     position: absolute;
-    right: 0;
+    right: 3px;
     top: 50%;
-    width: 22px;
-    height: 2px;
-    margin-top: -2px;
-    background-color: $secondary-color;
+    width: 14px;
+    height: 14px;
+    margin-top: -4px;
+    background-color: transparent;
+    border-top: 2px solid $secondary-color;
+    border-right: 2px solid $secondary-color;
+    box-shadow: 0 0 0 lightgray;
+    transition: all 200ms ease;
   }
   &:before {
-    transform: rotate(-90deg);
+    transform: translate3d(0,-50%,0) rotate(135deg);
     transition: transform 0.35s cubic-bezier(0.65, 0.05, 0.36, 1);
   }
 }
@@ -45,7 +48,7 @@
     opacity: 1;
   }
   .panel__label:before {
-    transform: rotate(0deg);
+    transform: rotate(-45deg);
   }
 }
 .panel__inner {
