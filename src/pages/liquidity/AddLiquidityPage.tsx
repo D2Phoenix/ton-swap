@@ -27,6 +27,8 @@ import Settings from '../../components/Settings';
 import BigNumber from 'bignumber.js';
 import { estimateLiquidityTransaction } from '../../store/liquidity/liquidity.thunks';
 import { WALLET_TX_UPDATE_INTERVAL } from '../../constants/swap';
+import { Link } from 'react-router-dom';
+import ChevronRightIcon from '../../components/icons/ChevronRightIcon';
 
 export function AddLiquidityPage() {
     const dispatch = useAppDispatch();
@@ -203,6 +205,9 @@ export function AddLiquidityPage() {
     return (
         <div className="add-liquidity-wrapper">
             <div className="add-liquidity-header">
+                <Link className="btn-icon" to="/pool">
+                    <ChevronRightIcon/>
+                </Link>
                 <span className="text-semibold">Add Liquidity</span>
                 <div className="btn-icon" onClick={() => setShowSettings(!showSettings)}>
                     <SettingsIcon/>

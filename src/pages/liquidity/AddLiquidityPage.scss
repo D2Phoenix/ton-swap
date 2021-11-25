@@ -14,6 +14,11 @@
     justify-content: space-between;
     width: 100%;
     padding: 0 16px;
+    .btn-icon {
+      svg {
+        transform: rotate(180deg);
+      }
+    }
   }
   .supply__btn {
     width: 100%;
