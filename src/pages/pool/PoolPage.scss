@@ -57,6 +57,29 @@
       height: 24px;
     }
   }
+  .pool-item-details-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    gap: 0.5rem;
+    > div {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      min-height: 24px;
+      > div {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
+    }
+    img {
+      width: 24px;
+      height: 24px;
+      margin-left: 0.5rem;
+    }
+  }
 }
 
 .import-pool {

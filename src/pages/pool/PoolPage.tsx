@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import './PoolPage.scss';
 import SettingsIcon from 'components/icons/SettingsIcon';
@@ -11,6 +11,8 @@ import { selectPoolPools } from '../../store/pool/pool.slice';
 import ChevronDownIcon from '../../components/icons/ChevronDownIcon';
 import ChevronRightIcon from '../../components/icons/ChevronRightIcon';
 import Accordion from '../../components/Accordion';
+import { TOKEN_PRECISION } from '../../constants/swap';
+import { toDecimals } from '../../utils/decimals';
 
 
 function PoolPage() {
@@ -48,6 +50,9 @@ function PoolPage() {
                 {
                     walletAdapter && pools.length > 0 && (
                         <Accordion panels={pools.map((pool, index) => {
+                            const share = pool.details.poolAmount.multipliedBy('100').div(pool.details.poolTokens).precision(2);
+                            const shareText = share.lt('0.01') ? '<0.01%' : `${share.toFixed()}%`;
+
                             return {
                                 label: (
                                     <div key={index} className="pool-item-wrapper">
@@ -58,7 +63,32 @@ function PoolPage() {
                                         <span>{pool.one.token!.symbol}/{pool.two.token!.symbol}</span>
                                     </div>
                                 ),
-                                content: ''
+                                content: (
+                                    <div key={index} className="pool-item-details-wrapper">
+                                        <div>
+                                            <div>Pooled {pool.one.token!.symbol}</div>
+                                            <div>
+                                                {toDecimals(pool.one.amount!, pool.one.token!.decimals).precision(TOKEN_PRECISION).toFixed()}
+                                                <img src={pool.one.token!.logoURI} alt={pool.one.token!.name}/>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div>Pooled {pool.two.token!.symbol}</div>
+                                            <div>
+                                                {toDecimals(pool.two.amount!, pool.two.token!.decimals)!.precision(TOKEN_PRECISION).toFixed()}
+                                                <img src={pool.two.token!.logoURI} alt={pool.two.token!.name}/>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div>Your pool tokens</div>
+                                            <div>{pool.details.poolAmount!.precision(TOKEN_PRECISION).toFixed()}</div>
+                                        </div>
+                                        <div>
+                                            <div>Your pool share</div>
+                                            <div>{shareText}</div>
+                                        </div>
+                                    </div>
+                                )
                             }
                         })} />
 
