@@ -10,6 +10,7 @@ import { getPoolPools } from '../../store/pool/pool.thunks';
 import { selectPoolPools } from '../../store/pool/pool.slice';
 import ChevronDownIcon from '../../components/icons/ChevronDownIcon';
 import ChevronRightIcon from '../../components/icons/ChevronRightIcon';
+import Accordion from '../../components/Accordion';
 
 
 function PoolPage() {
@@ -45,18 +46,23 @@ function PoolPage() {
                     </span>
                 }
                 {
-                    walletAdapter && pools.length > 0 && pools.map((pool, index) => {
-                        return (
-                            <div key={index} className="pool-item-wrapper">
-                                <div>
-                                    <img src={pool.one.token!.logoURI} alt={pool.one.token!.name}/>
-                                    <img src={pool.two.token!.logoURI} alt={pool.two.token!.name}/>
-                                </div>
-                                <span>{pool.one.token!.symbol}/{pool.two.token!.symbol}</span>
-                                <ChevronRightIcon />
-                            </div>
-                        )
-                    })
+                    walletAdapter && pools.length > 0 && (
+                        <Accordion panels={pools.map((pool, index) => {
+                            return {
+                                label: (
+                                    <div key={index} className="pool-item-wrapper">
+                                        <div>
+                                            <img src={pool.one.token!.logoURI} alt={pool.one.token!.name}/>
+                                            <img src={pool.two.token!.logoURI} alt={pool.two.token!.name}/>
+                                        </div>
+                                        <span>{pool.one.token!.symbol}/{pool.two.token!.symbol}</span>
+                                    </div>
+                                ),
+                                content: ''
+                            }
+                        })} />
+
+                    )
                 }
             </div>
             <Link className="btn btn-primary" to="add">

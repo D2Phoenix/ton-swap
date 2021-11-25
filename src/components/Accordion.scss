@@ -1,0 +1,64 @@
+@import "../styles/vars";
+
+.accordion {
+  width: 100%;
+}
+.panel__label {
+  position: relative;
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
+  font-weight: 500;
+  font-size: 17px;
+  font-family: inherit;
+  transition: color 0.2s linear;
+  cursor: pointer;
+  &:hover {
+    &:after,
+    &:before {
+      background-color: $primary-color;
+    }
+  }
+  &:focus {
+    outline: none;
+  }
+  &:after,
+  &:before {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 22px;
+    height: 2px;
+    margin-top: -2px;
+    background-color: $secondary-color;
+  }
+  &:before {
+    transform: rotate(-90deg);
+    transition: transform 0.35s cubic-bezier(0.65, 0.05, 0.36, 1);
+  }
+}
+.panel[aria-expanded='true'] {
+  .panel__content {
+    opacity: 1;
+  }
+  .panel__label:before {
+    transform: rotate(0deg);
+  }
+}
+.panel__inner {
+  overflow: hidden;
+  will-change: height;
+  transition: height 0.4s cubic-bezier(0.65, 0.05, 0.36, 1);
+}
+.panel__content {
+  margin: 5px 25px 25px;
+  font-size: 14px;
+  opacity: 0;
+  transition: opacity 0.3s linear 0.18s;
+}
+.panel:not(:last-child) {
+  margin-bottom: 3px;
+}
