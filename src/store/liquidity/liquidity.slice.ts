@@ -13,9 +13,8 @@ export interface LiquidityState {
     two: InputTokenInterface,
     txType: TransactionType;
     details: {
-        fee: BigNumber;
-        priceImpact: BigNumber;
-        insufficientLiquidity: boolean;
+        poolTokens: BigNumber;
+        poolAmount: BigNumber;
     };
 }
 
@@ -33,9 +32,8 @@ const initialState: LiquidityState = {
     two: {},
     txType: TransactionType.EXACT_IN,
     details: {
-        fee: new BigNumber('0'),
-        priceImpact: new BigNumber('0'),
-        insufficientLiquidity: false,
+        poolTokens: new BigNumber('0'),
+        poolAmount: new BigNumber('0'),
     },
 }
 
@@ -81,12 +79,11 @@ export const liquiditySlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(estimateLiquidityTransaction.fulfilled, (state, action) => {
-            state.two.amount = action.payload.toAmount;
-            state.one.amount = action.payload.fromAmount;
+            state.two.amount = action.payload.twoAmount;
+            state.one.amount = action.payload.oneAmount;
             state.txType = action.payload.txType;
-            state.details.fee = action.payload.fee;
-            state.details.priceImpact = action.payload.priceImpact;
-            state.details.insufficientLiquidity = action.payload.insufficientLiquidity;
+            state.details.poolTokens = action.payload.poolTokens;
+            state.details.poolAmount = action.payload.poolAmount;
         })
     }
 })

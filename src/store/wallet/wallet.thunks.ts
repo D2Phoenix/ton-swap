@@ -21,6 +21,14 @@ export const connectWallet = createAsyncThunk(
             balances[state.swap.to.token.symbol] = await adapter.getBalance(state.swap.to.token);
             permissions[state.swap.to.token.symbol] = await adapter.getTokenUsePermission(state.swap.to.token);
         }
+        if (state.liquidity.one.token) {
+            balances[state.liquidity.one.token.symbol] = await adapter.getBalance(state.liquidity.one.token);
+            permissions[state.liquidity.one.token.symbol] = await adapter.getTokenUsePermission(state.liquidity.one.token);
+        }
+        if (state.liquidity.two.token) {
+            balances[state.liquidity.two.token.symbol] = await adapter.getBalance(state.liquidity.two.token);
+            permissions[state.liquidity.two.token.symbol] = await adapter.getTokenUsePermission(state.liquidity.two.token);
+        }
         return {
             adapter,
             address: await adapter.getWalletAddress(),

@@ -3,6 +3,8 @@ import { SwapTransactionRequestInterface } from 'interfaces/swapTransactionReque
 import { SwapTransactionInterface } from 'interfaces/swapTransactionInterface';
 import { TransactionType } from 'interfaces/transactionInterfaces';
 import { fromDecimals, toDecimals } from '../utils/decimals';
+import { LiquidityTransactionInterface } from '../interfaces/liquidityTransactionInterface';
+import { LiquidityTransactionRequestInterface } from '../interfaces/liquidityTransactionRequestInterface';
 
 const prices: Record<string, string> = {
     'TON_AAVE': '13992321165469095',
@@ -45,6 +47,24 @@ class SmartContractsService {
             quote,
             txType: data.txType,
             fee: new BigNumber('0.003'),
+        });
+    }
+
+    getLiquidityTransactionEstimation(data: LiquidityTransactionRequestInterface): Promise<LiquidityTransactionInterface> {
+        // TODO: Implement real api for transaction estimation
+        const amount = data.txType === TransactionType.EXACT_IN ? data.one!.amount! : data.two!.amount!;
+        const amountToken = data.txType === TransactionType.EXACT_IN ? data.one!.token! : data.two!.token!;
+        const quoteToken = data.txType === TransactionType.EXACT_IN ? data.two!.token! : data.one!.token!;
+        const fromSymbol =  data.txType === TransactionType.EXACT_IN ? data.one!.token!.symbol : data.two!.token!.symbol;
+        const toSymbol =  data.txType === TransactionType.EXACT_IN ? data.two!.token!.symbol : data.one!.token!.symbol;
+        const price = prices[`${fromSymbol}_${toSymbol}`];
+        const quote = new BigNumber(price || fromDecimals(new BigNumber('1'), quoteToken.decimals)).multipliedBy(toDecimals(amount, amountToken.decimals));
+        return Promise.resolve({
+            amount,
+            quote,
+            txType: data.txType,
+            poolAmount: new BigNumber('1'),
+            poolTokens: new BigNumber('100'),
         });
     }
 

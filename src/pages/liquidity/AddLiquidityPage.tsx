@@ -79,7 +79,7 @@ export function AddLiquidityPage() {
             return setSupplyButtonText('Enter an amount');
         }
         if (!two.token || !one.token) {
-            return setSupplyButtonText('Select a token');
+            return setSupplyButtonText('Invalid pair');
         }
         if (one.token && insufficientFromBalance) {
             return setSupplyButtonText(`Insufficient ${one.token.symbol} balance`);
@@ -100,8 +100,8 @@ export function AddLiquidityPage() {
         }
         if (txType === TransactionType.EXACT_IN && two.token && one.token && one.amount && !one.amount.eq('0')) {
             return dispatch(estimateLiquidityTransaction({
-                from: one,
-                to: {
+                one,
+                two: {
                     token: two.token,
                 },
                 txType,
@@ -118,10 +118,10 @@ export function AddLiquidityPage() {
         }
         if (txType === TransactionType.EXACT_OUT && one.token && two.token && two.amount && !two.amount.eq('0')) {
             return dispatch(estimateLiquidityTransaction({
-                from: {
+                one: {
                     token: one.token,
                 },
-                to: two,
+                two: two,
                 txType,
             }))
         }
@@ -140,8 +140,8 @@ export function AddLiquidityPage() {
             }
             if (one.token && two.token && one.amount && !one.amount.eq('0')) {
                 dispatch(estimateLiquidityTransaction({
-                    from: one,
-                    to: two,
+                    one: one,
+                    two: two,
                     txType,
                 }));
             }
@@ -198,9 +198,13 @@ export function AddLiquidityPage() {
         }));
     }, [dispatch]);
 
-    const handleAllowUseToken = useCallback(() => {
+    const handleAllowUseOneToken = useCallback(() => {
         dispatch(setWalletUseTokenPermission(one.token!));
     }, [dispatch, one]);
+
+    const handleAllowUseTwoToken = useCallback(() => {
+        dispatch(setWalletUseTokenPermission(two.token!));
+    }, [dispatch, two]);
 
     const handleConnectWallet = useCallback(() => {
         dispatch(connectWallet());
@@ -240,20 +244,24 @@ export function AddLiquidityPage() {
             {
                 walletAdapter && isFilled && !walletPermissions[one.token!.symbol] && !insufficientFromBalance &&
                 <button className="btn btn-primary supply__btn"
-                        onClick={handleAllowUseToken}>
+                        onClick={handleAllowUseOneToken}>
                   Allow the TONSwap Protocol to use your {one.token!.symbol}
                 </button>
             }
             {
                 walletAdapter && isFilled && !walletPermissions[two.token!.symbol] && !insufficientToBalance &&
                 <button className="btn btn-primary supply__btn"
-                        onClick={handleAllowUseToken}>
+                        onClick={handleAllowUseTwoToken}>
                   Allow the TONSwap Protocol to use your {two.token!.symbol}
                 </button>
             }
             {
                 walletAdapter && <button className="btn btn-primary supply__btn"
-                                         disabled={!isFilled || insufficientBalance || (!!one.token && !walletPermissions[one.token.symbol])}
+                                         disabled={!isFilled
+                                         || insufficientBalance
+                                         || (!!one.token && !walletPermissions[one.token.symbol])
+                                         || (!!two.token && !walletPermissions[two.token.symbol])
+                                         }
                                          onClick={handleSupply}>
                     {supplyButtonText}
                 </button>
