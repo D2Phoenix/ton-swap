@@ -1,17 +1,21 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import BigNumber from 'bignumber.js';
 
 import './TokenSelect.scss';
 import Modal from './Modal';
 import TokenInterface from 'interfaces/tokenInterface';
+import { BALANCE_PRECISION } from '../constants/swap';
+import { toDecimals } from '../utils/decimals';
 
 
 interface TokenSelectParams {
     tokens: TokenInterface[],
+    balances: Record<string, BigNumber>
     onClose: Function;
     onSelect: Function;
 }
 
-function TokenSelect({tokens, onClose, onSelect}: TokenSelectParams) {
+function TokenSelect({tokens, balances, onClose, onSelect}: TokenSelectParams) {
     const loader = useRef(null);
     const [page, setPage] = useState(1);
     const [query, setQuery] = useState('');
@@ -52,12 +56,16 @@ function TokenSelect({tokens, onClose, onSelect}: TokenSelectParams) {
                 <div className="token-select-list">
                     {
                         visibleTokens.map((token, index) => {
+                            const balance = balances[token.symbol] ? toDecimals(balances[token.symbol], token.decimals).precision(BALANCE_PRECISION).toFixed() : '';
                             return (
                                 <div key={token.address} className="token-select-item" onClick={() => onSelect(token)}>
                                     <img className="token__img" src={token.logoURI} alt={token.name}/>
                                     <div className="token-name">
                                         <span className="text-semibold">{token.symbol}</span>
                                         <span className="text-small">{token.name}</span>
+                                    </div>
+                                    <div className="token-balance">
+                                        {balance}
                                     </div>
                                 </div>
                             )

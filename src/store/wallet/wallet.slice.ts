@@ -5,7 +5,7 @@ import type { RootState } from 'store/store'
 import {
     connectWallet,
     getWalletAddress,
-    getWalletBalance,
+    getWalletBalance, getWalletBalances,
     getWalletUseTokenPermission,
     setWalletUseTokenPermission, walletAddLiquidity, walletSwap
 } from './wallet.thunks';
@@ -49,6 +49,11 @@ export const walletSlice = createSlice({
         })
         builder.addCase(getWalletBalance.fulfilled, (state, action) => {
             state.balances[action.payload.token.symbol] = action.payload.value;
+        });
+        builder.addCase(getWalletBalances.fulfilled, (state, action) => {
+            action.payload.forEach((data) => {
+                state.balances[data.token.symbol] = data.value;
+            })
         });
         builder.addCase(getWalletAddress.fulfilled, (state, action) => {
             state.address = action.payload;

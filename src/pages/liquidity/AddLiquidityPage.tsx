@@ -17,7 +17,7 @@ import {
 } from '../../store/liquidity/liquidity.slice';
 import {
     connectWallet,
-    getWalletBalance,
+    getWalletBalance, getWalletBalances,
     getWalletUseTokenPermission,
     setWalletUseTokenPermission
 } from '../../store/wallet/wallet.thunks';
@@ -155,12 +155,18 @@ export function AddLiquidityPage() {
     const openFromTokenSelect = useCallback(() => {
         setShowTokenSelect(!showTokenSelect);
         setTokenSelectType('from');
-    }, [showTokenSelect]);
+        if (walletAdapter) {
+            dispatch(getWalletBalances(tokens));
+        }
+    }, [showTokenSelect, dispatch, walletAdapter, tokens]);
 
     const openToTokenSelect = useCallback(() => {
         setShowTokenSelect(!showTokenSelect);
         setTokenSelectType('to');
-    }, [showTokenSelect]);
+        if (walletAdapter) {
+            dispatch(getWalletBalances(tokens));
+        }
+    }, [showTokenSelect, dispatch, walletAdapter, tokens]);
 
     const handleSwitchTokens = useCallback(() => {
         dispatch(switchLiquidityTokens());
@@ -282,6 +288,7 @@ export function AddLiquidityPage() {
             }
             {
                 showTokenSelect && <TokenSelect tokens={tokens}
+                                                balances={walletBalances}
                                                 onClose={handleSelectToken}
                                                 onSelect={handleSelectToken}/>
             }

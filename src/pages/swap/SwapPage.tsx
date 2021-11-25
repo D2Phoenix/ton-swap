@@ -13,7 +13,7 @@ import { selectTokens } from 'store/app/app.slice';
 import { selectWalletAdapter, selectWalletBalances, selectWalletPermissions } from 'store/wallet/wallet.slice';
 import {
     connectWallet,
-    getWalletBalance,
+    getWalletBalance, getWalletBalances,
     getWalletUseTokenPermission,
     setWalletUseTokenPermission
 } from 'store/wallet/wallet.thunks';
@@ -148,12 +148,18 @@ function SwapPage() {
     const openFromTokenSelect = useCallback(() => {
         setShowTokenSelect(!showTokenSelect);
         setTokenSelectType('from');
-    }, [showTokenSelect]);
+        if (walletAdapter) {
+            dispatch(getWalletBalances(tokens));
+        }
+    }, [showTokenSelect, dispatch, walletAdapter, tokens]);
 
     const openToTokenSelect = useCallback(() => {
         setShowTokenSelect(!showTokenSelect);
         setTokenSelectType('to');
-    }, [showTokenSelect]);
+        if (walletAdapter) {
+            dispatch(getWalletBalances(tokens));
+        }
+    }, [showTokenSelect, dispatch, walletAdapter, tokens]);
 
     const handleSwitchTokens = useCallback(() => {
         dispatch(switchSwapTokens());
@@ -266,6 +272,7 @@ function SwapPage() {
             }
             {
                 showTokenSelect && <TokenSelect tokens={tokens}
+                                                balances={walletBalances}
                                                 onClose={handleSelectToken}
                                                 onSelect={handleSelectToken}/>
             }
