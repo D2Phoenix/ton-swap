@@ -1,6 +1,6 @@
 import TokenInterface from './tokenInterface';
 import BigNumber from 'bignumber.js';
-import { WalletTransactionStatus } from './transactionInterfaces';
+import { WalletTxStatus } from './transactionInterfaces';
 import { SwapState } from '../store/swap/swap.slice';
 
 export interface WalletAdapterInterface {
@@ -8,5 +8,5 @@ export interface WalletAdapterInterface {
     getBalance(token: TokenInterface): Promise<BigNumber>;
     getTokenUsePermission(token: TokenInterface): Promise<boolean>;
     setTokenUsePermission(token: TokenInterface): Promise<boolean>;
-    swap(fromToken: SwapState): Promise<WalletTransactionStatus>
+    swap(fromToken: SwapState): Promise<WalletTxStatus>
 }

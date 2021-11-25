@@ -21,7 +21,7 @@ import {
     getWalletUseTokenPermission,
     setWalletUseTokenPermission
 } from '../../store/wallet/wallet.thunks';
-import { TransactionType } from '../../interfaces/transactionInterfaces';
+import { TxType } from '../../interfaces/transactionInterfaces';
 import TokenSelect from '../../components/TokenSelect';
 import { selectTokens } from '../../store/app/app.slice';
 import Settings from '../../components/Settings';
@@ -92,13 +92,13 @@ export function AddLiquidityPage() {
 
     // Estimate EXACT_IN transaction
     useEffect((): any => {
-        if (txType === TransactionType.EXACT_IN && (!one.amount || one.amount.eq('0'))) {
+        if (txType === TxType.EXACT_IN && (!one.amount || one.amount.eq('0'))) {
             return dispatch(setLiquidityTwoAmount({
                 value: null,
                 txType,
             }));
         }
-        if (txType === TransactionType.EXACT_IN && two.token && one.token && one.amount && !one.amount.eq('0')) {
+        if (txType === TxType.EXACT_IN && two.token && one.token && one.amount && !one.amount.eq('0')) {
             return dispatch(estimateLiquidityTransaction({
                 one,
                 two: {
@@ -110,13 +110,13 @@ export function AddLiquidityPage() {
     }, [dispatch, one, two.token, txType]);
     // Estimate EXACT_OUT transaction
     useEffect((): any => {
-        if (txType === TransactionType.EXACT_OUT && (!two.amount || two.amount.eq('0'))) {
+        if (txType === TxType.EXACT_OUT && (!two.amount || two.amount.eq('0'))) {
             return dispatch(setLiquidityOneAmount({
                 value: null,
                 txType,
             }));
         }
-        if (txType === TransactionType.EXACT_OUT && one.token && two.token && two.amount && !two.amount.eq('0')) {
+        if (txType === TxType.EXACT_OUT && one.token && two.token && two.amount && !two.amount.eq('0')) {
             return dispatch(estimateLiquidityTransaction({
                 one: {
                     token: one.token,
@@ -187,14 +187,14 @@ export function AddLiquidityPage() {
     const handleFromTokenAmount = useCallback((value) => {
         dispatch(setLiquidityOneAmount({
             value,
-            txType: TransactionType.EXACT_IN
+            txType: TxType.EXACT_IN
         }));
     }, [dispatch]);
 
     const handleToTokenAmount = useCallback((value) => {
         dispatch(setLiquidityTwoAmount({
             value,
-            txType: TransactionType.EXACT_OUT
+            txType: TxType.EXACT_OUT
         }));
     }, [dispatch]);
 

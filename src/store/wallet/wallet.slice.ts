@@ -10,15 +10,15 @@ import {
     setWalletUseTokenPermission, walletSwap
 } from './wallet.thunks';
 import { WalletAdapterInterface } from 'interfaces/walletAdapterInterface';
-import { WalletTransactionStatus } from '../../interfaces/transactionInterfaces';
+import { WalletTxStatus } from '../../interfaces/transactionInterfaces';
 
 interface WalletState {
     adapter: WalletAdapterInterface | null,
     address: string;
     balances: Record<string, BigNumber>,
     permissions: Record<string, boolean>,
-    transaction: {
-        status: WalletTransactionStatus;
+    tx: {
+        status: WalletTxStatus;
     },
 }
 
@@ -27,8 +27,8 @@ const initialState: WalletState = {
     address: '',
     balances: {},
     permissions: {},
-    transaction: {
-        status: WalletTransactionStatus.INITIAL,
+    tx: {
+        status: WalletTxStatus.INITIAL,
     }
 }
 
@@ -37,7 +37,7 @@ export const walletSlice = createSlice({
     initialState,
     reducers: {
         resetTransaction: (state, action: PayloadAction<void>) => {
-            state.transaction.status = WalletTransactionStatus.INITIAL;
+            state.tx.status = WalletTxStatus.INITIAL;
         },
     },
     extraReducers: (builder) => {
@@ -60,10 +60,10 @@ export const walletSlice = createSlice({
             state.permissions[action.payload.token.symbol] = action.payload.value;
         });
         builder.addCase(walletSwap.pending, (state, action) => {
-            state.transaction.status = WalletTransactionStatus.PENDING;
+            state.tx.status = WalletTxStatus.PENDING;
         });
         builder.addCase(walletSwap.fulfilled, (state, action) => {
-            state.transaction.status = action.payload;
+            state.tx.status = action.payload;
         });
     },
 })
@@ -78,6 +78,6 @@ export const selectWalletAddress = (state: RootState) => state.wallet.address;
 
 export const selectWalletPermissions = (state: RootState) => state.wallet.permissions;
 
-export const selectWalletTransaction = (state: RootState) => state.wallet.transaction;
+export const selectWalletTransaction = (state: RootState) => state.wallet.tx;
 
 export default walletSlice.reducer;

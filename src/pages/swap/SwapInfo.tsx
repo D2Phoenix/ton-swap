@@ -6,7 +6,7 @@ import {
     selectSwapTxType,
     selectSwapTo
 } from 'store/swap/swap.slice';
-import { TransactionType } from 'interfaces/transactionInterfaces';
+import { TxType } from 'interfaces/transactionInterfaces';
 import { DEFAULT_SLIPPAGE, FEE_PRECISION, TOKEN_PRECISION } from 'constants/swap';
 import { useMemo } from 'react';
 import { toDecimals } from 'utils/decimals';
@@ -53,13 +53,13 @@ function SwapInfo() {
                 <span className="text-small text-semibold">{settings.slippage || DEFAULT_SLIPPAGE} %</span>
             </div>
             {
-                type === TransactionType.EXACT_IN && to && <div>
+                type === TxType.EXACT_IN && to && <div>
                   <span className="text-small">Minimum received</span>
                   <span className="text-small text-semibold">{minimumReceived} {to.token!.symbol}</span>
                 </div>
             }
             {
-                type === TransactionType.EXACT_OUT && from && <div>
+                type === TxType.EXACT_OUT && from && <div>
                   <span className="text-small">Maximum sent</span>
                   <span className="text-small text-semibold">{maximumSent} {from.token!.symbol}</span>
                 </div>

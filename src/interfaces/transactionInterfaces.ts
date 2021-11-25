@@ -1,9 +1,9 @@
-export enum TransactionType {
+export enum TxType {
     EXACT_IN = 'EXACT_IN',
     EXACT_OUT = 'EXACT_OUT',
 }
 
-export enum WalletTransactionStatus {
+export enum WalletTxStatus {
     INITIAL = 'INITIAL',
     PENDING = 'PENDING',
     CONFIRMED = 'CONFIRMED',

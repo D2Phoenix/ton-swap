@@ -18,7 +18,7 @@ import {
     setWalletUseTokenPermission
 } from 'store/wallet/wallet.thunks';
 import { estimateTransaction } from 'store/swap/swap.thunks';
-import { TransactionType } from 'interfaces/transactionInterfaces';
+import { TxType } from 'interfaces/transactionInterfaces';
 import {
     selectSwapFrom,
     selectSwapTo,
@@ -88,13 +88,13 @@ function SwapPage() {
     }, [from, to, insufficientBalance]);
     // Estimate EXACT_IN transaction
     useEffect((): any => {
-        if (txType === TransactionType.EXACT_IN && (!from.amount || from.amount.eq('0'))) {
+        if (txType === TxType.EXACT_IN && (!from.amount || from.amount.eq('0'))) {
             return dispatch(setSwapToAmount({
                 value: null,
                 txType,
             }));
         }
-        if (txType === TransactionType.EXACT_IN && to.token && from.token && from.amount && !from.amount.eq('0')) {
+        if (txType === TxType.EXACT_IN && to.token && from.token && from.amount && !from.amount.eq('0')) {
             return dispatch(estimateTransaction({
                 from: from,
                 to: {
@@ -106,13 +106,13 @@ function SwapPage() {
     }, [dispatch, from, to.token, txType]);
     // Estimate EXACT_OUT transaction
     useEffect((): any => {
-        if (txType === TransactionType.EXACT_OUT && (!to.amount || to.amount.eq('0'))) {
+        if (txType === TxType.EXACT_OUT && (!to.amount || to.amount.eq('0'))) {
             return dispatch(setSwapFromAmount({
                 value: null,
                 txType,
             }));
         }
-        if (txType === TransactionType.EXACT_OUT && from.token && to.token && to.amount && !to.amount.eq('0')) {
+        if (txType === TxType.EXACT_OUT && from.token && to.token && to.amount && !to.amount.eq('0')) {
             return dispatch(estimateTransaction({
                 from: {
                     token: from.token,
@@ -183,14 +183,14 @@ function SwapPage() {
     const handleFromTokenAmount = useCallback((value) => {
         dispatch(setSwapFromAmount({
             value,
-            txType: TransactionType.EXACT_IN
+            txType: TxType.EXACT_IN
         }));
     }, [dispatch]);
 
     const handleToTokenAmount = useCallback((value) => {
         dispatch(setSwapToAmount({
             value,
-            txType: TransactionType.EXACT_OUT
+            txType: TxType.EXACT_OUT
         }));
     }, [dispatch]);
 

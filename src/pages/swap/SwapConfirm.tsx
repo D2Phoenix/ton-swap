@@ -16,7 +16,7 @@ import {
 import { resetTransaction, selectWalletBalances, selectWalletTransaction } from 'store/wallet/wallet.slice';
 import { toDecimals } from 'utils/decimals';
 import { DEFAULT_SLIPPAGE, TOKEN_PRECISION } from 'constants/swap';
-import { WalletTransactionStatus, TransactionType } from 'interfaces/transactionInterfaces';
+import { WalletTxStatus, TxType } from 'interfaces/transactionInterfaces';
 import { walletSwap } from 'store/wallet/wallet.thunks';
 import Spinner from 'components/Spinner';
 import { selectSettings } from '../../store/app/app.slice';
@@ -31,7 +31,7 @@ function SwapConfirm({onClose}: any) {
     const walletTransaction = useAppSelector(selectWalletTransaction);
 
     const className = useMemo(() => {
-        return walletTransaction.status !== WalletTransactionStatus.INITIAL ? 'swap-confirm-modal mini' : 'swap-confirm-modal';
+        return walletTransaction.status !== WalletTxStatus.INITIAL ? 'swap-confirm-modal mini' : 'swap-confirm-modal';
     }, [walletTransaction]);
     const calcFrom = useMemo(() => {
         if (!from.amount || !to.amount || !to.token || !from.token) {
@@ -63,7 +63,7 @@ function SwapConfirm({onClose}: any) {
     }, [dispatch]);
     const handleClose = useCallback(() => {
         dispatch(resetTransaction());
-        if (walletTransaction.status === WalletTransactionStatus.CONFIRMED) {
+        if (walletTransaction.status === WalletTxStatus.CONFIRMED) {
             dispatch(resetSwap());
         }
         onClose && onClose();
@@ -72,7 +72,7 @@ function SwapConfirm({onClose}: any) {
     return (
         <Modal className={className} onClose={handleClose}>
             {
-                walletTransaction.status === WalletTransactionStatus.INITIAL && <>
+                walletTransaction.status === WalletTxStatus.INITIAL && <>
                   <h4>Confirm Swap</h4>
                   <div className="swap-confirm-wrapper">
                     <TokenInput token={from.token}
@@ -98,13 +98,13 @@ function SwapConfirm({onClose}: any) {
                     </div>
                     <SwapInfo/>
                       {
-                          txType === TransactionType.EXACT_IN && <span className="help-text text-small">
+                          txType === TxType.EXACT_IN && <span className="help-text text-small">
                 Output is estimated. You will receive at least <span
                             className="text-semibold text-small">{minimumReceived} {to.token!.symbol}</span>  or the transaction will revert.
                 </span>
                       }
                       {
-                          txType === TransactionType.EXACT_OUT && <span className="help-text text-small">
+                          txType === TxType.EXACT_OUT && <span className="help-text text-small">
                 Input is estimated. You will sell at most <span
                             className="text-semibold text-small">{maximumSent} {from.token!.symbol}</span> or the transaction will revert.
                 </span>
@@ -117,7 +117,7 @@ function SwapConfirm({onClose}: any) {
                 </>
             }
             {
-                walletTransaction.status === WalletTransactionStatus.PENDING && <>
+                walletTransaction.status === WalletTxStatus.PENDING && <>
                     <div className="swap-confirm-wrapper">
                       <div className="swap-status">
                         <Spinner />
@@ -132,7 +132,7 @@ function SwapConfirm({onClose}: any) {
                 </>
             }
             {
-                walletTransaction.status === WalletTransactionStatus.CONFIRMED && <>
+                walletTransaction.status === WalletTxStatus.CONFIRMED && <>
                   <div className="swap-confirm-wrapper">
                     <div className="swap-status">
                       <h2 className="text-semibold">
@@ -148,7 +148,7 @@ function SwapConfirm({onClose}: any) {
                 </>
             }
             {
-                walletTransaction.status === WalletTransactionStatus.REJECTED && <>
+                walletTransaction.status === WalletTxStatus.REJECTED && <>
                   <h4 className="text-error">Error</h4>
                   <div className="swap-confirm-wrapper">
                     <div className="swap-status">

@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js';
 
 import { WalletAdapterInterface } from 'interfaces/walletAdapterInterface';
 import TokenInterface from '../interfaces/tokenInterface';
-import { WalletTransactionStatus } from '../interfaces/transactionInterfaces';
+import { WalletTxStatus } from '../interfaces/transactionInterfaces';
 import { SwapState } from '../store/swap/swap.slice';
 
 const permissions: any = {
@@ -36,13 +36,13 @@ class StubWalletService implements WalletAdapterInterface {
         return Promise.resolve(permissions[token.symbol])
     };
 
-    swap(state: SwapState): Promise<WalletTransactionStatus> {
+    swap(state: SwapState): Promise<WalletTxStatus> {
         // TODO: Implement real api for wallet operation
-        return new Promise<WalletTransactionStatus>((resolve) => {
+        return new Promise<WalletTxStatus>((resolve) => {
             setTimeout(() => {
                 balances[state.from.token!.symbol] = balances[state.from.token!.symbol].minus(state.from.amount!);
                 balances[state.to.token!.symbol] = (balances[state.to.token!.symbol] || new BigNumber('0')).plus(state.to.amount!)
-                resolve(WalletTransactionStatus.CONFIRMED);
+                resolve(WalletTxStatus.CONFIRMED);
             }, 3000)
         });
     }

@@ -1,10 +1,10 @@
-import { TransactionType } from './transactionInterfaces';
+import { TxType } from './transactionInterfaces';
 import BigNumber from 'bignumber.js';
 
-export interface LiquidityTransactionInterface {
+export interface LiquidityTxInterface {
     amount: BigNumber;
     quote: BigNumber;
-    txType: TransactionType;
+    txType: TxType;
     poolAmount: BigNumber;
     poolTokens: BigNumber;
 }

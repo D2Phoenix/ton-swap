@@ -4,14 +4,14 @@ import BigNumber from 'bignumber.js';
 import type { RootState } from 'store/store'
 import { estimateLiquidityTransaction } from './liquidity.thunks';
 import { shiftDecimals } from 'utils/decimals';
-import { TransactionType } from 'interfaces/transactionInterfaces';
+import { TxType } from 'interfaces/transactionInterfaces';
 import { InputTokenInterface } from 'interfaces/inputTokenInterface';
 
 
 export interface LiquidityState {
     one: InputTokenInterface,
     two: InputTokenInterface,
-    txType: TransactionType;
+    txType: TxType;
     details: {
         poolTokens: BigNumber;
         poolAmount: BigNumber;
@@ -30,7 +30,7 @@ const initialState: LiquidityState = {
         },
     },
     two: {},
-    txType: TransactionType.EXACT_IN,
+    txType: TxType.EXACT_IN,
     details: {
         poolTokens: new BigNumber('0'),
         poolAmount: new BigNumber('0'),
@@ -71,7 +71,7 @@ export const liquiditySlice = createSlice({
             const two = state.two;
             state.two = state.one;
             state.one = two;
-            state.txType = state.txType === TransactionType.EXACT_IN ? TransactionType.EXACT_OUT : TransactionType.EXACT_IN;
+            state.txType = state.txType === TxType.EXACT_IN ? TxType.EXACT_OUT : TxType.EXACT_IN;
         },
         resetLiquidity: () => {
             return initialState;
