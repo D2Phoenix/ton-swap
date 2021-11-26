@@ -6,6 +6,7 @@ import { selectPoolsList } from 'store/pools/pools.slice';
 import { fetchPools } from 'store/pools/pools.thunks';
 import ChevronDownIcon from '../../components/icons/ChevronDownIcon';
 import ChevronRightIcon from '../../components/icons/ChevronRightIcon';
+import CurrencyUtils from '../../utils/currencyUtils';
 
 function PoolsPage() {
     const dispatch = useAppDispatch();
@@ -18,13 +19,16 @@ function PoolsPage() {
         dispatch(fetchPools());
     }, [dispatch]);
 
+    const filteredPools = useMemo(() => {
+        return pools.filter((pool) => `${pool.token0.symbol}/${pool.token1.symbol}`.toLowerCase().includes(query.toLowerCase()));
+    }, [pools, query])
+
     const visiblePools = useMemo(() => {
-        let result = pools.filter((pool) => pool.name.toLowerCase().includes(query.toLowerCase()));
         const sortKey: any = sort.startsWith('-') ? sort.split('-')[1] : sort;
         const sortDirection = sort.startsWith('-') ? -1 : 1;
-        result.sort((a: any, b: any) => {
-            const aValue = sortKey === 'name' ? a[sortKey] : parseFloat(a[sortKey]);
-            const bValue = sortKey === 'name' ? b[sortKey] : parseFloat(b[sortKey]);
+        filteredPools.sort((a: any, b: any) => {
+            const aValue = sortKey === 'name' ? `${a.token0.symbol}/${a.token1.symbol}` : parseFloat(a[sortKey]);
+            const bValue = sortKey === 'name' ? `${b.token0.symbol}/${b.token1.symbol}` : parseFloat(b[sortKey]);
             if (aValue > bValue) {
                 return 1 * sortDirection;
             }
@@ -33,12 +37,12 @@ function PoolsPage() {
             }
             return 0;
         });
-        return result.slice((page - 1) * 10, page * 10);
-    }, [pools, query, sort, page]);
+        return filteredPools.slice((page - 1) * 10, page * 10);
+    }, [filteredPools, sort, page]);
 
     const totalPages = useMemo(() => {
-        return Math.ceil(pools.filter((pool) => pool.name.toLowerCase().includes(query.toLowerCase())).length / 10);
-    }, [pools, query]);
+        return Math.ceil(filteredPools.length / 10);
+    }, [filteredPools]);
 
     const handleSort = useCallback((value: string) => {
         setSort(prev => (prev.startsWith(value) ? `-${value}` : value))
@@ -63,22 +67,22 @@ function PoolsPage() {
                             sort.includes('name') && <ChevronDownIcon revert={!sort.startsWith('-')}/>
                         }
                     </div>
-                    <div className="total-volume__column" onClick={handleSort.bind(null, 'totalVolume')}>
+                    <div className="tvl__column" onClick={handleSort.bind(null, 'totalValueLockedUSD')}>
                         TVL
                         {
-                            sort.includes('totalVolume') && <ChevronDownIcon revert={!sort.startsWith('-')}/>
+                            sort.includes('totalValueLockedUSD') && <ChevronDownIcon revert={!sort.startsWith('-')}/>
                         }
                     </div>
-                    <div className="total-day__column" onClick={handleSort.bind(null, 'total24')}>
+                    <div className="total-day__column" onClick={handleSort.bind(null, 'volume24USD')}>
                         Volume 24h
                         {
-                            sort.includes('total24') && <ChevronDownIcon revert={!sort.startsWith('-')}/>
+                            sort.includes('volume24USD') && <ChevronDownIcon revert={!sort.startsWith('-')}/>
                         }
                     </div>
-                    <div className="total-7day__column" onClick={handleSort.bind(null, 'total7d')}>
+                    <div className="total-7day__column" onClick={handleSort.bind(null, 'volume7dUSD')}>
                         Volume 7d
                         {
-                            sort.includes('total7d') && <ChevronDownIcon revert={!sort.startsWith('-')}/>
+                            sort.includes('volume7dUSD') && <ChevronDownIcon revert={!sort.startsWith('-')}/>
                         }
                     </div>
                 </div>
@@ -87,10 +91,10 @@ function PoolsPage() {
                         return (
                             <div key={index} className="pool-list__item">
                                 <div className="position__column">{index + 1}</div>
-                                <div className="name__column">{pool.name}</div>
-                                <div className="total-volume__column">${pool.totalVolume}m</div>
-                                <div className="total-day__column">${pool.total24}m</div>
-                                <div className="total-7day__column">${pool.total7d}m</div>
+                                <div className="name__column">{`${pool.token0.symbol}/${pool.token1.symbol}`}</div>
+                                <div className="tvl__column">{CurrencyUtils.toUSDDisplay(pool.totalValueLockedUSD)}</div>
+                                <div className="total-day__column">{CurrencyUtils.toUSDDisplay(pool.volume24USD)}</div>
+                                <div className="total-7day__column">{CurrencyUtils.toUSDDisplay(pool.volume7dUSD)}</div>
                             </div>
                         )
                     })
@@ -98,13 +102,13 @@ function PoolsPage() {
                 <div className="pools-list-pagination">
                     {
                         (page - 1) !== 0 && <div className="btn-icon" onClick={handlePageChange.bind(null, -1)}>
-                            <ChevronRightIcon revert={true}/>
+                          <ChevronRightIcon revert={true}/>
                         </div>
                     }
                     Page {page} of {totalPages}
                     {
-                        page !== totalPages &&  <div className="btn-icon" onClick={handlePageChange.bind(null, 1)}>
-                          <ChevronRightIcon />
+                        page !== totalPages && <div className="btn-icon" onClick={handlePageChange.bind(null, 1)}>
+                          <ChevronRightIcon/>
                         </div>
                     }
                 </div>

@@ -1,13 +1,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { getTokens } from 'api/tokens';
-import TokenInterface from 'interfaces/tokenInterface';
-import { getPools } from '../../api/pools';
-import PoolListInterface from '../../interfaces/poolListInterface';
+import PoolsService from 'api/poolsService';
+import PoolListInterface from 'interfaces/poolListInterface';
+
+const poolsService = new PoolsService();
 
 export const fetchPools = createAsyncThunk(
     'pools/list',
     async (): Promise<PoolListInterface[]> => {
-        return await getPools();
+        return await poolsService.getPools();
     },
 )
