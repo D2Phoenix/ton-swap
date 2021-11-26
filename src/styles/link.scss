@@ -16,10 +16,8 @@ a {
 }
 
 .link__btn {
-  display: block;
+  display: inline-block;
   color: $primary-color;
-  font-size: 19px;
-  line-height: 24px;
   cursor: pointer;
   -webkit-transition: color .3s;
   -o-transition: color .3s;

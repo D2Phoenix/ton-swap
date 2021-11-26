@@ -93,9 +93,9 @@ function TokenSelect({tokens, balances, onClose, onSelect, balancesFirst}: Token
                     }
                     <div ref={loader}/>
                 </div>
-                {/*<span className="text-center link__btn">
+                <span className="text-center link__btn">
                     Manage Token Lists
-                </span>*/}
+                </span>
             </div>
         </Modal>
     )
