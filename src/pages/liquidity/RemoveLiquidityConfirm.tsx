@@ -12,7 +12,7 @@ import {
     selectLiquidityTwo,
 } from 'store/liquidity/liquidity.slice';
 import { resetTransaction, selectWalletTransaction } from 'store/wallet/wallet.slice';
-import { DEFAULT_SLIPPAGE, TOKEN_PRECISION } from 'constants/swap';
+import { DEFAULT_SLIPPAGE } from 'constants/swap';
 import { WalletTxStatus } from 'interfaces/transactionInterfaces';
 import {  walletRemoveLiquidity } from 'store/wallet/wallet.thunks';
 import Spinner from 'components/Spinner';
@@ -83,11 +83,9 @@ function RemoveLiquidityConfirm({onClose}: any) {
                       <span className="text-semibold">{poolRemoveDisplay}</span>
                       <span> {one.token.symbol}/{two.token.symbol} Pool Tokens</span>
                     </div>
-                      {
-                          <span className="help-text text-small">
-                              Output is estimated. If the price changes by more than {settings.slippage || DEFAULT_SLIPPAGE}% your transaction will revert.
-                          </span>
-                      }
+                    <span className="help-text text-small">
+                      Output is estimated. If the price changes by more than {settings.slippage || DEFAULT_SLIPPAGE}% your transaction will revert.
+                    </span>
                     <button className="btn btn-primary remove__btn"
                             onClick={handleConfirmRemove}>
                       Confirm Remove Liquidity

@@ -68,19 +68,25 @@ export const walletSlice = createSlice({
             state.tx.status = WalletTxStatus.PENDING;
         });
         builder.addCase(walletSwap.fulfilled, (state, action) => {
-            state.tx.status = action.payload;
+            if (state.tx.status === WalletTxStatus.PENDING) {
+                state.tx.status = action.payload;
+            }
         });
         builder.addCase(walletAddLiquidity.pending, (state, action) => {
             state.tx.status = WalletTxStatus.PENDING;
         });
         builder.addCase(walletAddLiquidity.fulfilled, (state, action) => {
-            state.tx.status = action.payload;
+            if (state.tx.status === WalletTxStatus.PENDING) {
+                state.tx.status = action.payload;
+            }
         });
         builder.addCase(walletRemoveLiquidity.pending, (state, action) => {
             state.tx.status = WalletTxStatus.PENDING;
         });
         builder.addCase(walletRemoveLiquidity.fulfilled, (state, action) => {
-            state.tx.status = action.payload;
+            if (state.tx.status === WalletTxStatus.PENDING) {
+                state.tx.status = action.payload;
+            }
         });
     },
 })

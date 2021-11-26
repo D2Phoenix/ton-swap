@@ -24,7 +24,7 @@
   overflow: auto;
   height: calc(100% - 20px);
   padding-top: 2px;
-  > span {
+  > span:not(.help-text) {
     border-bottom: 1px solid $border-color;
     padding: 0 0 8px;
   }

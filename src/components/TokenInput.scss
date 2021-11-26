@@ -8,9 +8,24 @@
   padding: 1rem 1rem 0.75rem;
   border: 1px solid $border-color;
   &.view-only {
-    .btn {
-      outline: 0;
-      pointer-events: none;
+    .token-input {
+      .btn {
+        outline: 0;
+        pointer-events: none;
+        padding-left: 0;
+        img {
+          left: 0;
+          + img {
+            left: 24px;
+            + span {
+              margin-left: 52px;
+            }
+          }
+          + span {
+            margin-left: 28px;
+          }
+        }
+      }
     }
   }
   &:hover {

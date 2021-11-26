@@ -50,7 +50,7 @@ class StubWalletService implements WalletAdapterInterface {
                 balances[state.from.token.symbol] = balances[state.from.token.symbol].minus(state.from.amount);
                 balances[state.to.token.symbol] = (balances[state.to.token.symbol] || new BigNumber('0')).plus(state.to.amount)
                 resolve(WalletTxStatus.CONFIRMED);
-            }, 3000)
+            }, 2000)
         });
     }
 
@@ -104,7 +104,7 @@ class StubWalletService implements WalletAdapterInterface {
                     };
                 }
                 resolve(WalletTxStatus.CONFIRMED);
-            }, 3000)
+            }, 2000)
         });
     };
 
@@ -142,7 +142,7 @@ class StubWalletService implements WalletAdapterInterface {
         return new Promise<WalletTxStatus>((resolve) => {
                 setTimeout(() => {
                     resolve(WalletTxStatus.CONFIRMED);
-                }, 3000);
+                }, 2000);
             }
         );
     }
@@ -173,7 +173,7 @@ class StubWalletService implements WalletAdapterInterface {
                     delete liquidity[poolName];
                 }
                 resolve(WalletTxStatus.CONFIRMED);
-            }, 3000)
+            }, 2000)
         });
     };
 
