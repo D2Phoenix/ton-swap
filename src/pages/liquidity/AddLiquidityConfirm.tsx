@@ -1,9 +1,10 @@
 import { useCallback, useMemo } from 'react';
 
 import './AddLiquidityConfirm.scss';
+import LiquidityInfo from './LiquidityInfo';
 import Modal from 'components/Modal';
 import TokenInput from 'components/TokenInput';
-import LiquidityInfo from './LiquidityInfo';
+import Spinner from 'components/Spinner';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import {
     resetLiquidity,
@@ -12,36 +13,41 @@ import {
     selectLiquidityTwo,
 } from 'store/liquidity/liquidity.slice';
 import { resetTransaction, selectWalletTransaction } from 'store/wallet/wallet.slice';
-import { toDecimals } from 'utils/decimals';
-import { DEFAULT_SLIPPAGE, TOKEN_PRECISION } from 'constants/swap';
-import { WalletTxStatus } from 'interfaces/transactionInterfaces';
 import { walletAddLiquidity } from 'store/wallet/wallet.thunks';
-import Spinner from 'components/Spinner';
-import { selectSettings } from '../../store/app/app.slice';
+import { selectSettings } from 'store/app/app.slice';
+import { DEFAULT_SLIPPAGE } from 'constants/swap';
+import { WalletTxStatus } from 'interfaces/transactionInterfaces';
+import TokenUtils from 'utils/tokenUtils';
 
 function AddLiquidityConfirm({onClose}: any) {
     const dispatch = useAppDispatch();
     const one = useAppSelector(selectLiquidityOne);
     const two = useAppSelector(selectLiquidityTwo);
+    const pool = useAppSelector(selectLiquidityPool);
     const settings = useAppSelector(selectSettings);
     const walletTransaction = useAppSelector(selectWalletTransaction);
-    const pool = useAppSelector(selectLiquidityPool);
 
-    const className = useMemo(() => {
+    const modalClassName = useMemo(() => {
         return walletTransaction.status !== WalletTxStatus.INITIAL ? 'add-liquidity-confirm-modal mini' : 'add-liquidity-confirm-modal';
     }, [walletTransaction]);
-    const twoAmount = useMemo(() => {
-        return toDecimals(two.amount!, two.token!.decimals)
-            .precision(TOKEN_PRECISION).toFixed();
-    }, [two]);
-    const oneAmount = useMemo(() => {
-        return toDecimals(one.amount!, one.token!.decimals)
-            .precision(TOKEN_PRECISION).toFixed();
+
+    const oneDisplay = useMemo(() => {
+        return TokenUtils.getDisplay(one);
     }, [one]);
+
+    const twoDisplay = useMemo(() => {
+        return TokenUtils.getDisplay(two);
+    }, [two]);
+
+    const poolDisplay = useMemo(() => {
+        return TokenUtils.getDisplay(pool);
+    }, [pool]);
+
 
     const handleConfirmSupply = useCallback(() => {
         dispatch(walletAddLiquidity());
     }, [dispatch]);
+
     const handleClose = useCallback(() => {
         dispatch(resetTransaction());
         if (walletTransaction.status === WalletTxStatus.CONFIRMED) {
@@ -51,7 +57,7 @@ function AddLiquidityConfirm({onClose}: any) {
     }, [dispatch, walletTransaction, onClose]);
 
     return (
-        <Modal className={className} onClose={handleClose}>
+        <Modal className={modalClassName} onClose={handleClose}>
             {
                 walletTransaction.status === WalletTxStatus.INITIAL && <>
                   <h4>Confirm Supply</h4>
@@ -74,7 +80,7 @@ function AddLiquidityConfirm({onClose}: any) {
                     <LiquidityInfo/>
                     <div className="pool-tokens-info">
                       <span>You will receive </span>
-                      <span className="text-semibold">{pool.amount!.precision(TOKEN_PRECISION).toFixed()}</span>
+                      <span className="text-semibold">{poolDisplay}</span>
                       <span> {one.token!.symbol}/{two.token!.symbol} Pool Tokens</span>
                     </div>
                       {
@@ -95,7 +101,7 @@ function AddLiquidityConfirm({onClose}: any) {
                       <div className="add-liquidity-status">
                         <Spinner />
                         <span>
-                            Supplying {oneAmount} {one.token!.symbol} and {twoAmount} {two.token!.symbol}
+                            Supplying {oneDisplay} {one.token!.symbol} and {twoDisplay} {two.token!.symbol}
                         </span>
                         <span className="text-small">
                           Confirm this transaction in your wallet

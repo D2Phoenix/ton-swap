@@ -86,11 +86,12 @@ function SwapPage() {
         if (!to.token || !from.token) {
             return setSwapButtonText('Select a token');
         }
-        if (from.token && insufficientBalance) {
+        if (insufficientBalance) {
             return setSwapButtonText(`Insufficient ${from.token.symbol} balance`);
         }
         setSwapButtonText('Swap');
     }, [from, to, insufficientBalance]);
+
     // Estimate EXACT_IN transaction
     useEffect((): any => {
         if (txType === TxType.EXACT_IN && !TokenUtils.hasAmount(from)) {
@@ -107,6 +108,7 @@ function SwapPage() {
             }))
         }
     }, [dispatch, from, to.token, txType]);
+
     // Estimate EXACT_OUT transaction
     useEffect((): any => {
         if (txType === TxType.EXACT_OUT && !TokenUtils.hasAmount(to)) {
@@ -123,6 +125,7 @@ function SwapPage() {
             }))
         }
     }, [dispatch, from.token, to, txType]);
+
     // Update balances and transaction estimation every {WALLET_TX_UPDATE_INTERVAL} milliseconds
     useEffect((): any => {
         if (!walletAdapter) {

@@ -16,6 +16,7 @@ export interface WalletAdapterInterface {
     addLiquidity(state: LiquidityState): Promise<WalletTxStatus>;
     getPools(): Promise<WalletPoolInterface[]>;
     getPool(one: TokenInterface, two: TokenInterface): Promise<WalletPoolInterface>;
-    approveBurnPool(pool: InputPoolInterface): Promise<WalletTxStatus>;
+    getPoolToken(one: TokenInterface, two: TokenInterface): Promise<PoolInterface>;
+    approveRemovePool(pool: InputPoolInterface): Promise<WalletTxStatus>;
     removeLiquidity(state: LiquidityState): Promise<WalletTxStatus>;
 }

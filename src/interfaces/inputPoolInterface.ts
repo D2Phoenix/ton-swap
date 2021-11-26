@@ -6,5 +6,5 @@ export interface InputPoolInterface {
     token: PoolInterface;
     amount: BigNumber;
     overallAmount: BigNumber;
-    burnAmount?: BigNumber;
+    removeAmount?: BigNumber;
 }

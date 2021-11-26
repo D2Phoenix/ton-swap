@@ -9,9 +9,10 @@ import {
     selectLiquidityTwo,
     resetLiquidity,
     selectLiquidityPool,
-    setLiquidityOneBurnAmount,
-    setLiquidityTwoBurnAmount,
-    setLiquidityPoolBurnAmount, selectLiquidityBurnApproveTx,
+    setLiquidityOneRemoveAmount,
+    setLiquidityTwoRemoveAmount,
+    setLiquidityPoolRemoveAmount,
+    selectLiquidityRemoveApproveTx,
 } from '../../store/liquidity/liquidity.slice';
 import {
     getWalletBalance,
@@ -22,7 +23,7 @@ import { Link, useParams } from 'react-router-dom';
 import ChevronRightIcon from '../../components/icons/ChevronRightIcon';
 import LiquidityInfo from './LiquidityInfo';
 import ChevronDownIcon from '../../components/icons/ChevronDownIcon';
-import { approveBurn, fetchPoolToken } from '../../store/liquidity/liquidity.thunks';
+import { approveRemove, getLiquidityPool } from '../../store/liquidity/liquidity.thunks';
 import TokenUtils from '../../utils/tokenUtils';
 import { WalletTxStatus } from '../../interfaces/transactionInterfaces';
 import Spinner from '../../components/Spinner';
@@ -39,10 +40,10 @@ export function RemoveLiquidityPage() {
     const one = useAppSelector(selectLiquidityOne);
     const two = useAppSelector(selectLiquidityTwo);
     const pool = useAppSelector(selectLiquidityPool);
-    const burnApproveTx = useAppSelector(selectLiquidityBurnApproveTx);
+    const removeApproveTx = useAppSelector(selectLiquidityRemoveApproveTx);
 
     const isFilled = useMemo(() => {
-        return TokenUtils.isBurnFilled(one) && TokenUtils.isBurnFilled(two) && TokenUtils.hasBurnAmount(pool);
+        return TokenUtils.isRemoveFilled(one) && TokenUtils.isRemoveFilled(two) && TokenUtils.hasRemoveAmount(pool);
     }, [one, two, pool]);
 
     useEffect(() => {
@@ -53,13 +54,13 @@ export function RemoveLiquidityPage() {
 
     useEffect(() => {
         if (params.oneToken && params.twoToken) {
-            dispatch(fetchPoolToken(`${params.oneToken}:${params.twoToken}`));
+            dispatch(getLiquidityPool(`${params.oneToken}:${params.twoToken}`));
         }
     }, [dispatch, params]);
 
     //Handle remove button text
     useEffect(() => {
-        if (!TokenUtils.isBurnFilled(one) || !TokenUtils.isBurnFilled(two) || !TokenUtils.hasBurnAmount(pool)) {
+        if (!TokenUtils.isRemoveFilled(one) || !TokenUtils.isRemoveFilled(two) || !TokenUtils.hasRemoveAmount(pool)) {
             return setRemoveButtonText('Enter an amount');
         }
         setRemoveButtonText('Remove');
@@ -74,25 +75,25 @@ export function RemoveLiquidityPage() {
     }, [dispatch, one.token, walletAdapter]);
 
     const handleOneTokenAmount = useCallback((value) => {
-        dispatch(setLiquidityOneBurnAmount({
+        dispatch(setLiquidityOneRemoveAmount({
             value,
         }));
     }, [dispatch]);
 
     const handleTwoTokenAmount = useCallback((value) => {
-        dispatch(setLiquidityTwoBurnAmount({
+        dispatch(setLiquidityTwoRemoveAmount({
             value,
         }));
     }, [dispatch]);
 
     const handlePoolTokenAmount = useCallback((value) => {
-        dispatch(setLiquidityPoolBurnAmount({
+        dispatch(setLiquidityPoolRemoveAmount({
             value,
         }));
     }, [dispatch]);
 
     const handleApprove = useCallback(() => {
-        dispatch(approveBurn(pool))
+        dispatch(approveRemove(pool))
     }, [dispatch, pool]);
 
     const handleSupply = useCallback(() => {
@@ -112,7 +113,7 @@ export function RemoveLiquidityPage() {
             </div>
             <TokenInput token={pool.token}
                         balance={pool.amount}
-                        value={pool.burnAmount}
+                        value={pool.removeAmount}
                         showMax={true}
                         onChange={handlePoolTokenAmount}
                         selectable={false}
@@ -121,7 +122,7 @@ export function RemoveLiquidityPage() {
                 <ChevronDownIcon/>
             </div>
             <TokenInput token={one.token}
-                        value={one.burnAmount}
+                        value={one.removeAmount}
                         balance={one.amount}
                         showMax={true}
                         onChange={handleOneTokenAmount}
@@ -131,7 +132,7 @@ export function RemoveLiquidityPage() {
                 +
             </div>
             <TokenInput token={two.token}
-                        value={two.burnAmount}
+                        value={two.removeAmount}
                         balance={two.amount}
                         showMax={true}
                         onChange={handleTwoTokenAmount}
@@ -141,19 +142,19 @@ export function RemoveLiquidityPage() {
             <div className="actions-wrapper">
                 {
                     walletAdapter && <button className="btn btn-primary remove__btn"
-                                             disabled={!isFilled || [WalletTxStatus.PENDING, WalletTxStatus.CONFIRMED].indexOf(burnApproveTx.status) > -1}
+                                             disabled={!isFilled || [WalletTxStatus.PENDING, WalletTxStatus.CONFIRMED].indexOf(removeApproveTx.status) > -1}
                                              onClick={handleApprove}>
                         {
-                            burnApproveTx.status === WalletTxStatus.PENDING && <Spinner className="btn"/>
+                            removeApproveTx.status === WalletTxStatus.PENDING && <Spinner className="btn"/>
                         }
                         {
-                            burnApproveTx.status !== WalletTxStatus.PENDING && 'Approve'
+                            removeApproveTx.status !== WalletTxStatus.PENDING && 'Approve'
                         }
                     </button>
                 }
                 {
                     walletAdapter && <button className="btn btn-primary remove__btn"
-                                             disabled={!isFilled || burnApproveTx.status !== WalletTxStatus.CONFIRMED}
+                                             disabled={!isFilled || removeApproveTx.status !== WalletTxStatus.CONFIRMED}
                                              onClick={handleSupply}>
                         {removeButtonText}
                     </button>

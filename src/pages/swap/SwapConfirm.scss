@@ -8,6 +8,9 @@
   &.mini {
     .modal-content {
       height: 226px;
+      .swap-confirm-wrapper {
+        height: 100%;
+      }
     }
   }
 }
@@ -48,6 +51,9 @@
       width: 100%;
       margin-top: auto;
     }
+  }
+  .swap__btn {
+    margin-top: auto;
   }
 }
 

@@ -1,9 +1,12 @@
-import './AddLiquidityPage.scss';
-import TokenInput from '../../components/TokenInput';
-import SettingsIcon from '../../components/icons/SettingsIcon';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { selectWalletAdapter, selectWalletBalances, selectWalletPermissions } from '../../store/wallet/wallet.slice';
+import { Link, useParams } from 'react-router-dom';
+import BigNumber from 'bignumber.js';
+
+import './AddLiquidityPage.scss';
+import TokenInput from 'components/TokenInput';
+import SettingsIcon from 'components/icons/SettingsIcon';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { selectWalletAdapter, selectWalletBalances, selectWalletPermissions } from 'store/wallet/wallet.slice';
 import {
     selectLiquidityOne,
     selectLiquidityTxType,
@@ -14,24 +17,27 @@ import {
     setLiquidityTwoToken,
     switchLiquidityTokens,
     resetLiquidity,
-} from '../../store/liquidity/liquidity.slice';
+} from 'store/liquidity/liquidity.slice';
 import {
     connectWallet,
     getWalletBalance, getWalletBalances,
     getWalletUseTokenPermission,
     setWalletUseTokenPermission
-} from '../../store/wallet/wallet.thunks';
-import { TxType } from '../../interfaces/transactionInterfaces';
-import TokenSelect from '../../components/TokenSelect';
-import { selectTokens } from '../../store/app/app.slice';
-import Settings from '../../components/Settings';
-import BigNumber from 'bignumber.js';
-import { estimateLiquidityTransaction, fetchOneToken, fetchTwoToken } from '../../store/liquidity/liquidity.thunks';
-import { WALLET_TX_UPDATE_INTERVAL } from '../../constants/swap';
-import { Link, useParams } from 'react-router-dom';
-import ChevronRightIcon from '../../components/icons/ChevronRightIcon';
+} from 'store/wallet/wallet.thunks';
+import { selectTokens } from 'store/app/app.slice';
+import {
+    estimateLiquidityTransaction,
+    getLiquidityPoolToken,
+    getLiquidityToken
+} from 'store/liquidity/liquidity.thunks';
+import { TxType } from 'interfaces/transactionInterfaces';
+import TokenSelect from 'components/TokenSelect';
+import Settings from 'components/Settings';
+import { WALLET_TX_UPDATE_INTERVAL } from 'constants/swap';
+import ChevronRightIcon from 'components/icons/ChevronRightIcon';
 import LiquidityInfo from './LiquidityInfo';
 import AddLiquidityConfirm from './AddLiquidityConfirm';
+import TokenUtils from '../../utils/tokenUtils';
 
 export function AddLiquidityPage() {
     const dispatch = useAppDispatch();
@@ -43,34 +49,34 @@ export function AddLiquidityPage() {
     const [supplyButtonText, setSupplyButtonText] = useState('Supply');
     const [showAddLiquidityConfirm, setShowAddLiquidityConfirm] = useState(false);
     const walletAdapter = useAppSelector(selectWalletAdapter);
+    const walletBalances = useAppSelector(selectWalletBalances);
+    const walletPermissions = useAppSelector(selectWalletPermissions);
     const tokens = useAppSelector(selectTokens);
     const one = useAppSelector(selectLiquidityOne);
     const two = useAppSelector(selectLiquidityTwo);
     const txType = useAppSelector(selectLiquidityTxType);
-    const walletBalances = useAppSelector(selectWalletBalances);
-    const walletPermissions = useAppSelector(selectWalletPermissions);
 
     const isFilled = useMemo(() => {
-        return one.amount && two.amount && one.token && two.token
-            && !two.amount.eq('0')
+        return TokenUtils.isFilled(one) && TokenUtils.isFilled(two)
     }, [one, two]);
-    const insufficientFromBalance = useMemo(() => {
-        if (one.token && one.amount) {
-            const balance = walletBalances[one.token.symbol] || new BigNumber('0');
-            return one.amount.gt(balance);
+
+    const insufficientOneBalance = useMemo(() => {
+        if (TokenUtils.isFilled(one)) {
+            return TokenUtils.compareAmount(one, walletBalances[one.token.symbol]) === 1;
         }
         return false;
     }, [one, walletBalances]);
-    const insufficientToBalance = useMemo(() => {
-        if (two.token && two.amount) {
-            const balance = walletBalances[two.token.symbol] || new BigNumber('0');
-            return two.amount.gt(balance);
+
+    const insufficientTwoBalance = useMemo(() => {
+        if (TokenUtils.isFilled(two)) {
+            return TokenUtils.compareAmount(two, walletBalances[two.token.symbol]) === 1;
         }
         return false;
     }, [two, walletBalances]);
+
     const insufficientBalance = useMemo(() => {
-        return insufficientFromBalance || insufficientToBalance;
-    }, [insufficientFromBalance, insufficientToBalance]);
+        return insufficientOneBalance || insufficientTwoBalance;
+    }, [insufficientOneBalance, insufficientTwoBalance]);
 
     useEffect(() => {
         return () => {
@@ -80,39 +86,45 @@ export function AddLiquidityPage() {
 
     useEffect(() => {
         if (params.oneToken) {
-            dispatch(fetchOneToken(params.oneToken));
+            dispatch(getLiquidityToken({address: params.oneToken, position: 'one'}));
         }
         if (params.twoToken) {
-            dispatch(fetchTwoToken(params.twoToken));
+            dispatch(getLiquidityToken({address: params.twoToken, position: 'two'}));
         }
     }, [dispatch, params]);
 
-    //Handle swap button text
     useEffect(() => {
-        if (!one.amount || one.amount.eq('0')) {
+        if (one.token && two.token) {
+            dispatch(getLiquidityPoolToken({one: one.token, two: two.token}));
+        }
+    }, [dispatch, one.token, two.token])
+
+    //Handle supply button text
+    useEffect(() => {
+        if (!TokenUtils.isFilled(one)) {
             return setSupplyButtonText('Enter an amount');
         }
         if (!two.token || !one.token) {
             return setSupplyButtonText('Invalid pair');
         }
-        if (one.token && insufficientFromBalance) {
+        if (insufficientOneBalance) {
             return setSupplyButtonText(`Insufficient ${one.token.symbol} balance`);
         }
-        if (two.token && insufficientToBalance) {
+        if (insufficientTwoBalance) {
             return setSupplyButtonText(`Insufficient ${two.token.symbol} balance`);
         }
         setSupplyButtonText('Supply');
-    }, [one, two, insufficientFromBalance, insufficientToBalance]);
+    }, [one, two, insufficientOneBalance, insufficientTwoBalance]);
 
     // Estimate EXACT_IN transaction
     useEffect((): any => {
-        if (txType === TxType.EXACT_IN && (!one.amount || one.amount.eq('0'))) {
+        if (txType === TxType.EXACT_IN && !TokenUtils.hasAmount(one)) {
             return dispatch(setLiquidityTwoAmount({
                 value: null,
                 txType,
             }));
         }
-        if (txType === TxType.EXACT_IN && two.token && one.token && one.amount && !one.amount.eq('0')) {
+        if (txType === TxType.EXACT_IN && two.token && TokenUtils.hasAmount(one)) {
             return dispatch(estimateLiquidityTransaction({
                 in: one,
                 token: two.token,
@@ -120,15 +132,16 @@ export function AddLiquidityPage() {
             }))
         }
     }, [dispatch, one, two.token, txType]);
+
     // Estimate EXACT_OUT transaction
     useEffect((): any => {
-        if (txType === TxType.EXACT_OUT && (!two.amount || two.amount.eq('0'))) {
+        if (txType === TxType.EXACT_OUT && !TokenUtils.hasAmount(two)) {
             return dispatch(setLiquidityOneAmount({
                 value: null,
                 txType,
             }));
         }
-        if (txType === TxType.EXACT_OUT && one.token && two.token && two.amount && !two.amount.eq('0')) {
+        if (txType === TxType.EXACT_OUT && one.token && TokenUtils.hasAmount(two)) {
             return dispatch(estimateLiquidityTransaction({
                 token: one.token,
                 out: two,
@@ -136,6 +149,7 @@ export function AddLiquidityPage() {
             }))
         }
     }, [dispatch, one.token, two, txType]);
+
     // Update balances and transaction estimation every {WALLET_TX_UPDATE_INTERVAL} milliseconds
     useEffect((): any => {
         if (!walletAdapter) {
@@ -148,14 +162,14 @@ export function AddLiquidityPage() {
             if (two.token) {
                 dispatch(getWalletBalance(two.token));
             }
-            if (txType === TxType.EXACT_IN && one.token && two.token && one.amount && !one.amount.eq('0')) {
+            if (txType === TxType.EXACT_IN && two.token && TokenUtils.isFilled(one)) {
                 dispatch(estimateLiquidityTransaction({
                     in: one,
                     token: two.token,
                     txType,
                 }));
             }
-            if (txType === TxType.EXACT_OUT && one.token && two.token && two.amount && !two.amount.eq('0')) {
+            if (txType === TxType.EXACT_OUT && one.token && TokenUtils.isFilled(two)) {
                 dispatch(estimateLiquidityTransaction({
                     token: one.token,
                     out: two,
@@ -165,6 +179,7 @@ export function AddLiquidityPage() {
         }, WALLET_TX_UPDATE_INTERVAL);
         return () => clearInterval(intervalId);
     },[dispatch, walletAdapter, one, two, txType]);
+
     //Update balance and check token permissions on one token update
     useEffect(() => {
         if (walletAdapter && one.token) {
@@ -172,6 +187,7 @@ export function AddLiquidityPage() {
             dispatch(getWalletUseTokenPermission(one.token));
         }
     }, [dispatch, one.token, walletAdapter]);
+
     //Update balance and check token permissions on two token update
     useEffect(() => {
         if (walletAdapter && two.token) {
@@ -181,17 +197,17 @@ export function AddLiquidityPage() {
     }, [dispatch, two.token, walletAdapter])
 
 
-    const openFromTokenSelect = useCallback(() => {
+    const openOneTokenSelect = useCallback(() => {
         setShowTokenSelect(!showTokenSelect);
-        setTokenSelectType('from');
+        setTokenSelectType('one');
         if (walletAdapter) {
             dispatch(getWalletBalances(tokens));
         }
     }, [showTokenSelect, dispatch, walletAdapter, tokens]);
 
-    const openToTokenSelect = useCallback(() => {
+    const openTwoTokenSelect = useCallback(() => {
         setShowTokenSelect(!showTokenSelect);
-        setTokenSelectType('to');
+        setTokenSelectType('two');
         if (walletAdapter) {
             dispatch(getWalletBalances(tokens));
         }
@@ -206,13 +222,13 @@ export function AddLiquidityPage() {
         if (!token) {
             return;
         }
-        if (two.token && tokenSelectType === 'from' && two.token.symbol === token.symbol) {
+        if (two.token && tokenSelectType === 'one' && two.token.symbol === token.symbol) {
             return handleSwitchTokens();
         }
-        if (one.token && tokenSelectType === 'to' && one.token.symbol === token.symbol) {
+        if (one.token && tokenSelectType === 'two' && one.token.symbol === token.symbol) {
             return handleSwitchTokens();
         }
-        if (tokenSelectType === 'from') {
+        if (tokenSelectType === 'one') {
             return dispatch(setLiquidityOneToken(token));
         }
         dispatch(setLiquidityTwoToken(token));
@@ -263,7 +279,7 @@ export function AddLiquidityPage() {
                         balance={walletBalances[one.token?.symbol || '']}
                         value={one.amount}
                         showMax={true}
-                        onSelect={openFromTokenSelect}
+                        onSelect={openOneTokenSelect}
                         onChange={handleFromTokenAmount}
                         selectable={true}
                         editable={true}/>
@@ -274,7 +290,7 @@ export function AddLiquidityPage() {
                         balance={walletBalances[two.token?.symbol || '']}
                         value={two.amount}
                         showMax={true}
-                        onSelect={openToTokenSelect}
+                        onSelect={openTwoTokenSelect}
                         onChange={handleToTokenAmount}
                         selectable={true}
                         editable={true}/>
@@ -282,14 +298,14 @@ export function AddLiquidityPage() {
                 isFilled && <LiquidityInfo />
             }
             {
-                walletAdapter && isFilled && !walletPermissions[one.token!.symbol] && !insufficientFromBalance &&
+                walletAdapter && isFilled && !walletPermissions[one.token!.symbol] && !insufficientOneBalance &&
                 <button className="btn btn-primary supply__btn"
                         onClick={handleAllowUseOneToken}>
                   Allow the TONSwap Protocol to use your {one.token!.symbol}
                 </button>
             }
             {
-                walletAdapter && isFilled && !walletPermissions[two.token!.symbol] && !insufficientToBalance &&
+                walletAdapter && isFilled && !walletPermissions[two.token!.symbol] && !insufficientTwoBalance &&
                 <button className="btn btn-primary supply__btn"
                         onClick={handleAllowUseTwoToken}>
                   Allow the TONSwap Protocol to use your {two.token!.symbol}

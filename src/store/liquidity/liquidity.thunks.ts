@@ -6,8 +6,8 @@ import { LiquidityTxInRequestInterface, LiquidityTxOutRequestInterface } from '.
 import { RootState } from '../store';
 import TokenInterface from '../../interfaces/tokenInterface';
 import { getTokens } from '../../api/tokens';
-import PoolInterface from '../../interfaces/poolInterface';
 import { InputPoolInterface } from '../../interfaces/inputPoolInterface';
+import { InputTokenInterface } from '../../interfaces/inputTokenInterface';
 
 const swapService = new SmartContractsService();
 
@@ -25,25 +25,28 @@ export const estimateLiquidityTransaction = createAsyncThunk(
     }
 );
 
-export const fetchOneToken = createAsyncThunk(
-    'liquidity/tokenOne',
-    async (tokenSymbol:string, thunkAPI) => {
+export const getLiquidityToken = createAsyncThunk(
+    'liquidity/token',
+    async ({address, position}: { address: string, position: string }, thunkAPI) => {
         const state = thunkAPI.getState() as RootState;
         const tokens: TokenInterface[] = state.app.tokens.length ? state.app.tokens : (await getTokens()).tokens;
-        return tokens.find((token) => token.symbol === tokenSymbol) as TokenInterface;
+        return {
+            token: tokens.find((token) => token.address === address) as TokenInterface,
+            position
+        }
     },
 )
 
-export const fetchTwoToken = createAsyncThunk(
-    'liquidity/tokenTwo',
-    async (tokenSymbol:string, thunkAPI) => {
+export const getLiquidityPoolToken = createAsyncThunk(
+    'liquidity/pool/token',
+    async ({one, two}: {one: TokenInterface, two: TokenInterface}, thunkAPI) => {
         const state = thunkAPI.getState() as RootState;
-        const tokens: TokenInterface[] = state.app.tokens.length ? state.app.tokens : (await getTokens()).tokens;
-        return tokens.find((token) => token.symbol === tokenSymbol) as TokenInterface;
+        const walletAdapterService = state.wallet.adapter;
+        return walletAdapterService!.getPoolToken(one, two);
     },
 )
 
-export const fetchPoolToken = createAsyncThunk(
+export const getLiquidityPool = createAsyncThunk(
     'liquidity/pool',
     async (pool: string, thunkAPI) => {
         const state = thunkAPI.getState() as RootState;
@@ -55,11 +58,11 @@ export const fetchPoolToken = createAsyncThunk(
     },
 )
 
-export const approveBurn = createAsyncThunk(
-    'liquidity/burn/approve',
+export const approveRemove = createAsyncThunk(
+    'liquidity/remove/approve',
     async (pool: InputPoolInterface, thunkAPI) => {
         const state = thunkAPI.getState() as RootState;
         const walletAdapterService = state.wallet.adapter;
-        return walletAdapterService!.approveBurnPool(pool);
+        return walletAdapterService!.approveRemovePool(pool);
     },
 )

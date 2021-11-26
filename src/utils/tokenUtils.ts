@@ -6,25 +6,25 @@ import { toDecimals } from './decimals';
 import { InputPoolInterface } from '../interfaces/inputPoolInterface';
 
 class TokenUtils {
-    static isFilled(inputToken: InputTokenInterface | InputPoolInterface) {
-        return inputToken.token && TokenUtils.hasAmount(inputToken);
+    static isFilled(input: InputTokenInterface | InputPoolInterface) {
+        return input.token && TokenUtils.hasAmount(input);
     }
-    static isBurnFilled(inputToken: InputTokenInterface | InputPoolInterface) {
-        return inputToken.token && TokenUtils.hasBurnAmount(inputToken);
+    static isRemoveFilled(input: InputTokenInterface | InputPoolInterface) {
+        return input.token && TokenUtils.hasRemoveAmount(input);
     }
-    static hasAmount(inputToken: InputTokenInterface | InputPoolInterface) {
-        return inputToken.amount && !inputToken.amount.eq('0')
+    static hasAmount(input: InputTokenInterface | InputPoolInterface) {
+        return input.amount && !input.amount.eq('0')
     }
-    static hasBurnAmount(inputToken: InputTokenInterface | InputPoolInterface) {
-        return inputToken.burnAmount && !inputToken.burnAmount.eq('0')
+    static hasRemoveAmount(input: InputTokenInterface | InputPoolInterface) {
+        return input.removeAmount && !input.removeAmount.eq('0')
     }
-    static compareAmount(inputToken: InputTokenInterface, value: BigNumber) {
+    static compareAmount(input: InputTokenInterface, value: BigNumber) {
         value = value || new BigNumber('0');
-        return inputToken.amount.comparedTo(value);
+        return input.amount.comparedTo(value);
     }
-    static compareBurnAmount(inputToken: InputTokenInterface | InputPoolInterface, value: BigNumber) {
+    static compareRemoveAmount(input: InputTokenInterface | InputPoolInterface, value: BigNumber) {
         value = value || new BigNumber('0');
-        return inputToken.burnAmount!.comparedTo(value);
+        return input.removeAmount!.comparedTo(value);
     }
     static compareToken(inputToken: InputTokenInterface, token: TokenInterface) {
         if (!inputToken.token) {
@@ -32,23 +32,27 @@ class TokenUtils {
         }
         return inputToken.token.address === token.address;
     }
-    static getDisplay(token: InputTokenInterface) {
-        return toDecimals(token.amount!, token.token!.decimals)
+    static getDisplay(input: InputTokenInterface | InputPoolInterface) {
+        return toDecimals(input.amount!, input.token!.decimals)
             .precision(TOKEN_PRECISION).toFixed();
     }
-    static getDisplayRate(one: InputTokenInterface, two: InputTokenInterface) {
-        return one.amount.div(two.amount.shiftedBy(one.token.decimals - two.token.decimals)).precision(TOKEN_PRECISION).toFixed();
-    }
-    static getMinimumDisplayWithSlippage(token: InputTokenInterface, slippage: string) {
-        return toDecimals(token.amount, token.token.decimals).multipliedBy(new BigNumber('100').minus(new BigNumber(slippage)).div('100'))
+    static getRemoveDisplay(input: InputTokenInterface | InputPoolInterface) {
+        return toDecimals(input.removeAmount!, input.token!.decimals)
             .precision(TOKEN_PRECISION).toFixed();
     }
-    static getMaximumDisplayWithSlippage(token: InputTokenInterface, slippage: string) {
-        return toDecimals(token.amount, token.token.decimals).multipliedBy(new BigNumber('100').plus(new BigNumber(slippage)).div('100'))
+    static getDisplayRate(inputOne: InputTokenInterface, inputTwo: InputTokenInterface) {
+        return inputOne.amount.div(inputTwo.amount.shiftedBy(inputOne.token.decimals - inputTwo.token.decimals)).precision(TOKEN_PRECISION).toFixed();
+    }
+    static getMinimumDisplayWithSlippage(input: InputTokenInterface, slippage: string) {
+        return toDecimals(input.amount, input.token.decimals).multipliedBy(new BigNumber('100').minus(new BigNumber(slippage)).div('100'))
             .precision(TOKEN_PRECISION).toFixed();
     }
-    static getFeeDisplay(token: InputTokenInterface, fee: BigNumber) {
-        return toDecimals(token.amount!.multipliedBy(fee), token.token.decimals).precision(FEE_PRECISION).toFixed();
+    static getMaximumDisplayWithSlippage(input: InputTokenInterface, slippage: string) {
+        return toDecimals(input.amount, input.token.decimals).multipliedBy(new BigNumber('100').plus(new BigNumber(slippage)).div('100'))
+            .precision(TOKEN_PRECISION).toFixed();
+    }
+    static getFeeDisplay(input: InputTokenInterface, fee: BigNumber) {
+        return toDecimals(input.amount!.multipliedBy(fee), input.token.decimals).precision(FEE_PRECISION).toFixed();
     }
 }
 

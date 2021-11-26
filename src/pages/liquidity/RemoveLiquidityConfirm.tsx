@@ -12,34 +12,36 @@ import {
     selectLiquidityTwo,
 } from 'store/liquidity/liquidity.slice';
 import { resetTransaction, selectWalletTransaction } from 'store/wallet/wallet.slice';
-import { toDecimals } from 'utils/decimals';
 import { DEFAULT_SLIPPAGE, TOKEN_PRECISION } from 'constants/swap';
 import { WalletTxStatus } from 'interfaces/transactionInterfaces';
 import {  walletRemoveLiquidity } from 'store/wallet/wallet.thunks';
 import Spinner from 'components/Spinner';
-import { selectSettings } from '../../store/app/app.slice';
+import { selectSettings } from 'store/app/app.slice';
+import TokenUtils from 'utils/tokenUtils';
 
 function RemoveLiquidityConfirm({onClose}: any) {
     const dispatch = useAppDispatch();
     const one = useAppSelector(selectLiquidityOne);
     const two = useAppSelector(selectLiquidityTwo);
+    const pool = useAppSelector(selectLiquidityPool);
     const settings = useAppSelector(selectSettings);
     const walletTransaction = useAppSelector(selectWalletTransaction);
-    const pool = useAppSelector(selectLiquidityPool);
 
     const className = useMemo(() => {
         return walletTransaction.status !== WalletTxStatus.INITIAL ? 'remove-liquidity-confirm-modal mini' : 'remove-liquidity-confirm-modal';
     }, [walletTransaction]);
 
-    const twoAmount = useMemo(() => {
-        return toDecimals(two.amount!, two.token!.decimals)
-            .precision(TOKEN_PRECISION).toFixed();
+    const oneRemoveDisplay = useMemo(() => {
+        return TokenUtils.getRemoveDisplay(one);
+    }, [one]);
+
+    const twoRemoveDisplay = useMemo(() => {
+        return TokenUtils.getRemoveDisplay(two);
     }, [two]);
 
-    const oneAmount = useMemo(() => {
-        return toDecimals(one.amount!, one.token!.decimals)
-            .precision(TOKEN_PRECISION).toFixed();
-    }, [one]);
+    const poolRemoveDisplay = useMemo(() => {
+        return TokenUtils.getRemoveDisplay(pool)
+    }, [pool]);
 
     const handleConfirmRemove = useCallback(() => {
         dispatch(walletRemoveLiquidity());
@@ -61,7 +63,7 @@ function RemoveLiquidityConfirm({onClose}: any) {
                   <div className="remove-liquidity-confirm-wrapper">
                     <span>You will receive</span>
                     <TokenInput token={one.token}
-                                value={one.amount}
+                                value={one.removeAmount}
                                 showMax={true}
                                 selectable={false}
                                 editable={false}
@@ -70,7 +72,7 @@ function RemoveLiquidityConfirm({onClose}: any) {
                       +
                     </div>
                     <TokenInput token={two.token}
-                                value={two.amount}
+                                value={two.removeAmount}
                                 showMax={false}
                                 selectable={false}
                                 editable={false}
@@ -78,8 +80,8 @@ function RemoveLiquidityConfirm({onClose}: any) {
                     <LiquidityInfo/>
                     <div className="pool-tokens-info">
                       <span>You will burn </span>
-                      <span className="text-semibold">{pool.burnAmount!.precision(TOKEN_PRECISION).toFixed()}</span>
-                      <span> {one.token!.symbol}/{two.token!.symbol} Pool Tokens</span>
+                      <span className="text-semibold">{poolRemoveDisplay}</span>
+                      <span> {one.token.symbol}/{two.token.symbol} Pool Tokens</span>
                     </div>
                       {
                           <span className="help-text text-small">
@@ -99,7 +101,7 @@ function RemoveLiquidityConfirm({onClose}: any) {
                       <div className="remove-liquidity-status">
                         <Spinner />
                         <span>
-                            Removing {oneAmount} {one.token!.symbol} and {twoAmount} {two.token!.symbol}
+                            Removing {oneRemoveDisplay} {one.token.symbol} and {twoRemoveDisplay} {two.token.symbol}
                         </span>
                         <span className="text-small">
                           Confirm this transaction in your wallet

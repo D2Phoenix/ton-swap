@@ -1,29 +1,30 @@
-import './LiquidityInfo.scss';
-import { useAppSelector } from '../../store/hooks';
-import { selectLiquidityPool, selectLiquidityOne, selectLiquidityTwo } from '../../store/liquidity/liquidity.slice';
 import { useMemo } from 'react';
-import TokenUtils from '../../utils/tokenUtils';
+
+import './LiquidityInfo.scss';
+import { useAppSelector } from 'store/hooks';
+import { selectLiquidityPool, selectLiquidityOne, selectLiquidityTwo } from 'store/liquidity/liquidity.slice';
+import TokenUtils from 'utils/tokenUtils';
 
 function LiquidityInfo() {
     const one = useAppSelector(selectLiquidityOne);
     const two = useAppSelector(selectLiquidityTwo);
     const pool = useAppSelector(selectLiquidityPool);
 
-    const onePerTwo = useMemo(() => {
+    const onePerTwoDisplay = useMemo(() => {
         if (!TokenUtils.isFilled(one) || !TokenUtils.isFilled(two)) {
             return;
         }
         return TokenUtils.getDisplayRate(one, two);
     }, [one, two]);
 
-    const twoPerOne = useMemo(() => {
+    const twoPerOneDisplay = useMemo(() => {
         if (!TokenUtils.isFilled(one) || !TokenUtils.isFilled(two)) {
             return;
         }
         return TokenUtils.getDisplayRate(two, one);
     }, [one, two]);
 
-    const share = useMemo(() => {
+    const shareDisplay = useMemo(() => {
         if (!pool.amount) {
             return '0%';
         }
@@ -40,7 +41,7 @@ function LiquidityInfo() {
             <div className="liquidity-price-wrapper">
                 <div className="liquidity-price">
                     <div className="text-semibold">
-                        {twoPerOne}
+                        {twoPerOneDisplay}
                     </div>
                     <div className="text-small">
                         {two.token?.symbol} per {one.token?.symbol}
@@ -48,7 +49,7 @@ function LiquidityInfo() {
                 </div>
                 <div className="liquidity-price">
                     <div className="text-semibold">
-                        {onePerTwo}
+                        {onePerTwoDisplay}
                     </div>
                     <div className="text-small">
                         {one.token?.symbol} per {two.token?.symbol}
@@ -56,7 +57,7 @@ function LiquidityInfo() {
                 </div>
                 <div className="liquidity-price">
                     <div className="text-semibold">
-                        {share}
+                        {shareDisplay}
                     </div>
                     <div className="text-small">
                         Share of Pool

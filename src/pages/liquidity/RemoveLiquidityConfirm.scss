@@ -8,6 +8,9 @@
   &.mini {
     .modal-content {
       height: 226px;
+      .remove-liquidity-confirm-wrapper {
+        height: 100%;
+      }
     }
   }
 }

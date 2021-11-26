@@ -117,7 +117,28 @@ class StubWalletService implements WalletAdapterInterface {
         });
     }
 
-    approveBurnPool(pool: InputPoolInterface): Promise<WalletTxStatus> {
+    getPoolToken(one: TokenInterface, two: TokenInterface): Promise<PoolInterface> {
+        const poolName = liquidity[`${two.symbol}:${one.symbol}`] ?
+            `${two.symbol}:${one.symbol}` :
+            `${one.symbol}:${two.symbol}`;
+        let result: PoolInterface;
+        if (liquidity[poolName]) {
+            result = liquidity[poolName].pool.token;
+        } else {
+            result = {
+                symbol: poolName,
+                name: poolName,
+                logoOneURI: one.logoURI,
+                logoTwoURI: two.logoURI,
+                decimals: 0,
+                chainId: 1,
+                address: poolName,
+            }
+        }
+        return Promise.resolve(result);
+    }
+
+    approveRemovePool(pool: InputPoolInterface): Promise<WalletTxStatus> {
         return new Promise<WalletTxStatus>((resolve) => {
                 setTimeout(() => {
                     resolve(WalletTxStatus.CONFIRMED);
@@ -130,21 +151,21 @@ class StubWalletService implements WalletAdapterInterface {
         // TODO: Implement real api for wallet operation
         return new Promise<WalletTxStatus>((resolve) => {
             setTimeout(() => {
-                balances[state.one.token.symbol] = balances[state.one.token.symbol].plus(state.one.amount);
-                balances[state.two.token.symbol] = (balances[state.two.token.symbol] || new BigNumber('0')).plus(state.two.amount);
+                balances[state.one.token.symbol] = balances[state.one.token.symbol].plus(state.one.removeAmount!);
+                balances[state.two.token.symbol] = (balances[state.two.token.symbol] || new BigNumber('0')).plus(state.two.removeAmount!);
                 const poolName = `${state.one.token.symbol}:${state.two.token.symbol}`
                 liquidity[poolName] = {
                     one: {
                         token: liquidity[poolName].one.token,
-                        amount: liquidity[poolName].one.amount.minus(state.one.amount),
+                        amount: liquidity[poolName].one.amount.minus(state.one.removeAmount!),
                     },
                     two: {
                         token: liquidity[poolName].two.token,
-                        amount: liquidity[poolName].two.amount.minus(state.two.amount),
+                        amount: liquidity[poolName].two.amount.minus(state.two.removeAmount!),
                     },
                     pool: {
                         token: liquidity[poolName].pool.token,
-                        amount: liquidity[poolName].pool.amount.minus(state.pool.amount),
+                        amount: liquidity[poolName].pool.amount.minus(state.pool.removeAmount!),
                         overallAmount: liquidity[poolName].pool.overallAmount,
                     },
                 };

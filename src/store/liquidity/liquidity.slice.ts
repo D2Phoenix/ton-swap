@@ -3,11 +3,10 @@ import BigNumber from 'bignumber.js';
 
 import type { RootState } from 'store/store'
 import {
-    approveBurn,
+    approveRemove,
     estimateLiquidityTransaction,
-    fetchOneToken,
-    fetchPoolToken,
-    fetchTwoToken
+    getLiquidityPool, getLiquidityPoolToken,
+    getLiquidityToken,
 } from './liquidity.thunks';
 import { shiftDecimals } from 'utils/decimals';
 import { TxType, WalletTxStatus } from 'interfaces/transactionInterfaces';
@@ -20,7 +19,7 @@ export interface LiquidityState {
     two: InputTokenInterface,
     txType: TxType;
     pool: InputPoolInterface;
-    burnApproveTx: {
+    removeApproveTx: {
         status: WalletTxStatus,
     }
 }
@@ -46,9 +45,9 @@ const initialState: LiquidityState = {
         token: null as any,
         overallAmount: null as any,
         amount: null as any,
-        burnAmount: null as any,
+        removeAmount: null as any,
     },
-    burnApproveTx: {
+    removeApproveTx: {
         status: WalletTxStatus.INITIAL,
     }
 }
@@ -83,14 +82,14 @@ export const liquiditySlice = createSlice({
             state.two.amount = action.payload.value;
             state.txType = action.payload.txType;
         },
-        setLiquidityOneBurnAmount: (state, action: PayloadAction<any>) => {
-            handleBurnAmount(state, state.one, [state.two, state.pool], action.payload.value);
+        setLiquidityOneRemoveAmount: (state, action: PayloadAction<any>) => {
+            handleRemoveAmount(state, state.one, [state.two, state.pool], action.payload.value);
         },
-        setLiquidityTwoBurnAmount: (state, action: PayloadAction<any>) => {
-            handleBurnAmount(state, state.two, [state.one, state.pool], action.payload.value);
+        setLiquidityTwoRemoveAmount: (state, action: PayloadAction<any>) => {
+            handleRemoveAmount(state, state.two, [state.one, state.pool], action.payload.value);
         },
-        setLiquidityPoolBurnAmount: (state, action: PayloadAction<any>) => {
-            handleBurnAmount(state, state.pool, [state.one, state.two], action.payload.value);
+        setLiquidityPoolRemoveAmount: (state, action: PayloadAction<any>) => {
+            handleRemoveAmount(state, state.pool, [state.one, state.two], action.payload.value);
         },
         switchLiquidityTokens: (state, action: PayloadAction<void>) => {
             const two = state.two;
@@ -110,51 +109,55 @@ export const liquiditySlice = createSlice({
             state.pool.overallAmount = action.payload.poolTokens;
             state.pool.amount = action.payload.poolAmount;
         });
-        builder.addCase(fetchOneToken.fulfilled, (state, action) => {
-            state.one.token = action.payload;
+        builder.addCase(getLiquidityToken.fulfilled, (state, action) => {
+            if (action.payload.position === 'one') {
+                state.one.token = action.payload.token;
+                return
+            }
+            state.two.token = action.payload.token;
         });
-        builder.addCase(fetchTwoToken.fulfilled, (state, action) => {
-            state.two.token = action.payload;
+        builder.addCase(getLiquidityPoolToken.fulfilled, (state, action) => {
+            state.pool.token = action.payload;
         });
-        builder.addCase(fetchPoolToken.fulfilled, (state, action) => {
+        builder.addCase(getLiquidityPool.fulfilled, (state, action) => {
             state.one = action.payload.one;
             state.two = action.payload.two;
             state.pool = action.payload.pool;
         });
-        builder.addCase(approveBurn.pending, (state, action) => {
-            state.burnApproveTx.status = WalletTxStatus.PENDING;
+        builder.addCase(approveRemove.pending, (state, action) => {
+            state.removeApproveTx.status = WalletTxStatus.PENDING;
         });
-        builder.addCase(approveBurn.fulfilled, (state, action) => {
-            state.burnApproveTx.status = action.payload;
+        builder.addCase(approveRemove.fulfilled, (state, action) => {
+            state.removeApproveTx.status = action.payload;
         });
     }
 });
 
-function handleBurnAmount(state: Draft<LiquidityState>, token: Draft<InputTokenInterface | InputPoolInterface>, deps: Draft<InputTokenInterface | InputPoolInterface>[], value: BigNumber | null) {
+function handleRemoveAmount(state: Draft<LiquidityState>, token: Draft<InputTokenInterface | InputPoolInterface>, deps: Draft<InputTokenInterface | InputPoolInterface>[], value: BigNumber | null) {
     if (!value) {
-        token.burnAmount = null as any;
+        token.removeAmount = null as any;
         deps.forEach((item) => {
-            item.burnAmount = null as any;
+            item.removeAmount = null as any;
         })
         return;
     }
     if (value.eq('0')) {
-        token.burnAmount = value;
+        token.removeAmount = value;
         deps.forEach((item) => {
-            item.burnAmount = null as any;
+            item.removeAmount = null as any;
         })
         return;
     }
     const percent = token.amount.div(value);
-    token.burnAmount = value;
+    token.removeAmount = value;
     if (percent.lt('1')) {
         deps.forEach((item) => {
-            item.burnAmount = null as any;
+            item.removeAmount = null as any;
         })
         return;
     }
     deps.forEach((item) => {
-        item.burnAmount = item.amount.div(percent);
+        item.removeAmount = item.amount.div(percent);
     });
 }
 
@@ -164,9 +167,9 @@ export const {
     switchLiquidityTokens,
     setLiquidityOneAmount,
     setLiquidityTwoAmount,
-    setLiquidityOneBurnAmount,
-    setLiquidityTwoBurnAmount,
-    setLiquidityPoolBurnAmount,
+    setLiquidityOneRemoveAmount,
+    setLiquidityTwoRemoveAmount,
+    setLiquidityPoolRemoveAmount,
     resetLiquidity,
 } = liquiditySlice.actions
 
@@ -174,6 +177,6 @@ export const selectLiquidityOne = (state: RootState) => state.liquidity.one;
 export const selectLiquidityTwo = (state: RootState) => state.liquidity.two;
 export const selectLiquidityTxType = (state: RootState) => state.liquidity.txType;
 export const selectLiquidityPool = (state: RootState) => state.liquidity.pool;
-export const selectLiquidityBurnApproveTx = (state: RootState) => state.liquidity.burnApproveTx;
+export const selectLiquidityRemoveApproveTx = (state: RootState) => state.liquidity.removeApproveTx;
 
 export default liquiditySlice.reducer;
