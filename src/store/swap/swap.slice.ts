@@ -29,8 +29,12 @@ const initialState: SwapState = {
             name: "Ton",
             symbol: "TON",
         },
+        amount: null as any,
     },
-    to: {},
+    to: {
+        token: null as any,
+        amount: null as any,
+    },
     txType: TxType.EXACT_IN,
     details: {
         fee: new BigNumber('0'),

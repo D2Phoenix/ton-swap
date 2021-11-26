@@ -7,11 +7,10 @@ import {
     selectSwapTo
 } from 'store/swap/swap.slice';
 import { TxType } from 'interfaces/transactionInterfaces';
-import { DEFAULT_SLIPPAGE, FEE_PRECISION, TOKEN_PRECISION } from 'constants/swap';
+import { DEFAULT_SLIPPAGE } from 'constants/swap';
 import { useMemo } from 'react';
-import { toDecimals } from 'utils/decimals';
-import BigNumber from 'bignumber.js';
 import { selectSettings } from 'store/app/app.slice';
+import TokenUtils from 'utils/tokenUtils';
 
 function SwapInfo() {
     const from = useAppSelector(selectSwapFrom);
@@ -21,20 +20,15 @@ function SwapInfo() {
     const details = useAppSelector(selectSwapDetails);
 
     const liquidityFee = useMemo(() => {
-        const fee = from.amount!.multipliedBy(details!.fee);
-        return toDecimals(fee, from.token!.decimals).precision(FEE_PRECISION).toFixed();
+        return TokenUtils.getFeeDisplay(from, details.fee);
     }, [from, details]);
 
     const minimumReceived = useMemo(() => {
-        return toDecimals(to.amount!, to.token!.decimals)
-            .multipliedBy(new BigNumber('100').minus(new BigNumber(settings.slippage || DEFAULT_SLIPPAGE)).div('100'))
-            .precision(TOKEN_PRECISION).toFixed();
+        return TokenUtils.getMinimumDisplayWithSlippage(to, settings.slippage || DEFAULT_SLIPPAGE);
     }, [to, settings]);
 
     const maximumSent = useMemo(() => {
-        return toDecimals(from.amount!, from.token!.decimals)
-            .multipliedBy(new BigNumber('100').plus(new BigNumber(settings.slippage || DEFAULT_SLIPPAGE)).div('100'))
-            .precision(TOKEN_PRECISION).toFixed();
+        return TokenUtils.getMaximumDisplayWithSlippage(from, settings.slippage || DEFAULT_SLIPPAGE);
     }, [from, settings]);
 
     return (
@@ -42,7 +36,7 @@ function SwapInfo() {
             <span>Transaction Details</span>
             <div>
                 <span className="text-small">Liquidity Provider Fee</span>
-                <span className="text-small text-semibold">{liquidityFee} {from.token!.symbol}</span>
+                <span className="text-small text-semibold">{liquidityFee} {from.token.symbol}</span>
             </div>
             <div>
                 <span className="text-small">Price Impact</span>
@@ -55,13 +49,13 @@ function SwapInfo() {
             {
                 type === TxType.EXACT_IN && to && <div>
                   <span className="text-small">Minimum received</span>
-                  <span className="text-small text-semibold">{minimumReceived} {to.token!.symbol}</span>
+                  <span className="text-small text-semibold">{minimumReceived} {to.token.symbol}</span>
                 </div>
             }
             {
                 type === TxType.EXACT_OUT && from && <div>
                   <span className="text-small">Maximum sent</span>
-                  <span className="text-small text-semibold">{maximumSent} {from.token!.symbol}</span>
+                  <span className="text-small text-semibold">{maximumSent} {from.token.symbol}</span>
                 </div>
             }
         </div>

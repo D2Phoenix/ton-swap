@@ -1,8 +1,15 @@
 import { TxType } from './transactionInterfaces';
 import { InputTokenInterface } from './inputTokenInterface';
+import TokenInterface from './tokenInterface';
 
-export interface LiquidityTxRequestInterface {
-    one?: InputTokenInterface;
-    two?: InputTokenInterface;
-    txType: TxType;
+export interface LiquidityTxInRequestInterface {
+    in: InputTokenInterface;
+    token: TokenInterface;
+    txType: TxType.EXACT_IN;
+}
+
+export interface LiquidityTxOutRequestInterface {
+    out: InputTokenInterface;
+    token: TokenInterface;
+    txType: TxType.EXACT_OUT;
 }

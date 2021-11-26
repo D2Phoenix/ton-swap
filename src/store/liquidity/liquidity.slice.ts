@@ -26,8 +26,12 @@ const initialState: LiquidityState = {
             name: "Ton",
             symbol: "TON",
         },
+        amount: null as any
     },
-    two: {},
+    two: {
+        token: null as any,
+        amount: null as any
+    },
     txType: TxType.EXACT_IN,
     pool: {
         overallAmount: new BigNumber('0'),

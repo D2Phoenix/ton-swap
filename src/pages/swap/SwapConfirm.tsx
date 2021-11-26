@@ -1,5 +1,4 @@
 import { useCallback, useMemo } from 'react';
-import BigNumber from 'bignumber.js';
 
 import './SwapConfirm.scss';
 import Modal from 'components/Modal';
@@ -13,19 +12,18 @@ import {
     selectSwapTxType,
     selectSwapTo,
 } from 'store/swap/swap.slice';
-import { resetTransaction, selectWalletBalances, selectWalletTransaction } from 'store/wallet/wallet.slice';
-import { toDecimals } from 'utils/decimals';
-import { DEFAULT_SLIPPAGE, TOKEN_PRECISION } from 'constants/swap';
+import { resetTransaction, selectWalletTransaction } from 'store/wallet/wallet.slice';
+import { DEFAULT_SLIPPAGE } from 'constants/swap';
 import { WalletTxStatus, TxType } from 'interfaces/transactionInterfaces';
 import { walletSwap } from 'store/wallet/wallet.thunks';
 import Spinner from 'components/Spinner';
-import { selectSettings } from '../../store/app/app.slice';
+import { selectSettings } from 'store/app/app.slice';
+import TokenUtils from 'utils/tokenUtils';
 
 function SwapConfirm({onClose}: any) {
     const dispatch = useAppDispatch();
     const from = useAppSelector(selectSwapFrom);
     const to = useAppSelector(selectSwapTo);
-    const walletBalances = useAppSelector(selectWalletBalances);
     const txType = useAppSelector(selectSwapTxType);
     const settings = useAppSelector(selectSettings);
     const walletTransaction = useAppSelector(selectWalletTransaction);
@@ -33,34 +31,34 @@ function SwapConfirm({onClose}: any) {
     const className = useMemo(() => {
         return walletTransaction.status !== WalletTxStatus.INITIAL ? 'swap-confirm-modal mini' : 'swap-confirm-modal';
     }, [walletTransaction]);
-    const calcFrom = useMemo(() => {
-        if (!from.amount || !to.amount || !to.token || !from.token) {
+
+    const tokenSwapRate = useMemo(() => {
+        if (!TokenUtils.isFilled(from) || !TokenUtils.isFilled(to)) {
             return;
         }
-        return from.amount.div(to.amount.shiftedBy(from.token.decimals - to.token.decimals)).precision(TOKEN_PRECISION).toFixed();
+        return TokenUtils.getDisplayRate(from, to);
     }, [from, to]);
+
     const minimumReceived = useMemo(() => {
-        return toDecimals(to.amount!, to.token!.decimals)
-            .multipliedBy(new BigNumber('100').minus(new BigNumber(settings.slippage || DEFAULT_SLIPPAGE)).div('100'))
-            .precision(TOKEN_PRECISION).toFixed();
+        return TokenUtils.getMinimumDisplayWithSlippage(to, settings.slippage || DEFAULT_SLIPPAGE);
     }, [to, settings]);
+
     const maximumSent = useMemo(() => {
-        return toDecimals(from.amount!, from.token!.decimals)
-            .multipliedBy(new BigNumber('100').plus(new BigNumber(settings.slippage || DEFAULT_SLIPPAGE)).div('100'))
-            .precision(TOKEN_PRECISION).toFixed();
+        return TokenUtils.getMaximumDisplayWithSlippage(from, settings.slippage || DEFAULT_SLIPPAGE);
     }, [from, settings]);
+
     const toAmount = useMemo(() => {
-        return toDecimals(to.amount!, to.token!.decimals)
-            .precision(TOKEN_PRECISION).toFixed();
+        return TokenUtils.getDisplay(to);
     }, [to]);
+
     const fromAmount = useMemo(() => {
-        return toDecimals(from.amount!, from.token!.decimals)
-            .precision(TOKEN_PRECISION).toFixed();
+        return TokenUtils.getDisplay(from);
     }, [from]);
 
     const handleConfirmSwap = useCallback(() => {
         dispatch(walletSwap());
     }, [dispatch]);
+
     const handleClose = useCallback(() => {
         dispatch(resetTransaction());
         if (walletTransaction.status === WalletTxStatus.CONFIRMED) {
@@ -93,20 +91,20 @@ function SwapConfirm({onClose}: any) {
                     <div className="swap-info">
                       <span className="text-small">Price</span>
                       <span className="text-small">
-                1 {to.token!.symbol} = {calcFrom} {from.token!.symbol}
+                1 {to.token.symbol} = {tokenSwapRate} {from.token.symbol}
                 </span>
                     </div>
                     <SwapInfo/>
                       {
                           txType === TxType.EXACT_IN && <span className="help-text text-small">
                 Output is estimated. You will receive at least <span
-                            className="text-semibold text-small">{minimumReceived} {to.token!.symbol}</span>  or the transaction will revert.
+                            className="text-semibold text-small">{minimumReceived} {to.token.symbol}</span>  or the transaction will revert.
                 </span>
                       }
                       {
                           txType === TxType.EXACT_OUT && <span className="help-text text-small">
                 Input is estimated. You will sell at most <span
-                            className="text-semibold text-small">{maximumSent} {from.token!.symbol}</span> or the transaction will revert.
+                            className="text-semibold text-small">{maximumSent} {from.token.symbol}</span> or the transaction will revert.
                 </span>
                       }
                     <button className="btn btn-primary swap__btn"
@@ -122,7 +120,7 @@ function SwapConfirm({onClose}: any) {
                       <div className="swap-status">
                         <Spinner />
                         <span>
-                            Swapping {fromAmount} {from.token!.symbol} for {toAmount} {to.token!.symbol}
+                            Swapping {fromAmount} {from.token.symbol} for {toAmount} {to.token.symbol}
                         </span>
                         <span className="text-small">
                           Confirm this transaction in your wallet

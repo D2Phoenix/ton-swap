@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { SwapTxRequestInterface } from '../../interfaces/swapTxRequestInterface';
+import { SwapTxInRequestInterface, SwapTxOutRequestInterface } from '../../interfaces/swapTxRequestInterface';
 import SmartContractsService from '../../api/smartContractsService';
 import { TxType } from '../../interfaces/transactionInterfaces';
 
@@ -8,7 +8,7 @@ const swapService = new SmartContractsService();
 
 export const estimateTransaction = createAsyncThunk(
     'swap/estimate',
-    async (data: SwapTxRequestInterface) => {
+    async (data: SwapTxInRequestInterface | SwapTxOutRequestInterface) => {
         const transaction = await swapService.getTxEstimation(data);
         const priceImpact = await swapService.getPriceImpact(data, transaction);
         const insufficientLiquidity = !await swapService.checkLiquidity(data, transaction);

@@ -31,8 +31,9 @@ import {
 } from 'store/swap/swap.slice';
 import SwapInfo from './SwapInfo';
 import SwapConfirm from './SwapConfirm';
-import Tooltip from '../../components/Tooltip';
+import Tooltip from 'components/Tooltip';
 import { WALLET_TX_UPDATE_INTERVAL } from 'constants/swap';
+import TokenUtils from 'utils/tokenUtils';
 
 function SwapPage() {
     const dispatch = useAppDispatch();
@@ -50,21 +51,25 @@ function SwapPage() {
     const walletPermissions = useAppSelector(selectWalletPermissions);
 
     const isFilled = useMemo(() => {
-        return from.amount && to.amount && from.token && to.token
-            && !to.amount.eq('0')
+        return TokenUtils.isFilled(from) && TokenUtils.isFilled(to);
     }, [from, to]);
+
     const insufficientBalance = useMemo(() => {
-        if (from.token && from.amount) {
-            const balance = walletBalances[from.token.symbol] || new BigNumber('0');
-            return from.amount.gt(balance);
+        if (TokenUtils.isFilled(from)) {
+            return TokenUtils.compareAmount(from, walletBalances[from.token.symbol]) === 1;
         }
         return false;
     }, [from, walletBalances]);
-    const calcFrom = useMemo(() => {
-        if (!from.amount || !to.amount || !to.token || !from.token) {
+
+    const hasErrors = useMemo(() => {
+        return !isFilled || insufficientBalance || (!!from.token && !walletPermissions[from.token.symbol])
+    }, [isFilled, insufficientBalance, from, walletPermissions]);
+
+    const tokenSwapRate = useMemo(() => {
+        if (!TokenUtils.isFilled(from) || !TokenUtils.isFilled(to)) {
             return;
         }
-        return from.amount.div(to.amount.shiftedBy(from.token.decimals - to.token.decimals)).precision(6).toFixed();
+        return TokenUtils.getDisplayRate(from, to);
     }, [from, to])
 
     useEffect(() => {
@@ -75,7 +80,7 @@ function SwapPage() {
 
     //Handle swap button text
     useEffect(() => {
-        if (!from.amount || from.amount.eq('0')) {
+        if (!TokenUtils.isFilled(from)) {
             return setSwapButtonText('Enter an amount');
         }
         if (!to.token || !from.token) {
@@ -88,36 +93,32 @@ function SwapPage() {
     }, [from, to, insufficientBalance]);
     // Estimate EXACT_IN transaction
     useEffect((): any => {
-        if (txType === TxType.EXACT_IN && (!from.amount || from.amount.eq('0'))) {
+        if (txType === TxType.EXACT_IN && !TokenUtils.hasAmount(from)) {
             return dispatch(setSwapToAmount({
                 value: null,
                 txType,
             }));
         }
-        if (txType === TxType.EXACT_IN && to.token && from.token && from.amount && !from.amount.eq('0')) {
+        if (txType === TxType.EXACT_IN && to.token && TokenUtils.isFilled(from)) {
             return dispatch(estimateTransaction({
-                from: from,
-                to: {
-                    token: to.token,
-                },
+                in: from,
+                token: to.token,
                 txType,
             }))
         }
     }, [dispatch, from, to.token, txType]);
     // Estimate EXACT_OUT transaction
     useEffect((): any => {
-        if (txType === TxType.EXACT_OUT && (!to.amount || to.amount.eq('0'))) {
+        if (txType === TxType.EXACT_OUT && !TokenUtils.hasAmount(to)) {
             return dispatch(setSwapFromAmount({
                 value: null,
                 txType,
             }));
         }
-        if (txType === TxType.EXACT_OUT && from.token && to.token && to.amount && !to.amount.eq('0')) {
+        if (txType === TxType.EXACT_OUT && from.token && TokenUtils.isFilled(to)) {
             return dispatch(estimateTransaction({
-                from: {
-                    token: from.token,
-                },
-                to: to,
+                token: from.token,
+                out: to,
                 txType,
             }))
         }
@@ -134,10 +135,17 @@ function SwapPage() {
             if (from.token) {
                 dispatch(getWalletBalance(from.token));
             }
-            if (from.token && to.token && from.amount && !from.amount.eq('0')) {
+            if (txType === TxType.EXACT_IN && to.token && TokenUtils.isFilled(from)) {
                 dispatch(estimateTransaction({
-                    from: from,
-                    to: to,
+                    in: from,
+                    token: to.token,
+                    txType,
+                }));
+            }
+            if (txType === TxType.EXACT_OUT && from.token && TokenUtils.isFilled(to)) {
+                dispatch(estimateTransaction({
+                    out: to,
+                    token: from.token,
                     txType,
                 }));
             }
@@ -174,10 +182,10 @@ function SwapPage() {
             dispatch(getWalletBalance(token));
             dispatch(getWalletUseTokenPermission(token));
         }
-        if (to.token && tokenSelectType === 'from' && to.token.symbol === token.symbol) {
+        if (tokenSelectType === 'from' && TokenUtils.compareToken(to, token)) {
             return handleSwitchTokens();
         }
-        if (from.token && tokenSelectType === 'to' && from.token.symbol === token.symbol) {
+        if (tokenSelectType === 'to' && TokenUtils.compareToken(from, token)) {
             return handleSwitchTokens();
         }
         if (tokenSelectType === 'from') {
@@ -241,8 +249,8 @@ function SwapPage() {
                         editable={true}/>
             {
                 isFilled && <div className="swap-info text-small">
-                    <span>
-                      1 {to.token!.symbol} = {calcFrom} {from.token!.symbol}
+                    <span className="text-small">
+                      1 {to.token!.symbol} = {tokenSwapRate} {from.token!.symbol}
                     </span>
                   <Tooltip content={<SwapInfo/>} direction="left">
                     <div className="btn-icon">
@@ -252,7 +260,7 @@ function SwapPage() {
                 </div>
             }
             {
-                walletAdapter && isFilled && !walletPermissions[from.token!.symbol] && !insufficientBalance &&
+                walletAdapter && isFilled && !walletPermissions[from.token.symbol] && !insufficientBalance &&
                 <button className="btn btn-primary swap__btn"
                         onClick={handleAllowUseToken}>
                   Allow the TONSwap Protocol to use your {from.token!.symbol}
@@ -260,7 +268,7 @@ function SwapPage() {
             }
             {
                 walletAdapter && <button className="btn btn-primary swap__btn"
-                                         disabled={!isFilled || insufficientBalance || (!!from.token && !walletPermissions[from.token.symbol])}
+                                         disabled={hasErrors}
                                          onClick={handleSwap}>
                     {swapButtonText}
                 </button>

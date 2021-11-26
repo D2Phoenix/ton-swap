@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import SmartContractsService from '../../api/smartContractsService';
 import { TxType } from '../../interfaces/transactionInterfaces';
-import { LiquidityTxRequestInterface } from '../../interfaces/liquidityTxRequestInterface';
+import { LiquidityTxInRequestInterface, LiquidityTxOutRequestInterface } from '../../interfaces/liquidityTxRequestInterface';
 import { RootState } from '../store';
 import TokenInterface from '../../interfaces/tokenInterface';
 import { getTokens } from '../../api/tokens';
@@ -11,7 +11,7 @@ const swapService = new SmartContractsService();
 
 export const estimateLiquidityTransaction = createAsyncThunk(
     'liquidity/estimate',
-    async (data: LiquidityTxRequestInterface) => {
+    async (data: LiquidityTxInRequestInterface | LiquidityTxOutRequestInterface) => {
         const transaction = await swapService.getLiquidityTxEstimation(data);
         return {
             oneAmount: transaction.txType === TxType.EXACT_IN ? transaction.amount : transaction.quote,
@@ -28,7 +28,7 @@ export const fetchOneToken = createAsyncThunk(
     async (tokenSymbol:string, thunkAPI) => {
         const state = thunkAPI.getState() as RootState;
         const tokens: TokenInterface[] = state.app.tokens.length ? state.app.tokens : (await getTokens()).tokens;
-        return tokens.find((token) => token.symbol === tokenSymbol);
+        return tokens.find((token) => token.symbol === tokenSymbol) as TokenInterface;
     },
 )
 
@@ -37,7 +37,7 @@ export const fetchTwoToken = createAsyncThunk(
     async (tokenSymbol:string, thunkAPI) => {
         const state = thunkAPI.getState() as RootState;
         const tokens: TokenInterface[] = state.app.tokens.length ? state.app.tokens : (await getTokens()).tokens;
-        return tokens.find((token) => token.symbol === tokenSymbol)
+        return tokens.find((token) => token.symbol === tokenSymbol) as TokenInterface;
     },
 )
 

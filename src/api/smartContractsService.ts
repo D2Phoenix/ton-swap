@@ -1,10 +1,10 @@
 import BigNumber from 'bignumber.js';
-import { SwapTxRequestInterface } from 'interfaces/swapTxRequestInterface';
+import { SwapTxInRequestInterface, SwapTxOutRequestInterface } from 'interfaces/swapTxRequestInterface';
 import { SwapTxInterface } from 'interfaces/swapTxInterface';
 import { TxType } from 'interfaces/transactionInterfaces';
 import { fromDecimals, toDecimals } from '../utils/decimals';
 import { LiquidityTxInterface } from '../interfaces/liquidityTxInterface';
-import { LiquidityTxRequestInterface } from '../interfaces/liquidityTxRequestInterface';
+import { LiquidityTxInRequestInterface, LiquidityTxOutRequestInterface } from '../interfaces/liquidityTxRequestInterface';
 
 const prices: Record<string, string> = {
     'TON_AAVE': '13992321165469095',
@@ -33,13 +33,13 @@ const prices: Record<string, string> = {
 
 
 class SmartContractsService {
-    getTxEstimation(data: SwapTxRequestInterface): Promise<SwapTxInterface> {
+    getTxEstimation(data: SwapTxInRequestInterface | SwapTxOutRequestInterface): Promise<SwapTxInterface> {
         // TODO: Implement real api for transaction estimation
-        const amount = data.txType === TxType.EXACT_IN ? data.from!.amount! : data.to!.amount!;
-        const amountToken = data.txType === TxType.EXACT_IN ? data.from!.token! : data.to!.token!;
-        const quoteToken = data.txType === TxType.EXACT_IN ? data.to!.token! : data.from!.token!;
-        const fromSymbol =  data.txType === TxType.EXACT_IN ? data.from!.token!.symbol : data.to!.token!.symbol;
-        const toSymbol =  data.txType === TxType.EXACT_IN ? data.to!.token!.symbol : data.from!.token!.symbol;
+        const amount = data.txType === TxType.EXACT_IN ? data.in!.amount! : data.out!.amount!;
+        const amountToken = data.txType === TxType.EXACT_IN ? data.in!.token! : data.out!.token!;
+        const quoteToken = data.token;
+        const fromSymbol =  data.txType === TxType.EXACT_IN ? data.in!.token!.symbol : data.out!.token!.symbol;
+        const toSymbol =  data.token.symbol;
         const price = prices[`${fromSymbol}_${toSymbol}`];
         const quote = new BigNumber(price || fromDecimals(new BigNumber('1'), quoteToken.decimals)).multipliedBy(toDecimals(amount, amountToken.decimals));
         return Promise.resolve({
@@ -50,13 +50,13 @@ class SmartContractsService {
         });
     }
 
-    getLiquidityTxEstimation(data: LiquidityTxRequestInterface): Promise<LiquidityTxInterface> {
+    getLiquidityTxEstimation(data: LiquidityTxInRequestInterface | LiquidityTxOutRequestInterface): Promise<LiquidityTxInterface> {
         // TODO: Implement real api for transaction estimation
-        const amount = data.txType === TxType.EXACT_IN ? data.one!.amount! : data.two!.amount!;
-        const amountToken = data.txType === TxType.EXACT_IN ? data.one!.token! : data.two!.token!;
-        const quoteToken = data.txType === TxType.EXACT_IN ? data.two!.token! : data.one!.token!;
-        const fromSymbol =  data.txType === TxType.EXACT_IN ? data.one!.token!.symbol : data.two!.token!.symbol;
-        const toSymbol =  data.txType === TxType.EXACT_IN ? data.two!.token!.symbol : data.one!.token!.symbol;
+        const amount = data.txType === TxType.EXACT_IN ? data.in.amount! : data.out.amount;
+        const amountToken = data.txType === TxType.EXACT_IN ? data.in.token! : data.out.token;
+        const quoteToken = data.token;
+        const fromSymbol =  data.txType === TxType.EXACT_IN ? data.in!.token!.symbol : data.out!.token!.symbol;
+        const toSymbol =  data.token.symbol;
         const price = prices[`${fromSymbol}_${toSymbol}`];
         const quote = new BigNumber(price || fromDecimals(new BigNumber('1'), quoteToken.decimals)).multipliedBy(toDecimals(amount, amountToken.decimals));
         return Promise.resolve({
@@ -68,12 +68,12 @@ class SmartContractsService {
         });
     }
 
-    getPriceImpact(data: SwapTxRequestInterface, transaction: SwapTxInterface): Promise<BigNumber> {
+    getPriceImpact(data: LiquidityTxInRequestInterface | LiquidityTxOutRequestInterface, transaction: SwapTxInterface): Promise<BigNumber> {
         // TODO: Implement real api for estimate price impact
         return Promise.resolve(new BigNumber('2.00'));
     }
 
-    checkLiquidity(data: SwapTxRequestInterface, transaction: SwapTxInterface): Promise<boolean> {
+    checkLiquidity(data: LiquidityTxInRequestInterface | LiquidityTxOutRequestInterface, transaction: SwapTxInterface): Promise<boolean> {
         // TODO: Implement real api for estimate transaction liquidity
         return Promise.resolve(true);
     }

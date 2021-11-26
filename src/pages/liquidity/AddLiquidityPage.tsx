@@ -114,10 +114,8 @@ export function AddLiquidityPage() {
         }
         if (txType === TxType.EXACT_IN && two.token && one.token && one.amount && !one.amount.eq('0')) {
             return dispatch(estimateLiquidityTransaction({
-                one,
-                two: {
-                    token: two.token,
-                },
+                in: one,
+                token: two.token,
                 txType,
             }))
         }
@@ -132,11 +130,9 @@ export function AddLiquidityPage() {
         }
         if (txType === TxType.EXACT_OUT && one.token && two.token && two.amount && !two.amount.eq('0')) {
             return dispatch(estimateLiquidityTransaction({
-                one: {
-                    token: one.token,
-                },
-                two: two,
-                txType,
+                token: one.token,
+                out: two,
+                txType: TxType.EXACT_OUT,
             }))
         }
     }, [dispatch, one.token, two, txType]);
@@ -152,10 +148,17 @@ export function AddLiquidityPage() {
             if (two.token) {
                 dispatch(getWalletBalance(two.token));
             }
-            if (one.token && two.token && one.amount && !one.amount.eq('0')) {
+            if (txType === TxType.EXACT_IN && one.token && two.token && one.amount && !one.amount.eq('0')) {
                 dispatch(estimateLiquidityTransaction({
-                    one: one,
-                    two: two,
+                    in: one,
+                    token: two.token,
+                    txType,
+                }));
+            }
+            if (txType === TxType.EXACT_OUT && one.token && two.token && two.amount && !two.amount.eq('0')) {
+                dispatch(estimateLiquidityTransaction({
+                    token: one.token,
+                    out: two,
                     txType,
                 }));
             }
