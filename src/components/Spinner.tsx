@@ -1,8 +1,12 @@
 import './Spinner.scss';
 
-function Spinner() {
+interface SpinnerProps {
+    className?: string
+}
+
+function Spinner({className}: SpinnerProps) {
     return (
-        <div className="lds-ripple">
+        <div className={`lds-ripple ${className || ''}`}>
             <div />
             <div />
         </div>

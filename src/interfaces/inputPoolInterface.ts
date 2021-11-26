@@ -5,6 +5,6 @@ import PoolInterface from './poolInterface';
 export interface InputPoolInterface {
     token: PoolInterface;
     amount: BigNumber;
-    overallAmount?: BigNumber;
+    overallAmount: BigNumber;
     burnAmount?: BigNumber;
 }

@@ -4,6 +4,8 @@ import { WalletTxStatus } from './transactionInterfaces';
 import { SwapState } from '../store/swap/swap.slice';
 import { LiquidityState } from '../store/liquidity/liquidity.slice';
 import WalletPoolInterface from './walletPoolInterface';
+import PoolInterface from './poolInterface';
+import { InputPoolInterface } from './inputPoolInterface';
 
 export interface WalletAdapterInterface {
     getWalletAddress(): Promise<string>;
@@ -14,4 +16,6 @@ export interface WalletAdapterInterface {
     addLiquidity(state: LiquidityState): Promise<WalletTxStatus>;
     getPools(): Promise<WalletPoolInterface[]>;
     getPool(one: TokenInterface, two: TokenInterface): Promise<WalletPoolInterface>;
+    approveBurnPool(pool: InputPoolInterface): Promise<WalletTxStatus>;
+    removeLiquidity(state: LiquidityState): Promise<WalletTxStatus>;
 }

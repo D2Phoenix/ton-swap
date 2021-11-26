@@ -3,17 +3,28 @@ import BigNumber from 'bignumber.js';
 import { FEE_PRECISION, TOKEN_PRECISION } from '../constants/swap';
 import TokenInterface from '../interfaces/tokenInterface';
 import { toDecimals } from './decimals';
+import { InputPoolInterface } from '../interfaces/inputPoolInterface';
 
 class TokenUtils {
-    static isFilled(inputToken: InputTokenInterface) {
+    static isFilled(inputToken: InputTokenInterface | InputPoolInterface) {
         return inputToken.token && TokenUtils.hasAmount(inputToken);
     }
-    static hasAmount(inputToken: InputTokenInterface) {
+    static isBurnFilled(inputToken: InputTokenInterface | InputPoolInterface) {
+        return inputToken.token && TokenUtils.hasBurnAmount(inputToken);
+    }
+    static hasAmount(inputToken: InputTokenInterface | InputPoolInterface) {
         return inputToken.amount && !inputToken.amount.eq('0')
+    }
+    static hasBurnAmount(inputToken: InputTokenInterface | InputPoolInterface) {
+        return inputToken.burnAmount && !inputToken.burnAmount.eq('0')
     }
     static compareAmount(inputToken: InputTokenInterface, value: BigNumber) {
         value = value || new BigNumber('0');
-        return inputToken.amount!.comparedTo(value);
+        return inputToken.amount.comparedTo(value);
+    }
+    static compareBurnAmount(inputToken: InputTokenInterface | InputPoolInterface, value: BigNumber) {
+        value = value || new BigNumber('0');
+        return inputToken.burnAmount!.comparedTo(value);
     }
     static compareToken(inputToken: InputTokenInterface, token: TokenInterface) {
         if (!inputToken.token) {

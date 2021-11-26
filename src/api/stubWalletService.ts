@@ -6,6 +6,8 @@ import { WalletTxStatus } from '../interfaces/transactionInterfaces';
 import { SwapState } from '../store/swap/swap.slice';
 import { LiquidityState } from '../store/liquidity/liquidity.slice';
 import WalletPoolInterface from '../interfaces/walletPoolInterface';
+import PoolInterface from '../interfaces/poolInterface';
+import { InputPoolInterface } from '../interfaces/inputPoolInterface';
 
 const permissions: any = {
     'TON': true,
@@ -115,6 +117,44 @@ class StubWalletService implements WalletAdapterInterface {
         });
     }
 
+    approveBurnPool(pool: InputPoolInterface): Promise<WalletTxStatus> {
+        return new Promise<WalletTxStatus>((resolve) => {
+                setTimeout(() => {
+                    resolve(WalletTxStatus.CONFIRMED);
+                }, 3000);
+            }
+        );
+    }
+
+    removeLiquidity(state: LiquidityState): Promise<WalletTxStatus> {
+        // TODO: Implement real api for wallet operation
+        return new Promise<WalletTxStatus>((resolve) => {
+            setTimeout(() => {
+                balances[state.one.token.symbol] = balances[state.one.token.symbol].plus(state.one.amount);
+                balances[state.two.token.symbol] = (balances[state.two.token.symbol] || new BigNumber('0')).plus(state.two.amount);
+                const poolName = `${state.one.token.symbol}:${state.two.token.symbol}`
+                liquidity[poolName] = {
+                    one: {
+                        token: liquidity[poolName].one.token,
+                        amount: liquidity[poolName].one.amount.minus(state.one.amount),
+                    },
+                    two: {
+                        token: liquidity[poolName].two.token,
+                        amount: liquidity[poolName].two.amount.minus(state.two.amount),
+                    },
+                    pool: {
+                        token: liquidity[poolName].pool.token,
+                        amount: liquidity[poolName].pool.amount.minus(state.pool.amount),
+                        overallAmount: liquidity[poolName].pool.overallAmount,
+                    },
+                };
+                if (liquidity[poolName].pool.amount.eq('0')) {
+                    delete liquidity[poolName];
+                }
+                resolve(WalletTxStatus.CONFIRMED);
+            }, 3000)
+        });
+    };
 
 }
 

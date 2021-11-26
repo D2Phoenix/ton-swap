@@ -2,9 +2,15 @@ import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit'
 import BigNumber from 'bignumber.js';
 
 import type { RootState } from 'store/store'
-import { estimateLiquidityTransaction, fetchOneToken, fetchPoolToken, fetchTwoToken } from './liquidity.thunks';
+import {
+    approveBurn,
+    estimateLiquidityTransaction,
+    fetchOneToken,
+    fetchPoolToken,
+    fetchTwoToken
+} from './liquidity.thunks';
 import { shiftDecimals } from 'utils/decimals';
-import { TxType } from 'interfaces/transactionInterfaces';
+import { TxType, WalletTxStatus } from 'interfaces/transactionInterfaces';
 import { InputTokenInterface } from 'interfaces/inputTokenInterface';
 import { InputPoolInterface } from '../../interfaces/inputPoolInterface';
 
@@ -14,6 +20,9 @@ export interface LiquidityState {
     two: InputTokenInterface,
     txType: TxType;
     pool: InputPoolInterface;
+    burnApproveTx: {
+        status: WalletTxStatus,
+    }
 }
 
 const initialState: LiquidityState = {
@@ -39,6 +48,9 @@ const initialState: LiquidityState = {
         amount: null as any,
         burnAmount: null as any,
     },
+    burnApproveTx: {
+        status: WalletTxStatus.INITIAL,
+    }
 }
 
 export const liquiditySlice = createSlice({
@@ -108,7 +120,13 @@ export const liquiditySlice = createSlice({
             state.one = action.payload.one;
             state.two = action.payload.two;
             state.pool = action.payload.pool;
-        })
+        });
+        builder.addCase(approveBurn.pending, (state, action) => {
+            state.burnApproveTx.status = WalletTxStatus.PENDING;
+        });
+        builder.addCase(approveBurn.fulfilled, (state, action) => {
+            state.burnApproveTx.status = action.payload;
+        });
     }
 });
 
@@ -156,5 +174,6 @@ export const selectLiquidityOne = (state: RootState) => state.liquidity.one;
 export const selectLiquidityTwo = (state: RootState) => state.liquidity.two;
 export const selectLiquidityTxType = (state: RootState) => state.liquidity.txType;
 export const selectLiquidityPool = (state: RootState) => state.liquidity.pool;
+export const selectLiquidityBurnApproveTx = (state: RootState) => state.liquidity.burnApproveTx;
 
 export default liquiditySlice.reducer;

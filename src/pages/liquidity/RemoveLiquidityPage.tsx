@@ -3,65 +3,47 @@ import TokenInput from '../../components/TokenInput';
 import SettingsIcon from '../../components/icons/SettingsIcon';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { selectWalletAdapter, selectWalletBalances } from '../../store/wallet/wallet.slice';
+import { selectWalletAdapter } from '../../store/wallet/wallet.slice';
 import {
     selectLiquidityOne,
     selectLiquidityTwo,
-    setLiquidityOneAmount,
-    setLiquidityTwoAmount,
     resetLiquidity,
     selectLiquidityPool,
     setLiquidityOneBurnAmount,
     setLiquidityTwoBurnAmount,
-    setLiquidityPoolBurnAmount,
+    setLiquidityPoolBurnAmount, selectLiquidityBurnApproveTx,
 } from '../../store/liquidity/liquidity.slice';
 import {
     getWalletBalance,
     getWalletUseTokenPermission,
 } from '../../store/wallet/wallet.thunks';
 import Settings from '../../components/Settings';
-import BigNumber from 'bignumber.js';
 import { Link, useParams } from 'react-router-dom';
 import ChevronRightIcon from '../../components/icons/ChevronRightIcon';
 import LiquidityInfo from './LiquidityInfo';
-import AddLiquidityConfirm from './AddLiquidityConfirm';
 import ChevronDownIcon from '../../components/icons/ChevronDownIcon';
-import { fetchPoolToken } from '../../store/liquidity/liquidity.thunks';
+import { approveBurn, fetchPoolToken } from '../../store/liquidity/liquidity.thunks';
+import TokenUtils from '../../utils/tokenUtils';
+import { WalletTxStatus } from '../../interfaces/transactionInterfaces';
+import Spinner from '../../components/Spinner';
+import RemoveLiquidityConfirm from './RemoveLiquidityConfirm';
 
 export function RemoveLiquidityPage() {
     const dispatch = useAppDispatch();
     const params = useParams();
 
     const [showSettings, setShowSettings] = useState(false);
-    const [supplyButtonText, setSupplyButtonText] = useState('Supply');
-    const [showAddLiquidityConfirm, setShowAddLiquidityConfirm] = useState(false);
+    const [removeButtonText, setRemoveButtonText] = useState('Remove');
+    const [showRemoveLiquidityConfirm, setShowRemoveLiquidityConfirm] = useState(false);
     const walletAdapter = useAppSelector(selectWalletAdapter);
     const one = useAppSelector(selectLiquidityOne);
     const two = useAppSelector(selectLiquidityTwo);
     const pool = useAppSelector(selectLiquidityPool);
-    const walletBalances = useAppSelector(selectWalletBalances);
+    const burnApproveTx = useAppSelector(selectLiquidityBurnApproveTx);
 
     const isFilled = useMemo(() => {
-        return one.amount && two.amount && one.token && two.token
-            && !two.amount.eq('0')
-    }, [one, two]);
-    const insufficientFromBalance = useMemo(() => {
-        if (one.token && one.amount) {
-            const balance = walletBalances[one.token.symbol] || new BigNumber('0');
-            return one.amount.gt(balance);
-        }
-        return false;
-    }, [one, walletBalances]);
-    const insufficientToBalance = useMemo(() => {
-        if (two.token && two.amount) {
-            const balance = walletBalances[two.token.symbol] || new BigNumber('0');
-            return two.amount.gt(balance);
-        }
-        return false;
-    }, [two, walletBalances]);
-    const insufficientBalance = useMemo(() => {
-        return insufficientFromBalance || insufficientToBalance;
-    }, [insufficientFromBalance, insufficientToBalance]);
+        return TokenUtils.isBurnFilled(one) && TokenUtils.isBurnFilled(two) && TokenUtils.hasBurnAmount(pool);
+    }, [one, two, pool]);
 
     useEffect(() => {
         return () => {
@@ -77,17 +59,11 @@ export function RemoveLiquidityPage() {
 
     //Handle remove button text
     useEffect(() => {
-        if (!one.amount || one.amount.eq('0')) {
-            return setSupplyButtonText('Enter an amount');
+        if (!TokenUtils.isBurnFilled(one) || !TokenUtils.isBurnFilled(two) || !TokenUtils.hasBurnAmount(pool)) {
+            return setRemoveButtonText('Enter an amount');
         }
-        if (one.token && insufficientFromBalance) {
-            return setSupplyButtonText(`Insufficient ${one.token.symbol} balance`);
-        }
-        if (two.token && insufficientToBalance) {
-            return setSupplyButtonText(`Insufficient ${two.token.symbol} balance`);
-        }
-        setSupplyButtonText('Remove');
-    }, [one, two, insufficientFromBalance, insufficientToBalance]);
+        setRemoveButtonText('Remove');
+    }, [one, two, pool]);
 
     //Update balance and check token permissions on one token update
     useEffect(() => {
@@ -115,8 +91,12 @@ export function RemoveLiquidityPage() {
         }));
     }, [dispatch]);
 
+    const handleApprove = useCallback(() => {
+        dispatch(approveBurn(pool))
+    }, [dispatch, pool]);
+
     const handleSupply = useCallback(() => {
-        setShowAddLiquidityConfirm(true);
+        setShowRemoveLiquidityConfirm(true);
     }, []);
 
     return (
@@ -157,22 +137,25 @@ export function RemoveLiquidityPage() {
                         onChange={handleTwoTokenAmount}
                         selectable={false}
                         editable={true}/>
-            {
-                isFilled && <LiquidityInfo />
-            }
+            <LiquidityInfo />
             <div className="actions-wrapper">
                 {
                     walletAdapter && <button className="btn btn-primary remove__btn"
-                                             disabled={!isFilled || insufficientBalance}
-                                             onClick={handleSupply}>
-                      Approve
+                                             disabled={!isFilled || [WalletTxStatus.PENDING, WalletTxStatus.CONFIRMED].indexOf(burnApproveTx.status) > -1}
+                                             onClick={handleApprove}>
+                        {
+                            burnApproveTx.status === WalletTxStatus.PENDING && <Spinner className="btn"/>
+                        }
+                        {
+                            burnApproveTx.status !== WalletTxStatus.PENDING && 'Approve'
+                        }
                     </button>
                 }
                 {
                     walletAdapter && <button className="btn btn-primary remove__btn"
-                                             disabled={!isFilled || insufficientBalance}
+                                             disabled={!isFilled || burnApproveTx.status !== WalletTxStatus.CONFIRMED}
                                              onClick={handleSupply}>
-                        {supplyButtonText}
+                        {removeButtonText}
                     </button>
                 }
             </div>
@@ -180,7 +163,7 @@ export function RemoveLiquidityPage() {
                 showSettings && <Settings onClose={() => setShowSettings(false)}/>
             }
             {
-                showAddLiquidityConfirm && <AddLiquidityConfirm onClose={() => setShowAddLiquidityConfirm(false)}/>
+                showRemoveLiquidityConfirm && <RemoveLiquidityConfirm onClose={() => setShowRemoveLiquidityConfirm(false)}/>
             }
         </div>
     )

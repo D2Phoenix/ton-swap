@@ -6,6 +6,8 @@ import { LiquidityTxInRequestInterface, LiquidityTxOutRequestInterface } from '.
 import { RootState } from '../store';
 import TokenInterface from '../../interfaces/tokenInterface';
 import { getTokens } from '../../api/tokens';
+import PoolInterface from '../../interfaces/poolInterface';
+import { InputPoolInterface } from '../../interfaces/inputPoolInterface';
 
 const swapService = new SmartContractsService();
 
@@ -50,5 +52,14 @@ export const fetchPoolToken = createAsyncThunk(
         const oneToken = tokens.find((token) => token.symbol === pool.split(':')[0]);
         const twoToken = tokens.find((token) => token.symbol === pool.split(':')[1]);
         return walletAdapterService!.getPool(oneToken!, twoToken!);
+    },
+)
+
+export const approveBurn = createAsyncThunk(
+    'liquidity/burn/approve',
+    async (pool: InputPoolInterface, thunkAPI) => {
+        const state = thunkAPI.getState() as RootState;
+        const walletAdapterService = state.wallet.adapter;
+        return walletAdapterService!.approveBurnPool(pool);
     },
 )

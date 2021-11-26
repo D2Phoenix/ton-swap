@@ -125,3 +125,15 @@ export const walletAddLiquidity = createAsyncThunk(
         return WalletTxStatus.INITIAL;
     }
 )
+
+export const walletRemoveLiquidity = createAsyncThunk(
+    'wallet/liquidity/remove',
+    async (request, thunkAPI) => {
+        const state = thunkAPI.getState() as RootState;
+        const walletAdapterService = state.wallet.adapter;
+        if (walletAdapterService) {
+            return await walletAdapterService.removeLiquidity(state.liquidity)
+        }
+        return WalletTxStatus.INITIAL;
+    }
+)
