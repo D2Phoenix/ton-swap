@@ -31,7 +31,7 @@ export const getLiquidityToken = createAsyncThunk(
         const state = thunkAPI.getState() as RootState;
         const tokens: TokenInterface[] = state.app.tokens.length ? state.app.tokens : (await getTokens()).tokens;
         return {
-            token: tokens.find((token) => token.address === address) as TokenInterface,
+            token: tokens.find((token) => token.address === address || token.symbol === address) as TokenInterface,
             position
         }
     },
