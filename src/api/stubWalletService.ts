@@ -45,8 +45,8 @@ class StubWalletService implements WalletAdapterInterface {
         // TODO: Implement real api for wallet operation
         return new Promise<WalletTxStatus>((resolve) => {
             setTimeout(() => {
-                balances[state.from.token!.symbol] = balances[state.from.token!.symbol].minus(state.from.amount!);
-                balances[state.to.token!.symbol] = (balances[state.to.token!.symbol] || new BigNumber('0')).plus(state.to.amount!)
+                balances[state.from.token.symbol] = balances[state.from.token.symbol].minus(state.from.amount);
+                balances[state.to.token.symbol] = (balances[state.to.token.symbol] || new BigNumber('0')).plus(state.to.amount)
                 resolve(WalletTxStatus.CONFIRMED);
             }, 3000)
         });
@@ -60,33 +60,26 @@ class StubWalletService implements WalletAdapterInterface {
         // TODO: Implement real api for wallet operation
         return new Promise<WalletTxStatus>((resolve) => {
             setTimeout(() => {
-                balances[state.one.token!.symbol] = balances[state.one.token!.symbol].minus(state.one.amount!);
-                balances[state.two.token!.symbol] = (balances[state.two.token!.symbol] || new BigNumber('0')).minus(state.two.amount!);
-                const poolName = liquidity[`${state.two.token!.symbol}:${state.one.token!.symbol}`] ?
-                    `${state.two.token!.symbol}:${state.one.token!.symbol}` :
-                    `${state.one.token!.symbol}:${state.two.token!.symbol}`
+                balances[state.one.token.symbol] = balances[state.one.token.symbol].minus(state.one.amount);
+                balances[state.two.token.symbol] = (balances[state.two.token.symbol] || new BigNumber('0')).minus(state.two.amount);
+                const poolName = liquidity[`${state.two.token.symbol}:${state.one.token.symbol}`] ?
+                    `${state.two.token.symbol}:${state.one.token.symbol}` :
+                    `${state.one.token.symbol}:${state.two.token.symbol}`
                 const pool = liquidity[poolName];
                 if (pool) {
+                    const isReverse = poolName.startsWith(state.two.token.symbol);
                     liquidity[poolName] = {
                         one: {
                             token: liquidity[poolName].one.token,
-                            amount: liquidity[poolName].one.amount!.plus(state.one.amount!),
+                            amount: isReverse ? liquidity[poolName].one.amount.plus(state.two.amount) : liquidity[poolName].one.amount.plus(state.one.amount),
                         },
                         two: {
                             token: liquidity[poolName].two.token,
-                            amount: liquidity[poolName].two.amount!.plus(state.two.amount!),
+                            amount: isReverse ? liquidity[poolName].two.amount.plus(state.one.amount) : liquidity[poolName].two.amount.plus(state.two.amount),
                         },
                         pool: {
-                            token: {
-                              symbol: poolName,
-                              name: poolName,
-                              logoOneURI: liquidity[poolName].one.token!.logoURI,
-                              logoTwoURI: liquidity[poolName].one.token!.logoURI,
-                              decimals: 0,
-                              chainId: 1,
-                              address: poolName,
-                            },
-                            amount: liquidity[poolName].pool.amount!.plus(state.pool.amount!),
+                            token: liquidity[poolName].pool.token,
+                            amount: liquidity[poolName].pool.amount.plus(state.pool.amount),
                             overallAmount: liquidity[poolName].pool.overallAmount,
                         },
                     };
@@ -99,8 +92,8 @@ class StubWalletService implements WalletAdapterInterface {
                             token: {
                                 symbol: poolName,
                                 name: poolName,
-                                logoOneURI: state.one.token!.logoURI,
-                                logoTwoURI: state.two.token!.logoURI,
+                                logoOneURI: state.one.token.logoURI,
+                                logoTwoURI: state.two.token.logoURI,
                                 decimals: 0,
                                 chainId: 1,
                                 address: poolName,
