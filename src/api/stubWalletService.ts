@@ -109,11 +109,37 @@ class StubWalletService implements WalletAdapterInterface {
     };
 
     getPool(one: TokenInterface, two: TokenInterface): Promise<WalletPoolInterface> {
+        const poolName = `${one.symbol}:${two.symbol}`;
         const result = liquidity[`${one.symbol}:${two.symbol}`];
+        if (result) {
+            return Promise.resolve({
+                one: result.one,
+                two: result.two,
+                pool: result.pool
+            });
+        }
         return Promise.resolve({
-            one: result.one,
-            two: result.two,
-            pool: result.pool
+            one: {
+                token: one,
+                amount: new BigNumber('0'),
+            },
+            two: {
+                token: two,
+                amount: new BigNumber('0'),
+            },
+            pool: {
+                token: {
+                    symbol: poolName,
+                    name: poolName,
+                    logoOneURI: one.logoURI,
+                    logoTwoURI: two.logoURI,
+                    decimals: 0,
+                    chainId: 1,
+                    address: poolName,
+                },
+                amount: new BigNumber('0'),
+                overallAmount: new BigNumber('100'),
+            }
         });
     }
 

@@ -52,7 +52,7 @@ export function RemoveLiquidityPage() {
             return '0';
         }
         const percent = pool.removeAmount.div(pool.amount).multipliedBy('100');
-        if (percent.gt('100')) {
+        if (percent.gt('100') || percent.isNaN()) {
             return '0';
         }
         return percent.toFixed(0);

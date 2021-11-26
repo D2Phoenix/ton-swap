@@ -18,6 +18,7 @@ import {  walletRemoveLiquidity } from 'store/wallet/wallet.thunks';
 import Spinner from 'components/Spinner';
 import { selectSettings } from 'store/app/app.slice';
 import TokenUtils from 'utils/tokenUtils';
+import { getLiquidityPool } from '../../store/liquidity/liquidity.thunks';
 
 function RemoveLiquidityConfirm({onClose}: any) {
     const dispatch = useAppDispatch();
@@ -50,10 +51,10 @@ function RemoveLiquidityConfirm({onClose}: any) {
     const handleClose = useCallback(() => {
         dispatch(resetTransaction());
         if (walletTransaction.status === WalletTxStatus.CONFIRMED) {
-            dispatch(resetLiquidity());
+            dispatch(getLiquidityPool(`${one.token.symbol}:${two.token.symbol}`));
         }
         onClose && onClose();
-    }, [dispatch, walletTransaction, onClose]);
+    }, [dispatch, one, two, walletTransaction, onClose]);
 
     return (
         <Modal className={className} onClose={handleClose}>

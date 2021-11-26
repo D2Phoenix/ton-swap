@@ -1,17 +1,15 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import './PoolPage.scss';
 import SettingsIcon from 'components/icons/SettingsIcon';
-import Settings from '../../components/Settings';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { selectWalletAdapter } from '../../store/wallet/wallet.slice';
-import { Link } from 'react-router-dom';
-import { getPoolPools } from '../../store/pool/pool.thunks';
-import { selectPoolPools } from '../../store/pool/pool.slice';
-import Accordion from '../../components/Accordion';
-import { TOKEN_PRECISION } from '../../constants/swap';
-import { toDecimals } from '../../utils/decimals';
-import TokenUtils from '../../utils/tokenUtils';
+import Settings from 'components/Settings';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { selectWalletAdapter } from 'store/wallet/wallet.slice';
+import { getPoolPools } from 'store/pool/pool.thunks';
+import { selectPoolPools } from 'store/pool/pool.slice';
+import Accordion from 'components/Accordion';
+import TokenUtils from 'utils/tokenUtils';
 
 
 function PoolPage() {
