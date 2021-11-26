@@ -63,7 +63,7 @@ function TokenSelect({tokens, balances, onClose, onSelect, balancesFirst}: Token
                 return 0;
             });
         }
-        return result.slice(0, (page - 1) * 10);
+        return result.slice(0, page * 10);
     }, [tokens, page, query, balancesFirst, balances])
 
     return (

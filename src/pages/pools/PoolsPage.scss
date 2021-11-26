@@ -60,4 +60,21 @@
       text-align: end;
     }
   }
+  .pools-list-pagination {
+    display: flex;
+    align-items: center;
+    align-self: center;
+    gap: 0.5rem;
+    .btn-icon {
+      display: flex;
+      align-items: center;
+      svg {
+        cursor: pointer;
+        stroke: $primary-color;
+        &:hover {
+          stroke: $secondary-color;
+        }
+      }
+    }
+  }
 }

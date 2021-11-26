@@ -5,16 +5,18 @@ import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { selectPoolsList } from 'store/pools/pools.slice';
 import { fetchPools } from 'store/pools/pools.thunks';
 import ChevronDownIcon from '../../components/icons/ChevronDownIcon';
+import ChevronRightIcon from '../../components/icons/ChevronRightIcon';
 
 function PoolsPage() {
     const dispatch = useAppDispatch();
     const [query, setQuery] = useState('');
     const [sort, setSort] = useState('totalVolume');
+    const [page, setPage] = useState(1);
     const pools = useAppSelector(selectPoolsList);
 
     useEffect(() => {
         dispatch(fetchPools());
-    }, [dispatch])
+    }, [dispatch]);
 
     const visiblePools = useMemo(() => {
         let result = pools.filter((pool) => pool.name.toLowerCase().includes(query.toLowerCase()));
@@ -31,11 +33,19 @@ function PoolsPage() {
             }
             return 0;
         });
-        return result;
-    }, [pools, query, sort]);
+        return result.slice((page - 1) * 10, page * 10);
+    }, [pools, query, sort, page]);
+
+    const totalPages = useMemo(() => {
+        return Math.ceil(pools.filter((pool) => pool.name.toLowerCase().includes(query.toLowerCase())).length / 10);
+    }, [pools, query]);
 
     const handleSort = useCallback((value: string) => {
         setSort(prev => (prev.startsWith(value) ? `-${value}` : value))
+    }, []);
+
+    const handlePageChange = useCallback((value: number) => {
+        setPage((prev) => prev + value);
     }, []);
 
     return (
@@ -85,6 +95,19 @@ function PoolsPage() {
                         )
                     })
                 }
+                <div className="pools-list-pagination">
+                    {
+                        (page - 1) !== 0 && <div className="btn-icon" onClick={handlePageChange.bind(null, -1)}>
+                            <ChevronRightIcon revert={true}/>
+                        </div>
+                    }
+                    Page {page} of {totalPages}
+                    {
+                        page !== totalPages &&  <div className="btn-icon" onClick={handlePageChange.bind(null, 1)}>
+                          <ChevronRightIcon />
+                        </div>
+                    }
+                </div>
             </div>
         </div>
     )
