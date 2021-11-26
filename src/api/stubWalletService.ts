@@ -55,6 +55,7 @@ class StubWalletService implements WalletAdapterInterface {
     }
 
     getPools(): Promise<WalletPoolInterface[]> {
+        // TODO: Implement real api for wallet operation
         return Promise.resolve(Object.values(liquidity));
     }
 
@@ -109,6 +110,7 @@ class StubWalletService implements WalletAdapterInterface {
     };
 
     getPool(one: TokenInterface, two: TokenInterface): Promise<WalletPoolInterface> {
+        // TODO: Implement real api for wallet operation
         const poolName = `${one.symbol}:${two.symbol}`;
         const result = liquidity[`${one.symbol}:${two.symbol}`];
         if (result) {
@@ -144,6 +146,7 @@ class StubWalletService implements WalletAdapterInterface {
     }
 
     getPoolToken(one: TokenInterface, two: TokenInterface): Promise<PoolInterface> {
+        // TODO: Implement real api for wallet operation
         const poolName = liquidity[`${two.symbol}:${one.symbol}`] ?
             `${two.symbol}:${one.symbol}` :
             `${one.symbol}:${two.symbol}`;
@@ -165,6 +168,7 @@ class StubWalletService implements WalletAdapterInterface {
     }
 
     approveRemovePool(pool: InputPoolInterface): Promise<WalletTxStatus> {
+        // TODO: Implement real api for wallet operation
         return new Promise<WalletTxStatus>((resolve) => {
                 setTimeout(() => {
                     resolve(WalletTxStatus.CONFIRMED);

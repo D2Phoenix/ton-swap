@@ -107,7 +107,7 @@ function TokenInput({balance, token, value, showMax, editable, selectable, onCha
                 token && balance != null && <div className="balance text-small">
                   Balance: {balanceVisible} {token.symbol}
                     {
-                        showMax && !balance.eq('0') && (
+                        showMax && !balance.eq('0') && (!value || !balance.eq(value)) && (
                             <>&nbsp;(<span className="text-primary text-small link__btn" onClick={handleMax}>MAX</span>)</>
                         )
                     }

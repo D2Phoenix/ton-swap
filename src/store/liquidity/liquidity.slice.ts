@@ -96,15 +96,19 @@ export const liquiditySlice = createSlice({
             state.one.removeAmount = state.one.amount.multipliedBy(action.payload.value).div('100');
             state.two.removeAmount = state.two.amount.multipliedBy(action.payload.value).div('100');
             state.pool.removeAmount = state.pool.amount.multipliedBy(action.payload.value).div('100');
+            state.removeApproveTx.status = WalletTxStatus.INITIAL;
         },
         setLiquidityOneRemoveAmount: (state, action: PayloadAction<any>) => {
             handleRemoveAmount(state, state.one, [state.two, state.pool], action.payload.value);
+            state.removeApproveTx.status = WalletTxStatus.INITIAL;
         },
         setLiquidityTwoRemoveAmount: (state, action: PayloadAction<any>) => {
             handleRemoveAmount(state, state.two, [state.one, state.pool], action.payload.value);
+            state.removeApproveTx.status = WalletTxStatus.INITIAL;
         },
         setLiquidityPoolRemoveAmount: (state, action: PayloadAction<any>) => {
             handleRemoveAmount(state, state.pool, [state.one, state.two], action.payload.value);
+            state.removeApproveTx.status = WalletTxStatus.INITIAL;
         },
         switchLiquidityTokens: (state, action: PayloadAction<void>) => {
             const two = state.two;
