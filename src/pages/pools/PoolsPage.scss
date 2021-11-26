@@ -1,0 +1,63 @@
+@import "../../styles/vars";
+
+.pools-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+.pools-list-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  .pools-list-header {
+    > div {
+      display: flex;
+      align-items: center;
+      font-family: 'mulish-bold', serif;
+      color: $primary-color;
+      &.total-volume__column,
+      &.total-day__column,
+      &.total-7day__column {
+        justify-content: end;
+      }
+      &:not(.position__column) {
+        cursor: pointer;
+        &:hover {
+          color: $secondary-color;
+          svg {
+            stroke: $secondary-color;
+          }
+        }
+      }
+      svg {
+        stroke: $primary-color;
+      }
+    }
+  }
+  .pool-list__item, .pools-list-header {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    padding: 1rem 0;
+    align-items: center;
+    &:hover:not(.pools-list-header) {
+      > div {
+        cursor: pointer;
+        color: $primary-color;
+      }
+    }
+    .position__column {
+      flex: 0 1 20px;
+    }
+    .name__column {
+      flex: 1 1 auto;
+    }
+    .total-volume__column,
+    .total-day__column,
+    .total-7day__column {
+      flex: 0 1 110px;
+      text-align: end;
+    }
+  }
+}

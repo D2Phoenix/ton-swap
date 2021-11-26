@@ -4,6 +4,7 @@ import swapReducer from './swap/swap.slice';
 import walletReducer from './wallet/wallet.slice';
 import liquidityReducer from './liquidity/liquidity.slice';
 import poolReducer from './pool/pool.slice';
+import poolsReducer from './pools/pools.slice';
 
 export const store = configureStore({
     reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
         wallet: walletReducer,
         liquidity: liquidityReducer,
         pool: poolReducer,
+        pools: poolsReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
