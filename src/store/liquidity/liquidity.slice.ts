@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit'
 import BigNumber from 'bignumber.js';
 
 import type { RootState } from 'store/store'
@@ -19,12 +19,12 @@ export interface LiquidityState {
 const initialState: LiquidityState = {
     one: {
         token: {
-            address: "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+            address: '0x582d872a1b094fc48f5de31d3b73f2d9be47def1',
             chainId: 1,
             decimals: 9,
-            logoURI: "https://s2.coinmarketcap.com/static/img/coins/64x64/11419.png",
-            name: "Ton",
-            symbol: "TON",
+            logoURI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/11419.png',
+            name: 'Ton',
+            symbol: 'TON',
         },
         amount: null as any
     },
@@ -34,9 +34,10 @@ const initialState: LiquidityState = {
     },
     txType: TxType.EXACT_IN,
     pool: {
-        overallAmount: new BigNumber('0'),
-        amount: new BigNumber('0'),
-        burnAmount: new BigNumber('0'),
+        token: null as any,
+        overallAmount: null as any,
+        amount: null as any,
+        burnAmount: null as any,
     },
 }
 
@@ -70,6 +71,15 @@ export const liquiditySlice = createSlice({
             state.two.amount = action.payload.value;
             state.txType = action.payload.txType;
         },
+        setLiquidityOneBurnAmount: (state, action: PayloadAction<any>) => {
+            handleBurnAmount(state, state.one, [state.two, state.pool], action.payload.value);
+        },
+        setLiquidityTwoBurnAmount: (state, action: PayloadAction<any>) => {
+            handleBurnAmount(state, state.two, [state.one, state.pool], action.payload.value);
+        },
+        setLiquidityPoolBurnAmount: (state, action: PayloadAction<any>) => {
+            handleBurnAmount(state, state.pool, [state.one, state.two], action.payload.value);
+        },
         switchLiquidityTokens: (state, action: PayloadAction<void>) => {
             const two = state.two;
             state.two = state.one;
@@ -100,7 +110,35 @@ export const liquiditySlice = createSlice({
             state.pool = action.payload.pool;
         })
     }
-})
+});
+
+function handleBurnAmount(state: Draft<LiquidityState>, token: Draft<InputTokenInterface | InputPoolInterface>, deps: Draft<InputTokenInterface | InputPoolInterface>[], value: BigNumber | null) {
+    if (!value) {
+        token.burnAmount = null as any;
+        deps.forEach((item) => {
+            item.burnAmount = null as any;
+        })
+        return;
+    }
+    if (value.eq('0')) {
+        token.burnAmount = value;
+        deps.forEach((item) => {
+            item.burnAmount = null as any;
+        })
+        return;
+    }
+    const percent = token.amount.div(value);
+    token.burnAmount = value;
+    if (percent.lt('1')) {
+        deps.forEach((item) => {
+            item.burnAmount = null as any;
+        })
+        return;
+    }
+    deps.forEach((item) => {
+        item.burnAmount = item.amount.div(percent);
+    });
+}
 
 export const {
     setLiquidityOneToken,
@@ -108,6 +146,9 @@ export const {
     switchLiquidityTokens,
     setLiquidityOneAmount,
     setLiquidityTwoAmount,
+    setLiquidityOneBurnAmount,
+    setLiquidityTwoBurnAmount,
+    setLiquidityPoolBurnAmount,
     resetLiquidity,
 } = liquiditySlice.actions
 

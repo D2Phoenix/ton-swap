@@ -104,7 +104,7 @@ function TokenInput({balance, token, value, showMax, editable, selectable, onCha
                        onChange={handleChange}/>
             </div>
             {
-                token && balance !== undefined && <div className="balance text-small">
+                token && balance != null && <div className="balance text-small">
                   Balance: {balanceVisible} {token.symbol}
                     {
                         showMax && !balance.eq('0') && (

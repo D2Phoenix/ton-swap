@@ -9,14 +9,16 @@ import {
     selectLiquidityTwo,
     setLiquidityOneAmount,
     setLiquidityTwoAmount,
-    resetLiquidity, selectLiquidityPool,
+    resetLiquidity,
+    selectLiquidityPool,
+    setLiquidityOneBurnAmount,
+    setLiquidityTwoBurnAmount,
+    setLiquidityPoolBurnAmount,
 } from '../../store/liquidity/liquidity.slice';
 import {
     getWalletBalance,
     getWalletUseTokenPermission,
 } from '../../store/wallet/wallet.thunks';
-import { TxType } from '../../interfaces/transactionInterfaces';
-import { selectTokens } from '../../store/app/app.slice';
 import Settings from '../../components/Settings';
 import BigNumber from 'bignumber.js';
 import { Link, useParams } from 'react-router-dom';
@@ -95,17 +97,21 @@ export function RemoveLiquidityPage() {
         }
     }, [dispatch, one.token, walletAdapter]);
 
-    const handleFromTokenAmount = useCallback((value) => {
-        dispatch(setLiquidityOneAmount({
+    const handleOneTokenAmount = useCallback((value) => {
+        dispatch(setLiquidityOneBurnAmount({
             value,
-            txType: TxType.EXACT_IN
         }));
     }, [dispatch]);
 
-    const handleToTokenAmount = useCallback((value) => {
-        dispatch(setLiquidityTwoAmount({
+    const handleTwoTokenAmount = useCallback((value) => {
+        dispatch(setLiquidityTwoBurnAmount({
             value,
-            txType: TxType.EXACT_OUT
+        }));
+    }, [dispatch]);
+
+    const handlePoolTokenAmount = useCallback((value) => {
+        dispatch(setLiquidityPoolBurnAmount({
+            value,
         }));
     }, [dispatch]);
 
@@ -128,7 +134,7 @@ export function RemoveLiquidityPage() {
                         balance={pool.amount}
                         value={pool.burnAmount}
                         showMax={true}
-                        onChange={handleFromTokenAmount}
+                        onChange={handlePoolTokenAmount}
                         selectable={false}
                         editable={true}/>
             <div className="btn-icon">
@@ -138,7 +144,7 @@ export function RemoveLiquidityPage() {
                         value={one.burnAmount}
                         balance={one.amount}
                         showMax={true}
-                        onChange={handleFromTokenAmount}
+                        onChange={handleOneTokenAmount}
                         selectable={false}
                         editable={true}/>
             <div className="btn-icon">
@@ -148,7 +154,7 @@ export function RemoveLiquidityPage() {
                         value={two.burnAmount}
                         balance={two.amount}
                         showMax={true}
-                        onChange={handleToTokenAmount}
+                        onChange={handleTwoTokenAmount}
                         selectable={false}
                         editable={true}/>
             {

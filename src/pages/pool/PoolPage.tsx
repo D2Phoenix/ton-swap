@@ -50,7 +50,7 @@ function PoolPage() {
                 {
                     walletAdapter && pools.length > 0 && (
                         <Accordion panels={pools.map((pool, index) => {
-                            const share = pool.pool.amount!.multipliedBy('100').div(pool.pool.overallAmount!).precision(2);
+                            const share = pool.pool.amount.multipliedBy('100').div(pool.pool.overallAmount!).precision(2);
                             const shareText = share.lt('0.01') ? '<0.01%' : `${share.toFixed()}%`;
 
                             return {

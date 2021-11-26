@@ -154,20 +154,20 @@ function SwapPage() {
     },[dispatch, walletAdapter, from, to, txType]);
 
     const openFromTokenSelect = useCallback(() => {
-        setShowTokenSelect(!showTokenSelect);
+        setShowTokenSelect((prev) => !prev);
         setTokenSelectType('from');
         if (walletAdapter) {
             dispatch(getWalletBalances(tokens));
         }
-    }, [showTokenSelect, dispatch, walletAdapter, tokens]);
+    }, [dispatch, walletAdapter, tokens]);
 
     const openToTokenSelect = useCallback(() => {
-        setShowTokenSelect(!showTokenSelect);
+        setShowTokenSelect((prev) => !prev);
         setTokenSelectType('to');
         if (walletAdapter) {
             dispatch(getWalletBalances(tokens));
         }
-    }, [showTokenSelect, dispatch, walletAdapter, tokens]);
+    }, [dispatch, walletAdapter, tokens]);
 
     const handleSwitchTokens = useCallback(() => {
         dispatch(switchSwapTokens());

@@ -316,6 +316,7 @@ export function AddLiquidityPage() {
             {
                 showTokenSelect && <TokenSelect tokens={tokens}
                                                 balances={walletBalances}
+                                                balancesFirst={true}
                                                 onClose={handleSelectToken}
                                                 onSelect={handleSelectToken}/>
             }
