@@ -82,6 +82,11 @@ export const liquiditySlice = createSlice({
             state.two.amount = action.payload.value;
             state.txType = action.payload.txType;
         },
+        setLiquidityPercentRemoveAmount: (state, action: PayloadAction<any>) => {
+            state.one.removeAmount = state.one.amount.multipliedBy(action.payload.value).div('100');
+            state.two.removeAmount = state.two.amount.multipliedBy(action.payload.value).div('100');
+            state.pool.removeAmount = state.pool.amount.multipliedBy(action.payload.value).div('100');
+        },
         setLiquidityOneRemoveAmount: (state, action: PayloadAction<any>) => {
             handleRemoveAmount(state, state.one, [state.two, state.pool], action.payload.value);
         },
@@ -168,6 +173,7 @@ export const {
     setLiquidityOneAmount,
     setLiquidityTwoAmount,
     setLiquidityOneRemoveAmount,
+    setLiquidityPercentRemoveAmount,
     setLiquidityTwoRemoveAmount,
     setLiquidityPoolRemoveAmount,
     resetLiquidity,

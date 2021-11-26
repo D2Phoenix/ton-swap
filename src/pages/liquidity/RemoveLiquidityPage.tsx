@@ -12,7 +12,7 @@ import {
     setLiquidityOneRemoveAmount,
     setLiquidityTwoRemoveAmount,
     setLiquidityPoolRemoveAmount,
-    selectLiquidityRemoveApproveTx,
+    selectLiquidityRemoveApproveTx, setLiquidityPercentRemoveAmount,
 } from '../../store/liquidity/liquidity.slice';
 import {
     getWalletBalance,
@@ -28,6 +28,7 @@ import TokenUtils from '../../utils/tokenUtils';
 import { WalletTxStatus } from '../../interfaces/transactionInterfaces';
 import Spinner from '../../components/Spinner';
 import RemoveLiquidityConfirm from './RemoveLiquidityConfirm';
+import InputSlider from '../../components/InputSlider';
 
 export function RemoveLiquidityPage() {
     const dispatch = useAppDispatch();
@@ -45,6 +46,17 @@ export function RemoveLiquidityPage() {
     const isFilled = useMemo(() => {
         return TokenUtils.isRemoveFilled(one) && TokenUtils.isRemoveFilled(two) && TokenUtils.hasRemoveAmount(pool);
     }, [one, two, pool]);
+
+    const removePercent = useMemo(() => {
+        if (!pool.removeAmount) {
+            return '0';
+        }
+        const percent = pool.removeAmount.div(pool.amount).multipliedBy('100');
+        if (percent.gt('100')) {
+            return '0';
+        }
+        return percent.toFixed(0);
+    }, [pool])
 
     useEffect(() => {
         return () => {
@@ -73,6 +85,12 @@ export function RemoveLiquidityPage() {
             dispatch(getWalletUseTokenPermission(one.token));
         }
     }, [dispatch, one.token, walletAdapter]);
+
+    const handleInputSliderChange = useCallback((value) => {
+        dispatch(setLiquidityPercentRemoveAmount({
+            value,
+        }));
+    }, [dispatch])
 
     const handleOneTokenAmount = useCallback((value) => {
         dispatch(setLiquidityOneRemoveAmount({
@@ -111,6 +129,7 @@ export function RemoveLiquidityPage() {
                     <SettingsIcon/>
                 </div>
             </div>
+            <InputSlider value={removePercent} pnChange={handleInputSliderChange}/>
             <TokenInput token={pool.token}
                         balance={pool.amount}
                         value={pool.removeAmount}
