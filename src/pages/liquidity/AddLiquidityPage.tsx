@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import BigNumber from 'bignumber.js';
 
 import './AddLiquidityPage.scss';
 import TokenInput from 'components/TokenInput';
@@ -37,9 +36,9 @@ import { WALLET_TX_UPDATE_INTERVAL } from 'constants/swap';
 import ChevronRightIcon from 'components/icons/ChevronRightIcon';
 import LiquidityInfo from './LiquidityInfo';
 import AddLiquidityConfirm from './AddLiquidityConfirm';
-import TokenUtils from '../../utils/tokenUtils';
-import QuestionIcon from '../../components/icons/QuestionIcon';
-import Tooltip from '../../components/Tooltip';
+import TokenUtils from 'utils/tokenUtils';
+import QuestionIcon from 'components/icons/QuestionIcon';
+import Tooltip from 'components/Tooltip';
 
 export function AddLiquidityPage() {
     const dispatch = useAppDispatch();
@@ -128,7 +127,7 @@ export function AddLiquidityPage() {
         }
         if (txType === TxType.EXACT_IN && two.token && TokenUtils.hasAmount(one)) {
             return dispatch(estimateLiquidityTransaction({
-                in: one,
+                input: one,
                 token: two.token,
                 txType,
             }))
@@ -145,8 +144,8 @@ export function AddLiquidityPage() {
         }
         if (txType === TxType.EXACT_OUT && one.token && TokenUtils.hasAmount(two)) {
             return dispatch(estimateLiquidityTransaction({
+                input: two,
                 token: one.token,
-                out: two,
                 txType: TxType.EXACT_OUT,
             }))
         }
@@ -166,15 +165,15 @@ export function AddLiquidityPage() {
             }
             if (txType === TxType.EXACT_IN && two.token && TokenUtils.isFilled(one)) {
                 dispatch(estimateLiquidityTransaction({
-                    in: one,
+                    input: one,
                     token: two.token,
                     txType,
                 }));
             }
             if (txType === TxType.EXACT_OUT && one.token && TokenUtils.isFilled(two)) {
                 dispatch(estimateLiquidityTransaction({
+                    input: two,
                     token: one.token,
-                    out: two,
                     txType,
                 }));
             }

@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import BigNumber from 'bignumber.js';
 
 import './SwapPage.scss';
 import ChevronDownIcon from 'components/icons/ChevronDownIcon';
@@ -106,7 +105,7 @@ function SwapPage() {
         }
         if (txType === TxType.EXACT_IN && to.token && TokenUtils.isFilled(from)) {
             return dispatch(estimateTransaction({
-                in: from,
+                input: from,
                 token: to.token,
                 txType,
             }))
@@ -123,8 +122,8 @@ function SwapPage() {
         }
         if (txType === TxType.EXACT_OUT && from.token && TokenUtils.isFilled(to)) {
             return dispatch(estimateTransaction({
+                input: to,
                 token: from.token,
-                out: to,
                 txType,
             }))
         }
@@ -144,14 +143,14 @@ function SwapPage() {
             }
             if (txType === TxType.EXACT_IN && to.token && TokenUtils.isFilled(from)) {
                 dispatch(estimateTransaction({
-                    in: from,
+                    input: from,
                     token: to.token,
                     txType,
                 }));
             }
             if (txType === TxType.EXACT_OUT && from.token && TokenUtils.isFilled(to)) {
                 dispatch(estimateTransaction({
-                    out: to,
+                    input: to,
                     token: from.token,
                     txType,
                 }));

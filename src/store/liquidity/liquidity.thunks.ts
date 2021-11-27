@@ -1,19 +1,18 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import SmartContractsService from '../../api/smartContractsService';
-import { TxType } from '../../interfaces/transactionInterfaces';
-import { LiquidityTxInRequestInterface, LiquidityTxOutRequestInterface } from '../../interfaces/liquidityTxRequestInterface';
-import { RootState } from '../store';
-import TokenInterface from '../../interfaces/tokenInterface';
-import { getTokens } from '../../api/tokens';
-import { InputPoolInterface } from '../../interfaces/inputPoolInterface';
-import { InputTokenInterface } from '../../interfaces/inputTokenInterface';
+import SmartContractsService from 'api/smartContractsService';
+import { TxType } from 'interfaces/transactionInterfaces';
+import { LiquidityTxRequestInterface } from 'interfaces/liquidityTxRequestInterface';
+import { RootState } from 'store/store';
+import TokenInterface from 'interfaces/tokenInterface';
+import { getTokens } from 'api/tokens';
+import { InputPoolInterface } from 'interfaces/inputPoolInterface';
 
 const swapService = new SmartContractsService();
 
 export const estimateLiquidityTransaction = createAsyncThunk(
     'liquidity/estimate',
-    async (data: LiquidityTxInRequestInterface | LiquidityTxOutRequestInterface) => {
+    async (data: LiquidityTxRequestInterface) => {
         const transaction = await swapService.getLiquidityTxEstimation(data);
         return {
             oneAmount: transaction.txType === TxType.EXACT_IN ? transaction.amount : transaction.quote,

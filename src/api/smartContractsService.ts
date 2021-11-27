@@ -1,10 +1,13 @@
 import BigNumber from 'bignumber.js';
-import { SwapTxInRequestInterface, SwapTxOutRequestInterface } from 'interfaces/swapTxRequestInterface';
+import {
+    SwapTxRequestInterface
+} from 'interfaces/swapTxRequestInterface';
 import { SwapTxInterface } from 'interfaces/swapTxInterface';
-import { TxType } from 'interfaces/transactionInterfaces';
-import { fromDecimals, toDecimals } from '../utils/decimals';
-import { LiquidityTxInterface } from '../interfaces/liquidityTxInterface';
-import { LiquidityTxInRequestInterface, LiquidityTxOutRequestInterface } from '../interfaces/liquidityTxRequestInterface';
+import { fromDecimals, toDecimals } from 'utils/decimals';
+import { LiquidityTxInterface } from 'interfaces/liquidityTxInterface';
+import {
+    LiquidityTxRequestInterface
+} from 'interfaces/liquidityTxRequestInterface';
 import PoolsService from './poolsService';
 
 const prices: Record<string, string> = {
@@ -35,13 +38,13 @@ const prices: Record<string, string> = {
 const poolsService = new PoolsService();
 
 class SmartContractsService {
-    getTxEstimation(data: SwapTxInRequestInterface | SwapTxOutRequestInterface): Promise<SwapTxInterface> {
+    getTxEstimation(data: SwapTxRequestInterface): Promise<SwapTxInterface> {
         // TODO: Implement real api for transaction estimation
-        const amount = data.txType === TxType.EXACT_IN ? data.in!.amount! : data.out!.amount!;
-        const amountToken = data.txType === TxType.EXACT_IN ? data.in!.token! : data.out!.token!;
+        const amount = data.input.amount;
+        const amountToken = data.input.token;
         const quoteToken = data.token;
-        const fromSymbol =  data.txType === TxType.EXACT_IN ? data.in!.token!.symbol : data.out!.token!.symbol;
-        const toSymbol =  data.token.symbol;
+        const fromSymbol = data.input.token.symbol;
+        const toSymbol = data.token.symbol;
         const price = prices[`${fromSymbol}_${toSymbol}`];
         const quote = new BigNumber(price || fromDecimals(new BigNumber('1'), quoteToken.decimals)).multipliedBy(toDecimals(amount, amountToken.decimals));
         return Promise.resolve({
@@ -52,13 +55,13 @@ class SmartContractsService {
         });
     }
 
-    getLiquidityTxEstimation(data: LiquidityTxInRequestInterface | LiquidityTxOutRequestInterface): Promise<LiquidityTxInterface> {
+    getLiquidityTxEstimation(data: LiquidityTxRequestInterface): Promise<LiquidityTxInterface> {
         // TODO: Implement real api for transaction estimation
-        const amount = data.txType === TxType.EXACT_IN ? data.in.amount! : data.out.amount;
-        const amountToken = data.txType === TxType.EXACT_IN ? data.in.token! : data.out.token;
+        const amount = data.input.amount;
+        const amountToken = data.input.token;
         const quoteToken = data.token;
-        const fromSymbol =  data.txType === TxType.EXACT_IN ? data.in!.token!.symbol : data.out!.token!.symbol;
-        const toSymbol =  data.token.symbol;
+        const fromSymbol = data.input.token.symbol;
+        const toSymbol = data.token.symbol;
         const price = prices[`${fromSymbol}_${toSymbol}`];
         const quote = new BigNumber(price || fromDecimals(new BigNumber('1'), quoteToken.decimals)).multipliedBy(toDecimals(amount, amountToken.decimals));
         return Promise.resolve({
@@ -70,17 +73,15 @@ class SmartContractsService {
         });
     }
 
-    getPriceImpact(data: LiquidityTxInRequestInterface | LiquidityTxOutRequestInterface, transaction: SwapTxInterface): Promise<BigNumber> {
+    getPriceImpact(data: LiquidityTxRequestInterface, transaction: SwapTxInterface): Promise<BigNumber> {
         // TODO: Implement real api for estimate price impact
         return Promise.resolve(new BigNumber('2.00'));
     }
 
-    checkLiquidity(data: LiquidityTxInRequestInterface | LiquidityTxOutRequestInterface, transaction: SwapTxInterface): Promise<boolean> {
+    checkLiquidity(data: LiquidityTxRequestInterface, transaction: SwapTxInterface): Promise<boolean> {
         // TODO: Implement real api for estimate transaction liquidity
         return poolsService.getPools().then((pools) => {
-            const token0 = (data as LiquidityTxInRequestInterface).in ?
-                (data as LiquidityTxInRequestInterface).in.token.address.toLowerCase() :
-                (data as LiquidityTxOutRequestInterface).out.token.address.toLowerCase();
+            const token0 = data.input.token.address.toLowerCase();
             const token1 = data.token.address.toLowerCase();
             const pool = pools.find((pool) =>
                 (pool.token0.id.toLowerCase() === token0 || pool.token0.id.toLowerCase() === token1)
