@@ -11,10 +11,15 @@
   word-break: break-word;
 }
 
+html {
+  overflow-x: hidden;
+}
+
 body {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  overflow-x: hidden;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
   -ms-flex-direction: column;
