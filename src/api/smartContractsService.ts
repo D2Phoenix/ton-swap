@@ -5,6 +5,7 @@ import { TxType } from 'interfaces/transactionInterfaces';
 import { fromDecimals, toDecimals } from '../utils/decimals';
 import { LiquidityTxInterface } from '../interfaces/liquidityTxInterface';
 import { LiquidityTxInRequestInterface, LiquidityTxOutRequestInterface } from '../interfaces/liquidityTxRequestInterface';
+import PoolsService from './poolsService';
 
 const prices: Record<string, string> = {
     'TON_AAVE': '13992321165469095',
@@ -31,6 +32,7 @@ const prices: Record<string, string> = {
     'USDT_TON': '274213408',
 }
 
+const poolsService = new PoolsService();
 
 class SmartContractsService {
     getTxEstimation(data: SwapTxInRequestInterface | SwapTxOutRequestInterface): Promise<SwapTxInterface> {
@@ -75,7 +77,16 @@ class SmartContractsService {
 
     checkLiquidity(data: LiquidityTxInRequestInterface | LiquidityTxOutRequestInterface, transaction: SwapTxInterface): Promise<boolean> {
         // TODO: Implement real api for estimate transaction liquidity
-        return Promise.resolve(true);
+        return poolsService.getPools().then((pools) => {
+            const token0 = (data as LiquidityTxInRequestInterface).in ?
+                (data as LiquidityTxInRequestInterface).in.token.address.toLowerCase() :
+                (data as LiquidityTxOutRequestInterface).out.token.address.toLowerCase();
+            const token1 = data.token.address.toLowerCase();
+            const pool = pools.find((pool) =>
+                (pool.token0.id.toLowerCase() === token0 || pool.token0.id.toLowerCase() === token1)
+                && (pool.token1.id.toLowerCase() === token0 || pool.token1.id.toLowerCase() === token1));
+            return !!pool;
+        })
     }
 }
 

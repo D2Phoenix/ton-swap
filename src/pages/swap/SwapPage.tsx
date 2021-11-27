@@ -27,7 +27,7 @@ import {
     setSwapFromAmount,
     setSwapToToken,
     setSwapToAmount,
-    switchSwapTokens, resetSwap
+    switchSwapTokens, resetSwap, selectSwapDetails
 } from 'store/swap/swap.slice';
 import SwapInfo from './SwapInfo';
 import SwapConfirm from './SwapConfirm';
@@ -46,6 +46,7 @@ function SwapPage() {
     const from = useAppSelector(selectSwapFrom);
     const to = useAppSelector(selectSwapTo);
     const txType = useAppSelector(selectSwapTxType);
+    const swapDetails = useAppSelector(selectSwapDetails);
     const walletBalances = useAppSelector(selectWalletBalances);
     const walletAdapter = useAppSelector(selectWalletAdapter);
     const walletPermissions = useAppSelector(selectWalletPermissions);
@@ -62,8 +63,8 @@ function SwapPage() {
     }, [from, walletBalances]);
 
     const hasErrors = useMemo(() => {
-        return !isFilled || insufficientBalance || (!!from.token && !walletPermissions[from.token.symbol])
-    }, [isFilled, insufficientBalance, from, walletPermissions]);
+        return !isFilled || insufficientBalance || (!!from.token && !walletPermissions[from.token.symbol]) || swapDetails.insufficientLiquidity;
+    }, [isFilled, insufficientBalance, from, walletPermissions, swapDetails]);
 
     const tokenSwapRate = useMemo(() => {
         if (!TokenUtils.isFilled(from) || !TokenUtils.isFilled(to)) {
@@ -89,8 +90,11 @@ function SwapPage() {
         if (insufficientBalance) {
             return setSwapButtonText(`Insufficient ${from.token.symbol} balance`);
         }
+        if (swapDetails.insufficientLiquidity) {
+            return setSwapButtonText(`Insufficient liquidity for this trade.`);
+        }
         setSwapButtonText('Swap');
-    }, [from, to, insufficientBalance]);
+    }, [from, to, insufficientBalance, swapDetails]);
 
     // Estimate EXACT_IN transaction
     useEffect((): any => {
