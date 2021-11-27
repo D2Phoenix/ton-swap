@@ -30,6 +30,23 @@ function Settings({onClose}: any) {
         }
     }, [dispatch]);
 
+    const handleSlippageBlur = useCallback((event) => {
+        const value = parseFloat(event.target.value);
+        if (!value || value > 50 ) {
+            dispatch(setSettingsSlippage(''))
+        }
+    }, [dispatch]);
+
+    const handleDeadlineBlur = useCallback((event) => {
+        const value = parseFloat(event.target.value);
+        if (!value || value > 180 ) {
+            dispatch(setSettingsDeadline(''))
+        }
+    }, [dispatch]);
+
+    const slippageNumber = parseFloat(settings.slippage);
+    const deadlineNumber = parseFloat(settings.deadline);
+
     return (
         <Modal className={'swap-settings-modal'} onClose={onClose}>
             <div className="settings-wrapper">
@@ -48,9 +65,26 @@ function Settings({onClose}: any) {
                            className="number__input"
                            placeholder={DEFAULT_SLIPPAGE}
                            value={settings.slippage}
-                           onChange={handleSlippageChange}/>
+                           onChange={handleSlippageChange}
+                           onBlur={handleSlippageBlur}
+                    />
                     <span>&nbsp;%</span>
                 </div>
+                {
+                    slippageNumber < 0.05 && <span className="text-warning text-small">
+                      Your transaction may fail
+                    </span>
+                }
+                {
+                    slippageNumber > 1 && slippageNumber <= 50 && <span className="text-warning text-small">
+                      Your transaction may be frontrun
+                    </span>
+                }
+                {
+                    slippageNumber > 50 && <span className="text-error text-small">
+                      Enter a valid slippage percentage
+                    </span>
+                }
                 <div className="text-small">
                     Transaction deadline
                     <Tooltip content={<span className="text-small">Your transaction will revert if it is pending for more than this long.</span>}
@@ -65,9 +99,16 @@ function Settings({onClose}: any) {
                            className="number__input"
                            placeholder={DEFAULT_DEADLINE}
                            value={settings.deadline}
-                           onChange={handleDeadlineChange}/>
+                           onChange={handleDeadlineChange}
+                           onBlur={handleDeadlineBlur}
+                    />
                     <span>&nbsp;minutes</span>
                 </div>
+                {
+                    (deadlineNumber === 0 || deadlineNumber > 180) && <span className="text-error text-small">
+                      Enter a valid deadline
+                    </span>
+                }
             </div>
         </Modal>
     )
