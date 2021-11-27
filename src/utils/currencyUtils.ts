@@ -5,6 +5,10 @@ class CurrencyUtils {
         return '$' + CurrencyUtils.format(new BigNumber(value), 2);
     }
 
+    static toDisplay(value: string) {
+        return CurrencyUtils.format(new BigNumber(value), 2);
+    }
+
     static format(num: BigNumber, digits: number) {
         const lookup = [
             { value: new BigNumber(1), symbol: "" },

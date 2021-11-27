@@ -23,4 +23,6 @@ export default interface PoolItemInterface {
     volumeUSD: string;
     volume24USD: string;
     volume7dUSD: string;
+    volume24Change: string;
+    totalValueLockedChange: string;
 }

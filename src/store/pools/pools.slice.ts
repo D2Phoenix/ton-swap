@@ -38,5 +38,8 @@ export const poolsSlice = createSlice({
 export const {  } = poolsSlice.actions
 
 export const selectPoolsList = (state: RootState) => state.pools.list;
+export const selectPoolsPool = (state: RootState) => state.pools.pool;
+export const selectPoolsChartData = (state: RootState) => state.pools.chartData;
+export const selectPoolsTransactions = (state: RootState) => state.pools.transactions;
 
 export default poolsSlice.reducer;

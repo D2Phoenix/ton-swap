@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import './PoolsPage.scss';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
@@ -7,10 +8,12 @@ import { fetchPools } from 'store/pools/pools.thunks';
 import ChevronDownIcon from 'components/icons/ChevronDownIcon';
 import ChevronRightIcon from 'components/icons/ChevronRightIcon';
 import CurrencyUtils from 'utils/currencyUtils';
-import TokenIcon from '../../components/TokenIcon';
+import TokenIcon from 'components/TokenIcon';
+import PoolItemInterface from '../../interfaces/poolItemInterface';
 
 function PoolsPage() {
     const dispatch = useAppDispatch();
+    let navigate = useNavigate();
     const [query, setQuery] = useState('');
     const [sort, setSort] = useState('-totalValueLockedUSD');
     const [page, setPage] = useState(1);
@@ -53,6 +56,10 @@ function PoolsPage() {
         setPage((prev) => prev + value);
     }, []);
 
+    const handleSelectPools = useCallback((pool: PoolItemInterface) => {
+        navigate(pool.id);
+    }, [navigate]);
+
     return (
         <div className="pools-wrapper">
             <span className="text-semibold">All Pools</span>
@@ -90,7 +97,7 @@ function PoolsPage() {
                 {
                     visiblePools.map((pool, index) => {
                        return (
-                            <div key={index} className="pool-list__item">
+                            <div key={index} className="pool-list__item" onClick={handleSelectPools.bind(null, pool)}>
                                 <div className="position__column">{(page - 1) * 10 + index + 1}</div>
                                 <div className="name__column">
                                     <TokenIcon address={pool.token0.id} name={pool.token0.name}/>

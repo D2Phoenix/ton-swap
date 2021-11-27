@@ -10,6 +10,7 @@ import { fetchTokens } from './store/app/app.thunks';
 import { useAppDispatch } from './store/hooks';
 import RemoveLiquidityPage from './pages/liquidity/RemoveLiquidityPage';
 import PoolsPage from './pages/pools/PoolsPage';
+import PoolDetails from './pages/pools/PoolDetails';
 
 function App() {
     const dispatch = useAppDispatch();
@@ -30,6 +31,7 @@ function App() {
                       <Route path="pool/add/:oneToken/:twoToken" element={<AddLiquidityPage />} />
                       <Route path="pool/remove/:oneToken/:twoToken" element={<RemoveLiquidityPage />} />
                       <Route path="pools" element={<PoolsPage />} />
+                      <Route path="pools/:address" element={<PoolDetails />} />
                   </Routes>
               </div>
           </main>
