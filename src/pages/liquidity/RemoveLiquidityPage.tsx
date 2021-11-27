@@ -65,8 +65,8 @@ export function RemoveLiquidityPage() {
     }, [dispatch]);
 
     useEffect(() => {
-        if (params.oneToken && params.twoToken) {
-            dispatch(getLiquidityPool(`${params.oneToken}:${params.twoToken}`));
+        if (params.token0 && params.token1) {
+            dispatch(getLiquidityPool(`${params.token0}:${params.token1}`));
         }
     }, [dispatch, params]);
 

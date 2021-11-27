@@ -69,7 +69,22 @@
     }
   }
   .pool-charts {
+    position: relative;
     flex: 1 1 auto;
+    svg {
+      text {
+        tspan {
+          font-size: 13px;
+        }
+      }
+    }
+    .charts-select-wrapper {
+      position: absolute;
+      right: 0;
+      z-index: 1;
+      display: flex;
+      gap: 0.5rem;
+    }
   }
 }
 .pool-transactions {

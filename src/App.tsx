@@ -25,11 +25,13 @@ function App() {
               <div className="container">
                   <Routes>
                       <Route path="swap" element={<SwapPage />} />
+                      <Route path="swap/:token0" element={<SwapPage />} />
+                      <Route path="swap/:token0/:token1" element={<SwapPage />} />
                       <Route path="pool" element={<PoolPage />} />
                       <Route path="pool/add" element={<AddLiquidityPage />} />
-                      <Route path="pool/add/:oneToken" element={<AddLiquidityPage />} />
-                      <Route path="pool/add/:oneToken/:twoToken" element={<AddLiquidityPage />} />
-                      <Route path="pool/remove/:oneToken/:twoToken" element={<RemoveLiquidityPage />} />
+                      <Route path="pool/add/:token0" element={<AddLiquidityPage />} />
+                      <Route path="pool/add/:token0/:token1" element={<AddLiquidityPage />} />
+                      <Route path="pool/remove/:token0/:token1" element={<RemoveLiquidityPage />} />
                       <Route path="pools" element={<PoolsPage />} />
                       <Route path="pools/:address" element={<PoolDetails />} />
                   </Routes>

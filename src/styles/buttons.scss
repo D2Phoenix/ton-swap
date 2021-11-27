@@ -59,6 +59,14 @@
   &.small {
     padding: 5px 16px 5px 16px;
   }
+  &.mini {
+    font-size: 13px;
+    padding: 2px 8px;
+    &.active {
+      color: $secondary-color;
+      outline: 2px solid $secondary-color;
+    }
+  }
   &:hover {
     outline-width: 3px;
     -webkit-transition: all .3s;

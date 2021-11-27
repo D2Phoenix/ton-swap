@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import './PoolDetails.scss';
@@ -9,7 +9,7 @@ import TokenIcon from '../../components/TokenIcon';
 import CurrencyUtils from '../../utils/currencyUtils';
 import BigNumber from 'bignumber.js';
 import ChevronDownIcon from '../../components/icons/ChevronDownIcon';
-import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { Area, AreaChart, Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import DateUtils from '../../utils/dateUtils';
 
 
@@ -18,7 +18,7 @@ const TvlChartTooltip = ({ active, payload, label }: any) => {
         return (
             <div className="chart-tooltip">
                 <h3>{CurrencyUtils.toUSDDisplay(payload[0].value)}</h3>
-                <span>{DateUtils.toShortFormat(new Date(label * 1000))}</span>
+                <span className="text-small">{DateUtils.toShortFormat(new Date(label * 1000))} (UTC)</span>
             </div>
         );
     }
@@ -29,6 +29,7 @@ const TvlChartTooltip = ({ active, payload, label }: any) => {
 function PoolDetails() {
     const dispatch = useAppDispatch();
     const params = useParams();
+    const [chart, setChart] = useState('volume');
     const pool = useAppSelector(selectPoolsPool);
     const chartData = useAppSelector(selectPoolsChartData);
     const transactions = useAppSelector(selectPoolsTransactions);
@@ -90,10 +91,10 @@ function PoolDetails() {
                             <TokenIcon address={pool.token1.id} name={pool.token1.name}/>
                             <span className="text-semibold">{pool.token0.symbol} / {pool.token1.symbol}</span>
                             <div className="pool-actions">
-                                <Link to="/pool/add" className="btn btn-primary">
+                                <Link to={`/pool/add/${pool.token0.id}/${pool.token1.id}}`} className="btn btn-primary">
                                    Add Liquidity
                                 </Link>
-                                <Link to="/swap" className="btn btn-primary">
+                                <Link to={`/swap/${pool.token0.id}/${pool.token1.id}}`} className="btn btn-primary">
                                    Swap
                                 </Link>
                             </div>
@@ -139,19 +140,76 @@ function PoolDetails() {
                                 </div>
                             </div>
                             <div className="pool-charts">
-                                <ResponsiveContainer width="100%" height="100%">
-                                    <BarChart data={chartData}>
+                                <div className="charts-select-wrapper">
+                                    <button className={`btn btn-outline mini ${chart === 'volume' ? 'active' : ''}`}
+                                            onClick={setChart.bind(null, 'volume')}>
+                                        Volume
+                                    </button>
+                                    <button className={`btn btn-outline mini ${chart === 'tvl' ? 'active' : ''}`}
+                                            onClick={setChart.bind(null, 'tvl')}>
+                                        TVL
+                                    </button>
+                                    <button className={`btn btn-outline mini ${chart === 'fees' ? 'active' : ''}`}
+                                            onClick={setChart.bind(null, 'fees')}>
+                                        Fees
+                                    </button>
+                                </div>
+                                {
+                                    chart === 'volume' &&  <ResponsiveContainer width="100%" height="100%">
+                                      <BarChart data={chartData}>
                                         <Bar dataKey="volumeUSD" fill="#0088CC" />
                                         <XAxis dataKey="date"
                                                tickFormatter={formatXAxis}
-                                               tick={{stroke: '#303757'}}
+                                               tick={{stroke: '#303757', fontSize: '13'}}
                                         />
                                         <Tooltip content={<TvlChartTooltip />}
                                                  position={{ x: 0, y: 0 }}
                                                  cursor={{ fill: 'rgba(48, 55, 87, 0.08)' }}
                                         />
-                                    </BarChart>
-                                </ResponsiveContainer>
+                                      </BarChart>
+                                    </ResponsiveContainer>
+                                }
+                                {
+                                    chart === 'tvl' &&  <ResponsiveContainer width="100%" height="100%">
+                                      <AreaChart data={chartData}>
+                                        <defs>
+                                          <linearGradient id="colorTvlUSD" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="5%" stopColor="#0088CC" stopOpacity={0.6}/>
+                                            <stop offset="90%" stopColor="#0088CC" stopOpacity={0}/>
+                                          </linearGradient>
+                                        </defs>
+                                        <Area type="monotone"
+                                              dataKey="tvlUSD"
+                                              stroke="#0088CC"
+                                              strokeWidth={1}
+                                              fillOpacity={1}
+                                              fill="url(#colorTvlUSD)" />
+                                        <XAxis dataKey="date"
+                                               tickFormatter={formatXAxis}
+                                               tick={{stroke: '#303757', fontSize: '13'}}
+                                        />
+                                        <Tooltip content={<TvlChartTooltip />}
+                                                 position={{ x: 0, y: 0 }}
+                                                 cursor={{ fill: 'rgba(48, 55, 87, 0.08)' }}
+                                        />
+                                      </AreaChart>
+                                    </ResponsiveContainer>
+                                }
+                                {
+                                    chart === 'fees' &&  <ResponsiveContainer width="100%" height="100%">
+                                      <BarChart data={chartData}>
+                                        <Bar dataKey="feesUSD" fill="#0088CC" />
+                                        <XAxis dataKey="date"
+                                               tickFormatter={formatXAxis}
+                                               tick={{stroke: '#303757', fontSize: '13'}}
+                                        />
+                                        <Tooltip content={<TvlChartTooltip />}
+                                                 position={{ x: 0, y: 0 }}
+                                                 cursor={{ fill: 'rgba(48, 55, 87, 0.08)' }}
+                                        />
+                                      </BarChart>
+                                    </ResponsiveContainer>
+                                }
                             </div>
                         </div>
                         <div className="pool-transactions">

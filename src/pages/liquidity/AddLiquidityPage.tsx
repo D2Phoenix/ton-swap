@@ -85,11 +85,11 @@ export function AddLiquidityPage() {
     }, [dispatch]);
 
     useEffect(() => {
-        if (params.oneToken) {
-            dispatch(getLiquidityToken({address: params.oneToken, position: 'one'}));
+        if (params.token0) {
+            dispatch(getLiquidityToken({address: params.token0, position: 'one'}));
         }
-        if (params.twoToken) {
-            dispatch(getLiquidityToken({address: params.twoToken, position: 'two'}));
+        if (params.token1) {
+            dispatch(getLiquidityToken({address: params.token1, position: 'two'}));
         }
     }, [dispatch, params]);
 
