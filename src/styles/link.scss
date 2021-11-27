@@ -24,6 +24,9 @@ a {
   transition: color .3s;
   font-family: "mulish-bold", serif;
   text-decoration: none;
+  &.active {
+    color: $secondary-color;
+  }
   &:hover {
     color: $secondary-color;
   }

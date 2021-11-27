@@ -45,7 +45,7 @@ class PoolsService {
     getPoolTransactions(poolAddress: string): Promise<any> {
         return fetch(`/data/transactions.json`)
             .then((response) => response.json())
-            .then(response => response.data)
+            .then(response => [...response.data.burns, ...response.data.mints, ...response.data.swaps])
     }
 
     private getPoolByDate(name: string) {

@@ -11,9 +11,11 @@ import BigNumber from 'bignumber.js';
 import ChevronDownIcon from '../../components/icons/ChevronDownIcon';
 import { Area, AreaChart, Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import DateUtils from '../../utils/dateUtils';
+import ChevronRightIcon from '../../components/icons/ChevronRightIcon';
+import PoolTransactionsTable from './PoolTransactionsTable';
 
 
-const TvlChartTooltip = ({ active, payload, label }: any) => {
+const ChartTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
         return (
             <div className="chart-tooltip">
@@ -32,13 +34,12 @@ function PoolDetails() {
     const [chart, setChart] = useState('volume');
     const pool = useAppSelector(selectPoolsPool);
     const chartData = useAppSelector(selectPoolsChartData);
-    const transactions = useAppSelector(selectPoolsTransactions);
 
     useEffect(() => {
         if (params.address) {
             dispatch(fetchPool(params.address));
         }
-    }, [dispatch, params])
+    }, [dispatch, params]);
 
     const fee24Display = useMemo(() => {
         if (chartData.length) {
@@ -162,7 +163,7 @@ function PoolDetails() {
                                                tickFormatter={formatXAxis}
                                                tick={{stroke: '#303757', fontSize: '13'}}
                                         />
-                                        <Tooltip content={<TvlChartTooltip />}
+                                        <Tooltip content={<ChartTooltip />}
                                                  position={{ x: 0, y: 0 }}
                                                  cursor={{ fill: 'rgba(48, 55, 87, 0.08)' }}
                                         />
@@ -188,7 +189,7 @@ function PoolDetails() {
                                                tickFormatter={formatXAxis}
                                                tick={{stroke: '#303757', fontSize: '13'}}
                                         />
-                                        <Tooltip content={<TvlChartTooltip />}
+                                        <Tooltip content={<ChartTooltip />}
                                                  position={{ x: 0, y: 0 }}
                                                  cursor={{ fill: 'rgba(48, 55, 87, 0.08)' }}
                                         />
@@ -203,7 +204,7 @@ function PoolDetails() {
                                                tickFormatter={formatXAxis}
                                                tick={{stroke: '#303757', fontSize: '13'}}
                                         />
-                                        <Tooltip content={<TvlChartTooltip />}
+                                        <Tooltip content={<ChartTooltip />}
                                                  position={{ x: 0, y: 0 }}
                                                  cursor={{ fill: 'rgba(48, 55, 87, 0.08)' }}
                                         />
@@ -212,8 +213,8 @@ function PoolDetails() {
                                 }
                             </div>
                         </div>
-                        <div className="pool-transactions">
-                        </div>
+                        <h3 className="text-semibold"> Transactions </h3>
+                        <PoolTransactionsTable />
                     </>
                 )
             }

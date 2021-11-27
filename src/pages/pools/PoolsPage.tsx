@@ -60,12 +60,17 @@ function PoolsPage() {
         navigate(pool.id);
     }, [navigate]);
 
+    const handleQuery = useCallback((event) => {
+        setQuery(event.target.value);
+        setPage(1);
+    }, []);
+
     return (
         <div className="pools-wrapper">
             <span className="text-semibold">All Pools</span>
             <input placeholder="Search pools"
                    value={query}
-                   onChange={(event) => setQuery(event.target.value)}/>
+                   onChange={handleQuery}/>
             <div className="pools-list-wrapper">
                 <div className="pools-list-header">
                     <div className="position__column">#</div>
@@ -111,19 +116,19 @@ function PoolsPage() {
                         )
                     })
                 }
-                <div className="pools-list-pagination">
-                    <button className="btn-icon btn"
-                            disabled={(page - 1) === 0}
-                            onClick={handlePageChange.bind(null, -1)}>
-                        <ChevronRightIcon revert={true}/>
-                    </button>
-                    Page {page} of {totalPages}
-                    <button className="btn-icon btn"
-                            disabled={page === totalPages}
-                            onClick={handlePageChange.bind(null, 1)}>
-                        <ChevronRightIcon/>
-                    </button>
-                </div>
+            </div>
+            <div className="pools-list-pagination">
+                <button className="btn-icon btn"
+                        disabled={(page - 1) === 0}
+                        onClick={handlePageChange.bind(null, -1)}>
+                    <ChevronRightIcon revert={true}/>
+                </button>
+                Page {page} of {totalPages}
+                <button className="btn-icon btn"
+                        disabled={page >= totalPages}
+                        onClick={handlePageChange.bind(null, 1)}>
+                    <ChevronRightIcon/>
+                </button>
             </div>
         </div>
     )

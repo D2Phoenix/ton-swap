@@ -68,10 +68,23 @@
       text-align: end;
     }
   }
-  .pools-list-pagination {
-    display: flex;
-    align-items: center;
-    align-self: center;
-    gap: 0.5rem;
+}
+.pools-list-pagination {
+  display: flex;
+  align-items: center;
+  align-self: center;
+  gap: 0.5rem;
+}
+
+@media screen and (max-width: 599px) {
+  .pool-list__item:not(:last-child) {
+    border-bottom: 1px solid $border-color;
+  }
+  .pool-list__item, .pools-list-header {
+    .position__column,
+    .total-day__column,
+    .total-7day__column {
+      display: none !important;
+    }
   }
 }

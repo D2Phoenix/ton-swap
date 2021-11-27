@@ -8,14 +8,14 @@ interface PoolState {
     list: PoolItemInterface[],
     pool: PoolItemInterface,
     chartData: any[];
-    transactions: any;
+    transactions: any[];
 }
 
 const initialState: PoolState = {
     list: [],
     pool: null as any,
     chartData: [],
-    transactions: null,
+    transactions: [],
 }
 
 export const poolsSlice = createSlice({
