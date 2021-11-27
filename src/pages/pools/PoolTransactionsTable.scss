@@ -63,3 +63,23 @@
   align-self: center;
   gap: 0.5rem;
 }
+
+@media screen and (max-width: 599px) {
+  .pool-transactions__item:not(:last-child) {
+    border-bottom: 1px solid $border-color;
+  }
+  .pool-transactions__item, .pool-transactions-header {
+    .column:not(:last-child) {
+      display: none;
+    }
+    .column:last-child {
+      flex: 1 1 auto;
+    }
+    .account__column {
+      display: none !important;
+    }
+    .link__btn {
+      font-size: 13px !important;
+    }
+  }
+}

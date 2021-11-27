@@ -17,7 +17,7 @@ export const fetchPool = createAsyncThunk(
     'pools/pool',
     async (poolAddress: string, thunkAPI) => {
         const state = thunkAPI.getState() as RootState;
-        const pools = state.pools.list || await poolsService.getPools();
+        const pools = state.pools.list.length ? state.pools.list : await poolsService.getPools();
         return {
             pool: pools.find((pool) => pool.id === poolAddress) as PoolItemInterface,
             chartData: await poolsService.getPoolDayData(poolAddress),

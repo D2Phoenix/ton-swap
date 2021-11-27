@@ -4,7 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import './PoolDetails.scss';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { fetchPool } from 'store/pools/pools.thunks';
-import { selectPoolsChartData, selectPoolsPool, selectPoolsTransactions } from 'store/pools/pools.slice';
+import { resetPoolDetails, selectPoolsChartData, selectPoolsPool, selectPoolsTransactions } from 'store/pools/pools.slice';
 import TokenIcon from '../../components/TokenIcon';
 import CurrencyUtils from '../../utils/currencyUtils';
 import BigNumber from 'bignumber.js';
@@ -34,6 +34,12 @@ function PoolDetails() {
     const [chart, setChart] = useState('volume');
     const pool = useAppSelector(selectPoolsPool);
     const chartData = useAppSelector(selectPoolsChartData);
+
+    useEffect(() => {
+        return () => {
+            dispatch(resetPoolDetails());
+        }
+    }, [dispatch]);
 
     useEffect(() => {
         if (params.address) {
@@ -87,10 +93,12 @@ function PoolDetails() {
                             <span>{'< '}</span>
                             <Link to="/pools">Back</Link>
                         </span>
-                        <span className="pool-pair">
-                            <TokenIcon address={pool.token0.id} name={pool.token0.name}/>
-                            <TokenIcon address={pool.token1.id} name={pool.token1.name}/>
-                            <span className="text-semibold">{pool.token0.symbol} / {pool.token1.symbol}</span>
+                        <div className="pool-pair-wrapper">
+                            <div className="pool-pair">
+                                <TokenIcon address={pool.token0.id} name={pool.token0.name}/>
+                                <TokenIcon address={pool.token1.id} name={pool.token1.name}/>
+                                <span className="text-semibold">{pool.token0.symbol} / {pool.token1.symbol}</span>
+                            </div>
                             <div className="pool-actions">
                                 <Link to={`/pool/add/${pool.token0.id}/${pool.token1.id}}`} className="btn btn-primary">
                                    Add Liquidity
@@ -99,7 +107,7 @@ function PoolDetails() {
                                    Swap
                                 </Link>
                             </div>
-                        </span>
+                        </div>
                         <div className="pool-details">
                             <div className="pool-info">
                                 <span>Total Tokens Locked</span>

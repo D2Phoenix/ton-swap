@@ -15,12 +15,16 @@
       color: $primary-color;
     }
   }
-  .pool-pair {
+  .pool-pair-wrapper {
     display: flex;
     margin-bottom: 1rem;
     align-items: center;
-    > span {
-      margin-left: 0.5rem;
+    .pool-pair {
+      display: flex;
+      align-items: center;
+      > span {
+        margin-left: 0.5rem;
+      }
     }
     .pool-actions {
       display: flex;
@@ -86,5 +90,24 @@
       display: flex;
       gap: 0.5rem;
     }
+  }
+}
+
+@media screen and (max-width: 599px) {
+  .pool-details-wrapper {
+    .pool-pair-wrapper {
+      flex-direction: column;
+      gap: 1rem;
+      .pool-actions {
+        margin-left: initial;
+        justify-content: center;
+      }
+    }
+    .pool-details {
+      flex-direction: column;
+    }
+  }
+  .pool-charts {
+    height: 300px;
   }
 }

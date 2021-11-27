@@ -22,6 +22,11 @@ export const poolsSlice = createSlice({
     name: 'pools',
     initialState,
     reducers: {
+        resetPoolDetails: (state) => {
+            state.pool = null as any;
+            state.chartData = [];
+            state.transactions = [];
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(fetchPools.fulfilled, (state, action) => {
@@ -35,7 +40,7 @@ export const poolsSlice = createSlice({
     },
 })
 
-export const {  } = poolsSlice.actions
+export const { resetPoolDetails } = poolsSlice.actions
 
 export const selectPoolsList = (state: RootState) => state.pools.list;
 export const selectPoolsPool = (state: RootState) => state.pools.pool;
