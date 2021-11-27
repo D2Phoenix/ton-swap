@@ -11,6 +11,10 @@ import { selectPoolPools } from 'store/pool/pool.slice';
 import Accordion from 'components/Accordion';
 import TokenUtils from 'utils/tokenUtils';
 import TokenIcon from '../../components/TokenIcon';
+import QuestionIcon from '../../components/icons/QuestionIcon';
+import SwapInfo from '../swap/SwapInfo';
+import InfoIcon from '../../components/icons/InfoIcon';
+import Tooltip from '../../components/Tooltip';
 
 
 function PoolPage() {
@@ -27,7 +31,15 @@ function PoolPage() {
         <div className="pool-wrapper">
             <div className="pool-header-wrapper">
                 <div className="pool-header">
-                    <span className="text-semibold">Your Liquidity</span>
+                    <div className="text-semibold">
+                        Your Liquidity
+                        <Tooltip content={<span className="text-small">When you add liquidity, you are given pool tokens that represent your share. If you don’t see a pool you joined in this list, try importing a pool below.</span>}
+                                 direction="bottom">
+                            <div className="btn-icon">
+                                <QuestionIcon />
+                            </div>
+                        </Tooltip>
+                    </div>
                     <span className="text-small">Remove liquidity to receive tokens back</span>
                 </div>
                 <div className="btn-icon" onClick={() => setShowSettings(!showSettings)}>

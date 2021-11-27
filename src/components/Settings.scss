@@ -17,5 +17,8 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    .tooltip-wrapper {
+      margin-left: 0.5rem;
+    }
   }
 }

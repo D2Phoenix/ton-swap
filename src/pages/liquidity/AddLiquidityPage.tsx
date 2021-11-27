@@ -38,6 +38,8 @@ import ChevronRightIcon from 'components/icons/ChevronRightIcon';
 import LiquidityInfo from './LiquidityInfo';
 import AddLiquidityConfirm from './AddLiquidityConfirm';
 import TokenUtils from '../../utils/tokenUtils';
+import QuestionIcon from '../../components/icons/QuestionIcon';
+import Tooltip from '../../components/Tooltip';
 
 export function AddLiquidityPage() {
     const dispatch = useAppDispatch();
@@ -267,10 +269,18 @@ export function AddLiquidityPage() {
     return (
         <div className="add-liquidity-wrapper">
             <div className="add-liquidity-header">
-                <Link className="btn-icon" to="/pool">
+                <Link className="btn-icon chevron" to="/pool">
                     <ChevronRightIcon/>
                 </Link>
-                <span className="text-semibold">Add Liquidity</span>
+                <div className="text-semibold">
+                    Add Liquidity
+                    <Tooltip content={<span className="text-small">When you add liquidity, you are given pool tokens representing your position. These tokens automatically earn fees proportional to your share of the pool, and can be redeemed at any time.</span>}
+                             direction="bottom">
+                        <div className="btn-icon">
+                            <QuestionIcon />
+                        </div>
+                    </Tooltip>
+                </div>
                 <div className="btn-icon" onClick={() => setShowSettings(!showSettings)}>
                     <SettingsIcon/>
                 </div>

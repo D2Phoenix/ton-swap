@@ -5,6 +5,8 @@ import Modal from 'components/Modal';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { DEFAULT_DEADLINE, DEFAULT_SLIPPAGE } from 'constants/swap';
 import { selectSettings, setSettingsDeadline, setSettingsSlippage } from 'store/app/app.slice';
+import QuestionIcon from './icons/QuestionIcon';
+import Tooltip from './Tooltip';
 
 const SLIPPAGE_INPUT_REGEXP = RegExp(`^\\d*(?:\\\\[.])?\\d*$`);
 const DEADLINE_INPUT_REGEXP = RegExp(`^\\d*(?:\\\\[])?\\d*$`);
@@ -32,7 +34,15 @@ function Settings({onClose}: any) {
         <Modal className={'swap-settings-modal'} onClose={onClose}>
             <div className="settings-wrapper">
                 <h4>Transaction Settings</h4>
-                <span className="text-small">Slippage tolerance</span>
+                <div className="text-small">
+                    Slippage tolerance
+                    <Tooltip content={<span className="text-small">Your transaction will revert if the price changes unfavorably by more than this percentage.</span>}
+                             direction="bottom">
+                        <div className="btn-icon">
+                            <QuestionIcon />
+                        </div>
+                    </Tooltip>
+                </div>
                 <div>
                     <input type="text"
                            className="number__input"
@@ -41,7 +51,15 @@ function Settings({onClose}: any) {
                            onChange={handleSlippageChange}/>
                     <span>&nbsp;%</span>
                 </div>
-                <span className="text-small">Transaction deadline</span>
+                <div className="text-small">
+                    Transaction deadline
+                    <Tooltip content={<span className="text-small">Your transaction will revert if it is pending for more than this long.</span>}
+                             direction="bottom">
+                        <div className="btn-icon">
+                            <QuestionIcon />
+                        </div>
+                    </Tooltip>
+                </div>
                 <div>
                     <input type="text"
                            className="number__input"

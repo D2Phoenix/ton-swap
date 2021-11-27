@@ -1,6 +1,7 @@
 @import "../styles/vars";
 
 $tooltip-margin: 5px;
+$tooltip-margin-bottom: 15px;
 $tooltip-arrow-size: 6px;
 
 /* Wrapping */
@@ -20,19 +21,18 @@ $tooltip-arrow-size: 6px;
   font-family: sans-serif;
   line-height: 1;
   z-index: 100;
-  white-space: nowrap;
-  min-width: 300px;
+  width: 300px;
   border: 1px solid $border-color;
   border-radius: 8px;
-  &.top {
-    top: calc(#{$tooltip-margin} * -1);
+  &.bottom {
+    top: calc(#{$tooltip-margin-bottom} * 1);
   }
   &.right {
     left: calc(100% + #{$tooltip-margin});
     top: 50%;
     transform: translateX(0) translateY(-50%);
   }
-  &.bottom {
+  &.top {
     bottom: calc(#{$tooltip-margin} * -1);
   }
   &.left {

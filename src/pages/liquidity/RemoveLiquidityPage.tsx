@@ -29,6 +29,8 @@ import { WalletTxStatus } from '../../interfaces/transactionInterfaces';
 import Spinner from '../../components/Spinner';
 import RemoveLiquidityConfirm from './RemoveLiquidityConfirm';
 import InputSlider from '../../components/InputSlider';
+import QuestionIcon from '../../components/icons/QuestionIcon';
+import Tooltip from '../../components/Tooltip';
 
 export function RemoveLiquidityPage() {
     const dispatch = useAppDispatch();
@@ -121,10 +123,18 @@ export function RemoveLiquidityPage() {
     return (
         <div className="remove-liquidity-wrapper">
             <div className="remove-liquidity-header">
-                <Link className="btn-icon" to="/pool">
+                <Link className="btn-icon chevron" to="/pool">
                     <ChevronRightIcon/>
                 </Link>
-                <span className="text-semibold">Remove Liquidity</span>
+                <div className="text-semibold">
+                    Remove Liquidity
+                    <Tooltip content={<span className="text-small">Removing pool tokens converts your position back into underlying tokens at the current rate, proportional to your share of the pool. Accrued fees are included in the amounts you receive.</span>}
+                             direction="bottom">
+                        <div className="btn-icon">
+                            <QuestionIcon />
+                        </div>
+                    </Tooltip>
+                </div>
                 <div className="btn-icon" onClick={() => setShowSettings(!showSettings)}>
                     <SettingsIcon/>
                 </div>

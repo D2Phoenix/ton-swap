@@ -28,6 +28,7 @@ const Tooltip = ({delay, children, direction, content}: TooltipParams) => {
         <div
             className="tooltip-wrapper"
             // When to show the tooltip
+            onClick={active ? hideTip : showTip}
             onMouseEnter={showTip}
             onMouseLeave={hideTip}
         >
