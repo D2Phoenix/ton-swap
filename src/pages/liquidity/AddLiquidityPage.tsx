@@ -29,7 +29,7 @@ import {
     getLiquidityPoolToken,
     getLiquidityToken
 } from 'store/liquidity/liquidity.thunks';
-import { TxType } from 'interfaces/transactionInterfaces';
+import { EstimateTxType } from 'types/transactionInterfaces';
 import TokenSelect from 'components/TokenSelect';
 import Settings from 'components/Settings';
 import { WALLET_TX_UPDATE_INTERVAL } from 'constants/swap';
@@ -119,13 +119,13 @@ export function AddLiquidityPage() {
 
     // Estimate EXACT_IN transaction
     useEffect((): any => {
-        if (txType === TxType.EXACT_IN && !TokenUtils.hasAmount(input0)) {
+        if (txType === EstimateTxType.EXACT_IN && !TokenUtils.hasAmount(input0)) {
             return dispatch(setLiquidityInput1Amount({
                 value: null,
                 txType,
             }));
         }
-        if (txType === TxType.EXACT_IN && input1.token && TokenUtils.hasAmount(input0)) {
+        if (txType === EstimateTxType.EXACT_IN && input1.token && TokenUtils.hasAmount(input0)) {
             return dispatch(estimateLiquidityTransaction({
                 input: input0,
                 token: input1.token,
@@ -136,17 +136,17 @@ export function AddLiquidityPage() {
 
     // Estimate EXACT_OUT transaction
     useEffect((): any => {
-        if (txType === TxType.EXACT_OUT && !TokenUtils.hasAmount(input1)) {
+        if (txType === EstimateTxType.EXACT_OUT && !TokenUtils.hasAmount(input1)) {
             return dispatch(setLiquidityInput0Amount({
                 value: null,
                 txType,
             }));
         }
-        if (txType === TxType.EXACT_OUT && input0.token && TokenUtils.hasAmount(input1)) {
+        if (txType === EstimateTxType.EXACT_OUT && input0.token && TokenUtils.hasAmount(input1)) {
             return dispatch(estimateLiquidityTransaction({
                 input: input1,
                 token: input0.token,
-                txType: TxType.EXACT_OUT,
+                txType: EstimateTxType.EXACT_OUT,
             }))
         }
     }, [dispatch, input0.token, input1, txType]);
@@ -163,14 +163,14 @@ export function AddLiquidityPage() {
             if (input1.token) {
                 dispatch(getWalletBalance(input1.token));
             }
-            if (txType === TxType.EXACT_IN && input1.token && TokenUtils.isFilled(input0)) {
+            if (txType === EstimateTxType.EXACT_IN && input1.token && TokenUtils.isFilled(input0)) {
                 dispatch(estimateLiquidityTransaction({
                     input: input0,
                     token: input1.token,
                     txType,
                 }));
             }
-            if (txType === TxType.EXACT_OUT && input0.token && TokenUtils.isFilled(input1)) {
+            if (txType === EstimateTxType.EXACT_OUT && input0.token && TokenUtils.isFilled(input1)) {
                 dispatch(estimateLiquidityTransaction({
                     input: input1,
                     token: input0.token,
@@ -230,14 +230,14 @@ export function AddLiquidityPage() {
     const handleFromTokenAmount = useCallback((value) => {
         dispatch(setLiquidityInput0Amount({
             value,
-            txType: TxType.EXACT_IN
+            txType: EstimateTxType.EXACT_IN
         }));
     }, [dispatch]);
 
     const handleToTokenAmount = useCallback((value) => {
         dispatch(setLiquidityInput1Amount({
             value,
-            txType: TxType.EXACT_OUT
+            txType: EstimateTxType.EXACT_OUT
         }));
     }, [dispatch]);
 

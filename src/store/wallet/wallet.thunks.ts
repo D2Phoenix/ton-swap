@@ -1,10 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import BigNumber from 'bignumber.js';
 
-import TokenInterface from 'interfaces/tokenInterface';
+import TokenInterface from 'types/tokenInterface';
 import { RootState } from 'store/store';
 import StubWalletService from 'api/stubWalletService';
-import { WalletTxStatus } from '../../interfaces/transactionInterfaces';
+import { TxStatus } from 'types/transactionInterfaces';
 
 export const connectWallet = createAsyncThunk(
     'wallet/connect',
@@ -37,6 +37,12 @@ export const connectWallet = createAsyncThunk(
         }
     }
 )
+
+export const disconnectWallet = createAsyncThunk(
+    'wallet/disconnect',
+    async (request, thunkAPI) => {
+        return true;
+});
 
 export const getWalletBalance = createAsyncThunk(
     'wallet/balance',
@@ -108,9 +114,14 @@ export const walletSwap = createAsyncThunk(
         const state = thunkAPI.getState() as RootState;
         const walletAdapterService = state.wallet.adapter;
         if (walletAdapterService) {
-            return await walletAdapterService.swap(state.swap)
+            return {
+                status: await walletAdapterService.swap(state.swap),
+                state: state.swap,
+            }
         }
-        return WalletTxStatus.INITIAL;
+        return {
+            status: TxStatus.INITIAL,
+        }
     }
 )
 
@@ -120,9 +131,14 @@ export const walletAddLiquidity = createAsyncThunk(
         const state = thunkAPI.getState() as RootState;
         const walletAdapterService = state.wallet.adapter;
         if (walletAdapterService) {
-            return await walletAdapterService.addLiquidity(state.liquidity)
+            return {
+                status: await walletAdapterService.addLiquidity(state.liquidity),
+                state: state.liquidity,
+            }
         }
-        return WalletTxStatus.INITIAL;
+        return {
+            status: TxStatus.INITIAL,
+        };
     }
 )
 
@@ -132,8 +148,13 @@ export const walletRemoveLiquidity = createAsyncThunk(
         const state = thunkAPI.getState() as RootState;
         const walletAdapterService = state.wallet.adapter;
         if (walletAdapterService) {
-            return await walletAdapterService.removeLiquidity(state.liquidity)
+            return {
+                status: await walletAdapterService.removeLiquidity(state.liquidity),
+                state: state.liquidity,
+            }
         }
-        return WalletTxStatus.INITIAL;
+        return {
+            status: TxStatus.INITIAL,
+        };
     }
 )

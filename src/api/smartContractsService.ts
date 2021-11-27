@@ -1,13 +1,13 @@
 import BigNumber from 'bignumber.js';
 import {
     SwapTxRequestInterface
-} from 'interfaces/swapTxRequestInterface';
-import { SwapTxInterface } from 'interfaces/swapTxInterface';
+} from 'types/swapTxRequestInterface';
+import { SwapTxInterface } from 'types/swapTxInterface';
 import { fromDecimals, toDecimals } from 'utils/decimals';
-import { LiquidityTxInterface } from 'interfaces/liquidityTxInterface';
+import { LiquidityTxInterface } from 'types/liquidityTxInterface';
 import {
     LiquidityTxRequestInterface
-} from 'interfaces/liquidityTxRequestInterface';
+} from 'types/liquidityTxRequestInterface';
 import PoolsService from './poolsService';
 
 const prices: Record<string, string> = {

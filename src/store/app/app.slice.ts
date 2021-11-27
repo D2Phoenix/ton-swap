@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction} from '@reduxjs/toolkit'
 
 import type { RootState } from 'store/store'
-import TokenInterface from 'interfaces/tokenInterface';
+import TokenInterface from 'types/tokenInterface';
 import { fetchTokens } from './app.thunks';
 import { DEFAULT_DEADLINE, DEFAULT_SLIPPAGE } from '../../constants/swap';
-import { SettingsInterface } from '../../interfaces/settingsInterface';
+import { SettingsInterface } from '../../types/settingsInterface';
 
 interface AppState {
     tokens: TokenInterface[],

@@ -26,7 +26,7 @@ import LiquidityInfo from './LiquidityInfo';
 import ChevronDownIcon from 'components/icons/ChevronDownIcon';
 import { approveRemove, getLiquidityPool } from 'store/liquidity/liquidity.thunks';
 import TokenUtils from 'utils/tokenUtils';
-import { WalletTxStatus } from 'interfaces/transactionInterfaces';
+import { TxStatus } from 'types/transactionInterfaces';
 import Spinner from 'components/Spinner';
 import RemoveLiquidityConfirm from './RemoveLiquidityConfirm';
 import InputSlider from 'components/InputSlider';
@@ -172,19 +172,19 @@ export function RemoveLiquidityPage() {
             <div className="actions-wrapper">
                 {
                     walletAdapter && <button className="btn btn-primary remove__btn"
-                                             disabled={!isFilled || [WalletTxStatus.PENDING, WalletTxStatus.CONFIRMED].indexOf(removeApproveTx.status) > -1}
+                                             disabled={!isFilled || [TxStatus.PENDING, TxStatus.CONFIRMED].indexOf(removeApproveTx.status) > -1}
                                              onClick={handleApprove}>
                         {
-                            removeApproveTx.status === WalletTxStatus.PENDING && <Spinner className="btn"/>
+                            removeApproveTx.status === TxStatus.PENDING && <Spinner className="btn"/>
                         }
                         {
-                            removeApproveTx.status !== WalletTxStatus.PENDING && 'Approve'
+                            removeApproveTx.status !== TxStatus.PENDING && 'Approve'
                         }
                     </button>
                 }
                 {
                     walletAdapter && <button className="btn btn-primary remove__btn"
-                                             disabled={!isFilled || removeApproveTx.status !== WalletTxStatus.CONFIRMED}
+                                             disabled={!isFilled || removeApproveTx.status !== TxStatus.CONFIRMED}
                                              onClick={handleSupply}>
                         {removeButtonText}
                     </button>

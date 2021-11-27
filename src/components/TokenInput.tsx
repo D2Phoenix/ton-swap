@@ -3,10 +3,10 @@ import BigNumber from 'bignumber.js';
 
 import './TokenInput.scss';
 import ChevronRightIcon from './icons/ChevronRightIcon';
-import TokenInterface from '../interfaces/tokenInterface';
+import TokenInterface from '../types/tokenInterface';
 import { fromDecimals, toDecimals } from '../utils/decimals';
 import { BALANCE_PRECISION, TOKEN_PRECISION } from '../constants/swap';
-import PoolInterface from '../interfaces/poolInterface';
+import PoolInterface from '../types/poolInterface';
 import TokenIcon from './TokenIcon';
 
 interface TokenInputParams {

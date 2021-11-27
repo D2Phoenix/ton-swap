@@ -1,4 +1,4 @@
-import PoolItemInterface from 'interfaces/poolItemInterface';
+import PoolItemInterface from 'types/poolItemInterface';
 import BigNumber from 'bignumber.js';
 
 class PoolsService {

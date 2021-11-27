@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 
 import './TokenSelect.scss';
 import Modal from './Modal';
-import TokenInterface from 'interfaces/tokenInterface';
+import TokenInterface from 'types/tokenInterface';
 import { BALANCE_PRECISION } from 'constants/swap';
 import { toDecimals } from 'utils/decimals';
 import TokenIcon from './TokenIcon';

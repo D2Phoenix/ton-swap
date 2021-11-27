@@ -6,7 +6,7 @@ import {
     selectSwapTxType,
     selectSwapInput1
 } from 'store/swap/swap.slice';
-import { TxType } from 'interfaces/transactionInterfaces';
+import { EstimateTxType } from 'types/transactionInterfaces';
 import { DEFAULT_SLIPPAGE } from 'constants/swap';
 import { useMemo } from 'react';
 import { selectSettings } from 'store/app/app.slice';
@@ -47,13 +47,13 @@ function SwapInfo() {
                 <span className="text-small text-semibold">{settings.slippage || DEFAULT_SLIPPAGE} %</span>
             </div>
             {
-                type === TxType.EXACT_IN && to && <div>
+                type === EstimateTxType.EXACT_IN && to && <div>
                   <span className="text-small">Minimum received</span>
                   <span className="text-small text-semibold">{minimumReceived} {to.token.symbol}</span>
                 </div>
             }
             {
-                type === TxType.EXACT_OUT && from && <div>
+                type === EstimateTxType.EXACT_OUT && from && <div>
                   <span className="text-small">Maximum sent</span>
                   <span className="text-small text-semibold">{maximumSent} {from.token.symbol}</span>
                 </div>

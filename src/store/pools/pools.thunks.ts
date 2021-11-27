@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import PoolsService from 'api/poolsService';
-import PoolItemInterface from 'interfaces/poolItemInterface';
+import PoolItemInterface from 'types/poolItemInterface';
 import { RootState } from '../store';
 
 const poolsService = new PoolsService();

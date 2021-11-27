@@ -16,7 +16,7 @@ import { resetTransaction, selectWalletTransaction } from 'store/wallet/wallet.s
 import { walletAddLiquidity } from 'store/wallet/wallet.thunks';
 import { selectSettings } from 'store/app/app.slice';
 import { DEFAULT_SLIPPAGE } from 'constants/swap';
-import { WalletTxStatus } from 'interfaces/transactionInterfaces';
+import { TxStatus } from 'types/transactionInterfaces';
 import TokenUtils from 'utils/tokenUtils';
 
 function AddLiquidityConfirm({onClose}: any) {
@@ -28,7 +28,7 @@ function AddLiquidityConfirm({onClose}: any) {
     const walletTransaction = useAppSelector(selectWalletTransaction);
 
     const modalClassName = useMemo(() => {
-        return walletTransaction.status !== WalletTxStatus.INITIAL ? 'add-liquidity-confirm-modal mini' : 'add-liquidity-confirm-modal';
+        return walletTransaction.status !== TxStatus.INITIAL ? 'add-liquidity-confirm-modal mini' : 'add-liquidity-confirm-modal';
     }, [walletTransaction]);
 
     const token0Display = useMemo(() => {
@@ -50,7 +50,7 @@ function AddLiquidityConfirm({onClose}: any) {
 
     const handleClose = useCallback(() => {
         dispatch(resetTransaction());
-        if (walletTransaction.status === WalletTxStatus.CONFIRMED) {
+        if (walletTransaction.status === TxStatus.CONFIRMED) {
             dispatch(resetLiquidity());
         }
         onClose && onClose();
@@ -59,7 +59,7 @@ function AddLiquidityConfirm({onClose}: any) {
     return (
         <Modal className={modalClassName} onClose={handleClose}>
             {
-                walletTransaction.status === WalletTxStatus.INITIAL && <>
+                walletTransaction.status === TxStatus.INITIAL && <>
                   <h4>Confirm Supply</h4>
                   <div className="add-liquidity-confirm-wrapper">
                     <TokenInput token={input0.token}
@@ -96,7 +96,7 @@ function AddLiquidityConfirm({onClose}: any) {
                 </>
             }
             {
-                walletTransaction.status === WalletTxStatus.PENDING && <>
+                walletTransaction.status === TxStatus.PENDING && <>
                     <div className="add-liquidity-confirm-wrapper">
                       <div className="add-liquidity-status">
                         <Spinner />
@@ -111,7 +111,7 @@ function AddLiquidityConfirm({onClose}: any) {
                 </>
             }
             {
-                walletTransaction.status === WalletTxStatus.CONFIRMED && <>
+                walletTransaction.status === TxStatus.CONFIRMED && <>
                   <div className="add-liquidity-confirm-wrapper">
                     <div className="add-liquidity-status">
                       <h2 className="text-semibold">
@@ -127,7 +127,7 @@ function AddLiquidityConfirm({onClose}: any) {
                 </>
             }
             {
-                walletTransaction.status === WalletTxStatus.REJECTED && <>
+                walletTransaction.status === TxStatus.REJECTED && <>
                   <h4 className="text-error">Error</h4>
                   <div className="add-liquidity-confirm-wrapper">
                     <div className="add-liquidity-status">

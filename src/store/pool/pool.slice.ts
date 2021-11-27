@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 import type { RootState } from 'store/store'
 import { getPoolPools } from './pool.thunks';
-import WalletPoolInterface from '../../interfaces/walletPoolInterface';
+import WalletPoolInterface from '../../types/walletPoolInterface';
 
 interface PoolState {
     pools: WalletPoolInterface[],

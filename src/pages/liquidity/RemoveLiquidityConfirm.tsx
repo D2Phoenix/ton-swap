@@ -13,7 +13,7 @@ import {
 } from 'store/liquidity/liquidity.slice';
 import { resetTransaction, selectWalletTransaction } from 'store/wallet/wallet.slice';
 import { DEFAULT_SLIPPAGE } from 'constants/swap';
-import { WalletTxStatus } from 'interfaces/transactionInterfaces';
+import { TxStatus } from 'types/transactionInterfaces';
 import {  walletRemoveLiquidity } from 'store/wallet/wallet.thunks';
 import Spinner from 'components/Spinner';
 import { selectSettings } from 'store/app/app.slice';
@@ -29,7 +29,7 @@ function RemoveLiquidityConfirm({onClose}: any) {
     const walletTransaction = useAppSelector(selectWalletTransaction);
 
     const className = useMemo(() => {
-        return walletTransaction.status !== WalletTxStatus.INITIAL ? 'remove-liquidity-confirm-modal mini' : 'remove-liquidity-confirm-modal';
+        return walletTransaction.status !== TxStatus.INITIAL ? 'remove-liquidity-confirm-modal mini' : 'remove-liquidity-confirm-modal';
     }, [walletTransaction]);
 
     const token0RemoveDisplay = useMemo(() => {
@@ -50,7 +50,7 @@ function RemoveLiquidityConfirm({onClose}: any) {
 
     const handleClose = useCallback(() => {
         dispatch(resetTransaction());
-        if (walletTransaction.status === WalletTxStatus.CONFIRMED) {
+        if (walletTransaction.status === TxStatus.CONFIRMED) {
             dispatch(getLiquidityPool(`${input0.token.symbol}:${input1.token.symbol}`));
         }
         onClose && onClose();
@@ -59,7 +59,7 @@ function RemoveLiquidityConfirm({onClose}: any) {
     return (
         <Modal className={className} onClose={handleClose}>
             {
-                walletTransaction.status === WalletTxStatus.INITIAL && <>
+                walletTransaction.status === TxStatus.INITIAL && <>
                   <h4>Confirm Remove Liquidity</h4>
                   <div className="remove-liquidity-confirm-wrapper">
                     <span>You will receive</span>
@@ -95,7 +95,7 @@ function RemoveLiquidityConfirm({onClose}: any) {
                 </>
             }
             {
-                walletTransaction.status === WalletTxStatus.PENDING && <>
+                walletTransaction.status === TxStatus.PENDING && <>
                     <div className="remove-liquidity-confirm-wrapper">
                       <div className="remove-liquidity-status">
                         <Spinner />
@@ -110,7 +110,7 @@ function RemoveLiquidityConfirm({onClose}: any) {
                 </>
             }
             {
-                walletTransaction.status === WalletTxStatus.CONFIRMED && <>
+                walletTransaction.status === TxStatus.CONFIRMED && <>
                   <div className="remove-liquidity-confirm-wrapper">
                     <div className="remove-liquidity-status">
                       <h2 className="text-semibold">
@@ -126,7 +126,7 @@ function RemoveLiquidityConfirm({onClose}: any) {
                 </>
             }
             {
-                walletTransaction.status === WalletTxStatus.REJECTED && <>
+                walletTransaction.status === TxStatus.REJECTED && <>
                   <h4 className="text-error">Error</h4>
                   <div className="remove-liquidity-confirm-wrapper">
                     <div className="remove-liquidity-status">

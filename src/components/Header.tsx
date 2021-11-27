@@ -1,19 +1,29 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import './Header.scss';
 import { connectWallet } from 'store/wallet/wallet.thunks';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { selectWalletAddress } from 'store/wallet/wallet.slice';
+import Account from './Account';
 
 function Header() {
     const dispatch = useAppDispatch();
+    const [showAccount ,setShowAccount] = useState(false);
 
     const walletAddress = useAppSelector(selectWalletAddress)
 
     const handleConnectWallet = useCallback(() => {
         dispatch(connectWallet());
     }, [dispatch]);
+
+    const handleShowAccount = useCallback(() => {
+        setShowAccount(true);
+    }, []);
+
+    const handleCloseAccount = useCallback(() => {
+        setShowAccount(false);
+    }, []);
 
     return (
         <div className="header-wrapper">
@@ -49,12 +59,15 @@ function Header() {
                                                       onClick={handleConnectWallet}>Connect Wallet</div>
                             }
                             {
-                                walletAddress && <div className="btn btn-primary">{walletAddress}</div>
+                                walletAddress && <div className="btn btn-primary" onClick={handleShowAccount}>{walletAddress}</div>
                             }
                         </div>
                     </div>
                 </div>
             </nav>
+            {
+                showAccount && <Account onClose={handleCloseAccount} />
+            }
         </div>
     )
 }

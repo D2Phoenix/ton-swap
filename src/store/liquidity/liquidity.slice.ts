@@ -9,15 +9,15 @@ import {
     getLiquidityToken,
 } from './liquidity.thunks';
 import { shiftDecimals } from 'utils/decimals';
-import { TxType, WalletTxStatus } from 'interfaces/transactionInterfaces';
-import { InputTokenInterface } from 'interfaces/inputTokenInterface';
-import { InputPoolInterface } from 'interfaces/inputPoolInterface';
+import { EstimateTxType, TxStatus } from 'types/transactionInterfaces';
+import { InputTokenInterface } from 'types/inputTokenInterface';
+import { InputPoolInterface } from 'types/inputPoolInterface';
 
 
 export interface LiquidityState {
     input0: InputTokenInterface;
     input1: InputTokenInterface;
-    txType: TxType;
+    txType: EstimateTxType;
     pool: InputPoolInterface;
     oldLiquidity: {
         input0: InputTokenInterface;
@@ -25,7 +25,7 @@ export interface LiquidityState {
         pool: InputPoolInterface;
     };
     removeApproveTx: {
-        status: WalletTxStatus,
+        status: TxStatus,
     }
 }
 
@@ -45,7 +45,7 @@ const initialState: LiquidityState = {
         token: null as any,
         amount: null as any
     },
-    txType: TxType.EXACT_IN,
+    txType: EstimateTxType.EXACT_IN,
     pool: {
         token: null as any,
         overallAmount: null as any,
@@ -58,7 +58,7 @@ const initialState: LiquidityState = {
         pool: null as any,
     },
     removeApproveTx: {
-        status: WalletTxStatus.INITIAL,
+        status: TxStatus.INITIAL,
     }
 }
 
@@ -99,25 +99,25 @@ export const liquiditySlice = createSlice({
             state.input0.removeAmount = state.input0.amount.multipliedBy(action.payload.value).div('100');
             state.input1.removeAmount = state.input1.amount.multipliedBy(action.payload.value).div('100');
             state.pool.removeAmount = state.pool.amount.multipliedBy(action.payload.value).div('100');
-            state.removeApproveTx.status = WalletTxStatus.INITIAL;
+            state.removeApproveTx.status = TxStatus.INITIAL;
         },
         setLiquidityInput0RemoveAmount: (state, action: PayloadAction<any>) => {
             handleRemoveAmount(state, state.input0, [state.input1, state.pool], action.payload.value);
-            state.removeApproveTx.status = WalletTxStatus.INITIAL;
+            state.removeApproveTx.status = TxStatus.INITIAL;
         },
         setLiquidityInput1RemoveAmount: (state, action: PayloadAction<any>) => {
             handleRemoveAmount(state, state.input1, [state.input0, state.pool], action.payload.value);
-            state.removeApproveTx.status = WalletTxStatus.INITIAL;
+            state.removeApproveTx.status = TxStatus.INITIAL;
         },
         setLiquidityPoolRemoveAmount: (state, action: PayloadAction<any>) => {
             handleRemoveAmount(state, state.pool, [state.input0, state.input1], action.payload.value);
-            state.removeApproveTx.status = WalletTxStatus.INITIAL;
+            state.removeApproveTx.status = TxStatus.INITIAL;
         },
         switchLiquidityTokens: (state, action: PayloadAction<void>) => {
             const input1 = state.input1;
             state.input1 = state.input0;
             state.input0 = input1;
-            state.txType = state.txType === TxType.EXACT_IN ? TxType.EXACT_OUT : TxType.EXACT_IN;
+            state.txType = state.txType === EstimateTxType.EXACT_IN ? EstimateTxType.EXACT_OUT : EstimateTxType.EXACT_IN;
         },
         resetLiquidity: () => {
             return initialState;
@@ -145,10 +145,10 @@ export const liquiditySlice = createSlice({
             state.input0 = action.payload.input0;
             state.input1 = action.payload.input1;
             state.pool = action.payload.pool;
-            state.removeApproveTx.status = WalletTxStatus.INITIAL;
+            state.removeApproveTx.status = TxStatus.INITIAL;
         });
         builder.addCase(approveRemove.pending, (state, action) => {
-            state.removeApproveTx.status = WalletTxStatus.PENDING;
+            state.removeApproveTx.status = TxStatus.PENDING;
         });
         builder.addCase(approveRemove.fulfilled, (state, action) => {
             state.removeApproveTx.status = action.payload;

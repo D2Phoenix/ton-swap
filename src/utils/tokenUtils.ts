@@ -1,9 +1,9 @@
-import { InputTokenInterface } from '../interfaces/inputTokenInterface';
+import { InputTokenInterface } from '../types/inputTokenInterface';
 import BigNumber from 'bignumber.js';
 import { FEE_PRECISION, TOKEN_PRECISION } from '../constants/swap';
-import TokenInterface from '../interfaces/tokenInterface';
+import TokenInterface from '../types/tokenInterface';
 import { toDecimals } from './decimals';
-import { InputPoolInterface } from '../interfaces/inputPoolInterface';
+import { InputPoolInterface } from '../types/inputPoolInterface';
 
 class TokenUtils {
     static isFilled(input: InputTokenInterface | InputPoolInterface) {
@@ -32,9 +32,9 @@ class TokenUtils {
         }
         return inputToken.token.address === token.address;
     }
-    static getDisplay(input: InputTokenInterface | InputPoolInterface) {
+    static getDisplay(input: InputTokenInterface | InputPoolInterface, precision?: number) {
         return toDecimals(input.amount!, input.token!.decimals)
-            .precision(TOKEN_PRECISION).toFixed();
+            .precision(precision || TOKEN_PRECISION).toFixed();
     }
     static getRemoveDisplay(input: InputTokenInterface | InputPoolInterface) {
         return toDecimals(input.removeAmount!, input.token!.decimals)

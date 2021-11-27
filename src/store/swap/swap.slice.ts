@@ -4,14 +4,14 @@ import BigNumber from 'bignumber.js';
 import type { RootState } from 'store/store'
 import { estimateTransaction } from './swap.thunks';
 import { shiftDecimals } from 'utils/decimals';
-import { TxType } from 'interfaces/transactionInterfaces';
-import { InputTokenInterface } from 'interfaces/inputTokenInterface';
+import { EstimateTxType } from 'types/transactionInterfaces';
+import { InputTokenInterface } from 'types/inputTokenInterface';
 
 
 export interface SwapState {
     input0: InputTokenInterface,
     input1: InputTokenInterface,
-    txType: TxType;
+    txType: EstimateTxType;
     details: {
         fee: BigNumber;
         priceImpact: BigNumber;
@@ -35,7 +35,7 @@ const initialState: SwapState = {
         token: null as any,
         amount: null as any,
     },
-    txType: TxType.EXACT_IN,
+    txType: EstimateTxType.EXACT_IN,
     details: {
         fee: new BigNumber('0'),
         priceImpact: new BigNumber('0'),
@@ -77,7 +77,7 @@ export const swapSlice = createSlice({
             const from = state.input1;
             state.input1 = state.input0;
             state.input0 = from;
-            state.txType = state.txType === TxType.EXACT_IN ? TxType.EXACT_OUT : TxType.EXACT_IN;
+            state.txType = state.txType === EstimateTxType.EXACT_IN ? EstimateTxType.EXACT_OUT : EstimateTxType.EXACT_IN;
         },
         resetSwap: () => {
             return initialState;

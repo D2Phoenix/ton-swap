@@ -17,7 +17,7 @@ import {
     setWalletUseTokenPermission
 } from 'store/wallet/wallet.thunks';
 import { estimateTransaction } from 'store/swap/swap.thunks';
-import { TxType } from 'interfaces/transactionInterfaces';
+import { EstimateTxType } from 'types/transactionInterfaces';
 import {
     selectSwapInput0,
     selectSwapInput1,
@@ -97,13 +97,13 @@ function SwapPage() {
 
     // Estimate EXACT_IN transaction
     useEffect((): any => {
-        if (txType === TxType.EXACT_IN && !TokenUtils.hasAmount(input0)) {
+        if (txType === EstimateTxType.EXACT_IN && !TokenUtils.hasAmount(input0)) {
             return dispatch(setSwapInput1Amount({
                 value: null,
                 txType,
             }));
         }
-        if (txType === TxType.EXACT_IN && input1.token && TokenUtils.isFilled(input0)) {
+        if (txType === EstimateTxType.EXACT_IN && input1.token && TokenUtils.isFilled(input0)) {
             return dispatch(estimateTransaction({
                 input: input0,
                 token: input1.token,
@@ -114,13 +114,13 @@ function SwapPage() {
 
     // Estimate EXACT_OUT transaction
     useEffect((): any => {
-        if (txType === TxType.EXACT_OUT && !TokenUtils.hasAmount(input1)) {
+        if (txType === EstimateTxType.EXACT_OUT && !TokenUtils.hasAmount(input1)) {
             return dispatch(setSwapInput0Amount({
                 value: null,
                 txType,
             }));
         }
-        if (txType === TxType.EXACT_OUT && input0.token && TokenUtils.isFilled(input1)) {
+        if (txType === EstimateTxType.EXACT_OUT && input0.token && TokenUtils.isFilled(input1)) {
             return dispatch(estimateTransaction({
                 input: input1,
                 token: input0.token,
@@ -141,14 +141,14 @@ function SwapPage() {
             if (input0.token) {
                 dispatch(getWalletBalance(input0.token));
             }
-            if (txType === TxType.EXACT_IN && input1.token && TokenUtils.isFilled(input0)) {
+            if (txType === EstimateTxType.EXACT_IN && input1.token && TokenUtils.isFilled(input0)) {
                 dispatch(estimateTransaction({
                     input: input0,
                     token: input1.token,
                     txType,
                 }));
             }
-            if (txType === TxType.EXACT_OUT && input0.token && TokenUtils.isFilled(input1)) {
+            if (txType === EstimateTxType.EXACT_OUT && input0.token && TokenUtils.isFilled(input1)) {
                 dispatch(estimateTransaction({
                     input: input1,
                     token: input0.token,
@@ -195,14 +195,14 @@ function SwapPage() {
     const handleInput0TokenAmount = useCallback((value) => {
         dispatch(setSwapInput0Amount({
             value,
-            txType: TxType.EXACT_IN
+            txType: EstimateTxType.EXACT_IN
         }));
     }, [dispatch]);
 
     const handleToTokenAmount = useCallback((value) => {
         dispatch(setSwapInput1Amount({
             value,
-            txType: TxType.EXACT_OUT
+            txType: EstimateTxType.EXACT_OUT
         }));
     }, [dispatch]);
 

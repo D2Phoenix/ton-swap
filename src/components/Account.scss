@@ -1,0 +1,38 @@
+@import "../styles/vars";
+
+.account-modal.modal-container {
+  .modal-content {
+    height: 600px;
+    width: 50vw;
+    max-width: 420px;
+  }
+}
+.account-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 0.5em;
+  .account-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+  }
+  .transactions-list {
+    height: calc(100% - 96px);
+    overflow: auto;
+    padding-bottom: 8px;
+    .transactions-empty {
+      display: flex;
+      justify-content: center;
+    }
+    .transaction-item {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      min-height: 56px;
+      cursor: pointer;
+      gap: 16px;
+      padding: 8px;
+    }
+  }
+}
