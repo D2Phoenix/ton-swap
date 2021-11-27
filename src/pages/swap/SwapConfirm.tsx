@@ -8,9 +8,9 @@ import SwapInfo from './SwapInfo';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import {
     resetSwap,
-    selectSwapFrom,
+    selectSwapInput0,
     selectSwapTxType,
-    selectSwapTo,
+    selectSwapInput1,
 } from 'store/swap/swap.slice';
 import { resetTransaction, selectWalletTransaction } from 'store/wallet/wallet.slice';
 import { DEFAULT_SLIPPAGE } from 'constants/swap';
@@ -22,8 +22,8 @@ import TokenUtils from 'utils/tokenUtils';
 
 function SwapConfirm({onClose}: any) {
     const dispatch = useAppDispatch();
-    const from = useAppSelector(selectSwapFrom);
-    const to = useAppSelector(selectSwapTo);
+    const from = useAppSelector(selectSwapInput0);
+    const to = useAppSelector(selectSwapInput1);
     const txType = useAppSelector(selectSwapTxType);
     const settings = useAppSelector(selectSettings);
     const walletTransaction = useAppSelector(selectWalletTransaction);

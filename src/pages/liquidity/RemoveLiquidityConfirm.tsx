@@ -8,8 +8,8 @@ import { useAppDispatch, useAppSelector } from 'store/hooks';
 import {
     resetLiquidity,
     selectLiquidityPool,
-    selectLiquidityOne,
-    selectLiquidityTwo,
+    selectLiquidityInput0,
+    selectLiquidityInput1,
 } from 'store/liquidity/liquidity.slice';
 import { resetTransaction, selectWalletTransaction } from 'store/wallet/wallet.slice';
 import { DEFAULT_SLIPPAGE } from 'constants/swap';
@@ -22,8 +22,8 @@ import { getLiquidityPool } from '../../store/liquidity/liquidity.thunks';
 
 function RemoveLiquidityConfirm({onClose}: any) {
     const dispatch = useAppDispatch();
-    const one = useAppSelector(selectLiquidityOne);
-    const two = useAppSelector(selectLiquidityTwo);
+    const input0 = useAppSelector(selectLiquidityInput0);
+    const input1 = useAppSelector(selectLiquidityInput1);
     const pool = useAppSelector(selectLiquidityPool);
     const settings = useAppSelector(selectSettings);
     const walletTransaction = useAppSelector(selectWalletTransaction);
@@ -32,13 +32,13 @@ function RemoveLiquidityConfirm({onClose}: any) {
         return walletTransaction.status !== WalletTxStatus.INITIAL ? 'remove-liquidity-confirm-modal mini' : 'remove-liquidity-confirm-modal';
     }, [walletTransaction]);
 
-    const oneRemoveDisplay = useMemo(() => {
-        return TokenUtils.getRemoveDisplay(one);
-    }, [one]);
+    const token0RemoveDisplay = useMemo(() => {
+        return TokenUtils.getRemoveDisplay(input0);
+    }, [input0]);
 
-    const twoRemoveDisplay = useMemo(() => {
-        return TokenUtils.getRemoveDisplay(two);
-    }, [two]);
+    const token1RemoveDisplay = useMemo(() => {
+        return TokenUtils.getRemoveDisplay(input1);
+    }, [input1]);
 
     const poolRemoveDisplay = useMemo(() => {
         return TokenUtils.getRemoveDisplay(pool)
@@ -51,10 +51,10 @@ function RemoveLiquidityConfirm({onClose}: any) {
     const handleClose = useCallback(() => {
         dispatch(resetTransaction());
         if (walletTransaction.status === WalletTxStatus.CONFIRMED) {
-            dispatch(getLiquidityPool(`${one.token.symbol}:${two.token.symbol}`));
+            dispatch(getLiquidityPool(`${input0.token.symbol}:${input1.token.symbol}`));
         }
         onClose && onClose();
-    }, [dispatch, one, two, walletTransaction, onClose]);
+    }, [dispatch, input0, input1, walletTransaction, onClose]);
 
     return (
         <Modal className={className} onClose={handleClose}>
@@ -63,8 +63,8 @@ function RemoveLiquidityConfirm({onClose}: any) {
                   <h4>Confirm Remove Liquidity</h4>
                   <div className="remove-liquidity-confirm-wrapper">
                     <span>You will receive</span>
-                    <TokenInput token={one.token}
-                                value={one.removeAmount}
+                    <TokenInput token={input0.token}
+                                value={input0.removeAmount}
                                 showMax={true}
                                 selectable={false}
                                 editable={false}
@@ -72,8 +72,8 @@ function RemoveLiquidityConfirm({onClose}: any) {
                     <div className="btn-icon">
                       +
                     </div>
-                    <TokenInput token={two.token}
-                                value={two.removeAmount}
+                    <TokenInput token={input1.token}
+                                value={input1.removeAmount}
                                 showMax={false}
                                 selectable={false}
                                 editable={false}
@@ -82,7 +82,7 @@ function RemoveLiquidityConfirm({onClose}: any) {
                     <div className="pool-tokens-info">
                       <span>You will burn </span>
                       <span className="text-semibold">{poolRemoveDisplay}</span>
-                      <span> {one.token.symbol}/{two.token.symbol} Pool Tokens</span>
+                      <span> {input0.token.symbol}/{input1.token.symbol} Pool Tokens</span>
                     </div>
                     <span className="help-text text-small">
                       Output is estimated. If the price changes by more than {settings.slippage || DEFAULT_SLIPPAGE}% your transaction will revert.
@@ -100,7 +100,7 @@ function RemoveLiquidityConfirm({onClose}: any) {
                       <div className="remove-liquidity-status">
                         <Spinner />
                         <span>
-                            Removing {oneRemoveDisplay} {one.token.symbol} and {twoRemoveDisplay} {two.token.symbol}
+                            Removing {token0RemoveDisplay} {input0.token.symbol} and {token1RemoveDisplay} {input1.token.symbol}
                         </span>
                         <span className="text-small">
                           Confirm this transaction in your wallet

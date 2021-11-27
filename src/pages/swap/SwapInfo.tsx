@@ -2,9 +2,9 @@ import './SwapInfo.scss';
 import { useAppSelector } from 'store/hooks';
 import {
     selectSwapDetails,
-    selectSwapFrom,
+    selectSwapInput0,
     selectSwapTxType,
-    selectSwapTo
+    selectSwapInput1
 } from 'store/swap/swap.slice';
 import { TxType } from 'interfaces/transactionInterfaces';
 import { DEFAULT_SLIPPAGE } from 'constants/swap';
@@ -13,8 +13,8 @@ import { selectSettings } from 'store/app/app.slice';
 import TokenUtils from 'utils/tokenUtils';
 
 function SwapInfo() {
-    const from = useAppSelector(selectSwapFrom);
-    const to = useAppSelector(selectSwapTo);
+    const from = useAppSelector(selectSwapInput0);
+    const to = useAppSelector(selectSwapInput1);
     const type = useAppSelector(selectSwapTxType);
     const settings = useAppSelector(selectSettings);
     const details = useAppSelector(selectSwapDetails);

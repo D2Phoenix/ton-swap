@@ -4,14 +4,13 @@ import { Link, useParams } from 'react-router-dom';
 import './PoolDetails.scss';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { fetchPool } from 'store/pools/pools.thunks';
-import { resetPoolDetails, selectPoolsChartData, selectPoolsPool, selectPoolsTransactions } from 'store/pools/pools.slice';
-import TokenIcon from '../../components/TokenIcon';
-import CurrencyUtils from '../../utils/currencyUtils';
+import { resetPoolDetails, selectPoolsChartData, selectPoolsPool } from 'store/pools/pools.slice';
+import TokenIcon from 'components/TokenIcon';
+import CurrencyUtils from 'utils/currencyUtils';
 import BigNumber from 'bignumber.js';
-import ChevronDownIcon from '../../components/icons/ChevronDownIcon';
-import { Area, AreaChart, Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import DateUtils from '../../utils/dateUtils';
-import ChevronRightIcon from '../../components/icons/ChevronRightIcon';
+import ChevronDownIcon from 'components/icons/ChevronDownIcon';
+import { Area, AreaChart, Bar, BarChart, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
+import DateUtils from 'utils/dateUtils';
 import PoolTransactionsTable from './PoolTransactionsTable';
 
 

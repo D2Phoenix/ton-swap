@@ -1,36 +1,37 @@
 import './RemoveLiquidityPage.scss';
-import TokenInput from '../../components/TokenInput';
-import SettingsIcon from '../../components/icons/SettingsIcon';
+import TokenInput from 'components/TokenInput';
+import SettingsIcon from 'components/icons/SettingsIcon';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { selectWalletAdapter } from '../../store/wallet/wallet.slice';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { selectWalletAdapter } from 'store/wallet/wallet.slice';
 import {
-    selectLiquidityOne,
-    selectLiquidityTwo,
+    selectLiquidityInput0,
+    selectLiquidityInput1,
     resetLiquidity,
     selectLiquidityPool,
-    setLiquidityOneRemoveAmount,
-    setLiquidityTwoRemoveAmount,
+    setLiquidityInput0RemoveAmount,
+    setLiquidityInput1RemoveAmount,
     setLiquidityPoolRemoveAmount,
-    selectLiquidityRemoveApproveTx, setLiquidityPercentRemoveAmount,
-} from '../../store/liquidity/liquidity.slice';
+    selectLiquidityRemoveApproveTx,
+    setLiquidityPercentRemoveAmount,
+} from 'store/liquidity/liquidity.slice';
 import {
     getWalletBalance,
     getWalletUseTokenPermission,
-} from '../../store/wallet/wallet.thunks';
-import Settings from '../../components/Settings';
+} from 'store/wallet/wallet.thunks';
+import Settings from 'components/Settings';
 import { Link, useParams } from 'react-router-dom';
-import ChevronRightIcon from '../../components/icons/ChevronRightIcon';
+import ChevronRightIcon from 'components/icons/ChevronRightIcon';
 import LiquidityInfo from './LiquidityInfo';
-import ChevronDownIcon from '../../components/icons/ChevronDownIcon';
-import { approveRemove, getLiquidityPool } from '../../store/liquidity/liquidity.thunks';
-import TokenUtils from '../../utils/tokenUtils';
-import { WalletTxStatus } from '../../interfaces/transactionInterfaces';
-import Spinner from '../../components/Spinner';
+import ChevronDownIcon from 'components/icons/ChevronDownIcon';
+import { approveRemove, getLiquidityPool } from 'store/liquidity/liquidity.thunks';
+import TokenUtils from 'utils/tokenUtils';
+import { WalletTxStatus } from 'interfaces/transactionInterfaces';
+import Spinner from 'components/Spinner';
 import RemoveLiquidityConfirm from './RemoveLiquidityConfirm';
-import InputSlider from '../../components/InputSlider';
-import QuestionIcon from '../../components/icons/QuestionIcon';
-import Tooltip from '../../components/Tooltip';
+import InputSlider from 'components/InputSlider';
+import QuestionIcon from 'components/icons/QuestionIcon';
+import Tooltip from 'components/Tooltip';
 
 export function RemoveLiquidityPage() {
     const dispatch = useAppDispatch();
@@ -40,14 +41,14 @@ export function RemoveLiquidityPage() {
     const [removeButtonText, setRemoveButtonText] = useState('Remove');
     const [showRemoveLiquidityConfirm, setShowRemoveLiquidityConfirm] = useState(false);
     const walletAdapter = useAppSelector(selectWalletAdapter);
-    const one = useAppSelector(selectLiquidityOne);
-    const two = useAppSelector(selectLiquidityTwo);
+    const input0 = useAppSelector(selectLiquidityInput0);
+    const input1 = useAppSelector(selectLiquidityInput1);
     const pool = useAppSelector(selectLiquidityPool);
     const removeApproveTx = useAppSelector(selectLiquidityRemoveApproveTx);
 
     const isFilled = useMemo(() => {
-        return TokenUtils.isRemoveFilled(one) && TokenUtils.isRemoveFilled(two) && TokenUtils.hasRemoveAmount(pool);
-    }, [one, two, pool]);
+        return TokenUtils.isRemoveFilled(input0) && TokenUtils.isRemoveFilled(input1) && TokenUtils.hasRemoveAmount(pool);
+    }, [input0, input1, pool]);
 
     const removePercent = useMemo(() => {
         if (!pool.removeAmount) {
@@ -74,19 +75,19 @@ export function RemoveLiquidityPage() {
 
     //Handle remove button text
     useEffect(() => {
-        if (!TokenUtils.isRemoveFilled(one) || !TokenUtils.isRemoveFilled(two) || !TokenUtils.hasRemoveAmount(pool)) {
+        if (!TokenUtils.isRemoveFilled(input0) || !TokenUtils.isRemoveFilled(input1) || !TokenUtils.hasRemoveAmount(pool)) {
             return setRemoveButtonText('Enter an amount');
         }
         setRemoveButtonText('Remove');
-    }, [one, two, pool]);
+    }, [input0, input1, pool]);
 
-    //Update balance and check token permissions on one token update
+    //Update balance and check token permissions on token0 update
     useEffect(() => {
-        if (walletAdapter && one.token) {
-            dispatch(getWalletBalance(one.token));
-            dispatch(getWalletUseTokenPermission(one.token));
+        if (walletAdapter && input0.token) {
+            dispatch(getWalletBalance(input0.token));
+            dispatch(getWalletUseTokenPermission(input0.token));
         }
-    }, [dispatch, one.token, walletAdapter]);
+    }, [dispatch, input0.token, walletAdapter]);
 
     const handleInputSliderChange = useCallback((value) => {
         dispatch(setLiquidityPercentRemoveAmount({
@@ -94,14 +95,14 @@ export function RemoveLiquidityPage() {
         }));
     }, [dispatch])
 
-    const handleOneTokenAmount = useCallback((value) => {
-        dispatch(setLiquidityOneRemoveAmount({
+    const handleToken0Amount = useCallback((value) => {
+        dispatch(setLiquidityInput0RemoveAmount({
             value,
         }));
     }, [dispatch]);
 
-    const handleTwoTokenAmount = useCallback((value) => {
-        dispatch(setLiquidityTwoRemoveAmount({
+    const handleToken1Amount = useCallback((value) => {
+        dispatch(setLiquidityInput1RemoveAmount({
             value,
         }));
     }, [dispatch]);
@@ -150,21 +151,21 @@ export function RemoveLiquidityPage() {
             <div className="btn-icon">
                 <ChevronDownIcon/>
             </div>
-            <TokenInput token={one.token}
-                        value={one.removeAmount}
-                        balance={one.amount}
+            <TokenInput token={input0.token}
+                        value={input0.removeAmount}
+                        balance={input0.amount}
                         showMax={true}
-                        onChange={handleOneTokenAmount}
+                        onChange={handleToken0Amount}
                         selectable={false}
                         editable={true}/>
             <div className="btn-icon">
                 +
             </div>
-            <TokenInput token={two.token}
-                        value={two.removeAmount}
-                        balance={two.amount}
+            <TokenInput token={input1.token}
+                        value={input1.removeAmount}
+                        balance={input1.amount}
                         showMax={true}
-                        onChange={handleTwoTokenAmount}
+                        onChange={handleToken1Amount}
                         selectable={false}
                         editable={true}/>
             <LiquidityInfo />

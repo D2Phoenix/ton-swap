@@ -15,8 +15,8 @@ export interface WalletAdapterInterface {
     swap(state: SwapState): Promise<WalletTxStatus>;
     addLiquidity(state: LiquidityState): Promise<WalletTxStatus>;
     getPools(): Promise<WalletPoolInterface[]>;
-    getPool(one: TokenInterface, two: TokenInterface): Promise<WalletPoolInterface>;
-    getPoolToken(one: TokenInterface, two: TokenInterface): Promise<PoolInterface>;
+    getPool(token0: TokenInterface, token1: TokenInterface): Promise<WalletPoolInterface>;
+    getPoolToken(token0: TokenInterface, token1: TokenInterface): Promise<PoolInterface>;
     approveRemovePool(pool: InputPoolInterface): Promise<WalletTxStatus>;
     removeLiquidity(state: LiquidityState): Promise<WalletTxStatus>;
 }

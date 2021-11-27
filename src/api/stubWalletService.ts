@@ -47,8 +47,8 @@ class StubWalletService implements WalletAdapterInterface {
         // TODO: Implement real api for wallet operation
         return new Promise<WalletTxStatus>((resolve) => {
             setTimeout(() => {
-                balances[state.from.token.symbol] = balances[state.from.token.symbol].minus(state.from.amount);
-                balances[state.to.token.symbol] = (balances[state.to.token.symbol] || new BigNumber('0')).plus(state.to.amount)
+                balances[state.input0.token.symbol] = balances[state.input0.token.symbol].minus(state.input0.amount);
+                balances[state.input1.token.symbol] = (balances[state.input1.token.symbol] || new BigNumber('0')).plus(state.input1.amount)
                 resolve(WalletTxStatus.CONFIRMED);
             }, 2000)
         });
@@ -63,22 +63,22 @@ class StubWalletService implements WalletAdapterInterface {
         // TODO: Implement real api for wallet operation
         return new Promise<WalletTxStatus>((resolve) => {
             setTimeout(() => {
-                balances[state.one.token.symbol] = balances[state.one.token.symbol].minus(state.one.amount);
-                balances[state.two.token.symbol] = (balances[state.two.token.symbol] || new BigNumber('0')).minus(state.two.amount);
-                const poolName = liquidity[`${state.two.token.symbol}:${state.one.token.symbol}`] ?
-                    `${state.two.token.symbol}:${state.one.token.symbol}` :
-                    `${state.one.token.symbol}:${state.two.token.symbol}`
+                balances[state.input0.token.symbol] = balances[state.input0.token.symbol].minus(state.input0.amount);
+                balances[state.input1.token.symbol] = (balances[state.input1.token.symbol] || new BigNumber('0')).minus(state.input1.amount);
+                const poolName = liquidity[`${state.input1.token.symbol}:${state.input0.token.symbol}`] ?
+                    `${state.input1.token.symbol}:${state.input0.token.symbol}` :
+                    `${state.input0.token.symbol}:${state.input1.token.symbol}`
                 const pool = liquidity[poolName];
                 if (pool) {
-                    const isReverse = poolName.startsWith(state.two.token.symbol);
+                    const isReverse = poolName.startsWith(state.input1.token.symbol);
                     liquidity[poolName] = {
-                        one: {
-                            token: liquidity[poolName].one.token,
-                            amount: isReverse ? liquidity[poolName].one.amount.plus(state.two.amount) : liquidity[poolName].one.amount.plus(state.one.amount),
+                        input0: {
+                            token: liquidity[poolName].input0.token,
+                            amount: isReverse ? liquidity[poolName].input0.amount.plus(state.input1.amount) : liquidity[poolName].input0.amount.plus(state.input0.amount),
                         },
-                        two: {
-                            token: liquidity[poolName].two.token,
-                            amount: isReverse ? liquidity[poolName].two.amount.plus(state.one.amount) : liquidity[poolName].two.amount.plus(state.two.amount),
+                        input1: {
+                            token: liquidity[poolName].input1.token,
+                            amount: isReverse ? liquidity[poolName].input1.amount.plus(state.input0.amount) : liquidity[poolName].input1.amount.plus(state.input1.amount),
                         },
                         pool: {
                             token: liquidity[poolName].pool.token,
@@ -88,15 +88,15 @@ class StubWalletService implements WalletAdapterInterface {
                     };
                 } else {
                     liquidity[poolName] = {
-                        one: state.one,
-                        two: state.two,
+                        input0: state.input0,
+                        input1: state.input1,
                         pool: {
                             ...state.pool,
                             token: {
                                 symbol: poolName,
                                 name: poolName,
-                                address0: state.one.token.address,
-                                address1: state.two.token.address,
+                                address0: state.input0.token.address,
+                                address1: state.input1.token.address,
                                 decimals: 0,
                                 chainId: 1,
                                 address: poolName,
@@ -109,32 +109,32 @@ class StubWalletService implements WalletAdapterInterface {
         });
     };
 
-    getPool(one: TokenInterface, two: TokenInterface): Promise<WalletPoolInterface> {
+    getPool(token0: TokenInterface, token1: TokenInterface): Promise<WalletPoolInterface> {
         // TODO: Implement real api for wallet operation
-        const poolName = `${one.symbol}:${two.symbol}`;
-        const result = liquidity[`${one.symbol}:${two.symbol}`];
+        const poolName = `${token0.symbol}:${token1.symbol}`;
+        const result = liquidity[`${token0.symbol}:${token1.symbol}`];
         if (result) {
             return Promise.resolve({
-                one: result.one,
-                two: result.two,
+                input0: result.input0,
+                input1: result.input1,
                 pool: result.pool
             });
         }
         return Promise.resolve({
-            one: {
-                token: one,
+            input0: {
+                token: token0,
                 amount: new BigNumber('0'),
             },
-            two: {
-                token: two,
+            input1: {
+                token: token1,
                 amount: new BigNumber('0'),
             },
             pool: {
                 token: {
                     symbol: poolName,
                     name: poolName,
-                    address0: one.address,
-                    address1: two.address,
+                    address0: token0.address,
+                    address1: token1.address,
                     decimals: 0,
                     chainId: 1,
                     address: poolName,
@@ -145,11 +145,11 @@ class StubWalletService implements WalletAdapterInterface {
         });
     }
 
-    getPoolToken(one: TokenInterface, two: TokenInterface): Promise<PoolInterface> {
+    getPoolToken(token0: TokenInterface, token1: TokenInterface): Promise<PoolInterface> {
         // TODO: Implement real api for wallet operation
-        const poolName = liquidity[`${two.symbol}:${one.symbol}`] ?
-            `${two.symbol}:${one.symbol}` :
-            `${one.symbol}:${two.symbol}`;
+        const poolName = liquidity[`${token1.symbol}:${token0.symbol}`] ?
+            `${token1.symbol}:${token0.symbol}` :
+            `${token0.symbol}:${token1.symbol}`;
         let result: PoolInterface;
         if (liquidity[poolName]) {
             result = liquidity[poolName].pool.token;
@@ -157,8 +157,8 @@ class StubWalletService implements WalletAdapterInterface {
             result = {
                 symbol: poolName,
                 name: poolName,
-                address0: one.address,
-                address1: two.address,
+                address0: token0.address,
+                address1: token1.address,
                 decimals: 0,
                 chainId: 1,
                 address: poolName,
@@ -181,17 +181,17 @@ class StubWalletService implements WalletAdapterInterface {
         // TODO: Implement real api for wallet operation
         return new Promise<WalletTxStatus>((resolve) => {
             setTimeout(() => {
-                balances[state.one.token.symbol] = balances[state.one.token.symbol].plus(state.one.removeAmount!);
-                balances[state.two.token.symbol] = (balances[state.two.token.symbol] || new BigNumber('0')).plus(state.two.removeAmount!);
-                const poolName = `${state.one.token.symbol}:${state.two.token.symbol}`
+                balances[state.input0.token.symbol] = balances[state.input0.token.symbol].plus(state.input0.removeAmount!);
+                balances[state.input1.token.symbol] = (balances[state.input1.token.symbol] || new BigNumber('0')).plus(state.input1.removeAmount!);
+                const poolName = `${state.input0.token.symbol}:${state.input1.token.symbol}`
                 liquidity[poolName] = {
-                    one: {
-                        token: liquidity[poolName].one.token,
-                        amount: liquidity[poolName].one.amount.minus(state.one.removeAmount!),
+                    input0: {
+                        token: liquidity[poolName].input0.token,
+                        amount: liquidity[poolName].input0.amount.minus(state.input0.removeAmount!),
                     },
-                    two: {
-                        token: liquidity[poolName].two.token,
-                        amount: liquidity[poolName].two.amount.minus(state.two.removeAmount!),
+                    input1: {
+                        token: liquidity[poolName].input1.token,
+                        amount: liquidity[poolName].input1.amount.minus(state.input1.removeAmount!),
                     },
                     pool: {
                         token: liquidity[poolName].pool.token,

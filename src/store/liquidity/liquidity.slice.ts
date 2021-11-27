@@ -11,17 +11,17 @@ import {
 import { shiftDecimals } from 'utils/decimals';
 import { TxType, WalletTxStatus } from 'interfaces/transactionInterfaces';
 import { InputTokenInterface } from 'interfaces/inputTokenInterface';
-import { InputPoolInterface } from '../../interfaces/inputPoolInterface';
+import { InputPoolInterface } from 'interfaces/inputPoolInterface';
 
 
 export interface LiquidityState {
-    one: InputTokenInterface;
-    two: InputTokenInterface;
+    input0: InputTokenInterface;
+    input1: InputTokenInterface;
     txType: TxType;
     pool: InputPoolInterface;
     oldLiquidity: {
-        one: InputTokenInterface;
-        two: InputTokenInterface;
+        input0: InputTokenInterface;
+        input1: InputTokenInterface;
         pool: InputPoolInterface;
     };
     removeApproveTx: {
@@ -30,7 +30,7 @@ export interface LiquidityState {
 }
 
 const initialState: LiquidityState = {
-    one: {
+    input0: {
         token: {
             address: '0x582d872a1b094fc48f5de31d3b73f2d9be47def1',
             chainId: 1,
@@ -41,7 +41,7 @@ const initialState: LiquidityState = {
         },
         amount: null as any
     },
-    two: {
+    input1: {
         token: null as any,
         amount: null as any
     },
@@ -53,8 +53,8 @@ const initialState: LiquidityState = {
         removeAmount: null as any,
     },
     oldLiquidity: {
-        one: null as any,
-        two: null as any,
+        input0: null as any,
+        input1: null as any,
         pool: null as any,
     },
     removeApproveTx: {
@@ -66,57 +66,57 @@ export const liquiditySlice = createSlice({
     name: 'liquidity',
     initialState,
     reducers: {
-        setLiquidityOneToken: (state, action: PayloadAction<any>) => {
-            const prevToken = state.one.token;
-            state.one.token = action.payload;
+        setLiquidityInput0Token: (state, action: PayloadAction<any>) => {
+            const prevToken = state.input0.token;
+            state.input0.token = action.payload;
             // correct amount with new token decimals
-            if (state.one.token && state.one.amount) {
-                const delta = state.one.token.decimals - (prevToken?.decimals || 0);
-                state.one.amount = shiftDecimals(state.one.amount as BigNumber, delta);
+            if (state.input0.token && state.input0.amount) {
+                const delta = state.input0.token.decimals - (prevToken?.decimals || 0);
+                state.input0.amount = shiftDecimals(state.input0.amount as BigNumber, delta);
             }
         },
-        setLiquidityTwoToken: (state, action: PayloadAction<any>) => {
-            const prevToken = state.two.token;
-            state.two.token = action.payload;
+        setLiquidityInput1Token: (state, action: PayloadAction<any>) => {
+            const prevToken = state.input1.token;
+            state.input1.token = action.payload;
             // correct amount with new token decimals
-            if (state.two.token && state.two.amount) {
-                const delta = state.two.token.decimals - (prevToken?.decimals || 0);
-                state.two.amount = shiftDecimals(state.two.amount as BigNumber, delta);
+            if (state.input1.token && state.input1.amount) {
+                const delta = state.input1.token.decimals - (prevToken?.decimals || 0);
+                state.input1.amount = shiftDecimals(state.input1.amount as BigNumber, delta);
             }
         },
-        setLiquidityOneAmount: (state, action: PayloadAction<any>) => {
-            state.one.amount = action.payload.value;
+        setLiquidityInput0Amount: (state, action: PayloadAction<any>) => {
+            state.input0.amount = action.payload.value;
             state.txType = action.payload.txType;
         },
-        setLiquidityTwoAmount: (state, action: PayloadAction<any>) => {
-            state.two.amount = action.payload.value;
+        setLiquidityInput1Amount: (state, action: PayloadAction<any>) => {
+            state.input1.amount = action.payload.value;
             state.txType = action.payload.txType;
         },
         setLiquidityPercentRemoveAmount: (state, action: PayloadAction<any>) => {
-            if (!state.one.amount) {
+            if (!state.input0.amount) {
                 return;
             }
-            state.one.removeAmount = state.one.amount.multipliedBy(action.payload.value).div('100');
-            state.two.removeAmount = state.two.amount.multipliedBy(action.payload.value).div('100');
+            state.input0.removeAmount = state.input0.amount.multipliedBy(action.payload.value).div('100');
+            state.input1.removeAmount = state.input1.amount.multipliedBy(action.payload.value).div('100');
             state.pool.removeAmount = state.pool.amount.multipliedBy(action.payload.value).div('100');
             state.removeApproveTx.status = WalletTxStatus.INITIAL;
         },
-        setLiquidityOneRemoveAmount: (state, action: PayloadAction<any>) => {
-            handleRemoveAmount(state, state.one, [state.two, state.pool], action.payload.value);
+        setLiquidityInput0RemoveAmount: (state, action: PayloadAction<any>) => {
+            handleRemoveAmount(state, state.input0, [state.input1, state.pool], action.payload.value);
             state.removeApproveTx.status = WalletTxStatus.INITIAL;
         },
-        setLiquidityTwoRemoveAmount: (state, action: PayloadAction<any>) => {
-            handleRemoveAmount(state, state.two, [state.one, state.pool], action.payload.value);
+        setLiquidityInput1RemoveAmount: (state, action: PayloadAction<any>) => {
+            handleRemoveAmount(state, state.input1, [state.input0, state.pool], action.payload.value);
             state.removeApproveTx.status = WalletTxStatus.INITIAL;
         },
         setLiquidityPoolRemoveAmount: (state, action: PayloadAction<any>) => {
-            handleRemoveAmount(state, state.pool, [state.one, state.two], action.payload.value);
+            handleRemoveAmount(state, state.pool, [state.input0, state.input1], action.payload.value);
             state.removeApproveTx.status = WalletTxStatus.INITIAL;
         },
         switchLiquidityTokens: (state, action: PayloadAction<void>) => {
-            const two = state.two;
-            state.two = state.one;
-            state.one = two;
+            const input1 = state.input1;
+            state.input1 = state.input0;
+            state.input0 = input1;
             state.txType = state.txType === TxType.EXACT_IN ? TxType.EXACT_OUT : TxType.EXACT_IN;
         },
         resetLiquidity: () => {
@@ -125,25 +125,25 @@ export const liquiditySlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(estimateLiquidityTransaction.fulfilled, (state, action) => {
-            state.two.amount = action.payload.twoAmount;
-            state.one.amount = action.payload.oneAmount;
+            state.input0.amount = action.payload.oneAmount;
+            state.input1.amount = action.payload.twoAmount;
             state.txType = action.payload.txType;
             state.pool.overallAmount = action.payload.poolTokens;
             state.pool.amount = action.payload.poolAmount;
         });
         builder.addCase(getLiquidityToken.fulfilled, (state, action) => {
             if (action.payload.position === 'one') {
-                state.one.token = action.payload.token;
+                state.input0.token = action.payload.token;
                 return
             }
-            state.two.token = action.payload.token;
+            state.input1.token = action.payload.token;
         });
         builder.addCase(getLiquidityPoolToken.fulfilled, (state, action) => {
             state.pool.token = action.payload;
         });
         builder.addCase(getLiquidityPool.fulfilled, (state, action) => {
-            state.one = action.payload.one;
-            state.two = action.payload.two;
+            state.input0 = action.payload.input0;
+            state.input1 = action.payload.input1;
             state.pool = action.payload.pool;
             state.removeApproveTx.status = WalletTxStatus.INITIAL;
         });
@@ -185,20 +185,20 @@ function handleRemoveAmount(state: Draft<LiquidityState>, token: Draft<InputToke
 }
 
 export const {
-    setLiquidityOneToken,
-    setLiquidityTwoToken,
+    setLiquidityInput0Token,
+    setLiquidityInput1Token,
     switchLiquidityTokens,
-    setLiquidityOneAmount,
-    setLiquidityTwoAmount,
-    setLiquidityOneRemoveAmount,
+    setLiquidityInput0Amount,
+    setLiquidityInput1Amount,
+    setLiquidityInput0RemoveAmount,
     setLiquidityPercentRemoveAmount,
-    setLiquidityTwoRemoveAmount,
+    setLiquidityInput1RemoveAmount,
     setLiquidityPoolRemoveAmount,
     resetLiquidity,
 } = liquiditySlice.actions
 
-export const selectLiquidityOne = (state: RootState) => state.liquidity.one;
-export const selectLiquidityTwo = (state: RootState) => state.liquidity.two;
+export const selectLiquidityInput0 = (state: RootState) => state.liquidity.input0;
+export const selectLiquidityInput1 = (state: RootState) => state.liquidity.input1;
 export const selectLiquidityTxType = (state: RootState) => state.liquidity.txType;
 export const selectLiquidityPool = (state: RootState) => state.liquidity.pool;
 export const selectLiquidityRemoveApproveTx = (state: RootState) => state.liquidity.removeApproveTx;

@@ -9,7 +9,7 @@ import ChevronDownIcon from 'components/icons/ChevronDownIcon';
 import ChevronRightIcon from 'components/icons/ChevronRightIcon';
 import CurrencyUtils from 'utils/currencyUtils';
 import TokenIcon from 'components/TokenIcon';
-import PoolItemInterface from '../../interfaces/poolItemInterface';
+import PoolItemInterface from 'interfaces/poolItemInterface';
 
 function PoolsPage() {
     const dispatch = useAppDispatch();

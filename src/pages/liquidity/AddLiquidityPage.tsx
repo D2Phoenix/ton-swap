@@ -7,13 +7,13 @@ import SettingsIcon from 'components/icons/SettingsIcon';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { selectWalletAdapter, selectWalletBalances, selectWalletPermissions } from 'store/wallet/wallet.slice';
 import {
-    selectLiquidityOne,
+    selectLiquidityInput0,
     selectLiquidityTxType,
-    selectLiquidityTwo,
-    setLiquidityOneAmount,
-    setLiquidityOneToken,
-    setLiquidityTwoAmount,
-    setLiquidityTwoToken,
+    selectLiquidityInput1,
+    setLiquidityInput0Amount,
+    setLiquidityInput0Token,
+    setLiquidityInput1Amount,
+    setLiquidityInput1Token,
     switchLiquidityTokens,
     resetLiquidity,
 } from 'store/liquidity/liquidity.slice';
@@ -46,38 +46,38 @@ export function AddLiquidityPage() {
 
     const [showSettings, setShowSettings] = useState(false);
     const [showTokenSelect, setShowTokenSelect] = useState(false);
-    const [tokenSelectType, setTokenSelectType] = useState('from');
+    const [activeInput, setActiveInput] = useState('input0');
     const [supplyButtonText, setSupplyButtonText] = useState('Supply');
     const [showAddLiquidityConfirm, setShowAddLiquidityConfirm] = useState(false);
     const walletAdapter = useAppSelector(selectWalletAdapter);
     const walletBalances = useAppSelector(selectWalletBalances);
     const walletPermissions = useAppSelector(selectWalletPermissions);
     const tokens = useAppSelector(selectTokens);
-    const one = useAppSelector(selectLiquidityOne);
-    const two = useAppSelector(selectLiquidityTwo);
+    const input0 = useAppSelector(selectLiquidityInput0);
+    const input1 = useAppSelector(selectLiquidityInput1);
     const txType = useAppSelector(selectLiquidityTxType);
 
     const isFilled = useMemo(() => {
-        return TokenUtils.isFilled(one) && TokenUtils.isFilled(two)
-    }, [one, two]);
+        return TokenUtils.isFilled(input0) && TokenUtils.isFilled(input1)
+    }, [input0, input1]);
 
-    const insufficientOneBalance = useMemo(() => {
-        if (TokenUtils.isFilled(one)) {
-            return TokenUtils.compareAmount(one, walletBalances[one.token.symbol]) === 1;
+    const insufficientToken0Balance = useMemo(() => {
+        if (TokenUtils.isFilled(input0)) {
+            return TokenUtils.compareAmount(input0, walletBalances[input0.token.symbol]) === 1;
         }
         return false;
-    }, [one, walletBalances]);
+    }, [input0, walletBalances]);
 
-    const insufficientTwoBalance = useMemo(() => {
-        if (TokenUtils.isFilled(two)) {
-            return TokenUtils.compareAmount(two, walletBalances[two.token.symbol]) === 1;
+    const insufficientToken1Balance = useMemo(() => {
+        if (TokenUtils.isFilled(input1)) {
+            return TokenUtils.compareAmount(input1, walletBalances[input1.token.symbol]) === 1;
         }
         return false;
-    }, [two, walletBalances]);
+    }, [input1, walletBalances]);
 
     const insufficientBalance = useMemo(() => {
-        return insufficientOneBalance || insufficientTwoBalance;
-    }, [insufficientOneBalance, insufficientTwoBalance]);
+        return insufficientToken0Balance || insufficientToken1Balance;
+    }, [insufficientToken0Balance, insufficientToken1Balance]);
 
     useEffect(() => {
         return () => {
@@ -87,69 +87,69 @@ export function AddLiquidityPage() {
 
     useEffect(() => {
         if (params.token0) {
-            dispatch(getLiquidityToken({address: params.token0, position: 'one'}));
+            dispatch(getLiquidityToken({address: params.token0, position: 'input0'}));
         }
         if (params.token1) {
-            dispatch(getLiquidityToken({address: params.token1, position: 'two'}));
+            dispatch(getLiquidityToken({address: params.token1, position: 'input1'}));
         }
     }, [dispatch, params]);
 
     useEffect(() => {
-        if (one.token && two.token) {
-            dispatch(getLiquidityPoolToken({one: one.token, two: two.token}));
+        if (input0.token && input1.token) {
+            dispatch(getLiquidityPoolToken({token0: input0.token, token1: input1.token}));
         }
-    }, [dispatch, one.token, two.token])
+    }, [dispatch, input0.token, input1.token])
 
     //Handle supply button text
     useEffect(() => {
-        if (!TokenUtils.isFilled(one)) {
+        if (!TokenUtils.isFilled(input0)) {
             return setSupplyButtonText('Enter an amount');
         }
-        if (!two.token || !one.token) {
+        if (!input1.token || !input0.token) {
             return setSupplyButtonText('Invalid pair');
         }
-        if (insufficientOneBalance) {
-            return setSupplyButtonText(`Insufficient ${one.token.symbol} balance`);
+        if (insufficientToken0Balance) {
+            return setSupplyButtonText(`Insufficient ${input0.token.symbol} balance`);
         }
-        if (insufficientTwoBalance) {
-            return setSupplyButtonText(`Insufficient ${two.token.symbol} balance`);
+        if (insufficientToken1Balance) {
+            return setSupplyButtonText(`Insufficient ${input1.token.symbol} balance`);
         }
         setSupplyButtonText('Supply');
-    }, [one, two, insufficientOneBalance, insufficientTwoBalance]);
+    }, [input0, input1, insufficientToken0Balance, insufficientToken1Balance]);
 
     // Estimate EXACT_IN transaction
     useEffect((): any => {
-        if (txType === TxType.EXACT_IN && !TokenUtils.hasAmount(one)) {
-            return dispatch(setLiquidityTwoAmount({
+        if (txType === TxType.EXACT_IN && !TokenUtils.hasAmount(input0)) {
+            return dispatch(setLiquidityInput1Amount({
                 value: null,
                 txType,
             }));
         }
-        if (txType === TxType.EXACT_IN && two.token && TokenUtils.hasAmount(one)) {
+        if (txType === TxType.EXACT_IN && input1.token && TokenUtils.hasAmount(input0)) {
             return dispatch(estimateLiquidityTransaction({
-                input: one,
-                token: two.token,
+                input: input0,
+                token: input1.token,
                 txType,
             }))
         }
-    }, [dispatch, one, two.token, txType]);
+    }, [dispatch, input0, input1.token, txType]);
 
     // Estimate EXACT_OUT transaction
     useEffect((): any => {
-        if (txType === TxType.EXACT_OUT && !TokenUtils.hasAmount(two)) {
-            return dispatch(setLiquidityOneAmount({
+        if (txType === TxType.EXACT_OUT && !TokenUtils.hasAmount(input1)) {
+            return dispatch(setLiquidityInput0Amount({
                 value: null,
                 txType,
             }));
         }
-        if (txType === TxType.EXACT_OUT && one.token && TokenUtils.hasAmount(two)) {
+        if (txType === TxType.EXACT_OUT && input0.token && TokenUtils.hasAmount(input1)) {
             return dispatch(estimateLiquidityTransaction({
-                input: two,
-                token: one.token,
+                input: input1,
+                token: input0.token,
                 txType: TxType.EXACT_OUT,
             }))
         }
-    }, [dispatch, one.token, two, txType]);
+    }, [dispatch, input0.token, input1, txType]);
 
     // Update balances and transaction estimation every {WALLET_TX_UPDATE_INTERVAL} milliseconds
     useEffect((): any => {
@@ -157,58 +157,50 @@ export function AddLiquidityPage() {
             return;
         }
         const intervalId = setInterval(() => {
-            if (one.token) {
-                dispatch(getWalletBalance(one.token));
+            if (input0.token) {
+                dispatch(getWalletBalance(input0.token));
             }
-            if (two.token) {
-                dispatch(getWalletBalance(two.token));
+            if (input1.token) {
+                dispatch(getWalletBalance(input1.token));
             }
-            if (txType === TxType.EXACT_IN && two.token && TokenUtils.isFilled(one)) {
+            if (txType === TxType.EXACT_IN && input1.token && TokenUtils.isFilled(input0)) {
                 dispatch(estimateLiquidityTransaction({
-                    input: one,
-                    token: two.token,
+                    input: input0,
+                    token: input1.token,
                     txType,
                 }));
             }
-            if (txType === TxType.EXACT_OUT && one.token && TokenUtils.isFilled(two)) {
+            if (txType === TxType.EXACT_OUT && input0.token && TokenUtils.isFilled(input1)) {
                 dispatch(estimateLiquidityTransaction({
-                    input: two,
-                    token: one.token,
+                    input: input1,
+                    token: input0.token,
                     txType,
                 }));
             }
         }, WALLET_TX_UPDATE_INTERVAL);
         return () => clearInterval(intervalId);
-    },[dispatch, walletAdapter, one, two, txType]);
+    },[dispatch, walletAdapter, input0, input1, txType]);
 
-    //Update balance and check token permissions on one token update
+    //Update balance and check token permissions on token0 update
     useEffect(() => {
-        if (walletAdapter && one.token) {
-            dispatch(getWalletBalance(one.token));
-            dispatch(getWalletUseTokenPermission(one.token));
+        if (walletAdapter && input0.token) {
+            dispatch(getWalletBalance(input0.token));
+            dispatch(getWalletUseTokenPermission(input0.token));
         }
-    }, [dispatch, one.token, walletAdapter]);
+    }, [dispatch, input0.token, walletAdapter]);
 
-    //Update balance and check token permissions on two token update
+    //Update balance and check token permissions on token1 update
     useEffect(() => {
-        if (walletAdapter && two.token) {
-            dispatch(getWalletBalance(two.token));
-            dispatch(getWalletUseTokenPermission(two.token));
+        if (walletAdapter && input1.token) {
+            dispatch(getWalletBalance(input1.token));
+            dispatch(getWalletUseTokenPermission(input1.token));
         }
-    }, [dispatch, two.token, walletAdapter])
+    }, [dispatch, input1.token, walletAdapter])
 
 
-    const openOneTokenSelect = useCallback(() => {
+    const openTokenSelect = useCallback((activeInput) => {
         setShowTokenSelect(!showTokenSelect);
-        setTokenSelectType('one');
-        if (walletAdapter) {
-            dispatch(getWalletBalances(tokens));
-        }
-    }, [showTokenSelect, dispatch, walletAdapter, tokens]);
-
-    const openTwoTokenSelect = useCallback(() => {
-        setShowTokenSelect(!showTokenSelect);
-        setTokenSelectType('two');
+        setActiveInput(activeInput);
         if (walletAdapter) {
             dispatch(getWalletBalances(tokens));
         }
@@ -223,39 +215,39 @@ export function AddLiquidityPage() {
         if (!token) {
             return;
         }
-        if (two.token && tokenSelectType === 'one' && two.token.symbol === token.symbol) {
+        if (input1.token && activeInput === 'input0' && input1.token.symbol === token.symbol) {
             return handleSwitchTokens();
         }
-        if (one.token && tokenSelectType === 'two' && one.token.symbol === token.symbol) {
+        if (input0.token && activeInput === 'input1' && input0.token.symbol === token.symbol) {
             return handleSwitchTokens();
         }
-        if (tokenSelectType === 'one') {
-            return dispatch(setLiquidityOneToken(token));
+        if (activeInput === 'input0') {
+            return dispatch(setLiquidityInput0Token(token));
         }
-        dispatch(setLiquidityTwoToken(token));
-    }, [dispatch, one, two, tokenSelectType, handleSwitchTokens]);
+        dispatch(setLiquidityInput1Token(token));
+    }, [dispatch, input0, input1, activeInput, handleSwitchTokens]);
 
     const handleFromTokenAmount = useCallback((value) => {
-        dispatch(setLiquidityOneAmount({
+        dispatch(setLiquidityInput0Amount({
             value,
             txType: TxType.EXACT_IN
         }));
     }, [dispatch]);
 
     const handleToTokenAmount = useCallback((value) => {
-        dispatch(setLiquidityTwoAmount({
+        dispatch(setLiquidityInput1Amount({
             value,
             txType: TxType.EXACT_OUT
         }));
     }, [dispatch]);
 
-    const handleAllowUseOneToken = useCallback(() => {
-        dispatch(setWalletUseTokenPermission(one.token!));
-    }, [dispatch, one]);
+    const handleAllowUseToken0 = useCallback(() => {
+        dispatch(setWalletUseTokenPermission(input0.token!));
+    }, [dispatch, input0]);
 
-    const handleAllowUseTwoToken = useCallback(() => {
-        dispatch(setWalletUseTokenPermission(two.token!));
-    }, [dispatch, two]);
+    const handleAllowUseToken1 = useCallback(() => {
+        dispatch(setWalletUseTokenPermission(input1.token!));
+    }, [dispatch, input1]);
 
     const handleConnectWallet = useCallback(() => {
         dispatch(connectWallet());
@@ -284,22 +276,22 @@ export function AddLiquidityPage() {
                     <SettingsIcon/>
                 </div>
             </div>
-            <TokenInput token={one.token}
-                        balance={walletBalances[one.token?.symbol || '']}
-                        value={one.amount}
+            <TokenInput token={input0.token}
+                        balance={walletBalances[input0.token?.symbol || '']}
+                        value={input0.amount}
                         showMax={true}
-                        onSelect={openOneTokenSelect}
+                        onSelect={openTokenSelect.bind(null, 'input0')}
                         onChange={handleFromTokenAmount}
                         selectable={true}
                         editable={true}/>
             <div className="btn-icon">
                 +
             </div>
-            <TokenInput token={two.token}
-                        balance={walletBalances[two.token?.symbol || '']}
-                        value={two.amount}
+            <TokenInput token={input1.token}
+                        balance={walletBalances[input1.token?.symbol || '']}
+                        value={input1.amount}
                         showMax={true}
-                        onSelect={openTwoTokenSelect}
+                        onSelect={openTokenSelect.bind(null, 'input1')}
                         onChange={handleToTokenAmount}
                         selectable={true}
                         editable={true}/>
@@ -307,25 +299,25 @@ export function AddLiquidityPage() {
                 isFilled && <LiquidityInfo />
             }
             {
-                walletAdapter && isFilled && !walletPermissions[one.token!.symbol] && !insufficientOneBalance &&
+                walletAdapter && isFilled && !walletPermissions[input0.token!.symbol] && !insufficientToken0Balance &&
                 <button className="btn btn-primary supply__btn"
-                        onClick={handleAllowUseOneToken}>
-                  Allow the TONSwap Protocol to use your {one.token!.symbol}
+                        onClick={handleAllowUseToken0}>
+                  Allow the TONSwap Protocol to use your {input0.token!.symbol}
                 </button>
             }
             {
-                walletAdapter && isFilled && !walletPermissions[two.token!.symbol] && !insufficientTwoBalance &&
+                walletAdapter && isFilled && !walletPermissions[input1.token!.symbol] && !insufficientToken1Balance &&
                 <button className="btn btn-primary supply__btn"
-                        onClick={handleAllowUseTwoToken}>
-                  Allow the TONSwap Protocol to use your {two.token!.symbol}
+                        onClick={handleAllowUseToken1}>
+                  Allow the TONSwap Protocol to use your {input1.token!.symbol}
                 </button>
             }
             {
                 walletAdapter && <button className="btn btn-primary supply__btn"
                                          disabled={!isFilled
                                          || insufficientBalance
-                                         || (!!one.token && !walletPermissions[one.token.symbol])
-                                         || (!!two.token && !walletPermissions[two.token.symbol])
+                                         || (!!input0.token && !walletPermissions[input0.token.symbol])
+                                         || (!!input1.token && !walletPermissions[input1.token.symbol])
                                          }
                                          onClick={handleSupply}>
                     {supplyButtonText}

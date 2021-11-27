@@ -9,8 +9,8 @@ import { InputTokenInterface } from 'interfaces/inputTokenInterface';
 
 
 export interface SwapState {
-    from: InputTokenInterface,
-    to: InputTokenInterface,
+    input0: InputTokenInterface,
+    input1: InputTokenInterface,
     txType: TxType;
     details: {
         fee: BigNumber;
@@ -20,7 +20,7 @@ export interface SwapState {
 }
 
 const initialState: SwapState = {
-    from: {
+    input0: {
         token: {
             address: "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
             chainId: 1,
@@ -31,7 +31,7 @@ const initialState: SwapState = {
         },
         amount: null as any,
     },
-    to: {
+    input1: {
         token: null as any,
         amount: null as any,
     },
@@ -47,36 +47,36 @@ export const swapSlice = createSlice({
     name: 'swap',
     initialState,
     reducers: {
-        setSwapFromToken: (state, action: PayloadAction<any>) => {
-            const prevToken = state.from.token;
-            state.from.token = action.payload;
+        setSwapInput0Token: (state, action: PayloadAction<any>) => {
+            const prevToken = state.input0.token;
+            state.input0.token = action.payload;
             // correct amount with new token decimals
-            if (state.from.token && state.from.amount) {
-                const delta = state.from.token.decimals - (prevToken?.decimals || 0);
-                state.from.amount = shiftDecimals(state.from.amount as BigNumber, delta);
+            if (state.input0.token && state.input0.amount) {
+                const delta = state.input0.token.decimals - (prevToken?.decimals || 0);
+                state.input0.amount = shiftDecimals(state.input0.amount as BigNumber, delta);
             }
         },
-        setSwapToToken: (state, action: PayloadAction<any>) => {
-            const prevToken = state.to.token;
-            state.to.token = action.payload;
+        setSwapInput1Token: (state, action: PayloadAction<any>) => {
+            const prevInput = state.input1.token;
+            state.input1.token = action.payload;
             // correct amount with new token decimals
-            if (state.to.token && state.to.amount) {
-                const delta = state.to.token.decimals - (prevToken?.decimals || 0);
-                state.to.amount = shiftDecimals(state.to.amount as BigNumber, delta);
+            if (state.input1.token && state.input1.amount) {
+                const delta = state.input1.token.decimals - (prevInput?.decimals || 0);
+                state.input1.amount = shiftDecimals(state.input1.amount as BigNumber, delta);
             }
         },
-        setSwapFromAmount: (state, action: PayloadAction<any>) => {
-            state.from.amount = action.payload.value;
+        setSwapInput0Amount: (state, action: PayloadAction<any>) => {
+            state.input0.amount = action.payload.value;
             state.txType = action.payload.txType;
         },
-        setSwapToAmount: (state, action: PayloadAction<any>) => {
-            state.to.amount = action.payload.value;
+        setSwapInput1Amount: (state, action: PayloadAction<any>) => {
+            state.input1.amount = action.payload.value;
             state.txType = action.payload.txType;
         },
         switchSwapTokens: (state, action: PayloadAction<void>) => {
-            const from = state.to;
-            state.to = state.from;
-            state.from = from;
+            const from = state.input1;
+            state.input1 = state.input0;
+            state.input0 = from;
             state.txType = state.txType === TxType.EXACT_IN ? TxType.EXACT_OUT : TxType.EXACT_IN;
         },
         resetSwap: () => {
@@ -85,8 +85,8 @@ export const swapSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(estimateTransaction.fulfilled, (state, action) => {
-            state.to.amount = action.payload.toAmount;
-            state.from.amount = action.payload.fromAmount;
+            state.input0.amount = action.payload.fromAmount;
+            state.input1.amount = action.payload.toAmount;
             state.txType = action.payload.type;
             state.details.fee = action.payload.fee;
             state.details.priceImpact = action.payload.priceImpact;
@@ -96,16 +96,16 @@ export const swapSlice = createSlice({
 })
 
 export const {
-    setSwapFromToken,
-    setSwapToToken,
+    setSwapInput0Token,
+    setSwapInput1Token,
     switchSwapTokens,
-    setSwapFromAmount,
-    setSwapToAmount,
+    setSwapInput0Amount,
+    setSwapInput1Amount,
     resetSwap,
 } = swapSlice.actions
 
-export const selectSwapFrom = (state: RootState) => state.swap.from;
-export const selectSwapTo = (state: RootState) => state.swap.to;
+export const selectSwapInput0 = (state: RootState) => state.swap.input0;
+export const selectSwapInput1 = (state: RootState) => state.swap.input1;
 export const selectSwapTxType = (state: RootState) => state.swap.txType;
 export const selectSwapDetails = (state: RootState) => state.swap.details;
 

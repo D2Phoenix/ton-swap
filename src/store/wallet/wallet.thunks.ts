@@ -13,21 +13,21 @@ export const connectWallet = createAsyncThunk(
         const adapter = new StubWalletService();
         const balances: Record<string, BigNumber> = {};
         const permissions: Record<string, boolean> = {};
-        if (state.swap.from.token) {
-            balances[state.swap.from.token.symbol] = await adapter.getBalance(state.swap.from.token);
-            permissions[state.swap.from.token.symbol] = await adapter.getTokenUsePermission(state.swap.from.token);
+        if (state.swap.input0.token) {
+            balances[state.swap.input0.token.symbol] = await adapter.getBalance(state.swap.input0.token);
+            permissions[state.swap.input0.token.symbol] = await adapter.getTokenUsePermission(state.swap.input0.token);
         }
-        if (state.swap.to.token) {
-            balances[state.swap.to.token.symbol] = await adapter.getBalance(state.swap.to.token);
-            permissions[state.swap.to.token.symbol] = await adapter.getTokenUsePermission(state.swap.to.token);
+        if (state.swap.input1.token) {
+            balances[state.swap.input1.token.symbol] = await adapter.getBalance(state.swap.input1.token);
+            permissions[state.swap.input1.token.symbol] = await adapter.getTokenUsePermission(state.swap.input1.token);
         }
-        if (state.liquidity.one.token) {
-            balances[state.liquidity.one.token.symbol] = await adapter.getBalance(state.liquidity.one.token);
-            permissions[state.liquidity.one.token.symbol] = await adapter.getTokenUsePermission(state.liquidity.one.token);
+        if (state.liquidity.input0.token) {
+            balances[state.liquidity.input0.token.symbol] = await adapter.getBalance(state.liquidity.input0.token);
+            permissions[state.liquidity.input0.token.symbol] = await adapter.getTokenUsePermission(state.liquidity.input0.token);
         }
-        if (state.liquidity.two.token) {
-            balances[state.liquidity.two.token.symbol] = await adapter.getBalance(state.liquidity.two.token);
-            permissions[state.liquidity.two.token.symbol] = await adapter.getTokenUsePermission(state.liquidity.two.token);
+        if (state.liquidity.input1.token) {
+            balances[state.liquidity.input1.token.symbol] = await adapter.getBalance(state.liquidity.input1.token);
+            permissions[state.liquidity.input1.token.symbol] = await adapter.getTokenUsePermission(state.liquidity.input1.token);
         }
         return {
             adapter,

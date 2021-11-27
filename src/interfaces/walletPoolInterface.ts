@@ -2,7 +2,7 @@ import { InputTokenInterface } from './inputTokenInterface';
 import { InputPoolInterface } from './inputPoolInterface';
 
 export default interface WalletPoolInterface {
-    one: InputTokenInterface;
-    two: InputTokenInterface;
+    input0: InputTokenInterface;
+    input1: InputTokenInterface;
     pool: InputPoolInterface;
 }

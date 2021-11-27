@@ -2,27 +2,27 @@ import { useMemo } from 'react';
 
 import './LiquidityInfo.scss';
 import { useAppSelector } from 'store/hooks';
-import { selectLiquidityPool, selectLiquidityOne, selectLiquidityTwo } from 'store/liquidity/liquidity.slice';
+import { selectLiquidityPool, selectLiquidityInput0, selectLiquidityInput1 } from 'store/liquidity/liquidity.slice';
 import TokenUtils from 'utils/tokenUtils';
 
 function LiquidityInfo() {
-    const one = useAppSelector(selectLiquidityOne);
-    const two = useAppSelector(selectLiquidityTwo);
+    const input0 = useAppSelector(selectLiquidityInput0);
+    const input1 = useAppSelector(selectLiquidityInput1);
     const pool = useAppSelector(selectLiquidityPool);
 
-    const onePerTwoDisplay = useMemo(() => {
-        if (!TokenUtils.isFilled(one) || !TokenUtils.isFilled(two)) {
+    const token0PerToken1Display = useMemo(() => {
+        if (!TokenUtils.isFilled(input0) || !TokenUtils.isFilled(input1)) {
             return;
         }
-        return TokenUtils.getDisplayRate(one, two);
-    }, [one, two]);
+        return TokenUtils.getDisplayRate(input0, input1);
+    }, [input0, input1]);
 
-    const twoPerOneDisplay = useMemo(() => {
-        if (!TokenUtils.isFilled(one) || !TokenUtils.isFilled(two)) {
+    const token1PerToken0Display = useMemo(() => {
+        if (!TokenUtils.isFilled(input0) || !TokenUtils.isFilled(input1)) {
             return;
         }
-        return TokenUtils.getDisplayRate(two, one);
-    }, [one, two]);
+        return TokenUtils.getDisplayRate(input1, input0);
+    }, [input0, input1]);
 
     const shareDisplay = useMemo(() => {
         if (!pool.amount) {
@@ -41,18 +41,18 @@ function LiquidityInfo() {
             <div className="liquidity-price-wrapper">
                 <div className="liquidity-price">
                     <div className="text-semibold">
-                        {twoPerOneDisplay}
+                        {token1PerToken0Display}
                     </div>
                     <div className="text-small">
-                        {two.token?.symbol} per {one.token?.symbol}
+                        {input1.token?.symbol} per {input0.token?.symbol}
                     </div>
                 </div>
                 <div className="liquidity-price">
                     <div className="text-semibold">
-                        {onePerTwoDisplay}
+                        {token0PerToken1Display}
                     </div>
                     <div className="text-small">
-                        {one.token?.symbol} per {two.token?.symbol}
+                        {input0.token?.symbol} per {input1.token?.symbol}
                     </div>
                 </div>
                 <div className="liquidity-price">

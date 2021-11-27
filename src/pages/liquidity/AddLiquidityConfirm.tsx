@@ -9,8 +9,8 @@ import { useAppDispatch, useAppSelector } from 'store/hooks';
 import {
     resetLiquidity,
     selectLiquidityPool,
-    selectLiquidityOne,
-    selectLiquidityTwo,
+    selectLiquidityInput0,
+    selectLiquidityInput1,
 } from 'store/liquidity/liquidity.slice';
 import { resetTransaction, selectWalletTransaction } from 'store/wallet/wallet.slice';
 import { walletAddLiquidity } from 'store/wallet/wallet.thunks';
@@ -21,8 +21,8 @@ import TokenUtils from 'utils/tokenUtils';
 
 function AddLiquidityConfirm({onClose}: any) {
     const dispatch = useAppDispatch();
-    const one = useAppSelector(selectLiquidityOne);
-    const two = useAppSelector(selectLiquidityTwo);
+    const input0 = useAppSelector(selectLiquidityInput0);
+    const input1 = useAppSelector(selectLiquidityInput1);
     const pool = useAppSelector(selectLiquidityPool);
     const settings = useAppSelector(selectSettings);
     const walletTransaction = useAppSelector(selectWalletTransaction);
@@ -31,13 +31,13 @@ function AddLiquidityConfirm({onClose}: any) {
         return walletTransaction.status !== WalletTxStatus.INITIAL ? 'add-liquidity-confirm-modal mini' : 'add-liquidity-confirm-modal';
     }, [walletTransaction]);
 
-    const oneDisplay = useMemo(() => {
-        return TokenUtils.getDisplay(one);
-    }, [one]);
+    const token0Display = useMemo(() => {
+        return TokenUtils.getDisplay(input0);
+    }, [input0]);
 
-    const twoDisplay = useMemo(() => {
-        return TokenUtils.getDisplay(two);
-    }, [two]);
+    const token1Display = useMemo(() => {
+        return TokenUtils.getDisplay(input1);
+    }, [input1]);
 
     const poolDisplay = useMemo(() => {
         return TokenUtils.getDisplay(pool);
@@ -62,8 +62,8 @@ function AddLiquidityConfirm({onClose}: any) {
                 walletTransaction.status === WalletTxStatus.INITIAL && <>
                   <h4>Confirm Supply</h4>
                   <div className="add-liquidity-confirm-wrapper">
-                    <TokenInput token={one.token}
-                                value={one.amount}
+                    <TokenInput token={input0.token}
+                                value={input0.amount}
                                 showMax={true}
                                 selectable={false}
                                 editable={false}
@@ -71,8 +71,8 @@ function AddLiquidityConfirm({onClose}: any) {
                     <div className="btn-icon">
                       +
                     </div>
-                    <TokenInput token={two.token}
-                                value={two.amount}
+                    <TokenInput token={input1.token}
+                                value={input1.amount}
                                 showMax={false}
                                 selectable={false}
                                 editable={false}
@@ -81,7 +81,7 @@ function AddLiquidityConfirm({onClose}: any) {
                     <div className="pool-tokens-info">
                       <span>You will receive </span>
                       <span className="text-semibold">{poolDisplay}</span>
-                      <span> {one.token!.symbol}/{two.token!.symbol} Pool Tokens</span>
+                      <span> {input0.token!.symbol}/{input1.token!.symbol} Pool Tokens</span>
                     </div>
                       {
                           <span className="help-text text-small">
@@ -101,7 +101,7 @@ function AddLiquidityConfirm({onClose}: any) {
                       <div className="add-liquidity-status">
                         <Spinner />
                         <span>
-                            Supplying {oneDisplay} {one.token!.symbol} and {twoDisplay} {two.token!.symbol}
+                            Supplying {token0Display} {input0.token!.symbol} and {token1Display} {input1.token!.symbol}
                         </span>
                         <span className="text-small">
                           Confirm this transaction in your wallet

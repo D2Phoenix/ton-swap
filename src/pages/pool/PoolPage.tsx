@@ -10,11 +10,9 @@ import { getPoolPools } from 'store/pool/pool.thunks';
 import { selectPoolPools } from 'store/pool/pool.slice';
 import Accordion from 'components/Accordion';
 import TokenUtils from 'utils/tokenUtils';
-import TokenIcon from '../../components/TokenIcon';
-import QuestionIcon from '../../components/icons/QuestionIcon';
-import SwapInfo from '../swap/SwapInfo';
-import InfoIcon from '../../components/icons/InfoIcon';
-import Tooltip from '../../components/Tooltip';
+import TokenIcon from 'components/TokenIcon';
+import QuestionIcon from 'components/icons/QuestionIcon';
+import Tooltip from 'components/Tooltip';
 
 
 function PoolPage() {
@@ -67,30 +65,30 @@ function PoolPage() {
                                 label: (
                                     <div key={index} className="pool-item-wrapper">
                                         <div>
-                                            <TokenIcon address={pool.one.token.address} name={pool.one.token.name}/>
-                                            <TokenIcon address={pool.two.token.address} name={pool.two.token.name}/>
+                                            <TokenIcon address={pool.input0.token.address} name={pool.input0.token.name}/>
+                                            <TokenIcon address={pool.input1.token.address} name={pool.input1.token.name}/>
                                         </div>
-                                        <span>{pool.one.token.symbol}/{pool.two.token.symbol}</span>
+                                        <span>{pool.input0.token.symbol}/{pool.input1.token.symbol}</span>
                                     </div>
                                 ),
                                 content: (
                                     <div key={index} className="pool-item-details-wrapper">
                                         <div>
-                                            <div>Pooled {pool.one.token.symbol}</div>
+                                            <div>Pooled {pool.input0.token.symbol}</div>
                                             <div>
-                                                {TokenUtils.getDisplay(pool.one)}
-                                                <TokenIcon address={pool.one.token.address}
-                                                           name={pool.one.token.name}
+                                                {TokenUtils.getDisplay(pool.input0)}
+                                                <TokenIcon address={pool.input0.token.address}
+                                                           name={pool.input0.token.name}
                                                            size={'small'}
                                                 />
                                             </div>
                                         </div>
                                         <div>
-                                            <div>Pooled {pool.two.token.symbol}</div>
+                                            <div>Pooled {pool.input1.token.symbol}</div>
                                             <div>
-                                                {TokenUtils.getDisplay(pool.two)}
-                                                <TokenIcon address={pool.two.token.address}
-                                                           name={pool.two.token.name}
+                                                {TokenUtils.getDisplay(pool.input1)}
+                                                <TokenIcon address={pool.input1.token.address}
+                                                           name={pool.input1.token.name}
                                                            size={'small'}
                                                 />
                                             </div>
@@ -104,10 +102,10 @@ function PoolPage() {
                                             <div>{shareText}</div>
                                         </div>
                                         <div>
-                                            <Link className="btn btn-primary" to={`add/${pool.one.token.symbol}/${pool.two.token.symbol}`}>
+                                            <Link className="btn btn-primary" to={`add/${pool.input0.token.symbol}/${pool.input1.token.symbol}`}>
                                                 Add
                                             </Link>
-                                            <Link className="btn btn-primary" to={`remove/${pool.one.token.symbol}/${pool.two.token.symbol}`}>
+                                            <Link className="btn btn-primary" to={`remove/${pool.input0.token.symbol}/${pool.input1.token.symbol}`}>
                                                 Remove
                                             </Link>
                                         </div>

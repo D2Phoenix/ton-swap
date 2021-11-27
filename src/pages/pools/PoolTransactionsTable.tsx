@@ -6,7 +6,7 @@ import CurrencyUtils from 'utils/currencyUtils';
 import ChevronRightIcon from 'components/icons/ChevronRightIcon';
 import { useAppSelector } from 'store/hooks';
 import { selectPoolsTransactions } from 'store/pools/pools.slice';
-import DateUtils from '../../utils/dateUtils';
+import DateUtils from 'utils/dateUtils';
 
 function PoolTransactionsTable() {
     const [sort, setSort] = useState('-name');
