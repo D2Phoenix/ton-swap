@@ -29,13 +29,21 @@
   }
 }
 .btn-icon {
+  display: flex;
+  align-items: center;
   position: relative;
+  background-color: initial;
+  border: 0;
+  &:not(:disabled) {
+    svg {
+      &:hover {
+        stroke: $secondary-color;
+      }
+    }
+  }
   svg {
     cursor: pointer;
-    stroke: $secondary-color;
-    &:hover {
-      stroke: $primary-color;
-    }
+    stroke: $primary-color;
   }
 }
 .btn-outline {

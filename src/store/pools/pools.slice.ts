@@ -1,15 +1,21 @@
-import { createSlice} from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import type { RootState } from 'store/store';
 
-import { fetchPools } from './pools.thunks';
-import PoolListInterface from 'interfaces/poolListInterface';
+import { fetchPool, fetchPools } from './pools.thunks';
+import PoolItemInterface from 'interfaces/poolItemInterface';
 
 interface PoolState {
-    list: PoolListInterface[],
+    list: PoolItemInterface[],
+    pool: PoolItemInterface,
+    chartData: any[];
+    transactions: any;
 }
 
 const initialState: PoolState = {
     list: [],
+    pool: null as any,
+    chartData: [],
+    transactions: null,
 }
 
 export const poolsSlice = createSlice({
@@ -20,6 +26,11 @@ export const poolsSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(fetchPools.fulfilled, (state, action) => {
             state.list = action.payload;
+        });
+        builder.addCase(fetchPool.fulfilled, (state, action) => {
+            state.pool = action.payload.pool;
+            state.transactions = action.payload.transactions;
+            state.chartData = action.payload.chartData;
         })
     },
 })

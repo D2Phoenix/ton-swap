@@ -6,6 +6,7 @@ import Modal from './Modal';
 import TokenInterface from 'interfaces/tokenInterface';
 import { BALANCE_PRECISION } from 'constants/swap';
 import { toDecimals } from 'utils/decimals';
+import TokenIcon from './TokenIcon';
 
 
 interface TokenSelectParams {
@@ -79,7 +80,7 @@ function TokenSelect({tokens, balances, onClose, onSelect, balancesFirst}: Token
                             const balance = balances[token.symbol] ? toDecimals(balances[token.symbol], token.decimals).precision(BALANCE_PRECISION).toFixed() : '';
                             return (
                                 <div key={token.address} className="token-select-item" onClick={() => onSelect(token)}>
-                                    <img className="token__img" src={token.logoURI} alt={token.name}/>
+                                    <TokenIcon address={token.address} name={token.name}/>
                                     <div className="token-name">
                                         <span className="text-semibold">{token.symbol}</span>
                                         <span className="text-small">{token.name}</span>

@@ -48,10 +48,18 @@
       }
     }
     .position__column {
-      flex: 0 1 20px;
+      flex: 0 1 30px;
     }
     .name__column {
+      display: flex;
+      align-items: center;
       flex: 1 1 auto;
+      .token-icon-wrapper {
+        + .token-icon-wrapper {
+          margin-left: 0.25rem;
+          margin-right: 0.5rem;
+        }
+      }
     }
     .tvl__column,
     .total-day__column,
@@ -65,16 +73,5 @@
     align-items: center;
     align-self: center;
     gap: 0.5rem;
-    .btn-icon {
-      display: flex;
-      align-items: center;
-      svg {
-        cursor: pointer;
-        stroke: $primary-color;
-        &:hover {
-          stroke: $secondary-color;
-        }
-      }
-    }
   }
 }

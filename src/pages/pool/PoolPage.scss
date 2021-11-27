@@ -55,10 +55,6 @@
     > span {
       margin-left: 0.5rem;
     }
-    img {
-      width: 24px;
-      height: 24px;
-    }
   }
   .pool-item-details-wrapper {
     display: flex;
@@ -77,9 +73,7 @@
         align-items: center;
       }
     }
-    img {
-      width: 20px;
-      height: 20px;
+    .token-icon-wrapper {
       margin-left: 0.25rem;
     }
   }

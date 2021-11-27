@@ -1,0 +1,15 @@
+.token-icon-wrapper {
+  display: inline-block;
+  height: 24px;
+  &.small {
+    height: 20px;
+    img {
+      width: 20px;
+      height: 20px;
+    }
+  }
+  img {
+    width: 24px;
+    height: 24px;
+  }
+}

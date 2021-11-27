@@ -13,9 +13,9 @@
         outline: 0;
         pointer-events: none;
         padding-left: 0;
-        img {
+        .token-icon-wrapper {
           left: 0;
-          + img {
+          + .token-icon-wrapper {
             left: 24px;
             + span {
               margin-left: 52px;
@@ -43,19 +43,17 @@
       position: relative;
       margin-right: 0.75rem;
       flex: 0 0 auto;
-      img {
+      .token-icon-wrapper {
         position: absolute;
         left: 8px;
-        width: 24px;
-        height: 24px;
-        + img {
+        + .token-icon-wrapper {
           left: 32px;
           + span {
             margin-left: 44px;
           }
         }
       }
-      img + span {
+      .token-icon-wrapper + span {
         margin-left: 20px;
       }
       span {

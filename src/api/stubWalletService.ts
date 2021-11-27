@@ -95,8 +95,8 @@ class StubWalletService implements WalletAdapterInterface {
                             token: {
                                 symbol: poolName,
                                 name: poolName,
-                                logoOneURI: state.one.token.logoURI,
-                                logoTwoURI: state.two.token.logoURI,
+                                address0: state.one.token.address,
+                                address1: state.two.token.address,
                                 decimals: 0,
                                 chainId: 1,
                                 address: poolName,
@@ -133,8 +133,8 @@ class StubWalletService implements WalletAdapterInterface {
                 token: {
                     symbol: poolName,
                     name: poolName,
-                    logoOneURI: one.logoURI,
-                    logoTwoURI: two.logoURI,
+                    address0: one.address,
+                    address1: two.address,
                     decimals: 0,
                     chainId: 1,
                     address: poolName,
@@ -157,8 +157,8 @@ class StubWalletService implements WalletAdapterInterface {
             result = {
                 symbol: poolName,
                 name: poolName,
-                logoOneURI: one.logoURI,
-                logoTwoURI: two.logoURI,
+                address0: one.address,
+                address1: two.address,
                 decimals: 0,
                 chainId: 1,
                 address: poolName,

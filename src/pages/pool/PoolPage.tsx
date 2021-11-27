@@ -10,6 +10,7 @@ import { getPoolPools } from 'store/pool/pool.thunks';
 import { selectPoolPools } from 'store/pool/pool.slice';
 import Accordion from 'components/Accordion';
 import TokenUtils from 'utils/tokenUtils';
+import TokenIcon from '../../components/TokenIcon';
 
 
 function PoolPage() {
@@ -54,8 +55,8 @@ function PoolPage() {
                                 label: (
                                     <div key={index} className="pool-item-wrapper">
                                         <div>
-                                            <img src={pool.one.token.logoURI} alt={pool.one.token.name}/>
-                                            <img src={pool.two.token.logoURI} alt={pool.two.token.name}/>
+                                            <TokenIcon address={pool.one.token.address} name={pool.one.token.name}/>
+                                            <TokenIcon address={pool.two.token.address} name={pool.two.token.name}/>
                                         </div>
                                         <span>{pool.one.token.symbol}/{pool.two.token.symbol}</span>
                                     </div>
@@ -66,14 +67,20 @@ function PoolPage() {
                                             <div>Pooled {pool.one.token.symbol}</div>
                                             <div>
                                                 {TokenUtils.getDisplay(pool.one)}
-                                                <img src={pool.one.token.logoURI} alt={pool.one.token.name}/>
+                                                <TokenIcon address={pool.one.token.address}
+                                                           name={pool.one.token.name}
+                                                           size={'small'}
+                                                />
                                             </div>
                                         </div>
                                         <div>
                                             <div>Pooled {pool.two.token.symbol}</div>
                                             <div>
                                                 {TokenUtils.getDisplay(pool.two)}
-                                                <img src={pool.two.token.logoURI} alt={pool.two.token.name}/>
+                                                <TokenIcon address={pool.two.token.address}
+                                                           name={pool.two.token.name}
+                                                           size={'small'}
+                                                />
                                             </div>
                                         </div>
                                         <div>

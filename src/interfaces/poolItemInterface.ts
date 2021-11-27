@@ -1,4 +1,4 @@
-export default interface PoolListInterface {
+export default interface PoolItemInterface {
     id: string;
     feeTier: string;
     token0: {

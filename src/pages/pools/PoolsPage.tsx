@@ -4,14 +4,15 @@ import './PoolsPage.scss';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { selectPoolsList } from 'store/pools/pools.slice';
 import { fetchPools } from 'store/pools/pools.thunks';
-import ChevronDownIcon from '../../components/icons/ChevronDownIcon';
-import ChevronRightIcon from '../../components/icons/ChevronRightIcon';
-import CurrencyUtils from '../../utils/currencyUtils';
+import ChevronDownIcon from 'components/icons/ChevronDownIcon';
+import ChevronRightIcon from 'components/icons/ChevronRightIcon';
+import CurrencyUtils from 'utils/currencyUtils';
+import TokenIcon from '../../components/TokenIcon';
 
 function PoolsPage() {
     const dispatch = useAppDispatch();
     const [query, setQuery] = useState('');
-    const [sort, setSort] = useState('totalVolume');
+    const [sort, setSort] = useState('-totalValueLockedUSD');
     const [page, setPage] = useState(1);
     const pools = useAppSelector(selectPoolsList);
 
@@ -88,10 +89,14 @@ function PoolsPage() {
                 </div>
                 {
                     visiblePools.map((pool, index) => {
-                        return (
+                       return (
                             <div key={index} className="pool-list__item">
-                                <div className="position__column">{index + 1}</div>
-                                <div className="name__column">{`${pool.token0.symbol}/${pool.token1.symbol}`}</div>
+                                <div className="position__column">{(page - 1) * 10 + index + 1}</div>
+                                <div className="name__column">
+                                    <TokenIcon address={pool.token0.id} name={pool.token0.name}/>
+                                    <TokenIcon address={pool.token1.id} name={pool.token1.name}/>
+                                    {`${pool.token0.symbol}/${pool.token1.symbol}`}
+                                </div>
                                 <div className="tvl__column">{CurrencyUtils.toUSDDisplay(pool.totalValueLockedUSD)}</div>
                                 <div className="total-day__column">{CurrencyUtils.toUSDDisplay(pool.volume24USD)}</div>
                                 <div className="total-7day__column">{CurrencyUtils.toUSDDisplay(pool.volume7dUSD)}</div>
@@ -100,17 +105,17 @@ function PoolsPage() {
                     })
                 }
                 <div className="pools-list-pagination">
-                    {
-                        (page - 1) !== 0 && <div className="btn-icon" onClick={handlePageChange.bind(null, -1)}>
-                          <ChevronRightIcon revert={true}/>
-                        </div>
-                    }
+                    <button className="btn-icon btn"
+                            disabled={(page - 1) === 0}
+                            onClick={handlePageChange.bind(null, -1)}>
+                        <ChevronRightIcon revert={true}/>
+                    </button>
                     Page {page} of {totalPages}
-                    {
-                        page !== totalPages && <div className="btn-icon" onClick={handlePageChange.bind(null, 1)}>
-                          <ChevronRightIcon/>
-                        </div>
-                    }
+                    <button className="btn-icon btn"
+                            disabled={page === totalPages}
+                            onClick={handlePageChange.bind(null, 1)}>
+                        <ChevronRightIcon/>
+                    </button>
                 </div>
             </div>
         </div>

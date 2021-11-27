@@ -7,6 +7,7 @@ import TokenInterface from '../interfaces/tokenInterface';
 import { fromDecimals, toDecimals } from '../utils/decimals';
 import { BALANCE_PRECISION, TOKEN_PRECISION } from '../constants/swap';
 import PoolInterface from '../interfaces/poolInterface';
+import TokenIcon from './TokenIcon';
 
 interface TokenInputParams {
     balance?: BigNumber;
@@ -78,13 +79,13 @@ function TokenInput({balance, token, value, showMax, editable, selectable, onCha
             <div className="token-input">
                 <div className="btn btn-outline small text-medium" onClick={handleClick}>
                     {
-                        simpleToken?.logoURI && <img src={simpleToken.logoURI} alt={simpleToken.name}/>
+                        simpleToken?.logoURI && <TokenIcon address={simpleToken.address} name={simpleToken.name} />
                     }
                     {
-                        poolToken?.logoOneURI && <img src={poolToken.logoOneURI} alt={poolToken.name}/>
+                        poolToken?.address0 && <TokenIcon address={poolToken.address0} name={poolToken.name} />
                     }
                     {
-                        poolToken?.logoTwoURI && <img src={poolToken.logoTwoURI} alt={poolToken.name}/>
+                        poolToken?.address1 && <TokenIcon address={poolToken.address1} name={poolToken.name}/>
                     }
                     <span>{token ? token.symbol : 'Select'}</span>
                     {
