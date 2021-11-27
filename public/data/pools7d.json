@@ -19,11 +19,12 @@
         "token0Price": "4225.345259614615488696416875076839",
         "token1": {
           "__typename": "Token",
-          "decimals": "18",
+          "chainId": 1,
+          "name": "Ton",
           "derivedETH": "1",
-          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "name": "Wrapped Ether",
-          "symbol": "WETH"
+          "id": "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+          "decimals": 9,
+          "symbol": "TON"
         },
         "token1Price": "0.0002366670505148750413840348608131361",
         "totalValueLockedToken0": "143398930.878885",
@@ -50,11 +51,12 @@
         "token0Price": "0.07285639034155832286499565533093799",
         "token1": {
           "__typename": "Token",
-          "decimals": "18",
+          "chainId": 1,
+          "name": "Ton",
           "derivedETH": "1",
-          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "name": "Wrapped Ether",
-          "symbol": "WETH"
+          "id": "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+          "decimals": 9,
+          "symbol": "TON"
         },
         "token1Price": "13.72563196326219520849148501123864",
         "totalValueLockedToken0": "3573.90194353",
@@ -112,11 +114,12 @@
         "token0Price": "4225.103977401907249993163912592656",
         "token1": {
           "__typename": "Token",
-          "decimals": "18",
+          "chainId": 1,
+          "name": "Ton",
           "derivedETH": "1",
-          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "name": "Wrapped Ether",
-          "symbol": "WETH"
+          "id": "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+          "decimals": 9,
+          "symbol": "TON"
         },
         "token1Price": "0.0002366805658153099612266282304136849",
         "totalValueLockedToken0": "99905012.200572",
@@ -134,11 +137,12 @@
         "tick": "-192839",
         "token0": {
           "__typename": "Token",
-          "decimals": "18",
+          "chainId": 1,
+          "name": "Ton",
           "derivedETH": "1",
-          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "name": "Wrapped Ether",
-          "symbol": "WETH"
+          "id": "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+          "decimals": 9,
+          "symbol": "TON"
         },
         "token0Price": "0.0002368377690140800405473135535254536",
         "token1": {
@@ -236,11 +240,12 @@
         "token0Price": "0.07284163621568166865596461884290368",
         "token1": {
           "__typename": "Token",
-          "decimals": "18",
+          "chainId": 1,
+          "name": "Ton",
           "derivedETH": "1",
-          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "name": "Wrapped Ether",
-          "symbol": "WETH"
+          "id": "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+          "decimals": 9,
+          "symbol": "TON"
         },
         "token1Price": "13.7284120999016712131022469942907",
         "totalValueLockedToken0": "1539.68829506",
@@ -258,11 +263,12 @@
         "tick": "89",
         "token0": {
           "__typename": "Token",
-          "decimals": "18",
+          "chainId": 1,
+          "name": "Ton",
           "derivedETH": "1",
-          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "name": "Wrapped Ether",
-          "symbol": "WETH"
+          "id": "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+          "decimals": 9,
+          "symbol": "TON"
         },
         "token0Price": "0.9910694356212526062158994497545713",
         "token1": {
@@ -329,11 +335,12 @@
         "token0Price": "4226.690968692245118505207267560365",
         "token1": {
           "__typename": "Token",
-          "decimals": "18",
+          "chainId": 1,
+          "name": "Ton",
           "derivedETH": "1",
-          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "name": "Wrapped Ether",
-          "symbol": "WETH"
+          "id": "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+          "decimals": 9,
+          "symbol": "TON"
         },
         "token1Price": "0.0002365916996078385995849846973763895",
         "totalValueLockedToken0": "21308805.799055677209061756",
@@ -360,11 +367,12 @@
         "token0Price": "4226.544914838097239248955445512218",
         "token1": {
           "__typename": "Token",
-          "decimals": "18",
+          "chainId": 1,
+          "name": "Ton",
           "derivedETH": "1",
-          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "name": "Wrapped Ether",
-          "symbol": "WETH"
+          "id": "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+          "decimals": 9,
+          "symbol": "TON"
         },
         "token1Price": "0.0002365998753471915187282620686648242",
         "totalValueLockedToken0": "16256957.340695709741296337",
@@ -391,11 +399,12 @@
         "token0Price": "198.4295943658662100220079245330069",
         "token1": {
           "__typename": "Token",
-          "decimals": "18",
+          "chainId": 1,
+          "name": "Ton",
           "derivedETH": "1",
-          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "name": "Wrapped Ether",
-          "symbol": "WETH"
+          "id": "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+          "decimals": 9,
+          "symbol": "TON"
         },
         "token1Price": "0.005039570852300344434164859023908205",
         "totalValueLockedToken0": "2224739.311481618727679909",
@@ -453,11 +462,12 @@
         "token0Price": "2452.012298109282068548312029351014",
         "token1": {
           "__typename": "Token",
-          "decimals": "18",
+          "chainId": 1,
+          "name": "Ton",
           "derivedETH": "1",
-          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "name": "Wrapped Ether",
-          "symbol": "WETH"
+          "id": "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+          "decimals": 9,
+          "symbol": "TON"
         },
         "token1Price": "0.0004078282970974853079960577125679177",
         "totalValueLockedToken0": "15132858.086868206721405397",
@@ -475,11 +485,12 @@
         "tick": "-192833",
         "token0": {
           "__typename": "Token",
-          "decimals": "18",
+          "chainId": 1,
+          "name": "Ton",
           "derivedETH": "1",
-          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "name": "Wrapped Ether",
-          "symbol": "WETH"
+          "id": "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+          "decimals": 9,
+          "symbol": "TON"
         },
         "token0Price": "0.0002367032376001590136159510729392538",
         "token1": {
@@ -515,11 +526,12 @@
         "token0Price": "1097.038893482416631211651263635063",
         "token1": {
           "__typename": "Token",
-          "decimals": "18",
+          "chainId": 1,
+          "name": "Ton",
           "derivedETH": "1",
-          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "name": "Wrapped Ether",
-          "symbol": "WETH"
+          "id": "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+          "decimals": 9,
+          "symbol": "TON"
         },
         "token1Price": "0.0009115447099834551370012183490930921",
         "totalValueLockedToken0": "11977411.422837007767153683",
@@ -577,11 +589,12 @@
         "token0Price": "83965666.71150805548913813136306364",
         "token1": {
           "__typename": "Token",
-          "decimals": "18",
+          "chainId": 1,
+          "name": "Ton",
           "derivedETH": "1",
-          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "name": "Wrapped Ether",
-          "symbol": "WETH"
+          "id": "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+          "decimals": 9,
+          "symbol": "TON"
         },
         "token1Price": "0.00000001190962972325143605737288413581502",
         "totalValueLockedToken0": "579433289090.526595968708078797",
@@ -608,11 +621,12 @@
         "token0Price": "20.28147229624322045357881984477896",
         "token1": {
           "__typename": "Token",
-          "decimals": "18",
+          "chainId": 1,
+          "name": "Ton",
           "derivedETH": "1",
-          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "name": "Wrapped Ether",
-          "symbol": "WETH"
+          "id": "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+          "decimals": 9,
+          "symbol": "TON"
         },
         "token1Price": "0.04930608514970740522642046418080041",
         "totalValueLockedToken0": "120978.776140384687057093",
@@ -639,11 +653,12 @@
         "token0Price": "148.0489448866030767491049565550542",
         "token1": {
           "__typename": "Token",
-          "decimals": "18",
+          "chainId": 1,
+          "name": "Ton",
           "derivedETH": "1",
-          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "name": "Wrapped Ether",
-          "symbol": "WETH"
+          "id": "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+          "decimals": 9,
+          "symbol": "TON"
         },
         "token1Price": "0.006754522977289315527726885169342052",
         "totalValueLockedToken0": "952671.564550766351951071",
@@ -701,11 +716,12 @@
         "token0Price": "92.11559161457638799477874571604854",
         "token1": {
           "__typename": "Token",
-          "decimals": "18",
+          "chainId": 1,
+          "name": "Ton",
           "derivedETH": "1",
-          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "name": "Wrapped Ether",
-          "symbol": "WETH"
+          "id": "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+          "decimals": 9,
+          "symbol": "TON"
         },
         "token1Price": "0.01085592550047477323982867487299351",
         "totalValueLockedToken0": "564064.694102378067782931",
@@ -763,11 +779,12 @@
         "token0Price": "1925.174405225471550450927538470035",
         "token1": {
           "__typename": "Token",
-          "decimals": "18",
+          "chainId": 1,
+          "name": "Ton",
           "derivedETH": "1",
-          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "name": "Wrapped Ether",
-          "symbol": "WETH"
+          "id": "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+          "decimals": 9,
+          "symbol": "TON"
         },
         "token1Price": "0.0005194334587483166402785877138613004",
         "totalValueLockedToken0": "6039772.947145401508263684",
@@ -794,11 +811,12 @@
         "token0Price": "4223.47883817322094755428979411802",
         "token1": {
           "__typename": "Token",
-          "decimals": "18",
+          "chainId": 1,
+          "name": "Ton",
           "derivedETH": "1",
-          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "name": "Wrapped Ether",
-          "symbol": "WETH"
+          "id": "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+          "decimals": 9,
+          "symbol": "TON"
         },
         "token1Price": "0.0002367716373908788110322174321850807",
         "totalValueLockedToken0": "16239542.524491877259535737",
@@ -887,11 +905,12 @@
         "token0Price": "13.64884881369975255064874842855693",
         "token1": {
           "__typename": "Token",
-          "decimals": "18",
+          "chainId": 1,
+          "name": "Ton",
           "derivedETH": "1",
-          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "name": "Wrapped Ether",
-          "symbol": "WETH"
+          "id": "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+          "decimals": 9,
+          "symbol": "TON"
         },
         "token1Price": "0.07326625224218693623220626026480491",
         "totalValueLockedToken0": "69594.632904193367372737",
@@ -918,11 +937,12 @@
         "token0Price": "80.90795039091950009874509463720084",
         "token1": {
           "__typename": "Token",
-          "decimals": "18",
+          "chainId": 1,
+          "name": "Ton",
           "derivedETH": "1",
-          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "name": "Wrapped Ether",
-          "symbol": "WETH"
+          "id": "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+          "decimals": 9,
+          "symbol": "TON"
         },
         "token1Price": "0.0123597247880874816934896200711108",
         "totalValueLockedToken0": "310445.628437459575937622",
@@ -949,11 +969,12 @@
         "token0Price": "1743.465887062508493421194335676557",
         "token1": {
           "__typename": "Token",
-          "decimals": "18",
+          "chainId": 1,
+          "name": "Ton",
           "derivedETH": "1",
-          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "name": "Wrapped Ether",
-          "symbol": "WETH"
+          "id": "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+          "decimals": 9,
+          "symbol": "TON"
         },
         "token1Price": "0.0005735701555278821430169983974782131",
         "totalValueLockedToken0": "3775394.511486932967363944",
@@ -1073,11 +1094,12 @@
         "token0Price": "1050.377750383112672741491096322068",
         "token1": {
           "__typename": "Token",
-          "decimals": "18",
+          "chainId": 1,
+          "name": "Ton",
           "derivedETH": "1",
-          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "name": "Wrapped Ether",
-          "symbol": "WETH"
+          "id": "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+          "decimals": 9,
+          "symbol": "TON"
         },
         "token1Price": "0.000952038444869250140564657674617576",
         "totalValueLockedToken0": "4183803.310823777275533247",
@@ -1157,11 +1179,12 @@
         "tick": "-177330",
         "token0": {
           "__typename": "Token",
-          "decimals": "18",
+          "chainId": 1,
+          "name": "Ton",
           "derivedETH": "1",
-          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "name": "Wrapped Ether",
-          "symbol": "WETH"
+          "id": "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+          "decimals": 9,
+          "symbol": "TON"
         },
         "token0Price": "0.05022842638867127011054081694211429",
         "token1": {
@@ -1197,11 +1220,12 @@
         "token0Price": "286.004815357020558196938522283465",
         "token1": {
           "__typename": "Token",
-          "decimals": "18",
+          "chainId": 1,
+          "name": "Ton",
           "derivedETH": "1",
-          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "name": "Wrapped Ether",
-          "symbol": "WETH"
+          "id": "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+          "decimals": 9,
+          "symbol": "TON"
         },
         "token1Price": "0.003496444627170690771422269172008221",
         "totalValueLockedToken0": "530663.635417459214237207",
@@ -1228,11 +1252,12 @@
         "token0Price": "32.68465631995196481007969116541796",
         "token1": {
           "__typename": "Token",
-          "decimals": "18",
+          "chainId": 1,
+          "name": "Ton",
           "derivedETH": "1",
-          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "name": "Wrapped Ether",
-          "symbol": "WETH"
+          "id": "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+          "decimals": 9,
+          "symbol": "TON"
         },
         "token1Price": "0.0305953959010901925143080686322719",
         "totalValueLockedToken0": "80019.69963792024817908",
@@ -1250,11 +1275,12 @@
         "tick": "-194154",
         "token0": {
           "__typename": "Token",
-          "decimals": "18",
+          "chainId": 1,
+          "name": "Ton",
           "derivedETH": "1",
-          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "name": "Wrapped Ether",
-          "symbol": "WETH"
+          "id": "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+          "decimals": 9,
+          "symbol": "TON"
         },
         "token0Price": "0.0002701178052656517691099993064838819",
         "token1": {
@@ -1290,11 +1316,12 @@
         "token0Price": "12.14849042842506916637920320378319",
         "token1": {
           "__typename": "Token",
-          "decimals": "18",
+          "chainId": 1,
+          "name": "Ton",
           "derivedETH": "1",
-          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "name": "Wrapped Ether",
-          "symbol": "WETH"
+          "id": "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+          "decimals": 9,
+          "symbol": "TON"
         },
         "token1Price": "0.08231475391051034840347409369241469",
         "totalValueLockedToken0": "40584.249574190039531173",
@@ -1321,11 +1348,12 @@
         "token0Price": "2622.261030989175697623472978720741",
         "token1": {
           "__typename": "Token",
-          "decimals": "18",
+          "chainId": 1,
+          "name": "Ton",
           "derivedETH": "1",
-          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "name": "Wrapped Ether",
-          "symbol": "WETH"
+          "id": "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+          "decimals": 9,
+          "symbol": "TON"
         },
         "token1Price": "0.0003813502882368570159448979265120372",
         "totalValueLockedToken0": "5971985.36648895553907366",
@@ -1383,11 +1411,12 @@
         "token0Price": "93282.90853560607203543526413674582",
         "token1": {
           "__typename": "Token",
-          "decimals": "18",
+          "chainId": 1,
+          "name": "Ton",
           "derivedETH": "1",
-          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "name": "Wrapped Ether",
-          "symbol": "WETH"
+          "id": "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+          "decimals": 9,
+          "symbol": "TON"
         },
         "token1Price": "0.00001072007740430070479327975950805586",
         "totalValueLockedToken0": "301123602.189986998733349326",
@@ -1405,11 +1434,12 @@
         "tick": "44617",
         "token0": {
           "__typename": "Token",
-          "decimals": "18",
+          "chainId": 1,
+          "name": "Ton",
           "derivedETH": "1",
-          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "name": "Wrapped Ether",
-          "symbol": "WETH"
+          "id": "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+          "decimals": 9,
+          "symbol": "TON"
         },
         "token0Price": "0.01154524453184761091584699274700203",
         "token1": {
@@ -1445,11 +1475,12 @@
         "token0Price": "1.407871037752806630760989743164691",
         "token1": {
           "__typename": "Token",
-          "decimals": "18",
+          "chainId": 1,
+          "name": "Ton",
           "derivedETH": "1",
-          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "name": "Wrapped Ether",
-          "symbol": "WETH"
+          "id": "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+          "decimals": 9,
+          "symbol": "TON"
         },
         "token1Price": "0.7102923301811536762659840366768534",
         "totalValueLockedToken0": "4062.490552020639530223",
@@ -1476,11 +1507,12 @@
         "token0Price": "17021.67325256158918455060956513522",
         "token1": {
           "__typename": "Token",
-          "decimals": "18",
+          "chainId": 1,
+          "name": "Ton",
           "derivedETH": "1",
-          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "name": "Wrapped Ether",
-          "symbol": "WETH"
+          "id": "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+          "decimals": 9,
+          "symbol": "TON"
         },
         "token1Price": "0.00005874863094610925764077225960189322",
         "totalValueLockedToken0": "45358676.621843644545453632",
@@ -1498,11 +1530,12 @@
         "tick": "44568",
         "token0": {
           "__typename": "Token",
-          "decimals": "18",
+          "chainId": 1,
+          "name": "Ton",
           "derivedETH": "1",
-          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "name": "Wrapped Ether",
-          "symbol": "WETH"
+          "id": "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+          "decimals": 9,
+          "symbol": "TON"
         },
         "token0Price": "0.0116015765708042534851492454944572",
         "token1": {
@@ -1538,11 +1571,12 @@
         "token0Price": "1038168.338390930410021423723050166",
         "token1": {
           "__typename": "Token",
-          "decimals": "18",
+          "chainId": 1,
+          "name": "Ton",
           "derivedETH": "1",
-          "id": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "name": "Wrapped Ether",
-          "symbol": "WETH"
+          "id": "0x582d872a1b094fc48f5de31d3b73f2d9be47def1",
+          "decimals": 9,
+          "symbol": "TON"
         },
         "token1Price": "0.0000009632349234902617271044123036842805",
         "totalValueLockedToken0": "95865639.948305978296198085",
