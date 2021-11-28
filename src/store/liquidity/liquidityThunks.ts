@@ -9,6 +9,7 @@ import { getTokens } from 'api/tokens';
 import { InputPoolInterface } from 'types/inputPoolInterface';
 import PromiseUtils from 'utils/promiseUtils';
 import { LiquidityTxInterface } from 'types/liquidityTxInterface';
+import BigNumber from 'bignumber.js';
 
 const swapService = new SmartContractsService();
 
@@ -29,7 +30,8 @@ export const estimateLiquidityTransaction = createAsyncThunk(
             twoAmount: transaction.txType === EstimateTxType.EXACT_IN ? transaction.quote : transaction.amount,
             txType: data.txType,
             poolOverallAmount: transaction.poolOverallAmount,
-            poolAmount: transaction.poolAmount
+            poolAmount: transaction.poolAmount,
+            info: transaction.info,
         }
     }
 );
@@ -57,13 +59,26 @@ export const getLiquidityPoolToken = createAsyncThunk(
 
 export const getLiquidityPool = createAsyncThunk(
     'liquidity/pool',
-    async (pool: string, thunkAPI) => {
+    async (poolString: string, thunkAPI) => {
         const state = thunkAPI.getState() as RootState;
         const walletAdapterService = state.wallet.adapter;
         const tokens: TokenInterface[] = state.app.tokens.length ? state.app.tokens : (await getTokens()).tokens;
-        const oneToken = tokens.find((token) => token.symbol === pool.split(':')[0]);
-        const twoToken = tokens.find((token) => token.symbol === pool.split(':')[1]);
-        return walletAdapterService!.getPool(oneToken!, twoToken!);
+        const oneToken = tokens.find((token) => token.symbol === poolString.split(':')[0]);
+        const twoToken = tokens.find((token) => token.symbol === poolString.split(':')[1]);
+        const pool = await walletAdapterService!.getPool(oneToken!, twoToken!);
+        const info = {
+            token0PerToken1: new BigNumber(pool.input0.amount)
+                .div(new BigNumber(pool.input1.amount))
+                .toString(),
+                token1PerToken0: new BigNumber(pool.input1.amount)
+                .div(new BigNumber(pool.input0.amount))
+                .toString(),
+                share: new BigNumber('1').multipliedBy('100').div('100').toString(),
+        }
+        return {
+            pool,
+            info,
+        }
     },
 )
 

@@ -6,4 +6,9 @@ export interface LiquidityTxInterface {
     txType: EstimateTxType;
     poolAmount: string;
     poolOverallAmount: string;
+    info: {
+        token0PerToken1: string;
+        token1PerToken0: string;
+        share: string;
+    }
 }

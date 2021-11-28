@@ -22,10 +22,6 @@ class TokenUtils {
         value = value || '0';
         return new BigNumber(input.amount).comparedTo(value);
     }
-    static compareRemoveAmount(input: InputTokenInterface | InputPoolInterface, value: BigNumber) {
-        value = value || '0';
-        return new BigNumber(input.removeAmount!).comparedTo(value);
-    }
     static compareToken(inputToken: InputTokenInterface, token: TokenInterface) {
         if (!inputToken.token) {
             return false;

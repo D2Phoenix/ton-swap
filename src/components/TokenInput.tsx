@@ -7,7 +7,7 @@ import TokenInterface from 'types/tokenInterface';
 import { BALANCE_PRECISION } from 'constants/swap';
 import PoolInterface from 'types/poolInterface';
 import TokenIcon from './TokenIcon';
-import TokenUtils from '../utils/tokenUtils';
+import TokenUtils from 'utils/tokenUtils';
 
 interface TokenInputProps {
     balance?: string;
@@ -103,7 +103,10 @@ function TokenInput({balance, token, value, showMax, editable, selectable, loadi
                 token && balance != null && <div className="balance text-small">
                   Balance: {balanceVisible} {token.symbol}
                     {
-                        showMax && !balance && (!value || balance !== value) && (
+                        showMax &&
+                        !new BigNumber(balance).eq('0') &&
+                        (!value || !new BigNumber(balance).eq(value)) &&
+                        (
                             <>&nbsp;(<span className="text-primary text-small link__btn" onClick={handleMax}>MAX</span>)</>
                         )
                     }

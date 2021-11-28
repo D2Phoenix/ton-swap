@@ -5,7 +5,8 @@ import type { RootState } from 'store/store'
 import {
     approveRemove,
     estimateLiquidityTransaction,
-    getLiquidityPool, getLiquidityPoolToken,
+    getLiquidityPool,
+    getLiquidityPoolToken,
     getLiquidityToken,
 } from './liquidityThunks';
 import { EstimateTxType, TxStatus } from 'types/transactionInterfaces';
@@ -19,6 +20,11 @@ export interface LiquidityState {
     txType: EstimateTxType;
     pool: InputPoolInterface;
     loading: boolean;
+    info: {
+        token0PerToken1: string;
+        token1PerToken0: string;
+        share: string;
+    },
     oldLiquidity: {
         input0: InputTokenInterface;
         input1: InputTokenInterface;
@@ -51,6 +57,11 @@ const initialState: LiquidityState = {
         overallAmount: null as any,
         amount: null as any,
         removeAmount: null as any,
+    },
+    info: {
+        token0PerToken1: '',
+        token1PerToken0: '',
+        share: '',
     },
     loading: false,
     oldLiquidity: {
@@ -124,6 +135,7 @@ export const liquiditySlice = createSlice({
             state.txType = action.payload.txType;
             state.pool.overallAmount = action.payload.poolOverallAmount;
             state.pool.amount = action.payload.poolAmount;
+            state.info = action.payload.info;
             state.loading = false;
         });
         builder.addCase(getLiquidityToken.fulfilled, (state, action) => {
@@ -137,9 +149,10 @@ export const liquiditySlice = createSlice({
             state.pool.token = action.payload;
         });
         builder.addCase(getLiquidityPool.fulfilled, (state, action) => {
-            state.input0 = action.payload.input0;
-            state.input1 = action.payload.input1;
-            state.pool = action.payload.pool;
+            state.input0 = action.payload.pool.input0;
+            state.input1 = action.payload.pool.input1;
+            state.pool = action.payload.pool.pool;
+            state.info = action.payload.info;
             state.removeApproveTx.status = TxStatus.INITIAL;
         });
         builder.addCase(approveRemove.pending, (state, action) => {
@@ -199,5 +212,6 @@ export const selectLiquidityPool = (state: RootState) => state.liquidity.pool;
 export const selectLiquidityRemoveApproveTx = (state: RootState) => state.liquidity.removeApproveTx;
 export const selectLiquidityOldLiquidity = (state: RootState) => state.liquidity.oldLiquidity;
 export const selectLiquidityLoading = (state: RootState) => state.liquidity.loading;
+export const selectLiquidityInfo = (state: RootState) => state.liquidity.info;
 
 export default liquiditySlice.reducer;
