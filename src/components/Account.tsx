@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import BigNumber from 'bignumber.js';
 
 import './Account.scss';
 import Modal from './Modal';
@@ -58,7 +57,7 @@ function Account({onClose}: AccountProps) {
                 <span className="text-semibold">Account</span>
                 <div className="account-info text-semibold">
                     <span className="text-small">Address</span>
-                    <a href={`https://ton.sh/address/${walletAddress}`} target="_blank" className="text-semibold">{walletAddress}</a>
+                    <a href={`https://ton.sh/address/${walletAddress}`} rel="noreferrer" target="_blank" className="text-semibold">{walletAddress}</a>
                 </div>
                 <span className="text-small">Transactions</span>
                 <div className="transactions-list">
