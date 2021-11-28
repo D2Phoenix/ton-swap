@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import type { RootState } from 'store/store'
-import { estimateTransaction } from './swapThunks';
+import { estimateTransaction, getSwapToken } from './swapThunks';
 import { EstimateTxType } from 'types/transactionInterfaces';
 import { InputTokenInterface } from 'types/inputTokenInterface';
 
@@ -91,6 +91,13 @@ export const swapSlice = createSlice({
             state.txType = action.payload.type;
             state.trade = action.payload.trade;
             state.loading = false;
+        });
+        builder.addCase(getSwapToken.fulfilled, (state, action) => {
+            if (action.payload.position === 'input0') {
+                state.input0.token = action.payload.token;
+                return
+            }
+            state.input1.token = action.payload.token;
         });
     }
 })

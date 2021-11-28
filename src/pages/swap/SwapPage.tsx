@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import './SwapPage.scss';
 import ChevronDownIcon from 'components/icons/ChevronDownIcon';
@@ -20,7 +21,7 @@ import {
     getWalletUseTokenPermission,
     setWalletUseTokenPermission
 } from 'store/wallet/walletThunks';
-import { estimateTransaction } from 'store/swap/swapThunks';
+import { estimateTransaction, getSwapToken } from 'store/swap/swapThunks';
 import { EstimateTxType } from 'types/transactionInterfaces';
 import {
     selectSwapInput0,
@@ -44,6 +45,8 @@ import { WalletStatus } from 'types/walletAdapterInterface';
 
 function SwapPage() {
     const dispatch = useAppDispatch();
+    const params = useParams();
+
     const [showSettings, setShowSettings] = useState(false);
     const [showTokenSelect, setShowTokenSelect] = useState(false);
     const [showSwapConfirm, setShowSwapConfirm] = useState(false);
@@ -97,6 +100,15 @@ function SwapPage() {
             dispatch(resetSwap());
         };
     }, [dispatch]);
+
+    useEffect(() => {
+        if (params.token0) {
+            dispatch(getSwapToken({address: params.token0, position: 'input0'}));
+        }
+        if (params.token1) {
+            dispatch(getSwapToken({address: params.token1, position: 'input1'}));
+        }
+    }, [dispatch, params]);
 
     // Estimate EXACT_IN transaction
     useEffect((): any => {

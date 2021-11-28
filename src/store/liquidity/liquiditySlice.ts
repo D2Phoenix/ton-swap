@@ -139,7 +139,7 @@ export const liquiditySlice = createSlice({
             state.loading = false;
         });
         builder.addCase(getLiquidityToken.fulfilled, (state, action) => {
-            if (action.payload.position === 'one') {
+            if (action.payload.position === 'input0') {
                 state.input0.token = action.payload.token;
                 return
             }

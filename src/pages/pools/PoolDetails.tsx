@@ -99,10 +99,10 @@ function PoolDetails() {
                                 <span className="text-semibold">{pool.token0.symbol} / {pool.token1.symbol}</span>
                             </div>
                             <div className="pool-actions">
-                                <Link to={`/pool/add/${pool.token0.id}/${pool.token1.id}}`} className="btn btn-primary">
+                                <Link to={`/pool/add/${pool.token0.id}/${pool.token1.id}`} className="btn btn-primary">
                                    Add Liquidity
                                 </Link>
-                                <Link to={`/swap/${pool.token0.id}/${pool.token1.id}}`} className="btn btn-primary">
+                                <Link to={`/swap/${pool.token0.id}/${pool.token1.id}`} className="btn btn-primary">
                                    Swap
                                 </Link>
                             </div>

@@ -6,6 +6,8 @@ import { EstimateTxType } from 'types/transactionInterfaces';
 import PromiseUtils from 'utils/promiseUtils';
 import { SwapTradeInterface } from 'types/swapTradeInterface';
 import { RootState } from 'store/store';
+import TokenInterface from '../../types/tokenInterface';
+import { getTokens } from '../../api/tokens';
 
 const swapService = new SmartContractsService();
 
@@ -29,3 +31,16 @@ export const estimateTransaction = createAsyncThunk(
         }
     }
 );
+
+export const getSwapToken = createAsyncThunk(
+    'swap/token',
+    async ({address, position}: { address: string, position: string }, thunkAPI) => {
+        const state = thunkAPI.getState() as RootState;
+        const tokens: TokenInterface[] = state.app.tokens.length ? state.app.tokens : (await getTokens()).tokens;
+        return {
+            token: tokens.find((token) =>
+                token.address.toLowerCase() === address.toLowerCase() || token.symbol === address) as TokenInterface,
+            position
+        }
+    },
+)
