@@ -59,14 +59,7 @@ export const getWalletBalances = createAsyncThunk(
     async (tokens: TokenInterface[], thunkAPI) => {
         const state = thunkAPI.getState() as RootState;
         const walletAdapterService = state.wallet.adapter;
-        const result = [];
-        for (const token of tokens) {
-            result.push({
-                token,
-                value: walletAdapterService ? await walletAdapterService.getBalance(token) : '0',
-            })
-        }
-        return result;
+        return walletAdapterService ? await walletAdapterService.getBalances(tokens) : [];
     }
 )
 

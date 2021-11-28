@@ -15,6 +15,7 @@ export enum WalletStatus {
 export interface WalletAdapterInterface {
     getWalletAddress(): Promise<string>;
     getBalance(token: TokenInterface): Promise<string>;
+    getBalances(tokens: TokenInterface[]): Promise<any>;
     getTokenUsePermission(token: TokenInterface): Promise<boolean>;
     setTokenUsePermission(token: TokenInterface): Promise<boolean>;
     swap(state: SwapState): Promise<TxStatus>;

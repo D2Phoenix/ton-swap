@@ -31,6 +31,22 @@ class StubWalletService implements WalletAdapterInterface {
         })
     }
 
+    getBalances(tokens: TokenInterface[]): Promise<any> {
+        // TODO: Implement real api for wallet operation
+        return new Promise<any>((resolve) => {
+            setTimeout(() => {
+                const result = [];
+                for (const token of tokens) {
+                    result.push({
+                        token,
+                        value: balances[token.symbol] || '0',
+                    })
+                }
+                resolve(result);
+            }, 1000);
+        })
+    }
+
     getWalletAddress(): Promise<string> {
         // TODO: Implement real api for wallet operation
         return Promise.resolve('EQAaoKr296r6YnAQsPZaJ0hbgqFK_B_GotedqpGK9FeONlSi');

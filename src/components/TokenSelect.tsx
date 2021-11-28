@@ -70,11 +70,10 @@ function TokenSelect({onClose, onSelect, balancesFirst}: TokenSelectParams) {
     }, [handleObserver]);
 
     useEffect(() => {
-        const requestBalances = visibleTokens.filter((token) => !balances[token.symbol]);
-        if (walletAdapter && requestBalances.length) {
-            dispatch(getWalletBalances(requestBalances));
+        if (walletAdapter) {
+            dispatch(getWalletBalances(tokens));
         }
-    }, [dispatch, walletAdapter, balances, visibleTokens]);
+    }, [dispatch, walletAdapter, balances, tokens]);
 
     const handleClose = useCallback(() => {
         onClose();

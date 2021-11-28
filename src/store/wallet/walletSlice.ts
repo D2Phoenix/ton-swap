@@ -71,7 +71,7 @@ export const walletSlice = createSlice({
             state.balances[action.payload.token.symbol] = action.payload.value;
         });
         builder.addCase(getWalletBalances.fulfilled, (state, action) => {
-            action.payload.forEach((data) => {
+            action.payload.forEach((data: any) => {
                 state.balances[data.token.symbol] = data.value;
             })
         });
