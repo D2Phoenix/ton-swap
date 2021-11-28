@@ -9,23 +9,19 @@ import { useAppDispatch, useAppSelector } from 'store/hooks';
 import {
     resetSwap,
     selectSwapInput0,
-    selectSwapTxType,
-    selectSwapInput1,
+    selectSwapInput1, selectSwapTrade,
 } from 'store/swap/swapSlice';
 import { resetTransaction, selectWalletTransaction } from 'store/wallet/walletSlice';
-import { DEFAULT_SLIPPAGE } from 'constants/swap';
-import { TxStatus, EstimateTxType } from 'types/transactionInterfaces';
+import { TxStatus } from 'types/transactionInterfaces';
 import { walletSwap } from 'store/wallet/walletThunks';
 import Spinner from 'components/Spinner';
-import { selectSettings } from 'store/app/appSlice';
 import TokenUtils from 'utils/tokenUtils';
 
 function SwapConfirm({onClose}: any) {
     const dispatch = useAppDispatch();
-    const from = useAppSelector(selectSwapInput0);
-    const to = useAppSelector(selectSwapInput1);
-    const txType = useAppSelector(selectSwapTxType);
-    const settings = useAppSelector(selectSettings);
+    const input0 = useAppSelector(selectSwapInput0);
+    const input1 = useAppSelector(selectSwapInput1);
+    const trade = useAppSelector(selectSwapTrade);
     const walletTransaction = useAppSelector(selectWalletTransaction);
 
     const className = useMemo(() => {
@@ -33,27 +29,19 @@ function SwapConfirm({onClose}: any) {
     }, [walletTransaction]);
 
     const tokenSwapRate = useMemo(() => {
-        if (!TokenUtils.isFilled(from) || !TokenUtils.isFilled(to)) {
+        if (!TokenUtils.isFilled(input0) || !TokenUtils.isFilled(input1)) {
             return;
         }
-        return TokenUtils.getDisplayRate(from, to);
-    }, [from, to]);
+        return TokenUtils.getDisplayRate(input0, input1);
+    }, [input0, input1]);
 
-    const minimumReceived = useMemo(() => {
-        return TokenUtils.getMinimumDisplayWithSlippage(to, settings.slippage || DEFAULT_SLIPPAGE);
-    }, [to, settings]);
+    const token0Amount = useMemo(() => {
+        return TokenUtils.getDisplay(input1);
+    }, [input1]);
 
-    const maximumSent = useMemo(() => {
-        return TokenUtils.getMaximumDisplayWithSlippage(from, settings.slippage || DEFAULT_SLIPPAGE);
-    }, [from, settings]);
-
-    const toAmount = useMemo(() => {
-        return TokenUtils.getDisplay(to);
-    }, [to]);
-
-    const fromAmount = useMemo(() => {
-        return TokenUtils.getDisplay(from);
-    }, [from]);
+    const token1Amount = useMemo(() => {
+        return TokenUtils.getDisplay(input0);
+    }, [input0]);
 
     const handleConfirmSwap = useCallback(() => {
         dispatch(walletSwap());
@@ -73,8 +61,8 @@ function SwapConfirm({onClose}: any) {
                 walletTransaction.status === TxStatus.INITIAL && <>
                   <h4>Confirm Swap</h4>
                   <div className="swap-confirm-wrapper">
-                    <TokenInput token={from.token}
-                                value={from.amount}
+                    <TokenInput token={input0.token}
+                                value={input0.amount}
                                 showMax={true}
                                 selectable={false}
                                 editable={false}
@@ -82,8 +70,8 @@ function SwapConfirm({onClose}: any) {
                     <div className="switch__btn btn-icon">
                       <ChevronDownIcon/>
                     </div>
-                    <TokenInput token={to.token}
-                                value={to.amount}
+                    <TokenInput token={input1.token}
+                                value={input1.amount}
                                 showMax={false}
                                 selectable={false}
                                 editable={false}
@@ -91,20 +79,20 @@ function SwapConfirm({onClose}: any) {
                     <div className="swap-info">
                       <span className="text-small">Price</span>
                       <span className="text-small">
-                1 {to.token.symbol} = {tokenSwapRate} {from.token.symbol}
+                1 {input1.token.symbol} = {tokenSwapRate} {input0.token.symbol}
                 </span>
                     </div>
                     <SwapInfo/>
                       {
-                          txType === EstimateTxType.EXACT_IN && <span className="help-text text-small">
+                          trade.minimumReceived && <span className="help-text text-small">
                 Output is estimated. You will receive at least <span
-                            className="text-semibold text-small">{minimumReceived} {to.token.symbol}</span>  or the transaction will revert.
+                            className="text-semibold text-small">{TokenUtils.getNumberDisplay(trade.minimumReceived)} {input1.token.symbol}</span>  or the transaction will revert.
                 </span>
                       }
                       {
-                          txType === EstimateTxType.EXACT_OUT && <span className="help-text text-small">
+                          trade.maximumSent && <span className="help-text text-small">
                 Input is estimated. You will sell at most <span
-                            className="text-semibold text-small">{maximumSent} {from.token.symbol}</span> or the transaction will revert.
+                            className="text-semibold text-small">{TokenUtils.getNumberDisplay(trade.maximumSent)} {input0.token.symbol}</span> or the transaction will revert.
                 </span>
                       }
                     <button className="btn btn-primary swap__btn"
@@ -120,7 +108,7 @@ function SwapConfirm({onClose}: any) {
                       <div className="swap-status">
                         <Spinner />
                         <span>
-                            Swapping {fromAmount} {from.token.symbol} for {toAmount} {to.token.symbol}
+                            Swapping {token1Amount} {input0.token.symbol} for {token0Amount} {input1.token.symbol}
                         </span>
                         <span className="text-small">
                           Confirm this transaction in your wallet

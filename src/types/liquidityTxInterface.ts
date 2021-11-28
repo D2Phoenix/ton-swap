@@ -5,5 +5,5 @@ export interface LiquidityTxInterface {
     quote: string;
     txType: EstimateTxType;
     poolAmount: string;
-    poolTokens: string;
+    poolOverallAmount: string;
 }

@@ -7,18 +7,28 @@ import { RootState } from 'store/store';
 import TokenInterface from 'types/tokenInterface';
 import { getTokens } from 'api/tokens';
 import { InputPoolInterface } from 'types/inputPoolInterface';
+import PromiseUtils from 'utils/promiseUtils';
+import { LiquidityTxInterface } from 'types/liquidityTxInterface';
 
 const swapService = new SmartContractsService();
 
+let previousPromise: any = null;
+
 export const estimateLiquidityTransaction = createAsyncThunk(
     'liquidity/estimate',
-    async (data: LiquidityTxRequestInterface) => {
-        const transaction = await swapService.getLiquidityTxEstimation(data);
+    async (data: LiquidityTxRequestInterface, thunkAPI) => {
+        const state = thunkAPI.getState() as RootState;
+        if (previousPromise) {
+            previousPromise.cancel();
+        }
+        const getLiquidityTxEstimationPromise = PromiseUtils.makeCancelable<LiquidityTxInterface>(swapService.getLiquidityTxEstimation(data, state.app.settings));
+        previousPromise = getLiquidityTxEstimationPromise;
+        const transaction = await getLiquidityTxEstimationPromise.promise;
         return {
             oneAmount: transaction.txType === EstimateTxType.EXACT_IN ? transaction.amount : transaction.quote,
             twoAmount: transaction.txType === EstimateTxType.EXACT_IN ? transaction.quote : transaction.amount,
             txType: data.txType,
-            poolTokens: transaction.poolTokens,
+            poolOverallAmount: transaction.poolOverallAmount,
             poolAmount: transaction.poolAmount
         }
     }

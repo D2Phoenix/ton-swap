@@ -6,4 +6,5 @@ export interface LiquidityTxRequestInterface {
     input: InputTokenInterface;
     token: TokenInterface;
     txType: EstimateTxType;
+    source?: 'manual' | 'auto';
 }

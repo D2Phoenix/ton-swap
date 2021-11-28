@@ -2,7 +2,12 @@ import { useMemo } from 'react';
 
 import './LiquidityInfo.scss';
 import { useAppSelector } from 'store/hooks';
-import { selectLiquidityPool, selectLiquidityInput0, selectLiquidityInput1 } from 'store/liquidity/liquiditySlice';
+import {
+    selectLiquidityPool,
+    selectLiquidityInput0,
+    selectLiquidityInput1,
+    selectLiquidityLoading
+} from 'store/liquidity/liquiditySlice';
 import TokenUtils from 'utils/tokenUtils';
 import BigNumber from 'bignumber.js';
 
@@ -10,6 +15,7 @@ function LiquidityInfo() {
     const input0 = useAppSelector(selectLiquidityInput0);
     const input1 = useAppSelector(selectLiquidityInput1);
     const pool = useAppSelector(selectLiquidityPool);
+    const loading = useAppSelector(selectLiquidityLoading);
 
     const token0PerToken1Display = useMemo(() => {
         if (!TokenUtils.isFilled(input0) || !TokenUtils.isFilled(input1)) {
@@ -37,7 +43,7 @@ function LiquidityInfo() {
     }, [pool]);
 
     return (
-        <div className="liquidity-info-wrapper">
+        <div className={`liquidity-info-wrapper ${loading ? 'loading' : ''}`}>
             <span>Prices and pool share</span>
             <div className="liquidity-price-wrapper">
                 <div className="liquidity-price">

@@ -5,6 +5,9 @@
   flex-direction: column;
   gap: 8px;
   width: 100%;
+  &.loading {
+    opacity: 0.5;
+  }
   > span {
     border-bottom: 1px solid $border-color;
     padding: 0 1rem 8px;

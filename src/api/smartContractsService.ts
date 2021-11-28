@@ -107,22 +107,52 @@ class SmartContractsService {
         }
     }
 
-    getLiquidityTxEstimation(data: LiquidityTxRequestInterface): Promise<LiquidityTxInterface> {
+    async getLiquidityTxEstimation(data: LiquidityTxRequestInterface, settings: SettingsInterface): Promise<LiquidityTxInterface> {
         // TODO: Implement real api for transaction estimation
-        const amount = data.input.amount;
-        const amountToken = data.input.token;
-        const quoteToken = data.token;
-        const fromSymbol = data.input.token.symbol;
-        const toSymbol = data.token.symbol;
-        const price = prices[`${fromSymbol}_${toSymbol}`];
-        const quote = new BigNumber('0')//new BigNumber(price || fromDecimals(new BigNumber('1'), quoteToken.decimals)).multipliedBy(toDecimals(amount, amountToken.decimals));
-        return Promise.resolve({
-            amount,
-            quote,
-            txType: data.txType,
-            poolAmount: new BigNumber('1'),
-            poolTokens: new BigNumber('100'),
-        } as any);
+        // Using simple-uniswap-sdk for demo purpose
+        const uniswapPair = new UniswapPair({
+            // the contract address of the token you want to convert FROM
+            fromTokenContractAddress: data.txType === EstimateTxType.EXACT_IN ? data.input.token.address : data.token.address,
+            // the contract address of the token you want to convert TO
+            toTokenContractAddress: data.txType === EstimateTxType.EXACT_IN ? data.token.address : data.input.token.address,
+            // the ethereum address of the user using this part of the dApp
+            ethereumAddress: '0xB1E6079212888f0bE0cf55874B2EB9d7a5e02cD9',
+            chainId: ChainId.MAINNET,
+            settings: new UniswapPairSettings({
+                // if not supplied it will use `0.005` which is 0.5%
+                // please pass it in as a full number decimal so 0.7%
+                // would be 0.007
+                slippage: new BigNumber(settings.slippage).div('100').toNumber(),
+                // if not supplied it will use 20 a deadline minutes
+                deadlineMinutes: new BigNumber(settings.deadline).toNumber(),
+                disableMultihops: true,
+                uniswapVersions: [UniswapVersion.v3],
+            }),
+        });
+
+        const uniswapPairFactory = await uniswapPair.createFactory();
+        try {
+            const trade = await uniswapPairFactory.trade(data.input.amount, 'input' as any);
+
+            const result = {
+                amount: data.input.amount,
+                quote: trade.expectedConvertQuote,
+                txType: data.txType,
+                poolAmount: '1',
+                poolOverallAmount: '100',
+            };
+            trade.destroy();
+
+            return Promise.resolve(result);
+        } catch (error) {
+            return Promise.resolve({
+                amount: data.input.amount,
+                quote: '0',
+                txType: data.txType,
+                poolAmount: '0',
+                poolOverallAmount: '0',
+            });
+        }
     }
 
     getPriceImpact(data: LiquidityTxRequestInterface): Promise<string> {

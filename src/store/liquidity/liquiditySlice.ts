@@ -8,7 +8,6 @@ import {
     getLiquidityPool, getLiquidityPoolToken,
     getLiquidityToken,
 } from './liquidityThunks';
-import { shiftDecimals } from 'utils/decimals';
 import { EstimateTxType, TxStatus } from 'types/transactionInterfaces';
 import { InputTokenInterface } from 'types/inputTokenInterface';
 import { InputPoolInterface } from 'types/inputPoolInterface';
@@ -19,6 +18,7 @@ export interface LiquidityState {
     input1: InputTokenInterface;
     txType: EstimateTxType;
     pool: InputPoolInterface;
+    loading: boolean;
     oldLiquidity: {
         input0: InputTokenInterface;
         input1: InputTokenInterface;
@@ -52,6 +52,7 @@ const initialState: LiquidityState = {
         amount: null as any,
         removeAmount: null as any,
     },
+    loading: false,
     oldLiquidity: {
         input0: null as any,
         input1: null as any,
@@ -112,12 +113,18 @@ export const liquiditySlice = createSlice({
         },
     },
     extraReducers: (builder) => {
+        builder.addCase(estimateLiquidityTransaction.pending, (state, action) => {
+            if (action.meta.arg.source !== 'auto') {
+                state.loading = true;
+            }
+        });
         builder.addCase(estimateLiquidityTransaction.fulfilled, (state, action) => {
             state.input0.amount = action.payload.oneAmount;
             state.input1.amount = action.payload.twoAmount;
             state.txType = action.payload.txType;
-            state.pool.overallAmount = action.payload.poolTokens;
+            state.pool.overallAmount = action.payload.poolOverallAmount;
             state.pool.amount = action.payload.poolAmount;
+            state.loading = false;
         });
         builder.addCase(getLiquidityToken.fulfilled, (state, action) => {
             if (action.payload.position === 'one') {
@@ -191,5 +198,6 @@ export const selectLiquidityTxType = (state: RootState) => state.liquidity.txTyp
 export const selectLiquidityPool = (state: RootState) => state.liquidity.pool;
 export const selectLiquidityRemoveApproveTx = (state: RootState) => state.liquidity.removeApproveTx;
 export const selectLiquidityOldLiquidity = (state: RootState) => state.liquidity.oldLiquidity;
+export const selectLiquidityLoading = (state: RootState) => state.liquidity.loading;
 
 export default liquiditySlice.reducer;
