@@ -76,11 +76,13 @@ nav {
     margin-bottom: 0;
 
     &.wallet {
-      .btn {
+      > .btn {
         width: 178px;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
+        &:not(.btn-outline) {
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
+        }
       }
     }
   }

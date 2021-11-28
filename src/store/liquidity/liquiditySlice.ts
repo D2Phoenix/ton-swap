@@ -7,7 +7,7 @@ import {
     estimateLiquidityTransaction,
     getLiquidityPool, getLiquidityPoolToken,
     getLiquidityToken,
-} from './liquidity.thunks';
+} from './liquidityThunks';
 import { shiftDecimals } from 'utils/decimals';
 import { EstimateTxType, TxStatus } from 'types/transactionInterfaces';
 import { InputTokenInterface } from 'types/inputTokenInterface';
@@ -32,7 +32,7 @@ export interface LiquidityState {
 const initialState: LiquidityState = {
     input0: {
         token: {
-            address: '0x582d872a1b094fc48f5de31d3b73f2d9be47def1',
+            address: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
             chainId: 1,
             decimals: 9,
             logoURI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/11419.png',
@@ -67,22 +67,10 @@ export const liquiditySlice = createSlice({
     initialState,
     reducers: {
         setLiquidityInput0Token: (state, action: PayloadAction<any>) => {
-            const prevToken = state.input0.token;
             state.input0.token = action.payload;
-            // correct amount with new token decimals
-            if (state.input0.token && state.input0.amount) {
-                const delta = state.input0.token.decimals - (prevToken?.decimals || 0);
-                state.input0.amount = shiftDecimals(state.input0.amount as BigNumber, delta);
-            }
         },
         setLiquidityInput1Token: (state, action: PayloadAction<any>) => {
-            const prevToken = state.input1.token;
             state.input1.token = action.payload;
-            // correct amount with new token decimals
-            if (state.input1.token && state.input1.amount) {
-                const delta = state.input1.token.decimals - (prevToken?.decimals || 0);
-                state.input1.amount = shiftDecimals(state.input1.amount as BigNumber, delta);
-            }
         },
         setLiquidityInput0Amount: (state, action: PayloadAction<any>) => {
             state.input0.amount = action.payload.value;
@@ -96,9 +84,9 @@ export const liquiditySlice = createSlice({
             if (!state.input0.amount) {
                 return;
             }
-            state.input0.removeAmount = state.input0.amount.multipliedBy(action.payload.value).div('100');
-            state.input1.removeAmount = state.input1.amount.multipliedBy(action.payload.value).div('100');
-            state.pool.removeAmount = state.pool.amount.multipliedBy(action.payload.value).div('100');
+            state.input0.removeAmount = new BigNumber(state.input0.amount).multipliedBy(action.payload.value).div('100').toString();
+            state.input1.removeAmount = new BigNumber(state.input1.amount).multipliedBy(action.payload.value).div('100').toString();
+            state.pool.removeAmount = new BigNumber(state.pool.amount).multipliedBy(action.payload.value).div('100').toString();
             state.removeApproveTx.status = TxStatus.INITIAL;
         },
         setLiquidityInput0RemoveAmount: (state, action: PayloadAction<any>) => {
@@ -156,7 +144,7 @@ export const liquiditySlice = createSlice({
     }
 });
 
-function handleRemoveAmount(state: Draft<LiquidityState>, token: Draft<InputTokenInterface | InputPoolInterface>, deps: Draft<InputTokenInterface | InputPoolInterface>[], value: BigNumber | null) {
+function handleRemoveAmount(state: Draft<LiquidityState>, token: Draft<InputTokenInterface | InputPoolInterface>, deps: Draft<InputTokenInterface | InputPoolInterface>[], value: string | null) {
     if (!value) {
         token.removeAmount = null as any;
         deps.forEach((item) => {
@@ -164,23 +152,23 @@ function handleRemoveAmount(state: Draft<LiquidityState>, token: Draft<InputToke
         })
         return;
     }
-    if (value.eq('0')) {
+    if (new BigNumber(value).eq('0')) {
         token.removeAmount = value;
         deps.forEach((item) => {
             item.removeAmount = null as any;
         })
         return;
     }
-    const percent = token.amount.div(value);
+    const percentBig = new BigNumber(token.amount).div(value);
     token.removeAmount = value;
-    if (percent.lt('1')) {
+    if (percentBig.lt('1')) {
         deps.forEach((item) => {
             item.removeAmount = null as any;
         })
         return;
     }
     deps.forEach((item) => {
-        item.removeAmount = item.amount.div(percent);
+        item.removeAmount = new BigNumber(item.amount).div(percentBig).toString();
     });
 }
 

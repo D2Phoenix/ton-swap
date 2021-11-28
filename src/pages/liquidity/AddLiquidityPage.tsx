@@ -5,7 +5,7 @@ import './AddLiquidityPage.scss';
 import TokenInput from 'components/TokenInput';
 import SettingsIcon from 'components/icons/SettingsIcon';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { selectWalletAdapter, selectWalletBalances, selectWalletPermissions } from 'store/wallet/wallet.slice';
+import { selectWalletAdapter, selectWalletBalances, selectWalletPermissions } from 'store/wallet/walletSlice';
 import {
     selectLiquidityInput0,
     selectLiquidityTxType,
@@ -16,19 +16,19 @@ import {
     setLiquidityInput1Token,
     switchLiquidityTokens,
     resetLiquidity,
-} from 'store/liquidity/liquidity.slice';
+} from 'store/liquidity/liquiditySlice';
 import {
     connectWallet,
     getWalletBalance, getWalletBalances,
     getWalletUseTokenPermission,
     setWalletUseTokenPermission
-} from 'store/wallet/wallet.thunks';
-import { selectTokens } from 'store/app/app.slice';
+} from 'store/wallet/walletThunks';
+import { selectTokens } from 'store/app/appSlice';
 import {
     estimateLiquidityTransaction,
     getLiquidityPoolToken,
     getLiquidityToken
-} from 'store/liquidity/liquidity.thunks';
+} from 'store/liquidity/liquidityThunks';
 import { EstimateTxType } from 'types/transactionInterfaces';
 import TokenSelect from 'components/TokenSelect';
 import Settings from 'components/Settings';
@@ -52,7 +52,6 @@ export function AddLiquidityPage() {
     const walletAdapter = useAppSelector(selectWalletAdapter);
     const walletBalances = useAppSelector(selectWalletBalances);
     const walletPermissions = useAppSelector(selectWalletPermissions);
-    const tokens = useAppSelector(selectTokens);
     const input0 = useAppSelector(selectLiquidityInput0);
     const input1 = useAppSelector(selectLiquidityInput1);
     const txType = useAppSelector(selectLiquidityTxType);
@@ -201,10 +200,7 @@ export function AddLiquidityPage() {
     const openTokenSelect = useCallback((activeInput) => {
         setShowTokenSelect(!showTokenSelect);
         setActiveInput(activeInput);
-        if (walletAdapter) {
-            dispatch(getWalletBalances(tokens));
-        }
-    }, [showTokenSelect, dispatch, walletAdapter, tokens]);
+    }, [showTokenSelect, dispatch, walletAdapter]);
 
     const handleSwitchTokens = useCallback(() => {
         dispatch(switchLiquidityTokens());
@@ -331,9 +327,7 @@ export function AddLiquidityPage() {
                 showSettings && <Settings onClose={() => setShowSettings(false)}/>
             }
             {
-                showTokenSelect && <TokenSelect tokens={tokens}
-                                                balances={walletBalances}
-                                                balancesFirst={true}
+                showTokenSelect && <TokenSelect balancesFirst={true}
                                                 onClose={handleSelectToken}
                                                 onSelect={handleSelectToken}/>
             }

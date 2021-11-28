@@ -29,6 +29,9 @@
       width: 16px;
       height: 16px;
     }
+    &.loading {
+      opacity: 0.5;
+    }
   }
   .switch__btn {
     width: 16px;

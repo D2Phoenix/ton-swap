@@ -2,8 +2,9 @@ import { useMemo } from 'react';
 
 import './LiquidityInfo.scss';
 import { useAppSelector } from 'store/hooks';
-import { selectLiquidityPool, selectLiquidityInput0, selectLiquidityInput1 } from 'store/liquidity/liquidity.slice';
+import { selectLiquidityPool, selectLiquidityInput0, selectLiquidityInput1 } from 'store/liquidity/liquiditySlice';
 import TokenUtils from 'utils/tokenUtils';
+import BigNumber from 'bignumber.js';
 
 function LiquidityInfo() {
     const input0 = useAppSelector(selectLiquidityInput0);
@@ -28,7 +29,7 @@ function LiquidityInfo() {
         if (!pool.amount) {
             return '0%';
         }
-        const result = pool.amount.multipliedBy('100').div(pool.overallAmount!).precision(2);
+        const result = new BigNumber(pool.amount).multipliedBy('100').div(pool.overallAmount!).precision(2);
         if (result.lt('0.01')) {
             return '<0.01%';
         }

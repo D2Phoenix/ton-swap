@@ -1,14 +1,14 @@
 import BigNumber from 'bignumber.js';
-import {
-    SwapTxRequestInterface
-} from 'types/swapTxRequestInterface';
-import { SwapTxInterface } from 'types/swapTxInterface';
-import { fromDecimals, toDecimals } from 'utils/decimals';
+import { SwapTradeRequestInterface } from 'types/swapTradeRequestInterface';
+import { SwapTradeInterface } from 'types/swapTradeInterface';
 import { LiquidityTxInterface } from 'types/liquidityTxInterface';
-import {
-    LiquidityTxRequestInterface
-} from 'types/liquidityTxRequestInterface';
+import { LiquidityTxRequestInterface } from 'types/liquidityTxRequestInterface';
 import PoolsService from './poolsService';
+
+import { ChainId, UniswapPair, UniswapPairSettings, UniswapVersion } from 'simple-uniswap-sdk';
+import { EstimateTxType } from '../types/transactionInterfaces';
+import { SettingsInterface } from '../types/settingsInterface';
+
 
 const prices: Record<string, string> = {
     'TON_AAVE': '13992321165469095',
@@ -38,21 +38,73 @@ const prices: Record<string, string> = {
 const poolsService = new PoolsService();
 
 class SmartContractsService {
-    getTxEstimation(data: SwapTxRequestInterface): Promise<SwapTxInterface> {
-        // TODO: Implement real api for transaction estimation
-        const amount = data.input.amount;
-        const amountToken = data.input.token;
-        const quoteToken = data.token;
-        const fromSymbol = data.input.token.symbol;
-        const toSymbol = data.token.symbol;
-        const price = prices[`${fromSymbol}_${toSymbol}`];
-        const quote = new BigNumber(price || fromDecimals(new BigNumber('1'), quoteToken.decimals)).multipliedBy(toDecimals(amount, amountToken.decimals));
-        return Promise.resolve({
-            amount,
-            quote,
-            txType: data.txType,
-            fee: new BigNumber('0.003'),
+
+    async getTrade(data: SwapTradeRequestInterface, settings: SettingsInterface): Promise<SwapTradeInterface> {
+        // TODO: Implement Ton network contracts api for transaction estimation
+        // Using simple-uniswap-sdk for demo purpose
+        const uniswapPair = new UniswapPair({
+            // the contract address of the token you want to convert FROM
+            fromTokenContractAddress: data.txType === EstimateTxType.EXACT_IN ? data.input.token.address : data.token.address,
+            // the contract address of the token you want to convert TO
+            toTokenContractAddress: data.txType === EstimateTxType.EXACT_IN ? data.token.address : data.input.token.address,
+            // the ethereum address of the user using this part of the dApp
+            ethereumAddress: '0xB1E6079212888f0bE0cf55874B2EB9d7a5e02cD9',
+            chainId: ChainId.MAINNET,
+            settings: new UniswapPairSettings({
+                // if not supplied it will use `0.005` which is 0.5%
+                // please pass it in as a full number decimal so 0.7%
+                // would be 0.007
+                slippage: new BigNumber(settings.slippage).div('100').toNumber(),
+                // if not supplied it will use 20 a deadline minutes
+                deadlineMinutes: new BigNumber(settings.deadline).toNumber(),
+                disableMultihops: true,
+                uniswapVersions: [UniswapVersion.v3],
+            }),
         });
+
+        const uniswapPairFactory = await uniswapPair.createFactory();
+        const direction: any = data.txType === EstimateTxType.EXACT_IN ? 'input' : 'output';
+        try {
+            const trade = await uniswapPairFactory.trade(data.input.amount, direction);
+            const amount0 = data.txType === EstimateTxType.EXACT_IN ? data.input.amount : trade.expectedConvertQuote;
+            const amount1 = data.txType === EstimateTxType.EXACT_IN ? trade.expectedConvertQuote : data.input.amount;
+            const rate = new BigNumber(amount0)
+                .div(new BigNumber(amount1))
+                .toString();
+
+            const result = {
+                amount: data.input.amount,
+                quote: trade.expectedConvertQuote,
+                txType: data.txType,
+                trade: {
+                    fee: trade.liquidityProviderFeePercent.toString(),
+                    liquidityProviderFee: trade.liquidityProviderFee,
+                    maximumSent: trade.maximumSent,
+                    minimumReceived: trade.minAmountConvertQuote,
+                    priceImpact: await this.getPriceImpact(data),
+                    insufficientLiquidity: false,
+                    rate: rate,
+                }
+            };
+            trade.destroy();
+
+            return Promise.resolve(result);
+        } catch (error) {
+            return Promise.resolve({
+                amount: data.input.amount,
+                quote: '0',
+                txType: data.txType,
+                trade: {
+                    fee: '0',
+                    liquidityProviderFee: '0',
+                    maximumSent: '',
+                    minimumReceived: '',
+                    priceImpact: '0',
+                    insufficientLiquidity: true,
+                    rate: '0',
+                }
+            });
+        }
     }
 
     getLiquidityTxEstimation(data: LiquidityTxRequestInterface): Promise<LiquidityTxInterface> {
@@ -63,31 +115,24 @@ class SmartContractsService {
         const fromSymbol = data.input.token.symbol;
         const toSymbol = data.token.symbol;
         const price = prices[`${fromSymbol}_${toSymbol}`];
-        const quote = new BigNumber(price || fromDecimals(new BigNumber('1'), quoteToken.decimals)).multipliedBy(toDecimals(amount, amountToken.decimals));
+        const quote = new BigNumber('0')//new BigNumber(price || fromDecimals(new BigNumber('1'), quoteToken.decimals)).multipliedBy(toDecimals(amount, amountToken.decimals));
         return Promise.resolve({
             amount,
             quote,
             txType: data.txType,
             poolAmount: new BigNumber('1'),
             poolTokens: new BigNumber('100'),
-        });
+        } as any);
     }
 
-    getPriceImpact(data: LiquidityTxRequestInterface, transaction: SwapTxInterface): Promise<BigNumber> {
+    getPriceImpact(data: LiquidityTxRequestInterface): Promise<string> {
         // TODO: Implement real api for estimate price impact
-        return Promise.resolve(new BigNumber('2.00'));
+        return Promise.resolve('2.00');
     }
 
-    checkLiquidity(data: LiquidityTxRequestInterface, transaction: SwapTxInterface): Promise<boolean> {
+    checkLiquidity(data: LiquidityTxRequestInterface, transaction: SwapTradeInterface): Promise<boolean> {
         // TODO: Implement real api for estimate transaction liquidity
-        return poolsService.getPools().then((pools) => {
-            const token0 = data.input.token.address.toLowerCase();
-            const token1 = data.token.address.toLowerCase();
-            const pool = pools.find((pool) =>
-                (pool.token0.id.toLowerCase() === token0 || pool.token0.id.toLowerCase() === token1)
-                && (pool.token1.id.toLowerCase() === token0 || pool.token1.id.toLowerCase() === token1));
-            return !!pool;
-        })
+        return Promise.resolve(transaction.trade.insufficientLiquidity);
     }
 }
 

@@ -10,15 +10,15 @@ import {
     selectLiquidityPool,
     selectLiquidityInput0,
     selectLiquidityInput1,
-} from 'store/liquidity/liquidity.slice';
-import { resetTransaction, selectWalletTransaction } from 'store/wallet/wallet.slice';
+} from 'store/liquidity/liquiditySlice';
+import { resetTransaction, selectWalletTransaction } from 'store/wallet/walletSlice';
 import { DEFAULT_SLIPPAGE } from 'constants/swap';
 import { TxStatus } from 'types/transactionInterfaces';
-import {  walletRemoveLiquidity } from 'store/wallet/wallet.thunks';
+import {  walletRemoveLiquidity } from 'store/wallet/walletThunks';
 import Spinner from 'components/Spinner';
-import { selectSettings } from 'store/app/app.slice';
+import { selectSettings } from 'store/app/appSlice';
 import TokenUtils from 'utils/tokenUtils';
-import { getLiquidityPool } from '../../store/liquidity/liquidity.thunks';
+import { getLiquidityPool } from '../../store/liquidity/liquidityThunks';
 
 function RemoveLiquidityConfirm({onClose}: any) {
     const dispatch = useAppDispatch();

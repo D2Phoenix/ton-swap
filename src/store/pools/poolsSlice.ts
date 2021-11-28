@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { RootState } from 'store/store';
 
-import { fetchPool, fetchPools } from './pools.thunks';
+import { fetchPool, fetchPools } from './poolsThunks';
 import PoolItemInterface from 'types/poolItemInterface';
 
 interface PoolState {

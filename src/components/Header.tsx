@@ -2,15 +2,18 @@ import React, { useCallback, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import './Header.scss';
-import { connectWallet } from 'store/wallet/wallet.thunks';
+import { connectWallet } from 'store/wallet/walletThunks';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { selectWalletAddress } from 'store/wallet/wallet.slice';
+import { selectWalletAddress, selectWalletConnectionStatus } from 'store/wallet/walletSlice';
 import Account from './Account';
+import Spinner from './Spinner';
+import { WalletStatus } from '../types/walletAdapterInterface';
 
 function Header() {
     const dispatch = useAppDispatch();
     const [showAccount ,setShowAccount] = useState(false);
 
+    const walletConnectionStatus = useAppSelector(selectWalletConnectionStatus)
     const walletAddress = useAppSelector(selectWalletAddress)
 
     const handleConnectWallet = useCallback(() => {
@@ -55,11 +58,22 @@ function Header() {
                         </div>
                         <div className="nav-item wallet">
                             {
-                                !walletAddress && <div className="btn btn-outline"
-                                                      onClick={handleConnectWallet}>Connect Wallet</div>
+                                walletConnectionStatus !== WalletStatus.CONNECTED &&
+                                <button className="btn btn-outline"
+                                     onClick={handleConnectWallet}>
+                                    {
+                                        walletConnectionStatus === WalletStatus.DISCONNECTED && 'Connect Wallet'
+                                    }
+                                    {
+                                        walletConnectionStatus === WalletStatus.CONNECTING && <Spinner className="btn outline" />
+                                    }
+                                </button>
                             }
                             {
-                                walletAddress && <div className="btn btn-primary" onClick={handleShowAccount}>{walletAddress}</div>
+                                walletAddress &&
+                                <div className="btn btn-primary" onClick={handleShowAccount}>
+                                    {walletAddress}
+                                </div>
                             }
                         </div>
                     </div>

@@ -11,10 +11,10 @@ import {
     selectLiquidityPool,
     selectLiquidityInput0,
     selectLiquidityInput1,
-} from 'store/liquidity/liquidity.slice';
-import { resetTransaction, selectWalletTransaction } from 'store/wallet/wallet.slice';
-import { walletAddLiquidity } from 'store/wallet/wallet.thunks';
-import { selectSettings } from 'store/app/app.slice';
+} from 'store/liquidity/liquiditySlice';
+import { resetTransaction, selectWalletTransaction } from 'store/wallet/walletSlice';
+import { walletAddLiquidity } from 'store/wallet/walletThunks';
+import { selectSettings } from 'store/app/appSlice';
 import { DEFAULT_SLIPPAGE } from 'constants/swap';
 import { TxStatus } from 'types/transactionInterfaces';
 import TokenUtils from 'utils/tokenUtils';

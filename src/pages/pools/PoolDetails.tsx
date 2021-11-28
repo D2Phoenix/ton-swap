@@ -3,8 +3,8 @@ import { Link, useParams } from 'react-router-dom';
 
 import './PoolDetails.scss';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { fetchPool } from 'store/pools/pools.thunks';
-import { resetPoolDetails, selectPoolsChartData, selectPoolsPool } from 'store/pools/pools.slice';
+import { fetchPool } from 'store/pools/poolsThunks';
+import { resetPoolDetails, selectPoolsChartData, selectPoolsPool } from 'store/pools/poolsSlice';
 import TokenIcon from 'components/TokenIcon';
 import CurrencyUtils from 'utils/currencyUtils';
 import BigNumber from 'bignumber.js';

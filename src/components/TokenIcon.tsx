@@ -1,6 +1,6 @@
 import './TokenIcon.scss';
 import { useAppSelector } from 'store/hooks';
-import { selectTokens } from 'store/app/app.slice';
+import { selectTokens } from 'store/app/appSlice';
 import { useMemo } from 'react';
 
 interface TokenIconProps {

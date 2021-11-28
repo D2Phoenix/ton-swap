@@ -5,7 +5,7 @@ import ChevronDownIcon from 'components/icons/ChevronDownIcon';
 import CurrencyUtils from 'utils/currencyUtils';
 import ChevronRightIcon from 'components/icons/ChevronRightIcon';
 import { useAppSelector } from 'store/hooks';
-import { selectPoolsTransactions } from 'store/pools/pools.slice';
+import { selectPoolsTransactions } from 'store/pools/poolsSlice';
 import DateUtils from 'utils/dateUtils';
 
 function PoolTransactionsTable() {

@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 import './PoolsPage.scss';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { selectPoolsList } from 'store/pools/pools.slice';
-import { fetchPools } from 'store/pools/pools.thunks';
+import { selectPoolsList } from 'store/pools/poolsSlice';
+import { fetchPools } from 'store/pools/poolsThunks';
 import ChevronDownIcon from 'components/icons/ChevronDownIcon';
 import ChevronRightIcon from 'components/icons/ChevronRightIcon';
 import CurrencyUtils from 'utils/currencyUtils';

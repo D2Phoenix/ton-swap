@@ -4,7 +4,7 @@ import './Settings.scss';
 import Modal from 'components/Modal';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { DEFAULT_DEADLINE, DEFAULT_SLIPPAGE } from 'constants/swap';
-import { selectSettings, setSettingsDeadline, setSettingsSlippage } from 'store/app/app.slice';
+import { selectSettings, setSettingsDeadline, setSettingsSlippage } from 'store/app/appSlice';
 import QuestionIcon from './icons/QuestionIcon';
 import Tooltip from './Tooltip';
 

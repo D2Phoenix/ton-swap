@@ -3,7 +3,7 @@ import TokenInput from 'components/TokenInput';
 import SettingsIcon from 'components/icons/SettingsIcon';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { selectWalletAdapter } from 'store/wallet/wallet.slice';
+import { selectWalletAdapter } from 'store/wallet/walletSlice';
 import {
     selectLiquidityInput0,
     selectLiquidityInput1,
@@ -14,17 +14,17 @@ import {
     setLiquidityPoolRemoveAmount,
     selectLiquidityRemoveApproveTx,
     setLiquidityPercentRemoveAmount,
-} from 'store/liquidity/liquidity.slice';
+} from 'store/liquidity/liquiditySlice';
 import {
     getWalletBalance,
     getWalletUseTokenPermission,
-} from 'store/wallet/wallet.thunks';
+} from 'store/wallet/walletThunks';
 import Settings from 'components/Settings';
 import { Link, useParams } from 'react-router-dom';
 import ChevronRightIcon from 'components/icons/ChevronRightIcon';
 import LiquidityInfo from './LiquidityInfo';
 import ChevronDownIcon from 'components/icons/ChevronDownIcon';
-import { approveRemove, getLiquidityPool } from 'store/liquidity/liquidity.thunks';
+import { approveRemove, getLiquidityPool } from 'store/liquidity/liquidityThunks';
 import TokenUtils from 'utils/tokenUtils';
 import { TxStatus } from 'types/transactionInterfaces';
 import Spinner from 'components/Spinner';
@@ -32,6 +32,7 @@ import RemoveLiquidityConfirm from './RemoveLiquidityConfirm';
 import InputSlider from 'components/InputSlider';
 import QuestionIcon from 'components/icons/QuestionIcon';
 import Tooltip from 'components/Tooltip';
+import BigNumber from 'bignumber.js';
 
 export function RemoveLiquidityPage() {
     const dispatch = useAppDispatch();
@@ -54,7 +55,7 @@ export function RemoveLiquidityPage() {
         if (!pool.removeAmount) {
             return '0';
         }
-        const percent = pool.removeAmount.div(pool.amount).multipliedBy('100');
+        const percent = new BigNumber(pool.removeAmount).div(pool.amount).multipliedBy('100');
         if (percent.gt('100') || percent.isNaN()) {
             return '0';
         }

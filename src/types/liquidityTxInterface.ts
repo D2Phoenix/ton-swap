@@ -1,10 +1,9 @@
 import { EstimateTxType } from './transactionInterfaces';
-import BigNumber from 'bignumber.js';
 
 export interface LiquidityTxInterface {
-    amount: BigNumber;
-    quote: BigNumber;
+    amount: string;
+    quote: string;
     txType: EstimateTxType;
-    poolAmount: BigNumber;
-    poolTokens: BigNumber;
+    poolAmount: string;
+    poolTokens: string;
 }

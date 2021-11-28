@@ -2,9 +2,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import './Account.scss';
 import Modal from './Modal';
-import { selectWalletAddress, selectWalletTransactions } from 'store/wallet/wallet.slice';
+import { selectWalletAddress, selectWalletTransactions } from 'store/wallet/walletSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { disconnectWallet } from '../store/wallet/wallet.thunks';
+import { disconnectWallet } from '../store/wallet/walletThunks';
 import { TxType } from '../types/transactionInterfaces';
 
 

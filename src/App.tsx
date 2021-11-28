@@ -6,7 +6,7 @@ import Header from './components/Header';
 import SwapPage from './pages/swap/SwapPage';
 import PoolPage from './pages/pool/PoolPage';
 import AddLiquidityPage from './pages/liquidity/AddLiquidityPage';
-import { fetchTokens } from './store/app/app.thunks';
+import { fetchTokens } from './store/app/appThunks';
 import { useAppDispatch } from './store/hooks';
 import RemoveLiquidityPage from './pages/liquidity/RemoveLiquidityPage';
 import PoolsPage from './pages/pools/PoolsPage';

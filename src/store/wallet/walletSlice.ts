@@ -1,23 +1,28 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import BigNumber from 'bignumber.js';
 
 import type { RootState } from 'store/store'
 import {
-    connectWallet, disconnectWallet,
+    connectWallet,
+    disconnectWallet,
     getWalletAddress,
-    getWalletBalance, getWalletBalances,
+    getWalletBalance,
+    getWalletBalances,
     getWalletUseTokenPermission,
-    setWalletUseTokenPermission, walletAddLiquidity, walletRemoveLiquidity, walletSwap
-} from './wallet.thunks';
-import { WalletAdapterInterface } from 'types/walletAdapterInterface';
-import { TransactionInterface, TxStatus, EstimateTxType, TxType } from '../../types/transactionInterfaces';
-import TokenInterface from '../../types/tokenInterface';
-import TokenUtils from '../../utils/tokenUtils';
+    setWalletUseTokenPermission,
+    walletAddLiquidity,
+    walletRemoveLiquidity,
+    walletSwap
+} from './walletThunks';
+import { WalletAdapterInterface, WalletStatus } from 'types/walletAdapterInterface';
+import { TransactionInterface, TxStatus, TxType } from 'types/transactionInterfaces';
+import TokenUtils from 'utils/tokenUtils';
+import StubWalletService from '../../api/stubWalletService';
 
 interface WalletState {
     adapter: WalletAdapterInterface | null,
+    connectionStatus: WalletStatus;
     address: string;
-    balances: Record<string, BigNumber>,
+    balances: Record<string, string>,
     permissions: Record<string, boolean>,
     transactions: TransactionInterface[],
     tx: {
@@ -27,6 +32,7 @@ interface WalletState {
 
 const initialState: WalletState = {
     adapter: null,
+    connectionStatus: WalletStatus.DISCONNECTED,
     address: '',
     balances: {},
     permissions: {},
@@ -45,11 +51,16 @@ export const walletSlice = createSlice({
         },
     },
     extraReducers: (builder) => {
+        builder.addCase(connectWallet.pending,  (state, action) => {
+            state.adapter = new StubWalletService();
+            state.connectionStatus = WalletStatus.CONNECTING;
+        });
         builder.addCase(connectWallet.fulfilled,  (state, action) => {
             state.adapter = action.payload.adapter;
             state.address = action.payload.address;
             state.balances = action.payload.balances
             state.permissions = action.payload.permissions;
+            state.connectionStatus = WalletStatus.CONNECTED;
         });
         builder.addCase(disconnectWallet.fulfilled,  (state, action) => {
             state.adapter = null;
@@ -141,6 +152,8 @@ export const { resetTransaction } = walletSlice.actions
 export const selectWalletBalances = (state: RootState) => state.wallet.balances;
 
 export const selectWalletAdapter = (state: RootState) => state.wallet.adapter;
+
+export const selectWalletConnectionStatus = (state: RootState) => state.wallet.connectionStatus;
 
 export const selectWalletAddress = (state: RootState) => state.wallet.address;
 

@@ -1,43 +1,30 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 
 import './TokenInput.scss';
 import ChevronRightIcon from './icons/ChevronRightIcon';
-import TokenInterface from '../types/tokenInterface';
-import { fromDecimals, toDecimals } from '../utils/decimals';
-import { BALANCE_PRECISION, TOKEN_PRECISION } from '../constants/swap';
-import PoolInterface from '../types/poolInterface';
+import TokenInterface from 'types/tokenInterface';
+import { BALANCE_PRECISION } from 'constants/swap';
+import PoolInterface from 'types/poolInterface';
 import TokenIcon from './TokenIcon';
+import TokenUtils from '../utils/tokenUtils';
 
-interface TokenInputParams {
-    balance?: BigNumber;
+interface TokenInputProps {
+    balance?: string;
     token: TokenInterface | PoolInterface | undefined,
-    value: BigNumber | undefined;
+    value: string | undefined;
     editable: boolean;
     selectable: boolean;
     showMax: boolean;
     onChange?: Function;
     onSelect?: Function;
+    loading?: boolean;
+    primary?: boolean;
 }
 
 const INPUT_REGEXP = RegExp(`^\\d*(?:\\\\[.])?\\d*$`)
 
-function TokenInput({balance, token, value, showMax, editable, selectable, onChange, onSelect}: TokenInputParams) {
-    const [internalValue, setInternalValue] = useState('');
-
-    useEffect(() => {
-        if (!value && internalValue) {
-            setInternalValue('');
-        }
-        if (value) {
-            const compare = fromDecimals(new BigNumber(internalValue), token ? token.decimals : 0);
-            if (!value.eq(compare)) {
-                const newValue = toDecimals(value, token ? token.decimals : 0);
-                setInternalValue(newValue.precision(TOKEN_PRECISION).toFixed());
-            }
-        }
-    }, [value, internalValue, token])
-
+function TokenInput({balance, token, value, showMax, editable, selectable, loading, primary, onChange, onSelect}: TokenInputProps) {
     const handleClick = useCallback(() => {
         onSelect && onSelect();
     }, [onSelect]);
@@ -45,38 +32,46 @@ function TokenInput({balance, token, value, showMax, editable, selectable, onCha
     const handleChange = useCallback((event) => {
         const value = event.target.value.replace(/,/g, '.');
         if (value === '') {
-            setInternalValue(value)
             return onChange && onChange(null);
         }
         if (INPUT_REGEXP.test(value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))) {
-            setInternalValue(value);
-            onChange && onChange(fromDecimals(new BigNumber(value), token ? token.decimals : 0));
+            onChange && onChange(value);
         }
-    }, [onChange, token]);
+    }, [onChange]);
 
     const handleMax = useCallback((event) => {
         if (balance) {
             handleChange({
                 target: {
-                    value: toDecimals(balance, token ? token.decimals : 0).toFixed()
+                    value: balance
                 }
             });
         }
-    }, [handleChange, balance, token]);
+    }, [handleChange, balance]);
 
     const balanceVisible = useMemo(() => {
         if (balance) {
-            return toDecimals(balance, token ? token.decimals : 0).precision(BALANCE_PRECISION).toFixed();
+            return new BigNumber(balance).precision(BALANCE_PRECISION).toFixed();
         }
         return '0';
-    }, [balance, token]);
+    }, [balance]);
 
     const simpleToken = (token as TokenInterface);
     const poolToken = (token as PoolInterface);
 
+    const valueDisplay = useMemo(() => {
+        if (!value) {
+            return '';
+        }
+        if (primary) {
+            return value;
+        }
+        return TokenUtils.getNumberDisplay(value);
+    }, [value, primary])
+
     return (
         <div className={"input-wrapper" + (!selectable ? ' view-only' : '')}>
-            <div className="token-input">
+            <div className={"token-input" + (loading ? ' loading' : '')}>
                 <div className="btn btn-outline small text-medium" onClick={handleClick}>
                     {
                         simpleToken?.logoURI && <TokenIcon address={simpleToken.address} name={simpleToken.name} />
@@ -101,14 +96,14 @@ function TokenInput({balance, token, value, showMax, editable, selectable, onCha
                        pattern="^[0-9]*[.,]?[0-9]*$"
                        placeholder="0.0"
                        readOnly={!editable}
-                       value={internalValue}
+                       value={valueDisplay}
                        onChange={handleChange}/>
             </div>
             {
                 token && balance != null && <div className="balance text-small">
                   Balance: {balanceVisible} {token.symbol}
                     {
-                        showMax && !balance.eq('0') && (!value || !balance.eq(value)) && (
+                        showMax && !balance && (!value || balance !== value) && (
                             <>&nbsp;(<span className="text-primary text-small link__btn" onClick={handleMax}>MAX</span>)</>
                         )
                     }

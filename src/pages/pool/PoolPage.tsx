@@ -5,14 +5,15 @@ import './PoolPage.scss';
 import SettingsIcon from 'components/icons/SettingsIcon';
 import Settings from 'components/Settings';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { selectWalletAdapter } from 'store/wallet/wallet.slice';
-import { getPoolPools } from 'store/pool/pool.thunks';
-import { selectPoolPools } from 'store/pool/pool.slice';
+import { selectWalletAdapter } from 'store/wallet/walletSlice';
+import { getPoolPools } from 'store/pool/poolThunks';
+import { selectPoolPools } from 'store/pool/poolSlice';
 import Accordion from 'components/Accordion';
 import TokenUtils from 'utils/tokenUtils';
 import TokenIcon from 'components/TokenIcon';
 import QuestionIcon from 'components/icons/QuestionIcon';
 import Tooltip from 'components/Tooltip';
+import BigNumber from 'bignumber.js';
 
 
 function PoolPage() {
@@ -58,7 +59,7 @@ function PoolPage() {
                 {
                     walletAdapter && pools.length > 0 && (
                         <Accordion panels={pools.map((pool, index) => {
-                            const share = pool.pool.amount.multipliedBy('100').div(pool.pool.overallAmount).precision(2);
+                            const share = new BigNumber(pool.pool.amount).multipliedBy('100').div(pool.pool.overallAmount).precision(2);
                             const shareText = share.lt('0.01') ? '<0.01%' : `${share.toFixed()}%`;
 
                             return {

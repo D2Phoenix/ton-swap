@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import './SwapPage.scss';
 import ChevronDownIcon from 'components/icons/ChevronDownIcon';
@@ -8,15 +8,19 @@ import TokenInput from 'components/TokenInput';
 import Settings from 'components/Settings';
 import TokenSelect from 'components/TokenSelect';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { selectTokens } from 'store/app/app.slice';
-import { selectWalletAdapter, selectWalletBalances, selectWalletPermissions } from 'store/wallet/wallet.slice';
+import {
+    selectWalletAdapter,
+    selectWalletBalances,
+    selectWalletConnectionStatus,
+    selectWalletPermissions
+} from 'store/wallet/walletSlice';
 import {
     connectWallet,
-    getWalletBalance, getWalletBalances,
+    getWalletBalance,
     getWalletUseTokenPermission,
     setWalletUseTokenPermission
-} from 'store/wallet/wallet.thunks';
-import { estimateTransaction } from 'store/swap/swap.thunks';
+} from 'store/wallet/walletThunks';
+import { estimateTransaction } from 'store/swap/swapThunks';
 import { EstimateTxType } from 'types/transactionInterfaces';
 import {
     selectSwapInput0,
@@ -26,13 +30,17 @@ import {
     setSwapInput0Amount,
     setSwapInput1Token,
     setSwapInput1Amount,
-    switchSwapTokens, resetSwap, selectSwapDetails
-} from 'store/swap/swap.slice';
+    switchSwapTokens,
+    resetSwap,
+    selectSwapTrade, selectSwapLoading,
+} from 'store/swap/swapSlice';
 import SwapInfo from './SwapInfo';
 import SwapConfirm from './SwapConfirm';
 import Tooltip from 'components/Tooltip';
 import { WALLET_TX_UPDATE_INTERVAL } from 'constants/swap';
 import TokenUtils from 'utils/tokenUtils';
+import Spinner from 'components/Spinner';
+import { WalletStatus } from 'types/walletAdapterInterface';
 
 function SwapPage() {
     const dispatch = useAppDispatch();
@@ -40,14 +48,14 @@ function SwapPage() {
     const [showTokenSelect, setShowTokenSelect] = useState(false);
     const [showSwapConfirm, setShowSwapConfirm] = useState(false);
     const [activeInput, setActiveInput] = useState('input0');
-    const [swapButtonText, setSwapButtonText] = useState('Swap');
-    const tokens = useAppSelector(selectTokens);
     const input0 = useAppSelector(selectSwapInput0);
     const input1 = useAppSelector(selectSwapInput1);
     const txType = useAppSelector(selectSwapTxType);
-    const swapDetails = useAppSelector(selectSwapDetails);
+    const trade = useAppSelector(selectSwapTrade);
+    const loading = useAppSelector(selectSwapLoading);
     const walletBalances = useAppSelector(selectWalletBalances);
     const walletAdapter = useAppSelector(selectWalletAdapter);
+    const walletConnectionStatus = useAppSelector(selectWalletConnectionStatus);
     const walletPermissions = useAppSelector(selectWalletPermissions);
 
     const isFilled = useMemo(() => {
@@ -62,38 +70,33 @@ function SwapPage() {
     }, [input0, walletBalances]);
 
     const hasErrors = useMemo(() => {
-        return !isFilled || insufficientBalance || (!!input0.token && !walletPermissions[input0.token.symbol]) || swapDetails.insufficientLiquidity;
-    }, [isFilled, insufficientBalance, input0, walletPermissions, swapDetails]);
+        return !isFilled ||
+            insufficientBalance ||
+            (!!input0.token && !walletPermissions[input0.token.symbol]) ||
+            trade.insufficientLiquidity;
+    }, [isFilled, insufficientBalance, input0, walletPermissions, trade]);
 
-    const tokenSwapRate = useMemo(() => {
-        if (!TokenUtils.isFilled(input0) || !TokenUtils.isFilled(input1)) {
-            return;
+    const swapButtonText = useMemo(() => {
+        if (trade.insufficientLiquidity && input0.amount) {
+            return `Insufficient liquidity for this trade.`;
         }
-        return TokenUtils.getDisplayRate(input0, input1);
-    }, [input0, input1])
+        if (!TokenUtils.isFilled(input0)) {
+            return 'Enter an amount';
+        }
+        if (!input1.token || !input0.token) {
+            return 'Select a token';
+        }
+        if (insufficientBalance) {
+            return `Insufficient ${input0.token.symbol} balance`;
+        }
+        return 'Swap';
+    }, [input0, input1, insufficientBalance, trade]);
 
     useEffect(() => {
         return () => {
             dispatch(resetSwap());
         };
     }, [dispatch]);
-
-    //Handle swap button text
-    useEffect(() => {
-        if (!TokenUtils.isFilled(input0)) {
-            return setSwapButtonText('Enter an amount');
-        }
-        if (!input1.token || !input0.token) {
-            return setSwapButtonText('Select a token');
-        }
-        if (insufficientBalance) {
-            return setSwapButtonText(`Insufficient ${input0.token.symbol} balance`);
-        }
-        if (swapDetails.insufficientLiquidity) {
-            return setSwapButtonText(`Insufficient liquidity for this trade.`);
-        }
-        setSwapButtonText('Swap');
-    }, [input0, input1, insufficientBalance, swapDetails]);
 
     // Estimate EXACT_IN transaction
     useEffect((): any => {
@@ -146,6 +149,7 @@ function SwapPage() {
                     input: input0,
                     token: input1.token,
                     txType,
+                    source: 'auto',
                 }));
             }
             if (txType === EstimateTxType.EXACT_OUT && input0.token && TokenUtils.isFilled(input1)) {
@@ -153,19 +157,17 @@ function SwapPage() {
                     input: input1,
                     token: input0.token,
                     txType,
+                    source: 'auto',
                 }));
             }
         }, WALLET_TX_UPDATE_INTERVAL);
         return () => clearInterval(intervalId);
-    },[dispatch, walletAdapter, input0, input1, txType]);
+    }, [dispatch, walletAdapter, input0, input1, txType]);
 
     const openTokenSelect = useCallback((activeInput) => {
         setShowTokenSelect((prev) => !prev);
         setActiveInput(activeInput);
-        if (walletAdapter) {
-            dispatch(getWalletBalances(tokens));
-        }
-    }, [dispatch, walletAdapter, tokens]);
+    }, []);
 
     const handleSwitchTokens = useCallback(() => {
         dispatch(switchSwapTokens());
@@ -233,7 +235,10 @@ function SwapPage() {
                         onSelect={openTokenSelect.bind(null, 'input0')}
                         onChange={handleInput0TokenAmount}
                         selectable={true}
-                        editable={true}/>
+                        editable={true}
+                        loading={txType === EstimateTxType.EXACT_OUT && loading}
+                        primary={txType === EstimateTxType.EXACT_IN}
+            />
             <div className="switch__btn btn-icon" onClick={handleSwitchTokens}>
                 <ChevronDownIcon/>
             </div>
@@ -244,11 +249,14 @@ function SwapPage() {
                         onSelect={openTokenSelect.bind(null, 'input1')}
                         onChange={handleToTokenAmount}
                         selectable={true}
-                        editable={true}/>
+                        editable={true}
+                        loading={txType === EstimateTxType.EXACT_IN && loading}
+                        primary={txType === EstimateTxType.EXACT_OUT}
+            />
             {
-                isFilled && <div className="swap-info text-small">
-                    <span className="text-small">
-                      1 {input1.token.symbol} = {tokenSwapRate} {input0.token.symbol}
+                isFilled && <div className={`swap-info text-small ${loading ? 'loading' : ''}`}>
+                    <span className={`text-small`}>
+                      1 {input1.token.symbol} = {TokenUtils.getNumberDisplay(trade.rate)} {input0.token.symbol}
                     </span>
                   <Tooltip content={<SwapInfo/>} direction="left">
                     <div className="btn-icon">
@@ -258,30 +266,46 @@ function SwapPage() {
                 </div>
             }
             {
-                walletAdapter && isFilled && !walletPermissions[input0.token.symbol] && !insufficientBalance &&
+                walletConnectionStatus === WalletStatus.CONNECTED &&
+                isFilled &&
+                !insufficientBalance &&
+                !walletPermissions[input0.token.symbol] &&
                 <button className="btn btn-primary swap__btn"
                         onClick={handleAllowUseToken}>
                   Allow the TONSwap Protocol to use your {input0.token.symbol}
                 </button>
             }
             {
-                walletAdapter && <button className="btn btn-primary swap__btn"
-                                         disabled={hasErrors}
-                                         onClick={handleSwap}>
-                    {swapButtonText}
+                walletConnectionStatus === WalletStatus.CONNECTED &&
+                <button className="btn btn-primary swap__btn"
+                        disabled={loading || hasErrors}
+                        onClick={handleSwap}>
+                    {
+                        loading && <Spinner className="btn"/>
+                    }
+                    {
+                        !loading && swapButtonText
+                    }
                 </button>
             }
             {
-                !walletAdapter && <button className="btn btn-outline swap__btn"
-                                          onClick={handleConnectWallet}>Connect Wallet</button>
+                walletConnectionStatus !== WalletStatus.CONNECTED &&
+                <button className="btn btn-outline swap__btn"
+                        onClick={handleConnectWallet}>
+                    {
+                        walletConnectionStatus === WalletStatus.DISCONNECTED && 'Connect Wallet'
+                    }
+                    {
+                        walletConnectionStatus === WalletStatus.CONNECTING &&
+                        <Spinner className="btn outline"/>
+                    }
+                </button>
             }
             {
                 showSettings && <Settings onClose={() => setShowSettings(false)}/>
             }
             {
-                showTokenSelect && <TokenSelect tokens={tokens}
-                                                balances={walletBalances}
-                                                onClose={handleSelectToken}
+                showTokenSelect && <TokenSelect onClose={handleSelectToken}
                                                 onSelect={handleSelectToken}/>
             }
             {

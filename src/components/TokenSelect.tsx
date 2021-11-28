@@ -5,22 +5,50 @@ import './TokenSelect.scss';
 import Modal from './Modal';
 import TokenInterface from 'types/tokenInterface';
 import { BALANCE_PRECISION } from 'constants/swap';
-import { toDecimals } from 'utils/decimals';
 import TokenIcon from './TokenIcon';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { selectTokens } from '../store/app/appSlice';
+import { selectWalletAdapter, selectWalletBalances } from '../store/wallet/walletSlice';
+import { getWalletBalances } from '../store/wallet/walletThunks';
+import Spinner from './Spinner';
 
 
 interface TokenSelectParams {
-    tokens: TokenInterface[],
-    balances: Record<string, BigNumber>
     onClose: Function;
     onSelect: Function;
     balancesFirst?: boolean;
 }
 
-function TokenSelect({tokens, balances, onClose, onSelect, balancesFirst}: TokenSelectParams) {
+function TokenSelect({onClose, onSelect, balancesFirst}: TokenSelectParams) {
+    const dispatch = useAppDispatch();
+    const tokens = useAppSelector(selectTokens);
+    const balances = useAppSelector(selectWalletBalances);
+    const walletAdapter = useAppSelector(selectWalletAdapter);
     const loader = useRef(null);
     const [page, setPage] = useState(1);
     const [query, setQuery] = useState('');
+
+    const visibleTokens = useMemo(() => {
+        let result = tokens.filter((token) => token.symbol.toLowerCase().startsWith(query.toLowerCase())
+            || token.address.toLowerCase().startsWith(query.toLowerCase()));
+        if (balancesFirst) {
+            result.sort((a: TokenInterface, b: TokenInterface) => {
+                if (a.symbol === 'TON' || b.symbol === 'TON') {
+                    return 1;
+                }
+                const aBalance = new BigNumber(balances[a.symbol]) || new BigNumber('0');
+                const bBalance = new BigNumber(balances[b.symbol])|| new BigNumber('0')
+                if (a.symbol > b.symbol) {
+                    return bBalance.minus(aBalance).toNumber() || 1;
+                }
+                if (b.symbol > a.symbol) {
+                    return bBalance.minus(aBalance).toNumber() || -1;
+                }
+                return 0;
+            });
+        }
+        return result.slice(0, page * 10);
+    }, [tokens, page, query, balancesFirst, balances]);
 
     const handleObserver = useCallback((entries) => {
         const target = entries[0];
@@ -41,31 +69,16 @@ function TokenSelect({tokens, balances, onClose, onSelect, balancesFirst}: Token
         }
     }, [handleObserver]);
 
+    useEffect(() => {
+        const requestBalances = visibleTokens.filter((token) => !balances[token.symbol]);
+        if (walletAdapter && requestBalances.length) {
+            dispatch(getWalletBalances(requestBalances));
+        }
+    }, [dispatch, walletAdapter, balances, visibleTokens]);
+
     const handleClose = useCallback(() => {
         onClose();
     }, [onClose]);
-
-    const visibleTokens = useMemo(() => {
-        let result = tokens.filter((token) => token.symbol.toLowerCase().startsWith(query.toLowerCase())
-            || token.address.toLowerCase().startsWith(query.toLowerCase()));
-        if (balancesFirst) {
-            result.sort((a: TokenInterface, b: TokenInterface) => {
-                if (a.symbol === 'TON' || b.symbol === 'TON') {
-                    return 1;
-                }
-                const aBalance = balances[a.symbol] || new BigNumber('0');
-                const bBalance = balances[b.symbol] || new BigNumber('0')
-                if (a.symbol > b.symbol) {
-                    return bBalance.minus(aBalance).toNumber() || 1;
-                }
-                if (b.symbol > a.symbol) {
-                    return bBalance.minus(aBalance).toNumber() || -1;
-                }
-                return 0;
-            });
-        }
-        return result.slice(0, page * 10);
-    }, [tokens, page, query, balancesFirst, balances])
 
     return (
         <Modal className={'token-select-modal'} onClose={handleClose}>
@@ -77,7 +90,7 @@ function TokenSelect({tokens, balances, onClose, onSelect, balancesFirst}: Token
                 <div className="token-select-list">
                     {
                         visibleTokens.map((token, index) => {
-                            const balance = balances[token.symbol] ? toDecimals(balances[token.symbol], token.decimals).precision(BALANCE_PRECISION).toFixed() : '';
+                            const balance = balances[token.symbol] ? new BigNumber(balances[token.symbol]).precision(BALANCE_PRECISION).toFixed() : '';
                             return (
                                 <div key={token.address} className="token-select-item" onClick={() => onSelect(token)}>
                                     <TokenIcon address={token.address} name={token.name}/>
@@ -87,6 +100,9 @@ function TokenSelect({tokens, balances, onClose, onSelect, balancesFirst}: Token
                                     </div>
                                     <div className="token-balance">
                                         {balance}
+                                        {
+                                            walletAdapter && !balance && <Spinner className="btn outline" />
+                                        }
                                     </div>
                                 </div>
                             )

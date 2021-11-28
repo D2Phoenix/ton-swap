@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
-import appReducer from './app/app.slice';
-import swapReducer from './swap/swap.slice';
-import walletReducer from './wallet/wallet.slice';
-import liquidityReducer from './liquidity/liquidity.slice';
-import poolReducer from './pool/pool.slice';
-import poolsReducer from './pools/pools.slice';
+import appReducer from './app/appSlice';
+import swapReducer from './swap/swapSlice';
+import walletReducer from './wallet/walletSlice';
+import liquidityReducer from './liquidity/liquiditySlice';
+import poolReducer from './pool/poolSlice';
+import poolsReducer from './pools/poolsSlice';
 
 export const store = configureStore({
     reducer: {

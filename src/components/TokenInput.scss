@@ -81,5 +81,10 @@
         -webkit-appearance: none;
       }
     }
+    &.loading {
+      input {
+        opacity: 0.5;
+      }
+    }
   }
 }

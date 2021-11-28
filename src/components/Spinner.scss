@@ -12,6 +12,11 @@
       animation: lds-ripple-small 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
       border: 2px solid #fff;
     }
+    &.outline {
+      div {
+        border: 2px solid $primary-color;
+      }
+    }
   }
   div {
     position: absolute;

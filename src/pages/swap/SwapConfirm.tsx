@@ -11,13 +11,13 @@ import {
     selectSwapInput0,
     selectSwapTxType,
     selectSwapInput1,
-} from 'store/swap/swap.slice';
-import { resetTransaction, selectWalletTransaction } from 'store/wallet/wallet.slice';
+} from 'store/swap/swapSlice';
+import { resetTransaction, selectWalletTransaction } from 'store/wallet/walletSlice';
 import { DEFAULT_SLIPPAGE } from 'constants/swap';
 import { TxStatus, EstimateTxType } from 'types/transactionInterfaces';
-import { walletSwap } from 'store/wallet/wallet.thunks';
+import { walletSwap } from 'store/wallet/walletThunks';
 import Spinner from 'components/Spinner';
-import { selectSettings } from 'store/app/app.slice';
+import { selectSettings } from 'store/app/appSlice';
 import TokenUtils from 'utils/tokenUtils';
 
 function SwapConfirm({onClose}: any) {
