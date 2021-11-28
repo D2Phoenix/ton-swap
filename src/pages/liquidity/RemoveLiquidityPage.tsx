@@ -70,7 +70,10 @@ export function RemoveLiquidityPage() {
 
     useEffect(() => {
         if (params.token0 && params.token1) {
-            dispatch(getLiquidityPool(`${params.token0}:${params.token1}`));
+            dispatch(getLiquidityPool({
+                token0: params.token0,
+                token1: params.token1,
+            }));
         }
     }, [dispatch, params]);
 

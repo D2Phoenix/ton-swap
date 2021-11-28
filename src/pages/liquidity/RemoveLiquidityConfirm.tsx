@@ -51,7 +51,10 @@ function RemoveLiquidityConfirm({onClose}: any) {
     const handleClose = useCallback(() => {
         dispatch(resetTransaction());
         if (walletTransaction.status === TxStatus.CONFIRMED) {
-            dispatch(getLiquidityPool(`${input0.token.symbol}:${input1.token.symbol}`));
+            dispatch(getLiquidityPool({
+                token0: input0.token.address,
+                token1: input1.token.address,
+            }));
         }
         onClose && onClose();
     }, [dispatch, input0, input1, walletTransaction, onClose]);
