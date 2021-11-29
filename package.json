@@ -34,7 +34,8 @@
     "docker:build:dev": "docker build -t ton-swap:dev .",
     "docker:run": "docker run -it --rm -p 1337:80 ton-swap:prod",
     "docker:run:dev": "docker run -it --rm -v ${PWD}:/app -v /app/node_modules -p 3001:3000 -e CHOKIDAR_USEPOLLING=true ton-swap:dev",
-    "i18n": "i18next-scanner"
+    "i18n": "i18next-scanner",
+    "analyze": "source-map-explorer 'build/static/js/*.js'"
   },
   "eslintConfig": {
     "extends": [
@@ -56,6 +57,7 @@
   },
   "devDependencies": {
     "i18next-scanner": "^3.1.0",
-    "i18next-scanner-typescript": "^1.0.6"
+    "i18next-scanner-typescript": "^1.0.6",
+    "source-map-explorer": "^2.5.2"
   }
 }

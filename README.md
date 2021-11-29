@@ -38,3 +38,7 @@ Open [http://localhost:3001](http://localhost:3001) to view it in the browser.
 ### `yarn i18n`
 
 Extract translations to 'src/i18n' folder
+
+### `yarn analyze`
+
+Analyze bundle size. Build app first (yarn build)
