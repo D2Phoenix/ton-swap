@@ -10,6 +10,8 @@ export enum TxStatus {
     PENDING = 'PENDING',
     CONFIRMED = 'CONFIRMED',
     REJECTED = 'REJECTED',
+    SUCCEED = 'SUCCEED',
+    FAILED = 'FAILED',
 }
 
 export enum TxType {
@@ -26,4 +28,5 @@ export interface TransactionInterface {
     token1: TokenInterface;
     amount0: string;
     amount1: string;
+    notified: boolean;
 }

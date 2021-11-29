@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import TokenInterface from 'types/tokenInterface';
 import { RootState } from 'store/store';
-import { TxStatus } from 'types/transactionInterfaces';
+import { TransactionInterface, TxStatus } from 'types/transactionInterfaces';
 
 export const connectWallet = createAsyncThunk(
     'wallet/connect',
@@ -164,5 +164,17 @@ export const walletRemoveLiquidity = createAsyncThunk(
         return {
             status: TxStatus.INITIAL,
         };
+    }
+)
+
+export const walletCheckTransactions = createAsyncThunk(
+    'wallet/transactions/check',
+    async (transactions: TransactionInterface[], thunkAPI) => {
+        const state = thunkAPI.getState() as RootState;
+        const walletAdapterService = state.wallet.adapter;
+        if (walletAdapterService) {
+            return await walletAdapterService.checkTransactions(transactions);
+        }
+        return {};
     }
 )

@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import type { RootState } from 'store/store'
 import {
@@ -9,14 +9,14 @@ import {
     getWalletBalances,
     getWalletUseTokenPermission,
     setWalletUseTokenPermission,
-    walletAddLiquidity,
+    walletAddLiquidity, walletCheckTransactions,
     walletRemoveLiquidity,
     walletSwap
 } from './walletThunks';
 import { WalletAdapterInterface, WalletStatus } from 'types/walletAdapterInterface';
 import { TransactionInterface, TxStatus, TxType } from 'types/transactionInterfaces';
 import TokenUtils from 'utils/tokenUtils';
-import StubWalletService from '../../api/stubWalletService';
+import StubWalletService from 'api/stubWalletService';
 
 interface WalletState {
     adapter: WalletAdapterInterface | null,
@@ -48,6 +48,14 @@ export const walletSlice = createSlice({
     reducers: {
         resetTransaction: (state, action: PayloadAction<void>) => {
             state.tx.status = TxStatus.INITIAL;
+        },
+        setNotified: (state, action: PayloadAction<TransactionInterface>) => {
+            const transaction = state.transactions.find((transaction) => {
+                return transaction.id === action.payload.id;
+            });
+            if (transaction) {
+                transaction.notified = true;
+            }
         },
     },
     extraReducers: (builder) => {
@@ -99,6 +107,7 @@ export const walletSlice = createSlice({
                         token1: action.payload.state.input1.token,
                         amount0: TokenUtils.getDisplay(action.payload.state.input0, 2),
                         amount1: TokenUtils.getDisplay(action.payload.state.input1, 2),
+                        notified: false,
                     }
                     state.transactions = [transaction, ...state.transactions];
                 }
@@ -119,6 +128,7 @@ export const walletSlice = createSlice({
                         token1: action.payload.state.input1.token,
                         amount0: TokenUtils.getDisplay(action.payload.state.input0, 2),
                         amount1: TokenUtils.getDisplay(action.payload.state.input1, 2),
+                        notified: false,
                     }
                     state.transactions = [transaction, ...state.transactions];
                 }
@@ -139,15 +149,23 @@ export const walletSlice = createSlice({
                         token1: action.payload.state.input1.token,
                         amount0: TokenUtils.getDisplay(action.payload.state.input0, 2),
                         amount1: TokenUtils.getDisplay(action.payload.state.input1, 2),
+                        notified: false,
                     }
                     state.transactions = [transaction, ...state.transactions];
                 }
             }
         });
+        builder.addCase(walletCheckTransactions.fulfilled, (state, action) => {
+            state.transactions.forEach((transaction) => {
+                if (action.payload[transaction.id]) {
+                    transaction.status = action.payload[transaction.id];
+                }
+            })
+        });
     },
 })
 
-export const { resetTransaction } = walletSlice.actions
+export const { resetTransaction, setNotified } = walletSlice.actions
 
 export const selectWalletBalances = (state: RootState) => state.wallet.balances;
 
@@ -162,5 +180,12 @@ export const selectWalletPermissions = (state: RootState) => state.wallet.permis
 export const selectWalletTransaction = (state: RootState) => state.wallet.tx;
 
 export const selectWalletTransactions = (state: RootState) => state.wallet.transactions;
+
+export const selectWalletConfirmedTransactions = createSelector(selectWalletTransactions,(transactions) =>
+    transactions.filter(item => item.status === TxStatus.CONFIRMED))
+
+export const selectWalletNotNotifiedTransactions = createSelector(selectWalletTransactions,(transactions) =>
+    transactions.filter(item =>
+        !item.notified && (item.status === TxStatus.SUCCEED || item.status === TxStatus.FAILED)));
 
 export default walletSlice.reducer;

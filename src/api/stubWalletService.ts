@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js';
 
 import { WalletAdapterInterface } from 'types/walletAdapterInterface';
 import TokenInterface from 'types/tokenInterface';
-import { TxStatus } from 'types/transactionInterfaces';
+import { TransactionInterface, TxStatus } from 'types/transactionInterfaces';
 import { SwapState } from 'store/swap/swapSlice';
 import { LiquidityState } from 'store/liquidity/liquiditySlice';
 import WalletPoolInterface from 'types/walletPoolInterface';
@@ -263,6 +263,18 @@ class StubWalletService implements WalletAdapterInterface {
             }, 2000)
         });
     };
+
+    checkTransactions(transactions: TransactionInterface[]): Promise<Record<string, TxStatus>> {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                const result: Record<string, TxStatus> = {};
+                transactions.forEach((item) => {
+                    result[item.id] = TxStatus.SUCCEED;
+                });
+                resolve(result);
+            }, 2000);
+        })
+    }
 
 }
 

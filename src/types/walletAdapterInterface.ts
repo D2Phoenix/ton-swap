@@ -1,5 +1,5 @@
 import TokenInterface from './tokenInterface';
-import { TxStatus } from './transactionInterfaces';
+import { TransactionInterface, TxStatus } from './transactionInterfaces';
 import { SwapState } from '../store/swap/swapSlice';
 import { LiquidityState } from '../store/liquidity/liquiditySlice';
 import WalletPoolInterface from './walletPoolInterface';
@@ -26,4 +26,5 @@ export interface WalletAdapterInterface {
     getPool(token0: TokenInterface, token1: TokenInterface): Promise<WalletPoolInterface>;
     getPoolToken(token0: TokenInterface, token1: TokenInterface): Promise<PoolInterface>;
     approveRemovePool(pool: InputPoolInterface): Promise<TxStatus>;
+    checkTransactions(transactions: TransactionInterface[]): Promise<Record<string, TxStatus>>;
 }

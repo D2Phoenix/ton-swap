@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
+import { Trans, useTranslation } from 'react-i18next';
 
 import './App.scss';
 import Header from './components/Header';
@@ -7,17 +8,47 @@ import SwapPage from './pages/Swap/SwapPage';
 import PoolPage from './pages/Pool/PoolPage';
 import AddLiquidityPage from './pages/AddLiquidity/AddLiquidityPage';
 import { fetchTokens } from './store/app/appThunks';
-import { useAppDispatch } from './store/hooks';
+import { useAppDispatch, useAppSelector } from './store/hooks';
 import RemoveLiquidityPage from './pages/RemoveLiquidity/RemoveLiquidityPage';
 import PoolsPage from './pages/Pools/PoolsPage';
 import PoolDetailsPage from './pages/PoolDetails/PoolDetailsPage';
 import ImportPoolPage from './pages/ImportPool/ImportPoolPage';
+import { walletCheckTransactions } from './store/wallet/walletThunks';
+import { WALLET_TX_UPDATE_INTERVAL } from './constants/swap';
+import {
+    selectWalletAdapter,
+    selectWalletConfirmedTransactions,
+    selectWalletNotNotifiedTransactions,
+    setNotified
+} from './store/wallet/walletSlice';
+import { Notifications, Notification } from './components/Notifications';
+import { TxStatus, TxType } from './types/transactionInterfaces';
 
 function App() {
     const dispatch = useAppDispatch();
+    const {t} = useTranslation();
+    const walletAdapter = useAppSelector(selectWalletAdapter);
+    const confirmedTransactions = useAppSelector(selectWalletConfirmedTransactions);
+    const notNotifiedTransactions = useAppSelector(selectWalletNotNotifiedTransactions);
+
     useEffect(() => {
         dispatch(fetchTokens());
     }, [dispatch]);
+
+    // Update CONFIRMED transaction every {WALLET_TX_UPDATE_INTERVAL} milliseconds
+    useEffect((): any => {
+        if (!walletAdapter) {
+            return;
+        }
+        const intervalId = setInterval(() => {
+            dispatch(walletCheckTransactions(confirmedTransactions));
+        }, WALLET_TX_UPDATE_INTERVAL);
+        return () => clearInterval(intervalId);
+    }, [dispatch, walletAdapter, confirmedTransactions]);
+
+    const handleNotificationClose = useCallback((tx) => {
+        dispatch(setNotified(tx));
+    }, [dispatch])
 
     return (
       <>
@@ -42,6 +73,38 @@ function App() {
                       <Route path="pools/:address" element={<PoolDetailsPage />} />
                   </Routes>
               </div>
+              <Notifications>
+                  {
+                      notNotifiedTransactions.map((tx) => {
+                          return (
+                              <Notification key={tx.id}
+                                            type={tx.status === TxStatus.SUCCEED ? 'success' : 'error'}
+                                            onClose={handleNotificationClose.bind(null, tx)}
+                              >
+                                  {
+                                      tx.type === TxType.SWAP &&
+                                      <Trans>
+                                        Swap {{amount0: tx.amount0}} {{symbol0: tx.token0.symbol}} for {{amount1: tx.amount1}} {{symbol1: tx.token1.symbol}}
+                                      </Trans>
+                                  }
+                                  {
+                                      tx.type === TxType.MINT &&
+                                      <Trans>
+                                        Add {{amount0: tx.amount0}} {{symbol0: tx.token0.symbol}} and {{amount1: tx.amount1}} {{symbol1: tx.token1.symbol}}
+                                      </Trans>
+                                  }
+                                  {
+                                      tx.type === TxType.BURN && <Trans>
+                                        Remove {{amount0: tx.amount0}} {{symbol0: tx.token0.symbol}} and {{amount1: tx.amount1}} {{symbol1: tx.token1.symbol}}
+                                      </Trans>
+                                  }
+                                  <br/>
+                                  <a>{t('View on Explorer')}</a>
+                              </Notification>
+                          )
+                      })
+                  }
+              </Notifications>
           </main>
           <footer>
               <div className="container"/>
