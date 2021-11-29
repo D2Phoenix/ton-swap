@@ -28,7 +28,10 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "docker:build": "docker build -f Dockerfile.prod -t  ton-swap:prod .",
+    "docker:build:dev": "docker build -t ton-swap:dev .",
+    "docker:run": "docker run -it --rm -p 1337:80 ton-swap:prod",
+    "docker:run:dev": "docker run -it --rm -v ${PWD}:/app -v /app/node_modules -p 3001:3000 -e CHOKIDAR_USEPOLLING=true ton-swap:dev"
   },
   "eslintConfig": {
     "extends": [

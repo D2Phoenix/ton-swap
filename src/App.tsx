@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 
 import './App.scss';
 import Header from './components/Header';
@@ -25,6 +25,10 @@ function App() {
           <main>
               <div className="container">
                   <Routes>
+                      <Route
+                          path="/"
+                          element={<Navigate replace to="/swap" />}
+                      />
                       <Route path="swap" element={<SwapPage />} />
                       <Route path="swap/:token0" element={<SwapPage />} />
                       <Route path="swap/:token0/:token1" element={<SwapPage />} />
