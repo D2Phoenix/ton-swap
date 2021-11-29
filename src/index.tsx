@@ -49,4 +49,12 @@ ReactDOM.render(
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals(console.log);
 
-serviceWorkerRegistration.register();
+serviceWorkerRegistration.register({
+    onUpdate: registration => {
+        alert('New version available!  Ready to update?');
+        if (registration && registration.waiting) {
+            registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+        }
+        window.location.reload();
+    }
+});
