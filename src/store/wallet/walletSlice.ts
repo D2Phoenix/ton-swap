@@ -74,6 +74,7 @@ export const walletSlice = createSlice({
             state.adapter = null;
             state.address = '';
             state.balances = {};
+            state.connectionStatus = WalletStatus.DISCONNECTED;
         });
         builder.addCase(getWalletBalance.fulfilled, (state, action) => {
             state.balances[action.payload.token.symbol] = action.payload.value;
