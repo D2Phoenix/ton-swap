@@ -133,7 +133,7 @@ export function AddLiquidityPage() {
                 txType,
             }));
         }
-        if (txType === EstimateTxType.EXACT_IN && input1.token && TokenUtils.hasAmount(input0)) {
+        if (txType === EstimateTxType.EXACT_IN && input1.token && TokenUtils.isFilled(input0)) {
             return dispatch(estimateLiquidityTransaction({
                 input: input0,
                 token: input1.token,
@@ -150,7 +150,7 @@ export function AddLiquidityPage() {
                 txType,
             }));
         }
-        if (txType === EstimateTxType.EXACT_OUT && input0.token && TokenUtils.hasAmount(input1)) {
+        if (txType === EstimateTxType.EXACT_OUT && input0.token && TokenUtils.isFilled(input1)) {
             return dispatch(estimateLiquidityTransaction({
                 input: input1,
                 token: input0.token,
