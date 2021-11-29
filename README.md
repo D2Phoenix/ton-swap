@@ -1,5 +1,7 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+Demo available at: [https://ton-swap-22qkz.ondigitalocean.app](https://ton-swap-22qkz.ondigitalocean.app)
+
 ## Available Scripts
 
 In the project directory, you can run:
