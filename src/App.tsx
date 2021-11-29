@@ -106,9 +106,6 @@ function App() {
                   }
               </Notifications>
           </main>
-          <footer>
-              <div className="container"/>
-          </footer>
       </>
     );
 }
