@@ -8,22 +8,21 @@
   padding: 0.5rem;
   border-radius: 8px;
   position: relative;
-
-  .import-pool-header {
+  .import-pool-header-wrapper {
     display: flex;
     justify-content: space-between;
     width: 100%;
     padding: 0 16px;
-    > div {
+    .import-pool-header {
       display: flex;
-      align-items: center;
-      .tooltip-wrapper {
-        margin-left: 0.5rem;
-      }
-    }
-    .btn-icon.chevron {
-      svg {
-        transform: rotate(180deg);
+      flex-direction: column;
+      > div {
+        display: flex;
+        align-items: center;
+
+        .tooltip-wrapper {
+          margin-left: 0.5rem;
+        }
       }
     }
   }

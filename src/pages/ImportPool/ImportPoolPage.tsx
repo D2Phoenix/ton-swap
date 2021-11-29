@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { Link, useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import './ImportPoolPage.scss';
 import TokenInput from 'components/TokenInput';
@@ -110,18 +110,23 @@ export function ImportPoolPage() {
 
     return (
         <div className="import-pool-wrapper">
-            <div className="import-pool-header">
+            <div className="import-pool-header-wrapper">
                 <Link className="btn-icon chevron" to="/pool">
-                    <ChevronRightIcon/>
+                    <ChevronRightIcon revert={true}/>
                 </Link>
-                <div className="text-semibold">
-                    {t('Import Pool')}
-                    <Tooltip content={<span className="text-small">{t("Use this tool to find pools that don't automatically appear in the interface.")}</span>}
-                             direction="bottom">
-                        <div className="btn-icon">
-                            <QuestionIcon />
-                        </div>
-                    </Tooltip>
+                <div className="import-pool-header">
+                    <div className="text-semibold">
+                        {t('Import Pool')}
+                        <Tooltip content={<span className="text-small">{t("Use this tool to find pools that don't automatically appear in the interface.")}</span>}
+                                 direction="bottom">
+                            <div className="btn-icon">
+                                <QuestionIcon />
+                            </div>
+                        </Tooltip>
+                    </div>
+                    <div className="text-small">
+                        {t('Import an existing pool')}
+                    </div>
                 </div>
                 <div className="btn-icon" onClick={() => setShowSettings(!showSettings)}>
                     <SettingsIcon/>

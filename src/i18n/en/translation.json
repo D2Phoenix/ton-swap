@@ -104,5 +104,8 @@
   "Minimum received": "Minimum received",
   "Maximum sent": "Maximum sent",
   "Insufficient liquidity for this trade.": "Insufficient liquidity for this trade.",
-  "Trade tokens in an instant": "Trade tokens in an instant"
+  "Trade tokens in an instant": "Trade tokens in an instant",
+  "Add liquidity to receive LP tokens": "Add liquidity to receive LP tokens",
+  "To receive {{symbol0}} and {{symbol1}}": "To receive {{symbol0}} and {{symbol1}}",
+  "Import an existing pool": "Import an existing pool"
 }

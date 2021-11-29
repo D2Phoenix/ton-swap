@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
 import BigNumber from 'bignumber.js';
 
@@ -128,18 +128,25 @@ export function RemoveLiquidityPage() {
 
     return (
         <div className="remove-liquidity-wrapper">
-            <div className="remove-liquidity-header">
+            <div className="remove-liquidity-header-wrapper">
                 <Link className="btn-icon chevron" to="/pool">
-                    <ChevronRightIcon/>
+                    <ChevronRightIcon revert={true}/>
                 </Link>
-                <div className="text-semibold">
-                    {t('Remove Liquidity')}
-                    <Tooltip content={<span className="text-small">{t('Removing pool tokens converts your position back into underlying tokens at the current rate, proportional to your share of the pool. Accrued fees are included in the amounts you receive.')}</span>}
-                             direction="bottom">
-                        <div className="btn-icon">
-                            <QuestionIcon />
-                        </div>
-                    </Tooltip>
+                <div className="remove-liquidity-header">
+                    <div className="text-semibold">
+                        {t('Remove Liquidity')}
+                        <Tooltip content={<span className="text-small">{t('Removing pool tokens converts your position back into underlying tokens at the current rate, proportional to your share of the pool. Accrued fees are included in the amounts you receive.')}</span>}
+                                 direction="bottom">
+                            <div className="btn-icon">
+                                <QuestionIcon />
+                            </div>
+                        </Tooltip>
+                    </div>
+                    <div className="text-small">
+                        <Trans>
+                            To receive {{symbol0: input0.token?.symbol}} and {{symbol1: input1.token?.symbol}}
+                        </Trans>
+                    </div>
                 </div>
                 <div className="btn-icon" onClick={() => setShowSettings(!showSettings)}>
                     <SettingsIcon/>

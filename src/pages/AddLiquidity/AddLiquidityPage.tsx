@@ -266,18 +266,23 @@ export function AddLiquidityPage() {
 
     return (
         <div className="add-liquidity-wrapper">
-            <div className="add-liquidity-header">
+            <div className="add-liquidity-header-wrapper">
                 <Link className="btn-icon chevron" to="/pool">
-                    <ChevronRightIcon/>
+                    <ChevronRightIcon revert={true}/>
                 </Link>
-                <div className="text-semibold">
-                    {t('Add Liquidity')}
-                    <Tooltip content={<span className="text-small">{t('When you add liquidity, you are given pool tokens representing your position. These tokens automatically earn fees proportional to your share of the pool, and can be redeemed at any time.')}</span>}
-                             direction="bottom">
-                        <div className="btn-icon">
-                            <QuestionIcon/>
-                        </div>
-                    </Tooltip>
+                <div className="add-liquidity-header">
+                    <div className="text-semibold">
+                        {t('Add Liquidity')}
+                        <Tooltip content={<span className="text-small">{t('When you add liquidity, you are given pool tokens representing your position. These tokens automatically earn fees proportional to your share of the pool, and can be redeemed at any time.')}</span>}
+                                 direction="bottom">
+                            <div className="btn-icon">
+                                <QuestionIcon/>
+                            </div>
+                        </Tooltip>
+                    </div>
+                    <div className="text-small">
+                        {t('Add liquidity to receive LP tokens')}
+                    </div>
                 </div>
                 <div className="btn-icon" onClick={() => setShowSettings(!showSettings)}>
                     <SettingsIcon/>

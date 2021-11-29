@@ -8,22 +8,20 @@
   padding: 0.5rem;
   border-radius: 8px;
   position: relative;
-
-  .add-liquidity-header {
+  .add-liquidity-header-wrapper {
     display: flex;
     justify-content: space-between;
     width: 100%;
-    padding: 0 16px;
-    > div {
+    padding: 0 1rem;
+    .add-liquidity-header {
       display: flex;
-      align-items: center;
-      .tooltip-wrapper {
-        margin-left: 0.5rem;
-      }
-    }
-    .btn-icon.chevron {
-      svg {
-        transform: rotate(180deg);
+      flex-direction: column;
+      > div {
+        display: flex;
+        align-items: center;
+        .tooltip-wrapper {
+          margin-left: 0.5rem;
+        }
       }
     }
   }
