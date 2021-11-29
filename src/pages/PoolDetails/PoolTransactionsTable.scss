@@ -11,7 +11,7 @@
       font-family: 'mulish-bold', serif;
       color: $primary-color;
       &.column {
-        justify-content: end;
+        justify-content: flex-end;
       }
       & {
         cursor: pointer;

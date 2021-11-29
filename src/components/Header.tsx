@@ -33,12 +33,10 @@ function Header() {
     return (
         <div className="header-wrapper">
             <header>
-                <div className="container">
-                    <a href="/" className="logo">
-                        <img src="/images/toncoin_white.svg" alt="" />
-                        <span>TONSwap</span>
-                    </a>
-                </div>
+                <a href="/" className="logo">
+                    <img src="/images/toncoin_white.svg" alt="" />
+                    <span>TONSwap</span>
+                </a>
             </header>
             <nav>
                 <div className="nav-wrapper">

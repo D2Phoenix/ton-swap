@@ -1,15 +1,6 @@
 nav {
-  position: static;
-  top: 0;
-  right: 0;
-  bottom: 0;
   background-color: #fff;
-  padding: 0 24px 0;
   width: 100%;
-  -webkit-transition: right .4s;
-  -o-transition: right .4s;
-  transition: right .4s;
-  -webkit-box-shadow: none;
   box-shadow: none;
   overflow: auto;
   z-index: 10;
@@ -50,6 +41,7 @@ nav {
     -webkit-box-pack: end;
     -ms-flex-pack: end;
     justify-content: center;
+    align-items: center;
   }
   .nav-item__btn {
     display: block;
@@ -88,18 +80,11 @@ nav {
   }
 }
 
-.nav-wrapper:after {
-  content: "";
-  height: 40px;
-  width: 100%;
-  padding: 20px;
-}
-
-@media screen and (min-width: 1000px) {
+@media screen and (min-width: 700px) {
   nav {
-    padding: 64px 24px 0;
     .nav-list {
       justify-content: flex-end;
+      align-items: flex-end;
     }
   }
 }

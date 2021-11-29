@@ -11,7 +11,7 @@ import DateUtils from 'utils/dateUtils';
 
 function PoolTransactionsTable() {
     const { t } = useTranslation();
-    const [sort, setSort] = useState('-name');
+    const [sort, setSort] = useState('-timestamp');
     const [page, setPage] = useState(1);
     const [filter, setFilter] = useState('');
     const transactions = useAppSelector(selectPoolsTransactions);
