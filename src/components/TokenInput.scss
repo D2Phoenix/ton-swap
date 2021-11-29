@@ -10,11 +10,9 @@
   &.view-only {
     .token-input {
       .btn {
-        outline: 0;
         pointer-events: none;
         padding-left: 0;
         .token-icon-wrapper {
-          left: 0;
           + .token-icon-wrapper {
             left: 24px;
             + span {
@@ -22,7 +20,7 @@
             }
           }
           + span {
-            margin-left: 28px;
+            margin-left: 36px;
           }
         }
       }

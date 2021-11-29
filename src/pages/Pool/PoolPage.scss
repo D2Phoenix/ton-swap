@@ -55,12 +55,20 @@
     width: 100%;
     padding: 1rem 0;
     > div {
+      position: relative;
       display: flex;
       flex-direction: row;
       align-items: center;
+      > div {
+        position: absolute;
+        left: 0;
+        + div {
+          left: 1rem;
+        }
+      }
     }
     > span {
-      margin-left: 0.5rem;
+      margin-left: 3rem;
     }
   }
   .pool-item-details-wrapper {
