@@ -1,6 +1,8 @@
 {
   "short_name": "TonSwap",
   "name": "Ton Swap",
+  "description": "Swap or provide liquidity on the TonSwap Protocol",
+  "iconPath": "./logo.png",
   "icons": [
     {
       "src": "favicon16.ico",
@@ -35,6 +37,7 @@
   ],
   "start_url": ".",
   "display": "standalone",
+  "orientation": "portrait",
   "theme_color": "#000000",
   "background_color": "#ffffff"
 }
