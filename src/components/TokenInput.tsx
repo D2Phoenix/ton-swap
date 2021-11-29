@@ -15,7 +15,7 @@ interface TokenInputProps {
     value: string | undefined;
     editable: boolean;
     selectable: boolean;
-    showMax: boolean;
+    showMax?: boolean;
     onChange?: Function;
     onSelect?: Function;
     loading?: boolean;

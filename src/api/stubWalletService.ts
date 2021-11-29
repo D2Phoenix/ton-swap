@@ -135,7 +135,7 @@ class StubWalletService implements WalletAdapterInterface {
     getPool(token0: TokenInterface, token1: TokenInterface): Promise<WalletPoolInterface> {
         // TODO: Implement real api for wallet operation
         const poolName = `${token0.symbol}:${token1.symbol}`;
-        const result = liquidity[`${token0.symbol}:${token1.symbol}`];
+        const result = liquidity[poolName] || liquidity[`${token1.symbol}:${token0.symbol}`];
         if (result) {
             return Promise.resolve({
                 input0: result.input0,
@@ -227,6 +227,37 @@ class StubWalletService implements WalletAdapterInterface {
                 };
                 if (liquidity[poolName].pool.amount === '0') {
                     delete liquidity[poolName];
+                }
+                resolve(TxStatus.CONFIRMED);
+            }, 2000)
+        });
+    };
+
+    importLiquidity(state: LiquidityState): Promise<TxStatus> {
+        // TODO: Implement real api for wallet operation
+        return new Promise<TxStatus>((resolve) => {
+            setTimeout(() => {
+                 const poolName = liquidity[`${state.input1.token.symbol}:${state.input0.token.symbol}`] ?
+                    `${state.input1.token.symbol}:${state.input0.token.symbol}` :
+                    `${state.input0.token.symbol}:${state.input1.token.symbol}`
+                const pool = liquidity[poolName];
+                if (!pool) {
+                    liquidity[poolName] = {
+                        input0: state.input0,
+                        input1: state.input1,
+                        pool: {
+                            ...state.pool,
+                            token: {
+                                symbol: poolName,
+                                name: poolName,
+                                address0: state.input0.token.address,
+                                address1: state.input1.token.address,
+                                decimals: 0,
+                                chainId: 1,
+                                address: poolName,
+                            },
+                        }
+                    };
                 }
                 resolve(TxStatus.CONFIRMED);
             }, 2000)

@@ -116,6 +116,23 @@ export const walletSwap = createAsyncThunk(
     }
 )
 
+export const walletImportLiquidity = createAsyncThunk(
+    'wallet/liquidity/import',
+    async (request, thunkAPI) => {
+        const state = thunkAPI.getState() as RootState;
+        const walletAdapterService = state.wallet.adapter;
+        if (walletAdapterService) {
+            return {
+                status: await walletAdapterService.addLiquidity(state.liquidity),
+                state: state.liquidity,
+            }
+        }
+        return {
+            status: TxStatus.INITIAL,
+        };
+    }
+)
+
 export const walletAddLiquidity = createAsyncThunk(
     'wallet/liquidity/add',
     async (request, thunkAPI) => {

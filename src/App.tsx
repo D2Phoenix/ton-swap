@@ -11,6 +11,7 @@ import { useAppDispatch } from './store/hooks';
 import RemoveLiquidityPage from './pages/liquidity/RemoveLiquidityPage';
 import PoolsPage from './pages/pools/PoolsPage';
 import PoolDetails from './pages/pools/PoolDetails';
+import ImportPoolPage from './pages/pool/ImportPoolPage';
 
 function App() {
     const dispatch = useAppDispatch();
@@ -32,6 +33,7 @@ function App() {
                       <Route path="pool/add/:token0" element={<AddLiquidityPage />} />
                       <Route path="pool/add/:token0/:token1" element={<AddLiquidityPage />} />
                       <Route path="pool/remove/:token0/:token1" element={<RemoveLiquidityPage />} />
+                      <Route path="pool/import" element={<ImportPoolPage />} />
                       <Route path="pools" element={<PoolsPage />} />
                       <Route path="pools/:address" element={<PoolDetails />} />
                   </Routes>

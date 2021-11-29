@@ -211,7 +211,7 @@ export function AddLiquidityPage() {
     const openTokenSelect = useCallback((activeInput) => {
         setShowTokenSelect(!showTokenSelect);
         setActiveInput(activeInput);
-    }, [showTokenSelect, dispatch, walletAdapter]);
+    }, [showTokenSelect]);
 
     const handleSwitchTokens = useCallback(() => {
         dispatch(switchLiquidityTokens());
@@ -234,14 +234,14 @@ export function AddLiquidityPage() {
         dispatch(setLiquidityInput1Token(token));
     }, [dispatch, input0, input1, activeInput, handleSwitchTokens]);
 
-    const handleFromTokenAmount = useCallback((value) => {
+    const handleInput0TokenAmount = useCallback((value) => {
         dispatch(setLiquidityInput0Amount({
             value,
             txType: EstimateTxType.EXACT_IN
         }));
     }, [dispatch]);
 
-    const handleToTokenAmount = useCallback((value) => {
+    const handleInput1TokenAmount = useCallback((value) => {
         dispatch(setLiquidityInput1Amount({
             value,
             txType: EstimateTxType.EXACT_OUT
@@ -288,7 +288,7 @@ export function AddLiquidityPage() {
                         value={input0.amount}
                         showMax={true}
                         onSelect={openTokenSelect.bind(null, 'input0')}
-                        onChange={handleFromTokenAmount}
+                        onChange={handleInput0TokenAmount}
                         selectable={true}
                         editable={true}
                         loading={txType === EstimateTxType.EXACT_OUT && loading}
@@ -302,7 +302,7 @@ export function AddLiquidityPage() {
                         value={input1.amount}
                         showMax={true}
                         onSelect={openTokenSelect.bind(null, 'input1')}
-                        onChange={handleToTokenAmount}
+                        onChange={handleInput1TokenAmount}
                         selectable={true}
                         editable={true}
                         loading={txType === EstimateTxType.EXACT_IN && loading}
