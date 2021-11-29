@@ -29,11 +29,8 @@ function SwapConfirm({onClose}: any) {
     }, [walletTransaction]);
 
     const tokenSwapRate = useMemo(() => {
-        if (!TokenUtils.isFilled(input0) || !TokenUtils.isFilled(input1)) {
-            return;
-        }
-        return TokenUtils.getDisplayRate(input0, input1);
-    }, [input0, input1]);
+        return TokenUtils.getNumberDisplay(trade.rate);
+    }, [trade]);
 
     const token0Amount = useMemo(() => {
         return TokenUtils.getDisplay(input1);

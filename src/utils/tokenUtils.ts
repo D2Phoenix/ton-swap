@@ -32,13 +32,7 @@ class TokenUtils {
         return new BigNumber(input.amount).precision(precision || TOKEN_PRECISION).toFixed();
     }
     static getNumberDisplay(value: string, precision?: number) {
-        return new BigNumber(value).precision(precision || TOKEN_PRECISION).toFixed();
-    }
-    static getRemoveDisplay(input: InputTokenInterface | InputPoolInterface) {
-        return new BigNumber(input.removeAmount!).precision(TOKEN_PRECISION).toFixed();
-    }
-    static getDisplayRate(inputOne: InputTokenInterface, inputTwo: InputTokenInterface) {
-        return new BigNumber(inputOne.amount).div(new BigNumber(inputTwo.amount)).precision(TOKEN_PRECISION).toFixed();
+        return new BigNumber(value || '0').precision(precision || TOKEN_PRECISION).toFixed();
     }
 }
 

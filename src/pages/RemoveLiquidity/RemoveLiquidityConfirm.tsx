@@ -32,15 +32,15 @@ function RemoveLiquidityConfirm({onClose}: any) {
     }, [walletTransaction]);
 
     const token0RemoveDisplay = useMemo(() => {
-        return TokenUtils.getRemoveDisplay(input0);
+        return TokenUtils.getNumberDisplay(input0.removeAmount!);
     }, [input0]);
 
     const token1RemoveDisplay = useMemo(() => {
-        return TokenUtils.getRemoveDisplay(input1);
+        return TokenUtils.getNumberDisplay(input1.removeAmount!);
     }, [input1]);
 
     const poolRemoveDisplay = useMemo(() => {
-        return TokenUtils.getRemoveDisplay(pool)
+        return TokenUtils.getNumberDisplay(pool.removeAmount!);
     }, [pool]);
 
     const handleConfirmRemove = useCallback(() => {
