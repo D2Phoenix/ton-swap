@@ -1,7 +1,11 @@
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Link, useParams } from 'react-router-dom';
+import BigNumber from 'bignumber.js';
+
 import './RemoveLiquidityPage.scss';
 import TokenInput from 'components/TokenInput';
 import SettingsIcon from 'components/icons/SettingsIcon';
-import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { selectWalletAdapter } from 'store/wallet/walletSlice';
 import {
@@ -20,7 +24,6 @@ import {
     getWalletUseTokenPermission,
 } from 'store/wallet/walletThunks';
 import Settings from 'components/Settings';
-import { Link, useParams } from 'react-router-dom';
 import ChevronRightIcon from 'components/icons/ChevronRightIcon';
 import LiquidityInfo from 'pages/AddLiquidity/LiquidityInfo';
 import ChevronDownIcon from 'components/icons/ChevronDownIcon';
@@ -32,14 +35,13 @@ import RemoveLiquidityConfirm from './RemoveLiquidityConfirm';
 import InputSlider from 'components/InputSlider';
 import QuestionIcon from 'components/icons/QuestionIcon';
 import Tooltip from 'components/Tooltip';
-import BigNumber from 'bignumber.js';
 
 export function RemoveLiquidityPage() {
     const dispatch = useAppDispatch();
     const params = useParams();
+    const { t } = useTranslation();
 
     const [showSettings, setShowSettings] = useState(false);
-    const [removeButtonText, setRemoveButtonText] = useState('Remove');
     const [showRemoveLiquidityConfirm, setShowRemoveLiquidityConfirm] = useState(false);
     const walletAdapter = useAppSelector(selectWalletAdapter);
     const input0 = useAppSelector(selectLiquidityInput0);
@@ -60,7 +62,14 @@ export function RemoveLiquidityPage() {
             return '0';
         }
         return percent.toFixed(0);
-    }, [pool])
+    }, [pool]);
+
+    const removeButtonText = useMemo(() => {
+        if (!TokenUtils.isRemoveFilled(input0) || !TokenUtils.isRemoveFilled(input1) || !TokenUtils.hasRemoveAmount(pool)) {
+            return t('Enter an amount');
+        }
+        return t('Remove');
+    }, [t, input0, input1, pool]);
 
     useEffect(() => {
         return () => {
@@ -76,14 +85,6 @@ export function RemoveLiquidityPage() {
             }));
         }
     }, [dispatch, params]);
-
-    //Handle remove button text
-    useEffect(() => {
-        if (!TokenUtils.isRemoveFilled(input0) || !TokenUtils.isRemoveFilled(input1) || !TokenUtils.hasRemoveAmount(pool)) {
-            return setRemoveButtonText('Enter an amount');
-        }
-        setRemoveButtonText('Remove');
-    }, [input0, input1, pool]);
 
     //Update balance and check token permissions on token0 update
     useEffect(() => {
@@ -132,8 +133,8 @@ export function RemoveLiquidityPage() {
                     <ChevronRightIcon/>
                 </Link>
                 <div className="text-semibold">
-                    Remove Liquidity
-                    <Tooltip content={<span className="text-small">Removing pool tokens converts your position back into underlying tokens at the current rate, proportional to your share of the pool. Accrued fees are included in the amounts you receive.</span>}
+                    {t('Remove Liquidity')}
+                    <Tooltip content={<span className="text-small">{t('Removing pool tokens converts your position back into underlying tokens at the current rate, proportional to your share of the pool. Accrued fees are included in the amounts you receive.')}</span>}
                              direction="bottom">
                         <div className="btn-icon">
                             <QuestionIcon />
@@ -182,7 +183,7 @@ export function RemoveLiquidityPage() {
                             removeApproveTx.status === TxStatus.PENDING && <Spinner className="btn"/>
                         }
                         {
-                            removeApproveTx.status !== TxStatus.PENDING && 'Approve'
+                            removeApproveTx.status !== TxStatus.PENDING && t('Approve')
                         }
                     </button>
                 }

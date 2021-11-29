@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 
 import './PoolTransactionsTable.scss';
 import ChevronDownIcon from 'components/icons/ChevronDownIcon';
@@ -9,6 +10,7 @@ import { selectPoolsTransactions } from 'store/pools/poolsSlice';
 import DateUtils from 'utils/dateUtils';
 
 function PoolTransactionsTable() {
+    const { t } = useTranslation();
     const [sort, setSort] = useState('-name');
     const [page, setPage] = useState(1);
     const [filter, setFilter] = useState('');
@@ -59,47 +61,47 @@ function PoolTransactionsTable() {
                     <div className="buttons__column">
                         <div className={`link__btn ${filter === '' ? 'active' : ''}`}
                              onClick={handleFilter.bind(null, '')}>
-                            All
+                            {t('All')}
                         </div>
                         <div className={`link__btn ${filter === 'Swap' ? 'active' : ''}`}
                              onClick={handleFilter.bind(null, 'Swap')}>
-                            Swaps
+                            {t('Swaps')}
                         </div>
                         <div className={`link__btn ${filter === 'Mint' ? 'active' : ''}`}
                              onClick={handleFilter.bind(null, 'Mint')}>
-                            Adds
+                            {t('Adds')}
                         </div>
                         <div className={`link__btn ${filter === 'Burn' ? 'active' : ''}`}
                              onClick={handleFilter.bind(null, 'Burn')}>
-                            Removes
+                            {t('Removes')}
                         </div>
                     </div>
                     <div className="column" onClick={handleSort.bind(null, 'amountUSD')}>
-                        Total Value
+                        {t('Total Value')}
                         {
                             sort.includes('amountUSD') && <ChevronDownIcon revert={!sort.startsWith('-')}/>
                         }
                     </div>
                     <div className="column" onClick={handleSort.bind(null, 'amount0')}>
-                        Token Amount
+                        {t('Token Amount')}
                         {
                             sort.includes('amount0') && <ChevronDownIcon revert={!sort.startsWith('-')}/>
                         }
                     </div>
                     <div className="column" onClick={handleSort.bind(null, 'amount1')}>
-                        Token Amount
+                        {t('Token Amount')}
                         {
                             sort.includes('amount1') && <ChevronDownIcon revert={!sort.startsWith('-')}/>
                         }
                     </div>
                     <div className="account__column" onClick={handleSort.bind(null, 'owner')}>
-                        Account
+                        {t('Account')}
                         {
                             sort.includes('owner') && <ChevronDownIcon revert={!sort.startsWith('-')}/>
                         }
                     </div>
                     <div className="column" onClick={handleSort.bind(null, 'timestamp')}>
-                        Time
+                        {t('Time')}
                         {
                             sort.includes('timestamp') && <ChevronDownIcon revert={!sort.startsWith('-')}/>
                         }
@@ -112,17 +114,23 @@ function PoolTransactionsTable() {
                                 <div className="buttons__column">
                                     {
                                         tx.__typename === 'Swap' && <a>
-                                            Swap {tx.pool.token0.symbol} for {tx.pool.token1.symbol}
+                                            <Trans>
+                                              Swap {{symbol0: tx.pool.token0.symbol}} for {{symbol1: tx.pool.token1.symbol}}
+                                            </Trans>
                                         </a>
                                     }
                                     {
                                         tx.__typename === 'Mint' && <a>
-                                            Add {tx.pool.token0.symbol} and {tx.pool.token1.symbol}
+                                          <Trans>
+                                            Add {{symbol0: tx.pool.token0.symbol}} and {{symbol1: tx.pool.token1.symbol}}
+                                          </Trans>
                                         </a>
                                     }
                                     {
                                         tx.__typename === 'Burn' && <a>
-                                          Remove {tx.pool.token0.symbol} and {tx.pool.token1.symbol}
+                                          <Trans>
+                                            Remove {{symbol0: tx.pool.token0.symbol}} and {{symbol1: tx.pool.token1.symbol}}
+                                          </Trans>
                                         </a>
                                     }
                                 </div>
@@ -148,7 +156,9 @@ function PoolTransactionsTable() {
                         onClick={handlePageChange.bind(null, -1)}>
                     <ChevronRightIcon revert={true}/>
                 </button>
-                Page {page} of {totalPages}
+                <Trans>
+                    Page {{page: page}} of {{total: totalPages}}
+                </Trans>
                 <button className="btn-icon btn"
                         disabled={page >= totalPages}
                         onClick={handlePageChange.bind(null, 1)}>

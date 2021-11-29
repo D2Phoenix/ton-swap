@@ -8,6 +8,7 @@ import { BALANCE_PRECISION } from 'constants/swap';
 import PoolInterface from 'types/poolInterface';
 import TokenIcon from './TokenIcon';
 import TokenUtils from 'utils/tokenUtils';
+import { useTranslation } from 'react-i18next';
 
 interface TokenInputProps {
     balance?: string;
@@ -25,6 +26,7 @@ interface TokenInputProps {
 const INPUT_REGEXP = RegExp(`^\\d*(?:\\\\[.])?\\d*$`)
 
 function TokenInput({balance, token, value, showMax, editable, selectable, loading, primary, onChange, onSelect}: TokenInputProps) {
+    const { t } = useTranslation();
     const handleClick = useCallback(() => {
         onSelect && onSelect();
     }, [onSelect]);
@@ -82,7 +84,7 @@ function TokenInput({balance, token, value, showMax, editable, selectable, loadi
                     {
                         poolToken?.address1 && <TokenIcon address={poolToken.address1} name={poolToken.name}/>
                     }
-                    <span>{token ? token.symbol : 'Select'}</span>
+                    <span>{token ? token.symbol : t('Select')}</span>
                     {
                         selectable && <ChevronRightIcon/>
                     }
@@ -101,7 +103,7 @@ function TokenInput({balance, token, value, showMax, editable, selectable, loadi
             </div>
             {
                 token && balance != null && <div className="balance text-small">
-                  Balance: {balanceVisible} {token.symbol}
+                    {t('Balance')}: {balanceVisible} {token.symbol}
                     {
                         showMax &&
                         !new BigNumber(balance).eq('0') &&

@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import './Header.scss';
 import { connectWallet } from 'store/wallet/walletThunks';
@@ -7,10 +8,11 @@ import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { selectWalletAddress, selectWalletConnectionStatus } from 'store/wallet/walletSlice';
 import Account from './Account';
 import Spinner from './Spinner';
-import { WalletStatus } from '../types/walletAdapterInterface';
+import { WalletStatus } from 'types/walletAdapterInterface';
 
 function Header() {
     const dispatch = useAppDispatch();
+    const { t } = useTranslation();
     const [showAccount ,setShowAccount] = useState(false);
 
     const walletConnectionStatus = useAppSelector(selectWalletConnectionStatus)
@@ -43,17 +45,17 @@ function Header() {
                     <div className="nav-list">
                         <div className="nav-item">
                             <NavLink className="nav-item__btn" to="/swap">
-                                Swap
+                                {t('Swap')}
                             </NavLink>
                         </div>
                         <div className="nav-item">
                             <NavLink className="nav-item__btn" to="/pool">
-                                Pool
+                                {t('Pool')}
                             </NavLink>
                         </div>
                         <div className="nav-item">
                             <NavLink className="nav-item__btn" to="/pools">
-                                Top Pools
+                                {t('Top Pools')}
                             </NavLink>
                         </div>
                         <div className="nav-item wallet">
@@ -62,7 +64,7 @@ function Header() {
                                 <button className="btn btn-outline"
                                      onClick={handleConnectWallet}>
                                     {
-                                        walletConnectionStatus === WalletStatus.DISCONNECTED && 'Connect Wallet'
+                                        walletConnectionStatus === WalletStatus.DISCONNECTED && t('Connect Wallet')
                                     }
                                     {
                                         walletConnectionStatus === WalletStatus.CONNECTING && <Spinner className="btn outline" />

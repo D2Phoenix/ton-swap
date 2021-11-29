@@ -34,3 +34,7 @@ Builds the Docker image in the development mode.
 
 Create docker container in the development mode.
 Open [http://localhost:3001](http://localhost:3001) to view it in the browser.
+
+### `yarn i18n`
+
+Extract translations to 'src/i18n' folder

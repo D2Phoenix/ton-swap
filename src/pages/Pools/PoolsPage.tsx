@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Trans, useTranslation } from 'react-i18next';
 
 import './PoolsPage.scss';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
@@ -14,6 +15,8 @@ import PoolItemInterface from 'types/poolItemInterface';
 function PoolsPage() {
     const dispatch = useAppDispatch();
     let navigate = useNavigate();
+    const { t } = useTranslation();
+
     const [query, setQuery] = useState('');
     const [sort, setSort] = useState('-totalValueLockedUSD');
     const [page, setPage] = useState(1);
@@ -67,33 +70,33 @@ function PoolsPage() {
 
     return (
         <div className="pools-wrapper">
-            <span className="text-semibold">All Pools</span>
-            <input placeholder="Search pools"
+            <span className="text-semibold">{t('All Pools')}</span>
+            <input placeholder={t('Search pools')}
                    value={query}
                    onChange={handleQuery}/>
             <div className="pools-list-wrapper">
                 <div className="pools-list-header">
                     <div className="position__column">#</div>
                     <div className="name__column" onClick={handleSort.bind(null, 'name')}>
-                        Name
+                        {t('Name')}
                         {
                             sort.includes('name') && <ChevronDownIcon revert={!sort.startsWith('-')}/>
                         }
                     </div>
                     <div className="tvl__column" onClick={handleSort.bind(null, 'totalValueLockedUSD')}>
-                        TVL
+                        {t('TVL')}
                         {
                             sort.includes('totalValueLockedUSD') && <ChevronDownIcon revert={!sort.startsWith('-')}/>
                         }
                     </div>
                     <div className="total-day__column" onClick={handleSort.bind(null, 'volume24USD')}>
-                        Volume 24h
+                        {t('Volume 24h')}
                         {
                             sort.includes('volume24USD') && <ChevronDownIcon revert={!sort.startsWith('-')}/>
                         }
                     </div>
                     <div className="total-7day__column" onClick={handleSort.bind(null, 'volume7dUSD')}>
-                        Volume 7d
+                        {t('Volume 7d')}
                         {
                             sort.includes('volume7dUSD') && <ChevronDownIcon revert={!sort.startsWith('-')}/>
                         }
@@ -123,7 +126,9 @@ function PoolsPage() {
                         onClick={handlePageChange.bind(null, -1)}>
                     <ChevronRightIcon revert={true}/>
                 </button>
-                Page {page} of {totalPages}
+                <Trans>
+                    Page {{page: page}} of {{total: totalPages}}
+                </Trans>
                 <button className="btn-icon btn"
                         disabled={page >= totalPages}
                         onClick={handlePageChange.bind(null, 1)}>

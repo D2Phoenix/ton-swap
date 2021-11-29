@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import './Settings.scss';
 import Modal from 'components/Modal';
@@ -13,6 +14,7 @@ const DEADLINE_INPUT_REGEXP = RegExp(`^\\d*(?:\\\\[])?\\d*$`);
 
 function Settings({onClose}: any) {
     const dispatch = useAppDispatch();
+    const { t } = useTranslation();
     const settings = useAppSelector(selectSettings);
 
 
@@ -50,10 +52,10 @@ function Settings({onClose}: any) {
     return (
         <Modal className={'swap-settings-modal'} onClose={onClose}>
             <div className="settings-wrapper">
-                <h4>Transaction Settings</h4>
+                <h4>{t('Transaction Settings')}</h4>
                 <div className="text-small">
-                    Slippage tolerance
-                    <Tooltip content={<span className="text-small">Your transaction will revert if the price changes unfavorably by more than this percentage.</span>}
+                    {t('Slippage tolerance')}
+                    <Tooltip content={<span className="text-small">{t('Your transaction will revert if the price changes unfavorably by more than this percentage.')}</span>}
                              direction="bottom">
                         <div className="btn-icon">
                             <QuestionIcon />
@@ -72,22 +74,22 @@ function Settings({onClose}: any) {
                 </div>
                 {
                     slippageNumber < 0.05 && <span className="text-warning text-small">
-                      Your transaction may fail
+                        {t('Your transaction may fail')}
                     </span>
                 }
                 {
                     slippageNumber > 1 && slippageNumber <= 50 && <span className="text-warning text-small">
-                      Your transaction may be frontrun
+                        {t('Your transaction may be frontrun')}
                     </span>
                 }
                 {
                     slippageNumber > 50 && <span className="text-error text-small">
-                      Enter a valid slippage percentage
+                        {t('Enter a valid slippage percentage')}
                     </span>
                 }
                 <div className="text-small">
-                    Transaction deadline
-                    <Tooltip content={<span className="text-small">Your transaction will revert if it is pending for more than this long.</span>}
+                    {t('Transaction deadline')}
+                    <Tooltip content={<span className="text-small">{t('Your transaction will revert if it is pending for more than this long.')}</span>}
                              direction="bottom">
                         <div className="btn-icon">
                             <QuestionIcon />
@@ -102,11 +104,11 @@ function Settings({onClose}: any) {
                            onChange={handleDeadlineChange}
                            onBlur={handleDeadlineBlur}
                     />
-                    <span>&nbsp;minutes</span>
+                    <span>&nbsp;{t('minutes')}</span>
                 </div>
                 {
                     (deadlineNumber === 0 || deadlineNumber > 180) && <span className="text-error text-small">
-                      Enter a valid deadline
+                        {t('Enter a valid deadline')}
                     </span>
                 }
             </div>

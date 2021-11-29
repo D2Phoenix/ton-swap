@@ -2,12 +2,36 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
 
 import './styles/index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { store } from './store/store';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+import translationEN from 'i18n/en/translation.json';
+
+// the translations
+const resources = {
+    en: {
+        translation: translationEN
+    }
+};
+
+i18n
+    .use(initReactI18next)
+    .init({
+        resources,
+        lng: "en",
+        fallbackLng: "en",
+        react: {
+            useSuspense: false
+        },
+        interpolation: {
+            escapeValue: false // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
+        }
+    });
 
 ReactDOM.render(
   <React.StrictMode>

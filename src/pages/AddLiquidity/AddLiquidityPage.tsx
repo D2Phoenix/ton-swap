@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { Trans, useTranslation } from 'react-i18next';
 
 import './AddLiquidityPage.scss';
 import TokenInput from 'components/TokenInput';
@@ -50,11 +51,11 @@ import { WalletStatus } from 'types/walletAdapterInterface';
 export function AddLiquidityPage() {
     const dispatch = useAppDispatch();
     const params = useParams();
+    const { t } = useTranslation();
 
     const [showSettings, setShowSettings] = useState(false);
     const [showTokenSelect, setShowTokenSelect] = useState(false);
     const [activeInput, setActiveInput] = useState('input0');
-    const [supplyButtonText, setSupplyButtonText] = useState('Supply');
     const [showAddLiquidityConfirm, setShowAddLiquidityConfirm] = useState(false);
     const walletAdapter = useAppSelector(selectWalletAdapter);
     const walletBalances = useAppSelector(selectWalletBalances);
@@ -87,6 +88,22 @@ export function AddLiquidityPage() {
         return insufficientToken0Balance || insufficientToken1Balance;
     }, [insufficientToken0Balance, insufficientToken1Balance]);
 
+    const supplyButtonText = useMemo(() => {
+        if (!TokenUtils.isFilled(input0)) {
+            return t('Enter an amount');
+        }
+        if (!input1.token || !input0.token) {
+            return t('Invalid pair');
+        }
+        if (insufficientToken0Balance) {
+            return t(`Insufficient {{symbol0}} balance`, {symbol0: input0.token.symbol});
+        }
+        if (insufficientToken1Balance) {
+            return t(`Insufficient {{symbol0}} balance`, {symbol0: input1.token.symbol});
+        }
+        return t('Supply');
+    }, [t, input0, input1, insufficientToken0Balance, insufficientToken1Balance]);
+
     useEffect(() => {
         return () => {
             dispatch(resetLiquidity());
@@ -107,23 +124,6 @@ export function AddLiquidityPage() {
             dispatch(getLiquidityPoolToken({token0: input0.token, token1: input1.token}));
         }
     }, [dispatch, input0.token, input1.token])
-
-    //Handle supply button text
-    useEffect(() => {
-        if (!TokenUtils.isFilled(input0)) {
-            return setSupplyButtonText('Enter an amount');
-        }
-        if (!input1.token || !input0.token) {
-            return setSupplyButtonText('Invalid pair');
-        }
-        if (insufficientToken0Balance) {
-            return setSupplyButtonText(`Insufficient ${input0.token.symbol} balance`);
-        }
-        if (insufficientToken1Balance) {
-            return setSupplyButtonText(`Insufficient ${input1.token.symbol} balance`);
-        }
-        setSupplyButtonText('Supply');
-    }, [input0, input1, insufficientToken0Balance, insufficientToken1Balance]);
 
     // Estimate EXACT_IN transaction
     useEffect((): any => {
@@ -271,8 +271,8 @@ export function AddLiquidityPage() {
                     <ChevronRightIcon/>
                 </Link>
                 <div className="text-semibold">
-                    Add Liquidity
-                    <Tooltip content={<span className="text-small">When you add liquidity, you are given pool tokens representing your position. These tokens automatically earn fees proportional to your share of the pool, and can be redeemed at any time.</span>}
+                    {t('Add Liquidity')}
+                    <Tooltip content={<span className="text-small">{t('When you add liquidity, you are given pool tokens representing your position. These tokens automatically earn fees proportional to your share of the pool, and can be redeemed at any time.')}</span>}
                              direction="bottom">
                         <div className="btn-icon">
                             <QuestionIcon/>
@@ -318,7 +318,9 @@ export function AddLiquidityPage() {
                 !insufficientToken0Balance &&
                 <button className="btn btn-primary supply__btn"
                         onClick={handleAllowUseToken0}>
-                  Allow the TONSwap Protocol to use your {input0.token!.symbol}
+                  <Trans>
+                    Allow the TONSwap Protocol to use your {{symbol0: input0.token.symbol}}
+                  </Trans>
                 </button>
             }
             {
@@ -328,7 +330,9 @@ export function AddLiquidityPage() {
                 !insufficientToken1Balance &&
                 <button className="btn btn-primary supply__btn"
                         onClick={handleAllowUseToken1}>
-                  Allow the TONSwap Protocol to use your {input1.token!.symbol}
+                  <Trans>
+                    Allow the TONSwap Protocol to use your {{symbol0: input0.token.symbol}}
+                  </Trans>
                 </button>
             }
             {
@@ -354,7 +358,7 @@ export function AddLiquidityPage() {
                 <button className="btn btn-outline supply__btn"
                         onClick={handleConnectWallet}>
                     {
-                        walletConnectionStatus === WalletStatus.DISCONNECTED && 'Connect Wallet'
+                        walletConnectionStatus === WalletStatus.DISCONNECTED && t('Connect Wallet')
                     }
                     {
                         walletConnectionStatus === WalletStatus.CONNECTING &&

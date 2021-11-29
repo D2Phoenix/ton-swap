@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import './ImportPoolPage.scss';
 import TokenInput from 'components/TokenInput';
@@ -33,6 +34,7 @@ import TokenSelect from 'components/TokenSelect';
 export function ImportPoolPage() {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const [showSettings, setShowSettings] = useState(false);
     const [showTokenSelect, setShowTokenSelect] = useState(false);
@@ -48,12 +50,12 @@ export function ImportPoolPage() {
 
     const importButtonText = useMemo(() => {
         if (!input0.token || !input1.token) {
-            return 'Select a pair';
+            return t('Select a pair');
         }
         if (!TokenUtils.isFilled(input0) || !TokenUtils.isFilled(input1) || !TokenUtils.isFilled(pool)) {
-            return 'You don’t have liquidity in this pool yet.';
+            return t('You don’t have liquidity in this pool yet.');
         }
-        return 'Import';
+        return t('Import');
     }, [input0, input1, pool]);
 
     useEffect(() => {
@@ -113,8 +115,8 @@ export function ImportPoolPage() {
                     <ChevronRightIcon/>
                 </Link>
                 <div className="text-semibold">
-                    Import Pool
-                    <Tooltip content={<span className="text-small">Use this tool to find pools that don't automatically appear in the interface.</span>}
+                    {t('Import Pool')}
+                    <Tooltip content={<span className="text-small">{t("Use this tool to find pools that don't automatically appear in the interface.")}</span>}
                              direction="bottom">
                         <div className="btn-icon">
                             <QuestionIcon />
@@ -165,7 +167,7 @@ export function ImportPoolPage() {
                 input0.token &&
                 input1.token &&
                 <Link to={`/pool/add/${input0.token.address}/${input1.token.address}`} className="btn btn-primary import__btn">
-                  Add Liquidity
+                    {t('Add Liquidity')}
                 </Link>
             }
             {
@@ -173,7 +175,7 @@ export function ImportPoolPage() {
                 <button className="btn btn-outline import__btn"
                         onClick={handleConnectWallet}>
                     {
-                        walletConnectionStatus === WalletStatus.DISCONNECTED && 'Connect Wallet'
+                        walletConnectionStatus === WalletStatus.DISCONNECTED && t('Connect Wallet')
                     }
                     {
                         walletConnectionStatus === WalletStatus.CONNECTING &&

@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 
 import './Account.scss';
 import Modal from './Modal';
 import { selectWalletAddress, selectWalletTransactions } from 'store/wallet/walletSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { disconnectWallet } from '../store/wallet/walletThunks';
-import { TxType } from '../types/transactionInterfaces';
+import { disconnectWallet } from 'store/wallet/walletThunks';
+import { TxType } from 'types/transactionInterfaces';
 
 
 interface AccountProps {
@@ -14,6 +15,7 @@ interface AccountProps {
 
 function Account({onClose}: AccountProps) {
     const dispatch = useAppDispatch();
+    const { t } = useTranslation();
     const loader = useRef(null);
     const [page, setPage] = useState(1);
     const walletAddress = useAppSelector(selectWalletAddress);
@@ -54,16 +56,16 @@ function Account({onClose}: AccountProps) {
     return (
         <Modal className={'account-modal'} onClose={handleClose}>
             <div className="account-wrapper">
-                <span className="text-semibold">Account</span>
+                <span className="text-semibold">{t('Account')}</span>
                 <div className="account-info text-semibold">
-                    <span className="text-small">Address</span>
+                    <span className="text-small">{t('Address')}</span>
                     <a href={`https://ton.sh/address/${walletAddress}`} rel="noreferrer" target="_blank" className="text-semibold">{walletAddress}</a>
                 </div>
-                <span className="text-small">Transactions</span>
+                <span className="text-small">{t('Transactions')}</span>
                 <div className="transactions-list">
                     {
                         visibleTxs.length === 0 && (
-                            <div className="transactions-empty">Your transactions will appear here...</div>
+                            <div className="transactions-empty">{t('Your transactions will appear here...')}</div>
                         )
                     }
                     {
@@ -72,17 +74,23 @@ function Account({onClose}: AccountProps) {
                                 <div key={tx.id} className="transaction-item">
                                     {
                                         tx.type === TxType.SWAP && <a>
-                                          Swap {tx.amount0} {tx.token0.symbol} for {tx.amount1} {tx.token1.symbol}
+                                          <Trans>
+                                            Swap {{amount0: tx.amount0}} {{symbol0: tx.token0.symbol}} for {{amount1: tx.amount1}} {{symbol1: tx.token1.symbol}}
+                                          </Trans>
                                         </a>
                                     }
                                     {
                                         tx.type === TxType.MINT && <a>
-                                          Add {tx.amount0} {tx.token0.symbol} and {tx.amount1} {tx.token1.symbol}
+                                          <Trans>
+                                            Add {{amount0: tx.amount0}} {{symbol0: tx.token0.symbol}} and {{amount1: tx.amount1}} {{symbol1: tx.token1.symbol}}
+                                          </Trans>
                                         </a>
                                     }
                                     {
                                         tx.type === TxType.BURN && <a>
-                                          Remove {tx.amount0} {tx.token0.symbol} and {tx.amount1} {tx.token1.symbol}
+                                          <Trans>
+                                            Remove {{amount0: tx.amount0}} {{symbol0: tx.token0.symbol}} and {{amount1: tx.amount1}} {{symbol1: tx.token1.symbol}}
+                                          </Trans>
                                         </a>
                                     }
                                 </div>
@@ -92,7 +100,9 @@ function Account({onClose}: AccountProps) {
                     <div ref={loader}/>
                 </div>
                 <span className="btn btn-primary" onClick={handleDisconnect}>
-                    Disconnect
+                    {
+                        t('Disconnect')
+                    }
                 </span>
             </div>
         </Modal>

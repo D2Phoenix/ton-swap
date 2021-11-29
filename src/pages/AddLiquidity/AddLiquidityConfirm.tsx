@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 
 import './AddLiquidityConfirm.scss';
 import LiquidityInfo from './LiquidityInfo';
@@ -21,6 +22,7 @@ import TokenUtils from 'utils/tokenUtils';
 
 function AddLiquidityConfirm({onClose}: any) {
     const dispatch = useAppDispatch();
+    const {t} = useTranslation();
     const input0 = useAppSelector(selectLiquidityInput0);
     const input1 = useAppSelector(selectLiquidityInput1);
     const pool = useAppSelector(selectLiquidityPool);
@@ -60,7 +62,7 @@ function AddLiquidityConfirm({onClose}: any) {
         <Modal className={modalClassName} onClose={handleClose}>
             {
                 walletTransaction.status === TxStatus.INITIAL && <>
-                  <h4>Confirm Supply</h4>
+                  <h4>{t('Confirm Supply')}</h4>
                   <div className="add-liquidity-confirm-wrapper">
                     <TokenInput token={input0.token}
                                 value={input0.amount}
@@ -79,35 +81,39 @@ function AddLiquidityConfirm({onClose}: any) {
                     />
                     <LiquidityInfo/>
                     <div className="pool-tokens-info">
-                      <span>You will receive </span>
+                      <span>{t('You will receive')} </span>
                       <span className="text-semibold">{poolDisplay}</span>
-                      <span> {input0.token!.symbol}/{input1.token!.symbol} Pool Tokens</span>
+                      <span> {input0.token!.symbol}/{input1.token!.symbol} {t('Pool Tokens')}</span>
                     </div>
                       {
                           <span className="help-text text-small">
-                              Output is estimated. If the price changes by more than {settings.slippage || DEFAULT_SLIPPAGE}% your transaction will revert.
+                              <Trans>
+                                  Output is estimated. If the price changes by more than {{slippage: settings.slippage || DEFAULT_SLIPPAGE}}% your transaction will revert.
+                              </Trans>
                           </span>
                       }
                     <button className="btn btn-primary supply__btn"
                             onClick={handleConfirmSupply}>
-                      Confirm Supply
+                        {t('Confirm Supply')}
                     </button>
                   </div>
                 </>
             }
             {
                 walletTransaction.status === TxStatus.PENDING && <>
-                    <div className="add-liquidity-confirm-wrapper">
-                      <div className="add-liquidity-status">
-                        <Spinner />
-                        <span>
-                            Supplying {token0Display} {input0.token!.symbol} and {token1Display} {input1.token!.symbol}
+                  <div className="add-liquidity-confirm-wrapper">
+                    <div className="add-liquidity-status">
+                      <Spinner/>
+                      <span>
+                            <Trans>
+                              Supplying {{token0: token0Display}} {{symbol0: input0.token!.symbol}} and {{token1: token1Display}} {{symbol1: input1.token!.symbol}}
+                            </Trans>
+                      </span>
+                      <span className="text-small">
+                          {t('Confirm this transaction in your wallet')}
                         </span>
-                        <span className="text-small">
-                          Confirm this transaction in your wallet
-                        </span>
-                      </div>
                     </div>
+                  </div>
                 </>
             }
             {
@@ -115,12 +121,12 @@ function AddLiquidityConfirm({onClose}: any) {
                   <div className="add-liquidity-confirm-wrapper">
                     <div className="add-liquidity-status">
                       <h2 className="text-semibold">
-                        Transaction submitted
+                          {t('Transaction submitted')}
                       </h2>
-                      <a>View on Explorer</a>
+                      <a>{t('View on Explorer')}</a>
                       <button className="btn btn-primary"
                               onClick={handleClose}>
-                        Close
+                          {t('Close')}
                       </button>
                     </div>
                   </div>
@@ -128,15 +134,15 @@ function AddLiquidityConfirm({onClose}: any) {
             }
             {
                 walletTransaction.status === TxStatus.REJECTED && <>
-                  <h4 className="text-error">Error</h4>
+                  <h4 className="text-error">{t('Error')}</h4>
                   <div className="add-liquidity-confirm-wrapper">
                     <div className="add-liquidity-status">
                       <h2 className="text-semibold text-error">
-                        Transaction rejected
+                          {t('Transaction rejected')}
                       </h2>
                       <button className="btn btn-primary"
                               onClick={handleClose}>
-                        Dismiss
+                          {t('Dismiss')}
                       </button>
                     </div>
                   </div>

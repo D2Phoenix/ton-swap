@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { Area, AreaChart, Bar, BarChart, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
+import BigNumber from 'bignumber.js';
 
 import './PoolDetailsPage.scss';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
@@ -7,9 +10,7 @@ import { fetchPool } from 'store/pools/poolsThunks';
 import { resetPoolDetails, selectPoolsChartData, selectPoolsPool } from 'store/pools/poolsSlice';
 import TokenIcon from 'components/TokenIcon';
 import CurrencyUtils from 'utils/currencyUtils';
-import BigNumber from 'bignumber.js';
 import ChevronDownIcon from 'components/icons/ChevronDownIcon';
-import { Area, AreaChart, Bar, BarChart, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
 import DateUtils from 'utils/dateUtils';
 import PoolTransactionsTable from './PoolTransactionsTable';
 
@@ -30,6 +31,8 @@ const ChartTooltip = ({ active, payload, label }: any) => {
 function PoolDetailsPage() {
     const dispatch = useAppDispatch();
     const params = useParams();
+    const { t } = useTranslation();
+
     const [chart, setChart] = useState('volume');
     const pool = useAppSelector(selectPoolsPool);
     const chartData = useAppSelector(selectPoolsChartData);
@@ -90,7 +93,7 @@ function PoolDetailsPage() {
                     <>
                         <span className="breadcrumbs">
                             <span>{'< '}</span>
-                            <Link to="/pools">Back</Link>
+                            <Link to="/pools">{t('Back')}</Link>
                         </span>
                         <div className="pool-pair-wrapper">
                             <div className="pool-pair">
@@ -100,16 +103,16 @@ function PoolDetailsPage() {
                             </div>
                             <div className="pool-actions">
                                 <Link to={`/pool/add/${pool.token0.id}/${pool.token1.id}`} className="btn btn-primary">
-                                   Add Liquidity
+                                    {t('Add Liquidity')}
                                 </Link>
                                 <Link to={`/swap/${pool.token0.id}/${pool.token1.id}`} className="btn btn-primary">
-                                   Swap
+                                    {t('Swap')}
                                 </Link>
                             </div>
                         </div>
                         <div className="pool-details">
                             <div className="pool-info">
-                                <span>Total Tokens Locked</span>
+                                <span>{t('Total Tokens Locked')}</span>
                                 <div className="pool-info__section">
                                     <div>
                                         <TokenIcon address={pool.token0.id} name={pool.token0.name}/>
@@ -122,7 +125,7 @@ function PoolDetailsPage() {
                                         <span className="align-right text-semibold">{CurrencyUtils.toDisplay(pool.totalValueLockedToken1)}</span>
                                     </div>
                                 </div>
-                                <span>TVL</span>
+                                <span>{t('TVL')}</span>
                                 <div className="pool-info__section">
                                     <h3>{CurrencyUtils.toUSDDisplay(pool.totalValueLockedUSD)}</h3>
                                     {
@@ -132,7 +135,7 @@ function PoolDetailsPage() {
                                         </h4>
                                     }
                                 </div>
-                                <span>Volume 24h</span>
+                                <span>{t('Volume 24h')}</span>
                                 <div className="pool-info__section">
                                     <h3>{CurrencyUtils.toUSDDisplay(pool.volume24USD)}</h3>
                                     {
@@ -142,7 +145,7 @@ function PoolDetailsPage() {
                                         </h4>
                                     }
                                 </div>
-                                <span>24h Fees</span>
+                                <span>{t('24h Fees')}</span>
                                 <div className="pool-info__section">
                                     <h3>{fee24Display}</h3>
                                 </div>
@@ -151,15 +154,15 @@ function PoolDetailsPage() {
                                 <div className="charts-select-wrapper">
                                     <button className={`btn btn-outline mini ${chart === 'volume' ? 'active' : ''}`}
                                             onClick={setChart.bind(null, 'volume')}>
-                                        Volume
+                                        {t('Volume')}
                                     </button>
                                     <button className={`btn btn-outline mini ${chart === 'tvl' ? 'active' : ''}`}
                                             onClick={setChart.bind(null, 'tvl')}>
-                                        TVL
+                                        {t('TVL')}
                                     </button>
                                     <button className={`btn btn-outline mini ${chart === 'fees' ? 'active' : ''}`}
                                             onClick={setChart.bind(null, 'fees')}>
-                                        Fees
+                                        {t('Fees')}
                                     </button>
                                 </div>
                                 {
@@ -220,7 +223,7 @@ function PoolDetailsPage() {
                                 }
                             </div>
                         </div>
-                        <h3 className="text-semibold"> Transactions </h3>
+                        <h3 className="text-semibold">{t('Transactions')}</h3>
                         <PoolTransactionsTable />
                     </>
                 )

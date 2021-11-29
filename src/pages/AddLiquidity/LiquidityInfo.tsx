@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
+import { Trans, useTranslation } from 'react-i18next';
 
 import './LiquidityInfo.scss';
 import { useAppSelector } from 'store/hooks';
@@ -12,6 +13,7 @@ import {
 import TokenUtils from 'utils/tokenUtils';
 
 function LiquidityInfo() {
+    const { t } = useTranslation();
     const input0 = useAppSelector(selectLiquidityInput0);
     const input1 = useAppSelector(selectLiquidityInput1);
     const loading = useAppSelector(selectLiquidityLoading);
@@ -38,14 +40,16 @@ function LiquidityInfo() {
 
     return (
         <div className={`liquidity-info-wrapper ${loading ? 'loading' : ''}`}>
-            <span>Prices and pool share</span>
+            <span>{t('Prices and pool share')}</span>
             <div className="liquidity-price-wrapper">
                 <div className="liquidity-price">
                     <div className="text-semibold">
                         {token1PerToken0Display}
                     </div>
                     <div className="text-small">
-                        {input1.token?.symbol} per {input0.token?.symbol}
+                        <Trans>
+                            {{symbol0: input1.token?.symbol}} per {{symbol1: input0.token?.symbol}}
+                        </Trans>
                     </div>
                 </div>
                 <div className="liquidity-price">
@@ -53,7 +57,9 @@ function LiquidityInfo() {
                         {token0PerToken1Display}
                     </div>
                     <div className="text-small">
-                        {input0.token?.symbol} per {input1.token?.symbol}
+                        <Trans>
+                            {{symbol0: input0.token?.symbol}} per {{symbol1: input1.token?.symbol}}
+                        </Trans>
                     </div>
                 </div>
                 <div className="liquidity-price">
@@ -61,7 +67,7 @@ function LiquidityInfo() {
                         {shareDisplay}
                     </div>
                     <div className="text-small">
-                        Share of Pool
+                        {t('Share of Pool')}
                     </div>
                 </div>
             </div>

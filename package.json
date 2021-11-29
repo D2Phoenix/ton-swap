@@ -12,9 +12,11 @@
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "bignumber.js": "^9.0.1",
+    "i18next": "^21.5.3",
     "node-sass": "^4.14.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-i18next": "^11.14.3",
     "react-redux": "^7.2.6",
     "react-router-dom": "6",
     "react-scripts": "4.0.3",
@@ -31,7 +33,8 @@
     "docker:build": "docker build -f Dockerfile.prod -t  ton-swap:prod .",
     "docker:build:dev": "docker build -t ton-swap:dev .",
     "docker:run": "docker run -it --rm -p 1337:80 ton-swap:prod",
-    "docker:run:dev": "docker run -it --rm -v ${PWD}:/app -v /app/node_modules -p 3001:3000 -e CHOKIDAR_USEPOLLING=true ton-swap:dev"
+    "docker:run:dev": "docker run -it --rm -v ${PWD}:/app -v /app/node_modules -p 3001:3000 -e CHOKIDAR_USEPOLLING=true ton-swap:dev",
+    "i18n": "i18next-scanner"
   },
   "eslintConfig": {
     "extends": [
@@ -50,5 +53,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "i18next-scanner": "^3.1.0",
+    "i18next-scanner-typescript": "^1.0.6"
   }
 }

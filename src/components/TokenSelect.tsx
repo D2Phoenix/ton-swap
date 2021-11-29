@@ -11,6 +11,7 @@ import { selectTokens } from '../store/app/appSlice';
 import { selectWalletAdapter, selectWalletBalances } from '../store/wallet/walletSlice';
 import { getWalletBalances } from '../store/wallet/walletThunks';
 import Spinner from './Spinner';
+import { useTranslation } from 'react-i18next';
 
 
 interface TokenSelectParams {
@@ -21,6 +22,7 @@ interface TokenSelectParams {
 
 function TokenSelect({onClose, onSelect, balancesFirst}: TokenSelectParams) {
     const dispatch = useAppDispatch();
+    const { t } = useTranslation();
     const tokens = useAppSelector(selectTokens);
     const balances = useAppSelector(selectWalletBalances);
     const walletAdapter = useAppSelector(selectWalletAdapter);
@@ -82,8 +84,8 @@ function TokenSelect({onClose, onSelect, balancesFirst}: TokenSelectParams) {
     return (
         <Modal className={'token-select-modal'} onClose={handleClose}>
             <div className="token-select-wrapper">
-                <span className="text-semibold">Select a token</span>
-                <input placeholder="Search name or paste address"
+                <span className="text-semibold">{t('Select a token')}</span>
+                <input placeholder={t('Search name or paste address"')}
                        value={query}
                        onChange={(event) => setQuery(event.target.value)}/>
                 <div className="token-select-list">
@@ -110,7 +112,7 @@ function TokenSelect({onClose, onSelect, balancesFirst}: TokenSelectParams) {
                     <div ref={loader}/>
                 </div>
                 <span className="text-center link__btn">
-                    Manage Token Lists
+                    {t('Manage Token Lists')}
                 </span>
             </div>
         </Modal>

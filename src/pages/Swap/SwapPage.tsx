@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { Trans, useTranslation } from 'react-i18next';
 
 import './SwapPage.scss';
 import ChevronDownIcon from 'components/icons/ChevronDownIcon';
@@ -46,6 +47,7 @@ import { WalletStatus } from 'types/walletAdapterInterface';
 function SwapPage() {
     const dispatch = useAppDispatch();
     const params = useParams();
+    const {t} = useTranslation();
 
     const [showSettings, setShowSettings] = useState(false);
     const [showTokenSelect, setShowTokenSelect] = useState(false);
@@ -81,19 +83,19 @@ function SwapPage() {
 
     const swapButtonText = useMemo(() => {
         if (trade.insufficientLiquidity && input0.amount) {
-            return `Insufficient liquidity for this trade.`;
+            return t(`Insufficient liquidity for this trade.`);
         }
         if (!TokenUtils.isFilled(input0)) {
-            return 'Enter an amount';
+            return t('Enter an amount');
         }
         if (!input1.token || !input0.token) {
-            return 'Select a token';
+            return t('Select a token');
         }
         if (insufficientBalance) {
-            return `Insufficient ${input0.token.symbol} balance`;
+            return t(`Insufficient {{symbol0}} balance`, {symbol0: input0.token.symbol});
         }
-        return 'Swap';
-    }, [input0, input1, insufficientBalance, trade]);
+        return t('Swap');
+    }, [t, input0, input1, insufficientBalance, trade]);
 
     useEffect(() => {
         return () => {
@@ -235,7 +237,7 @@ function SwapPage() {
     return (
         <div className="swap-wrapper">
             <div className="swap-header">
-                <span className="text-semibold">Swap</span>
+                <span className="text-semibold">{t('Swap')}</span>
                 <div className="btn-icon" onClick={() => setShowSettings(!showSettings)}>
                     <SettingsIcon/>
                 </div>
@@ -284,7 +286,9 @@ function SwapPage() {
                 !walletPermissions[input0.token.symbol] &&
                 <button className="btn btn-primary swap__btn"
                         onClick={handleAllowUseToken}>
-                  Allow the TONSwap Protocol to use your {input0.token.symbol}
+                  <Trans>
+                    Allow the TONSwap Protocol to use your {{symbol0: input0.token.symbol}}
+                  </Trans>
                 </button>
             }
             {
@@ -305,7 +309,7 @@ function SwapPage() {
                 <button className="btn btn-outline swap__btn"
                         onClick={handleConnectWallet}>
                     {
-                        walletConnectionStatus === WalletStatus.DISCONNECTED && 'Connect Wallet'
+                        walletConnectionStatus === WalletStatus.DISCONNECTED && t('Connect Wallet')
                     }
                     {
                         walletConnectionStatus === WalletStatus.CONNECTING &&

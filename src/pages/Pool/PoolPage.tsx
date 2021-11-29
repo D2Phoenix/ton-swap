@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Trans, useTranslation } from 'react-i18next';
 
 import './PoolPage.scss';
 import SettingsIcon from 'components/icons/SettingsIcon';
@@ -18,6 +19,7 @@ import BigNumber from 'bignumber.js';
 
 function PoolPage() {
     const dispatch = useAppDispatch();
+    const { t } = useTranslation();
     const [showSettings, setShowSettings] = useState(false);
     const walletAdapter = useAppSelector(selectWalletAdapter);
     const pools = useAppSelector(selectPoolPools);
@@ -31,15 +33,15 @@ function PoolPage() {
             <div className="pool-header-wrapper">
                 <div className="pool-header">
                     <div className="text-semibold">
-                        Your Liquidity
-                        <Tooltip content={<span className="text-small">When you add liquidity, you are given pool tokens that represent your share. If you don’t see a pool you joined in this list, try importing a pool below.</span>}
+                        {t('Your Liquidity')}
+                        <Tooltip content={<span className="text-small">{t('When you add liquidity, you are given pool tokens that represent your share. If you don’t see a pool you joined in this list, try importing a pool below.')}</span>}
                                  direction="bottom">
                             <div className="btn-icon">
                                 <QuestionIcon />
                             </div>
                         </Tooltip>
                     </div>
-                    <span className="text-small">Remove liquidity to receive tokens back</span>
+                    <span className="text-small">{t('Remove liquidity to receive tokens back')}</span>
                 </div>
                 <div className="btn-icon" onClick={() => setShowSettings(!showSettings)}>
                     <SettingsIcon/>
@@ -48,12 +50,12 @@ function PoolPage() {
             <div className="pool-list-wrapper">
                 {
                     !walletAdapter && <span>
-                      Connect to a wallet to view your liquidity.
+                      {t('Connect to a wallet to view your liquidity.')}
                     </span>
                 }
                 {
                     walletAdapter && pools.length === 0 && <span>
-                      No liquidity found.
+                      {t('No liquidity found.')}
                     </span>
                 }
                 {
@@ -75,7 +77,11 @@ function PoolPage() {
                                 content: (
                                     <div key={index} className="pool-item-details-wrapper">
                                         <div>
-                                            <div>Pooled {pool.input0.token.symbol}</div>
+                                            <div>
+                                                <Trans>
+                                                    Pooled {{symbol0: pool.input0.token.symbol}}
+                                                </Trans>
+                                            </div>
                                             <div>
                                                 {TokenUtils.getDisplay(pool.input0)}
                                                 <TokenIcon address={pool.input0.token.address}
@@ -85,7 +91,11 @@ function PoolPage() {
                                             </div>
                                         </div>
                                         <div>
-                                            <div>Pooled {pool.input1.token.symbol}</div>
+                                            <div>
+                                                <Trans>
+                                                    Pooled {{symbol0: pool.input1.token.symbol}}
+                                                </Trans>
+                                            </div>
                                             <div>
                                                 {TokenUtils.getDisplay(pool.input1)}
                                                 <TokenIcon address={pool.input1.token.address}
@@ -95,19 +105,19 @@ function PoolPage() {
                                             </div>
                                         </div>
                                         <div>
-                                            <div>Your pool tokens</div>
+                                            <div>{t('Your pool tokens')}</div>
                                             <div>{TokenUtils.getDisplay(pool.pool)}</div>
                                         </div>
                                         <div>
-                                            <div>Your pool share</div>
+                                            <div>{t('Your pool share')}</div>
                                             <div>{shareText}</div>
                                         </div>
                                         <div>
                                             <Link className="btn btn-primary" to={`add/${pool.input0.token.symbol}/${pool.input1.token.symbol}`}>
-                                                Add
+                                                {t('Add')}
                                             </Link>
                                             <Link className="btn btn-primary" to={`remove/${pool.input0.token.symbol}/${pool.input1.token.symbol}`}>
-                                                Remove
+                                                {t('Remove')}
                                             </Link>
                                         </div>
                                     </div>
@@ -118,12 +128,12 @@ function PoolPage() {
                 }
             </div>
             <Link className="btn btn-primary" to="add">
-                Add Liquidity
+                {t('Add Liquidity')}
             </Link>
             <div className="import-pool">
-                <span>Don't see a pool you joined?</span>
+                <span>{t("Don't see a pool you joined?")}</span>
                 <Link className="btn btn-outline" to="import">
-                    Import Pool
+                    {t('Import Pool')}
                 </Link>
             </div>
             {
