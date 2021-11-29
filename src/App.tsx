@@ -57,12 +57,8 @@ function App() {
           <Header />
           <main>
               <div className="container">
-                  <Suspense fallback={<Spinner />}>
+                  <Suspense fallback={<div className="lazy-loader"><Spinner /></div>}>
                       <Routes>
-                              <Route
-                                  path="/"
-                                  element={<Navigate replace to="/swap" />}
-                              />
                               <Route path="swap" element={<SwapPage />} />
                               <Route path="swap/:token0" element={<SwapPage />} />
                               <Route path="swap/:token0/:token1" element={<SwapPage />} />
@@ -74,6 +70,10 @@ function App() {
                               <Route path="pool/import" element={<ImportPoolPage />} />
                               <Route path="pools" element={<PoolsPage />} />
                               <Route path="pools/:address" element={<PoolDetailsPage />} />
+                              <Route
+                                  path="*"
+                                  element={<Navigate replace to="/swap" />}
+                              />
                       </Routes>
                   </Suspense>
               </div>
