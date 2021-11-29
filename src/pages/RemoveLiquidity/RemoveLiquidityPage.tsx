@@ -127,7 +127,7 @@ export function RemoveLiquidityPage() {
     }, []);
 
     return (
-        <div className="remove-liquidity-wrapper">
+        <form className="remove-liquidity-wrapper" onSubmit={e => { e.preventDefault(); }}>
             <div className="remove-liquidity-header-wrapper">
                 <Link className="btn-icon chevron" to="/pool">
                     <ChevronRightIcon revert={true}/>
@@ -208,7 +208,7 @@ export function RemoveLiquidityPage() {
             {
                 showRemoveLiquidityConfirm && <RemoveLiquidityConfirm onClose={() => setShowRemoveLiquidityConfirm(false)}/>
             }
-        </div>
+        </form>
     )
 }
 

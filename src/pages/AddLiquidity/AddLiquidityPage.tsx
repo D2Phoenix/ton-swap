@@ -265,7 +265,7 @@ export function AddLiquidityPage() {
     }, []);
 
     return (
-        <div className="add-liquidity-wrapper">
+        <form className="add-liquidity-wrapper" onSubmit={e => { e.preventDefault(); }}>
             <div className="add-liquidity-header-wrapper">
                 <Link className="btn-icon chevron" to="/pool">
                     <ChevronRightIcon revert={true}/>
@@ -382,7 +382,7 @@ export function AddLiquidityPage() {
             {
                 showAddLiquidityConfirm && <AddLiquidityConfirm onClose={() => setShowAddLiquidityConfirm(false)}/>
             }
-        </div>
+        </form>
     )
 }
 

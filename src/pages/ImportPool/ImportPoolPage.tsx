@@ -109,7 +109,7 @@ export function ImportPoolPage() {
     }, [dispatch, navigate]);
 
     return (
-        <div className="import-pool-wrapper">
+        <form className="import-pool-wrapper" onSubmit={e => { e.preventDefault(); }}>
             <div className="import-pool-header-wrapper">
                 <Link className="btn-icon chevron" to="/pool">
                     <ChevronRightIcon revert={true}/>
@@ -196,7 +196,7 @@ export function ImportPoolPage() {
             {
                 showSettings && <Settings onClose={() => setShowSettings(false)}/>
             }
-        </div>
+        </form>
     )
 }
 

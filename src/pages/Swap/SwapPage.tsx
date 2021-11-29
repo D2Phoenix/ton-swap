@@ -235,7 +235,7 @@ function SwapPage() {
     }, [])
 
     return (
-        <div className="swap-wrapper">
+        <form className="swap-wrapper" onSubmit={e => { e.preventDefault(); }}>
             <div className="swap-header-wrapper">
                 <div className="swap-header">
                     <span className="text-semibold">{t('Swap')}</span>
@@ -330,7 +330,7 @@ function SwapPage() {
             {
                 showSwapConfirm && <SwapConfirm onClose={() => setShowSwapConfirm(false)}/>
             }
-        </div>
+        </form>
     )
 }
 
