@@ -103,5 +103,6 @@
   "Allowed slippage": "Allowed slippage",
   "Minimum received": "Minimum received",
   "Maximum sent": "Maximum sent",
-  "Insufficient liquidity for this trade.": "Insufficient liquidity for this trade."
+  "Insufficient liquidity for this trade.": "Insufficient liquidity for this trade.",
+  "Trade tokens in an instant": "Trade tokens in an instant"
 }

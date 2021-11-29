@@ -236,8 +236,11 @@ function SwapPage() {
 
     return (
         <div className="swap-wrapper">
-            <div className="swap-header">
-                <span className="text-semibold">{t('Swap')}</span>
+            <div className="swap-header-wrapper">
+                <div className="swap-header">
+                    <span className="text-semibold">{t('Swap')}</span>
+                    <span className="text-small">{t('Trade tokens in an instant')}</span>
+                </div>
                 <div className="btn-icon" onClick={() => setShowSettings(!showSettings)}>
                     <SettingsIcon/>
                 </div>
