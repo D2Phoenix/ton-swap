@@ -64,6 +64,10 @@ function Settings({onClose}: any) {
                 </div>
                 <div>
                     <input type="text"
+                           inputMode="decimal"
+                           autoComplete="off"
+                           autoCorrect="off"
+                           pattern="^[0-9]*[.,]?[0-9]*$"
                            className="number__input"
                            placeholder={DEFAULT_SLIPPAGE}
                            value={settings.slippage}
@@ -98,6 +102,10 @@ function Settings({onClose}: any) {
                 </div>
                 <div>
                     <input type="text"
+                           inputMode="decimal"
+                           autoComplete="off"
+                           autoCorrect="off"
+                           pattern="^[0-9]*[.,]?[0-9]*$"
                            className="number__input"
                            placeholder={DEFAULT_DEADLINE}
                            value={settings.deadline}
