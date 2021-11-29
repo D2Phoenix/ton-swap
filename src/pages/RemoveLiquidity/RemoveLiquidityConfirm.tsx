@@ -3,10 +3,9 @@ import { useCallback, useMemo } from 'react';
 import './RemoveLiquidityConfirm.scss';
 import Modal from 'components/Modal';
 import TokenInput from 'components/TokenInput';
-import LiquidityInfo from './LiquidityInfo';
+import LiquidityInfo from 'pages/AddLiquidity/LiquidityInfo';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import {
-    resetLiquidity,
     selectLiquidityPool,
     selectLiquidityInput0,
     selectLiquidityInput1,
@@ -18,7 +17,7 @@ import {  walletRemoveLiquidity } from 'store/wallet/walletThunks';
 import Spinner from 'components/Spinner';
 import { selectSettings } from 'store/app/appSlice';
 import TokenUtils from 'utils/tokenUtils';
-import { getLiquidityPool } from '../../store/liquidity/liquidityThunks';
+import { getLiquidityPool } from 'store/liquidity/liquidityThunks';
 
 function RemoveLiquidityConfirm({onClose}: any) {
     const dispatch = useAppDispatch();

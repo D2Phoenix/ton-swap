@@ -20,15 +20,15 @@ import {
     setLiquidityInput1Amount,
     setLiquidityInput1Token,
     switchLiquidityTokens,
-    resetLiquidity, selectLiquidityLoading,
+    resetLiquidity,
+    selectLiquidityLoading,
 } from 'store/liquidity/liquiditySlice';
 import {
     connectWallet,
-    getWalletBalance, getWalletBalances,
+    getWalletBalance,
     getWalletUseTokenPermission,
     setWalletUseTokenPermission
 } from 'store/wallet/walletThunks';
-import { selectTokens } from 'store/app/appSlice';
 import {
     estimateLiquidityTransaction,
     getLiquidityPoolToken,
@@ -44,8 +44,8 @@ import AddLiquidityConfirm from './AddLiquidityConfirm';
 import TokenUtils from 'utils/tokenUtils';
 import QuestionIcon from 'components/icons/QuestionIcon';
 import Tooltip from 'components/Tooltip';
-import Spinner from '../../components/Spinner';
-import { WalletStatus } from '../../types/walletAdapterInterface';
+import Spinner from 'components/Spinner';
+import { WalletStatus } from 'types/walletAdapterInterface';
 
 export function AddLiquidityPage() {
     const dispatch = useAppDispatch();

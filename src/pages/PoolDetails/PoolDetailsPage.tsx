@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
-import './PoolDetails.scss';
+import './PoolDetailsPage.scss';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { fetchPool } from 'store/pools/poolsThunks';
 import { resetPoolDetails, selectPoolsChartData, selectPoolsPool } from 'store/pools/poolsSlice';
@@ -27,7 +27,7 @@ const ChartTooltip = ({ active, payload, label }: any) => {
     return null;
 };
 
-function PoolDetails() {
+function PoolDetailsPage() {
     const dispatch = useAppDispatch();
     const params = useParams();
     const [chart, setChart] = useState('volume');
@@ -229,4 +229,4 @@ function PoolDetails() {
     )
 }
 
-export default PoolDetails;
+export default PoolDetailsPage;

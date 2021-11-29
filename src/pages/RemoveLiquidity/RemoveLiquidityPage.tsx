@@ -22,7 +22,7 @@ import {
 import Settings from 'components/Settings';
 import { Link, useParams } from 'react-router-dom';
 import ChevronRightIcon from 'components/icons/ChevronRightIcon';
-import LiquidityInfo from './LiquidityInfo';
+import LiquidityInfo from 'pages/AddLiquidity/LiquidityInfo';
 import ChevronDownIcon from 'components/icons/ChevronDownIcon';
 import { approveRemove, getLiquidityPool } from 'store/liquidity/liquidityThunks';
 import TokenUtils from 'utils/tokenUtils';

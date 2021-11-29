@@ -3,15 +3,15 @@ import { Route, Routes } from 'react-router-dom';
 
 import './App.scss';
 import Header from './components/Header';
-import SwapPage from './pages/swap/SwapPage';
-import PoolPage from './pages/pool/PoolPage';
-import AddLiquidityPage from './pages/liquidity/AddLiquidityPage';
+import SwapPage from './pages/Swap/SwapPage';
+import PoolPage from './pages/Pool/PoolPage';
+import AddLiquidityPage from './pages/AddLiquidity/AddLiquidityPage';
 import { fetchTokens } from './store/app/appThunks';
 import { useAppDispatch } from './store/hooks';
-import RemoveLiquidityPage from './pages/liquidity/RemoveLiquidityPage';
-import PoolsPage from './pages/pools/PoolsPage';
-import PoolDetails from './pages/pools/PoolDetails';
-import ImportPoolPage from './pages/pool/ImportPoolPage';
+import RemoveLiquidityPage from './pages/RemoveLiquidity/RemoveLiquidityPage';
+import PoolsPage from './pages/Pools/PoolsPage';
+import PoolDetailsPage from './pages/PoolDetails/PoolDetailsPage';
+import ImportPoolPage from './pages/ImportPool/ImportPoolPage';
 
 function App() {
     const dispatch = useAppDispatch();
@@ -35,7 +35,7 @@ function App() {
                       <Route path="pool/remove/:token0/:token1" element={<RemoveLiquidityPage />} />
                       <Route path="pool/import" element={<ImportPoolPage />} />
                       <Route path="pools" element={<PoolsPage />} />
-                      <Route path="pools/:address" element={<PoolDetails />} />
+                      <Route path="pools/:address" element={<PoolDetailsPage />} />
                   </Routes>
               </div>
           </main>
