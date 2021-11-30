@@ -34,18 +34,18 @@ function SwapInfo() {
                 <span className="text-small">{t('Liquidity Provider Fee')}</span>
                 <span className="text-small text-semibold">{TokenUtils.getNumberDisplay(trade.liquidityProviderFee)} {from.token.symbol}</span>
             </div>
-            <div>
-                <span className="text-small">{t('Price Impact')}</span>
-                <span className="price">
-                    {
-                        priceChangeDirection !== 0 &&
-                        <span className={priceChangeDirection > 0 ? 'positive': 'negative'}>
+            {
+                priceChangeDirection !== 0 &&
+                <div>
+                  <span className="text-small">{t('Price Impact')}</span>
+                  <span className="price">
+                    <span className={priceChangeDirection > 0 ? 'positive': 'negative'}>
                           <ChevronDownIcon revert={priceChangeDirection > 0}/>
                           <span className="text-small text-semibold">{trade.priceImpact} %</span>
                         </span>
-                    }
-                </span>
-            </div>
+                  </span>
+                </div>
+            }
             <div>
                 <span className="text-small">{t('Allowed slippage')}</span>
                 <span className="text-small text-semibold">{settings.slippage || DEFAULT_SLIPPAGE} %</span>
