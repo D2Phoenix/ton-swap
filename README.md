@@ -1,5 +1,7 @@
 # TONSwap
 
+[Frontend Contest: Frontend of DEX with liquidity pools, Stage 1](https://github.com/newton-blockchain/TIPs/issues/42)
+
 Demo available at: [https://ton-swap-22qkz.ondigitalocean.app](https://ton-swap-22qkz.ondigitalocean.app)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
