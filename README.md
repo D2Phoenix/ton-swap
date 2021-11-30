@@ -28,10 +28,15 @@ Open [http://localhost:1337](http://localhost:1337) to view it in the browser.
 - Pool page for creating a pool with two tokens and manage existing user pools
 - Add and Remove Liquidity pages
 - Import Pool Page
-- Top Pools page with a list of pools and pool statistics.
+- Top Pools page with a list of pools and pool statistics
+- Wallet Account Modal with a list of latest translations
+- Notifications for pending transactions
+- Charts with [recharts](https://github.com/recharts/recharts)
+- Math with [bignumber.js](https://github.com/MikeMcl/bignumber.js/)
 - Internationalization support with [react-i18n](https://github.com/i18next/react-i18next)
 - Progressive Web App support
 - Lazy loading of pages
+- Mobile friendly
 
 *Notice* For demo purpose [simple-uniswap-sdk](https://github.com/uniswap-integration/simple-uniswap-sdk) was used to mock exchange rates
 

@@ -21,7 +21,7 @@ export function Notification({children, type, onClose}: NotificationProps) {
                 ref.current.classList.add('active');
             }
         }, 100)
-    }, [])
+    }, []);
 
     const handleClick = useCallback(()=> {
         if (ref.current) {
@@ -32,6 +32,12 @@ export function Notification({children, type, onClose}: NotificationProps) {
             }, 500);
         }
     }, [onClose]);
+
+    useEffect(() => {
+        setTimeout(() => {
+            handleClick();
+        }, 5000)
+    }, [handleClick]);
 
     return (
         <div ref={ref} className={`notification enter notification-${type}`} onClick={handleClick}>
