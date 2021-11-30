@@ -21,6 +21,7 @@ function TokenIcon({address, name, size, url}: TokenIconProps) {
         if (token) {
             return token.logoURI;
         }
+        return '/images/icons/empty-token.svg';
     }, [tokens, address, url])
 
     return (
