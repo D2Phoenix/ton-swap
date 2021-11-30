@@ -8,7 +8,8 @@
     > div {
       display: flex;
       align-items: center;
-      font-family: 'mulish-bold', serif;
+      font-family: 'Mulish', sans-serif;
+      font-weight: 700;
       color: $primary-color;
       &.column {
         justify-content: flex-end;

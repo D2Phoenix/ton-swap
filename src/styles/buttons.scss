@@ -17,7 +17,7 @@
   -webkit-transition: all .3s;
   -o-transition: all .3s;
   transition: all .3s;
-  font-family: "mulish-black", serif;
+  font-weight: 900;
   color: #FFFFFF;
   vertical-align: middle;
   &:hover {
@@ -54,7 +54,8 @@
   -webkit-transition: all .3s;
   -o-transition: all .3s;
   transition: all .3s;
-  font-family: "mulish-bold", serif;
+  font-family: 'Mulish', sans-serif;
+  font-weight: 700;
   color: $primary-color;
   &:after {
     content: '';

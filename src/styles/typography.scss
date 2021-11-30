@@ -1,14 +1,14 @@
 h1 {
-  font-family: "mulish-black", serif;
+  font-family: 'Mulish', sans-serif;
   font-size: 32px;
   line-height: 40px;
-  font-weight: normal;
+  font-weight: 900;
 }
 h3 {
-  font-family: "mulish-black", serif;
+  font-family: 'Mulish', sans-serif;
   font-size: 24px;
   line-height: 40px;
-  font-weight: normal;
+  font-weight: 900;
 }
 
 h1 span,
@@ -19,7 +19,8 @@ h3 a {
 }
 
 h4 {
-  font-family: "mulish-bold", serif;
+  font-family: 'Mulish', sans-serif;
+  font-weight: 700;
 }
 
 sup {
@@ -46,13 +47,13 @@ sup {
 .text-bold,
 .text-bold span,
 strong, b {
-  font-family: "mulish-black", serif;
-  font-weight: normal;
+  font-family: 'Mulish', sans-serif;
+  font-weight: 900;
 }
 
 .text-semibold {
-  font-family: "mulish-bold", serif;
-  font-weight: normal;
+  font-family: 'Mulish', sans-serif;
+  font-weight: 700;
 }
 
 .text-small {

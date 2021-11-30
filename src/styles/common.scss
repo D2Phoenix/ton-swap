@@ -5,7 +5,7 @@
   margin: 0;
   font-size: 16px;
   line-height: 20px;
-  font-family: "mulish", serif;
+  font-family: 'Mulish', sans-serif;
   -webkit-text-size-adjust: 100%;
   color: $secondary-color;
   word-break: break-word;
@@ -56,7 +56,8 @@ body {
 }
 
 .logo span {
-  font-family: "mulish-bold", serif;
+  font-family: 'Mulish', sans-serif;
+  font-weight: 700;
   font-size: 19px;
   line-height: 24px;
   color: $secondary-color;
@@ -64,7 +65,7 @@ body {
 }
 
 .logo .postfix {
-  font-family: "mulish", serif;
+  font-family: 'Mulish', sans-serif;
   vertical-align: baseline;
 }
 

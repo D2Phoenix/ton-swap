@@ -15,7 +15,8 @@
     > div {
       display: flex;
       align-items: center;
-      font-family: 'mulish-bold', serif;
+      font-family: 'Mulish', sans-serif;
+      font-weight: 700;
       color: $primary-color;
       &.tvl__column,
       &.total-day__column,
