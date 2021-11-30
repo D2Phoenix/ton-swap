@@ -12,6 +12,8 @@ import { EstimateTxType } from 'types/transactionInterfaces';
 import { DEFAULT_SLIPPAGE } from 'constants/swap';
 import { selectSettings } from 'store/app/appSlice';
 import TokenUtils from 'utils/tokenUtils';
+import ChevronDownIcon from '../../components/icons/ChevronDownIcon';
+import React, { useMemo } from 'react';
 
 function SwapInfo() {
     const {t} = useTranslation();
@@ -20,6 +22,10 @@ function SwapInfo() {
     const type = useAppSelector(selectSwapTxType);
     const settings = useAppSelector(selectSettings);
     const trade = useAppSelector(selectSwapTrade);
+
+    const priceChangeDirection = useMemo(() => {
+        return parseFloat(trade.priceImpact);
+    }, [trade.priceImpact]);
 
     return (
         <div className={"swap-info-wrapper"}>
@@ -30,7 +36,15 @@ function SwapInfo() {
             </div>
             <div>
                 <span className="text-small">{t('Price Impact')}</span>
-                <span className="text-small text-semibold">{trade.priceImpact} %</span>
+                <span className="price">
+                    {
+                        priceChangeDirection !== 0 &&
+                        <span className={priceChangeDirection > 0 ? 'positive': 'negative'}>
+                          <ChevronDownIcon revert={priceChangeDirection > 0}/>
+                          <span className="text-small text-semibold">{trade.priceImpact} %</span>
+                        </span>
+                    }
+                </span>
             </div>
             <div>
                 <span className="text-small">{t('Allowed slippage')}</span>

@@ -12,5 +12,28 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    > span:not(:first-child) {
+      text-align: end;
+    }
+  }
+  .price {
+    .positive {
+      display: flex;
+      align-items: center;
+      svg {
+        stroke: $success-color;
+      }
+      span {
+        color: $success-color;
+      }
+    }
+    .negative {
+      svg {
+        stroke: $error-color;
+      }
+      span {
+        color: $error-color;
+      }
+    }
   }
 }
