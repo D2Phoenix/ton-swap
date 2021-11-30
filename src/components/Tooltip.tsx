@@ -1,14 +1,14 @@
 import React, { useCallback, useState } from 'react';
 import "./Tooltip.scss";
 
-interface TooltipParams {
+interface TooltipProps {
     delay?: number;
     children: any;
     direction: 'top' | 'bottom' | 'left' | 'right';
     content: any;
 }
 
-const Tooltip = ({delay, children, direction, content}: TooltipParams) => {
+const Tooltip = ({delay, children, direction, content}: TooltipProps) => {
     const [intervalId, setIntervalId] = useState();
     const [active, setActive] = useState(false);
 

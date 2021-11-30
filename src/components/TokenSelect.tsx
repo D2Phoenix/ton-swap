@@ -14,13 +14,13 @@ import Spinner from './Spinner';
 import { useTranslation } from 'react-i18next';
 
 
-interface TokenSelectParams {
+interface TokenSelectProps {
     onClose: Function;
     onSelect: Function;
     balancesFirst?: boolean;
 }
 
-function TokenSelect({onClose, onSelect, balancesFirst}: TokenSelectParams) {
+function TokenSelect({onClose, onSelect, balancesFirst}: TokenSelectProps) {
     const dispatch = useAppDispatch();
     const { t } = useTranslation();
     const tokens = useAppSelector(selectTokens);

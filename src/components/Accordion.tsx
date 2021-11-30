@@ -1,9 +1,17 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import React, { MouseEventHandler, useCallback, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 
 import './Accordion.scss';
 
-function Panel({label, content, activeTab, index, activateTab}: any) {
+interface PanelProps {
+    label: React.ReactNode,
+    content: React.ReactNode,
+    activeTab: number;
+    index: number;
+    onActivateTab: MouseEventHandler<HTMLButtonElement>;
+}
+
+function Panel({label, content, activeTab, index, onActivateTab}: PanelProps) {
     const [height, setHeight] = useState(0);
     const element = useRef(null);
     const isActive = activeTab === index;
@@ -28,7 +36,7 @@ function Panel({label, content, activeTab, index, activateTab}: any) {
              aria-expanded={ isActive }>
             <button className='panel__label'
                     role='tab'
-                    onClick={ activateTab }>
+                    onClick={ onActivateTab }>
                 { label }
             </button>
             <div className='panel__inner'
@@ -42,7 +50,14 @@ function Panel({label, content, activeTab, index, activateTab}: any) {
     );
 }
 
-function Accordion({panels}: any) {
+interface AccordionProps {
+    panels: {
+        label: React.ReactNode,
+        content: React.ReactNode,
+    }[];
+}
+
+function Accordion({panels}: AccordionProps) {
     const [activeTab, setActiveTab] = useState(-1);
 
     const handleActivateTab = useCallback((index) => {
@@ -54,10 +69,10 @@ function Accordion({panels}: any) {
             {panels.map((panel: any, index: number) =>
                 <Panel
                     key={ index }
-                    activeTab={ activeTab }
+                    activeTab={activeTab}
                     index={ index }
                     {...panel}
-                    activateTab={ () => handleActivateTab(index) }
+                    onActivateTab={handleActivateTab.bind(null, index)}
                 />
             )}
         </div>

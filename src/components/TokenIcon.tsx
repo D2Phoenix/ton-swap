@@ -7,18 +7,21 @@ interface TokenIconProps {
     address: string;
     name: string;
     size?: 'small';
+    url?: string;
 }
 
-function TokenIcon({address, name, size}: TokenIconProps) {
+function TokenIcon({address, name, size, url}: TokenIconProps) {
     const tokens = useAppSelector(selectTokens);
 
     const iconUrl = useMemo(() => {
+        if (url) {
+            return url;
+        }
         const token = tokens.find((token) => token.address.toLowerCase() === address.toLowerCase());
         if (token) {
             return token.logoURI;
         }
-        return '/images/icons/empty-token.svg';
-    }, [tokens, address])
+    }, [tokens, address, url])
 
     return (
         <div className={`token-icon-wrapper ${size || ''}`}>

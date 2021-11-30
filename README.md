@@ -1,8 +1,8 @@
 # TONSwap
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
 Demo available at: [https://ton-swap-22qkz.ondigitalocean.app](https://ton-swap-22qkz.ondigitalocean.app)
+
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Install and start locally
 

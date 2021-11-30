@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { MouseEventHandler } from 'react';
 import ReactDOM from 'react-dom';
 
 import './Modal.scss';
 
-function Modal({ children, className, onClose }: any) {
+interface ModalProps {
+    children: React.ReactNode;
+    className: string;
+    onClose: MouseEventHandler;
+}
+
+function Modal({ children, className, onClose }: ModalProps) {
     const el = React.useMemo(() => document.createElement("div"), []);
 
     React.useEffect(() => {

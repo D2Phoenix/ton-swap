@@ -20,11 +20,18 @@
     display: flex;
     margin-bottom: 1rem;
     align-items: center;
+    position: relative;
     .pool-pair {
       display: flex;
       align-items: center;
-      > span {
-        margin-left: 0.5rem;
+      padding-left: 3rem;
+      .token-icon-wrapper {
+        position: absolute;
+        left: 0;
+        + .token-icon-wrapper {
+          position: absolute;
+          margin-left: 1rem;
+        }
       }
     }
     .pool-actions {

@@ -76,7 +76,7 @@ function TokenInput({balance, token, value, showMax, editable, selectable, loadi
             <div className={"token-input" + (loading ? ' loading' : '')}>
                 <div className="btn btn-outline small text-medium" onClick={handleClick}>
                     {
-                        simpleToken?.logoURI && <TokenIcon address={simpleToken.address} name={simpleToken.name} />
+                        simpleToken?.logoURI && <TokenIcon address={simpleToken.address} name={simpleToken.name} url={simpleToken.logoURI} />
                     }
                     {
                         poolToken?.address0 && <TokenIcon address={poolToken.address0} name={poolToken.name} />

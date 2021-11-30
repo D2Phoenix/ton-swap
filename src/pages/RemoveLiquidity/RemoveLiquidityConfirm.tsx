@@ -20,7 +20,11 @@ import { selectSettings } from 'store/app/appSlice';
 import TokenUtils from 'utils/tokenUtils';
 import { getLiquidityPool } from 'store/liquidity/liquidityThunks';
 
-function RemoveLiquidityConfirm({onClose}: any) {
+interface RemoveLiquidityConfirmProps {
+    onClose: Function;
+}
+
+function RemoveLiquidityConfirm({onClose}: RemoveLiquidityConfirmProps) {
     const dispatch = useAppDispatch();
     const { t } = useTranslation();
 

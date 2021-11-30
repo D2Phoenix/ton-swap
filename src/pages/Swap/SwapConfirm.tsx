@@ -18,7 +18,11 @@ import { walletSwap } from 'store/wallet/walletThunks';
 import Spinner from 'components/Spinner';
 import TokenUtils from 'utils/tokenUtils';
 
-function SwapConfirm({onClose}: any) {
+interface SwapConfirmProps {
+    onClose: Function;
+}
+
+function SwapConfirm({onClose}: SwapConfirmProps) {
     const dispatch = useAppDispatch();
     const {t} = useTranslation();
 

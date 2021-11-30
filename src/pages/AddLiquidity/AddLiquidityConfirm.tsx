@@ -20,7 +20,11 @@ import { DEFAULT_SLIPPAGE } from 'constants/swap';
 import { TxStatus } from 'types/transactionInterfaces';
 import TokenUtils from 'utils/tokenUtils';
 
-function AddLiquidityConfirm({onClose}: any) {
+interface AddLiquidityConfirmProps {
+    onClose: Function;
+}
+
+function AddLiquidityConfirm({onClose}: AddLiquidityConfirmProps) {
     const dispatch = useAppDispatch();
     const {t} = useTranslation();
     const input0 = useAppSelector(selectLiquidityInput0);

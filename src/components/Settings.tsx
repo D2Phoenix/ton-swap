@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { MouseEventHandler, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import './Settings.scss';
@@ -12,7 +12,11 @@ import Tooltip from './Tooltip';
 const SLIPPAGE_INPUT_REGEXP = RegExp(`^\\d*(?:\\\\[.])?\\d*$`);
 const DEADLINE_INPUT_REGEXP = RegExp(`^\\d*(?:\\\\[])?\\d*$`);
 
-function Settings({onClose}: any) {
+interface SettingsProps {
+    onClose: MouseEventHandler;
+}
+
+function Settings({onClose}: SettingsProps) {
     const dispatch = useAppDispatch();
     const { t } = useTranslation();
     const settings = useAppSelector(selectSettings);
