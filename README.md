@@ -43,6 +43,11 @@ Open [http://localhost:1337](http://localhost:1337) to view it in the browser.
 ## Further work
 
 - Implement Token List Manage
+- Unit and e2e tests
+
+## App Screens
+
+[Here](/docs/images)
 
 ## Available Scripts
 
