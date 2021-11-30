@@ -6,8 +6,8 @@ import { EstimateTxType } from 'types/transactionInterfaces';
 import PromiseUtils from 'utils/promiseUtils';
 import { SwapTradeInterface } from 'types/swapTradeInterface';
 import { RootState } from 'store/store';
-import TokenInterface from '../../types/tokenInterface';
-import { getTokens } from '../../api/tokens';
+import TokenInterface from 'types/tokenInterface';
+import { getTokens } from 'api/tokens';
 
 const swapService = new SmartContractsService();
 

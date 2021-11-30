@@ -6,10 +6,10 @@ import Modal from './Modal';
 import TokenInterface from 'types/tokenInterface';
 import { BALANCE_PRECISION } from 'constants/swap';
 import TokenIcon from './TokenIcon';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { selectTokens } from '../store/app/appSlice';
-import { selectWalletAdapter, selectWalletBalances } from '../store/wallet/walletSlice';
-import { getWalletBalances } from '../store/wallet/walletThunks';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { selectTokens } from 'store/app/appSlice';
+import { selectWalletAdapter, selectWalletBalances } from 'store/wallet/walletSlice';
+import { getWalletBalances } from 'store/wallet/walletThunks';
 import Spinner from './Spinner';
 import { useTranslation } from 'react-i18next';
 

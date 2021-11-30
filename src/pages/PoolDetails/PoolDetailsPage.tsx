@@ -13,7 +13,7 @@ import CurrencyUtils from 'utils/currencyUtils';
 import ChevronDownIcon from 'components/icons/ChevronDownIcon';
 import DateUtils from 'utils/dateUtils';
 import PoolTransactionsTable from './PoolTransactionsTable';
-import Spinner from '../../components/Spinner';
+import Spinner from 'components/Spinner';
 
 
 const ChartTooltip = ({active, payload, label}: any) => {

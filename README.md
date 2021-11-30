@@ -22,7 +22,8 @@ yarn docker:run
 
 Open [http://localhost:1337](http://localhost:1337) to view it in the browser.
 
-## Description
+## Implemented Pages and Features
+
 
 
 

@@ -12,7 +12,7 @@ import { EstimateTxType } from 'types/transactionInterfaces';
 import { DEFAULT_SLIPPAGE } from 'constants/swap';
 import { selectSettings } from 'store/app/appSlice';
 import TokenUtils from 'utils/tokenUtils';
-import ChevronDownIcon from '../../components/icons/ChevronDownIcon';
+import ChevronDownIcon from 'components/icons/ChevronDownIcon';
 import React, { useMemo } from 'react';
 
 function SwapInfo() {

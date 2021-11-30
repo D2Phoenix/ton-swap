@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { RootState } from '../store';
-import WalletPoolInterface from '../../types/walletPoolInterface';
+import { RootState } from 'store/store';
+import WalletPoolInterface from 'types/walletPoolInterface';
 
 export const getPoolPools = createAsyncThunk(
     'pool/pools',
