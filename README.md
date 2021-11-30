@@ -24,8 +24,20 @@ Open [http://localhost:1337](http://localhost:1337) to view it in the browser.
 
 ## Implemented Pages and Features
 
+- Swap page for exchanging one token for another token
+- Pool page for creating a pool with two tokens and manage existing user pools
+- Add and Remove Liquidity pages
+- Import Pool Page
+- Top Pools page with a list of pools and pool statistics.
+- Internationalization support with [react-i18n](https://github.com/i18next/react-i18next)
+- Progressive Web App support
+- Lazy loading of pages
 
+*Notice* For demo purpose [simple-uniswap-sdk](https://github.com/uniswap-integration/simple-uniswap-sdk) was used to mock exchange rates
 
+## Further work
+
+- Implement Token List Manage
 
 ## Available Scripts
 
