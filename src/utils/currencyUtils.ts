@@ -20,7 +20,7 @@ class CurrencyUtils {
             { value: new BigNumber(1e18), symbol: "e" }
         ];
         const rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
-        var item = lookup.slice().reverse().find(function(item) {
+        const item = lookup.slice().reverse().find(function(item) {
             return num.gte(item.value);
         });
         return item ? num.div(item.value).toFixed(digits).replace(rx, "$1") + item.symbol : "0";

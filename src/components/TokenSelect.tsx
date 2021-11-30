@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { MouseEventHandler, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import BigNumber from 'bignumber.js';
 
 import './TokenSelect.scss';
@@ -7,11 +7,56 @@ import TokenInterface from 'types/tokenInterface';
 import { BALANCE_PRECISION } from 'constants/swap';
 import TokenIcon from './TokenIcon';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { selectTokens } from 'store/app/appSlice';
+import { selectTokenLists, selectTokens } from 'store/app/appSlice';
 import { selectWalletAdapter, selectWalletBalances } from 'store/wallet/walletSlice';
 import { getWalletBalances } from 'store/wallet/walletThunks';
 import Spinner from './Spinner';
 import { useTranslation } from 'react-i18next';
+import ChevronRightIcon from './icons/ChevronRightIcon';
+
+interface TokenManageListParams {
+    onBack: MouseEventHandler;
+}
+
+function TokenManageList({onBack}: TokenManageListParams) {
+    const dispatch = useAppDispatch();
+    const { t } = useTranslation();
+
+    const [listUrl, setListUrl] = useState('');
+    const tokenLists = useAppSelector(selectTokenLists);
+
+    return (
+        <div className="token-select-wrapper">
+            <div className="token-select-header">
+                <button className="btn-icon btn" onClick={onBack}>
+                    <ChevronRightIcon revert={true}/>
+                </button>
+                <span className="text-semibold">{t('Managa tokens')}</span>
+            </div>
+            <input placeholder={t('https:// or ipfs:// or ENS name')}
+                   value={listUrl}
+                   onChange={(event) => setListUrl(event.target.value)}/>
+            <div className="token-select-list">
+                {
+                    tokenLists.map((tokenList, index) => {
+                        return (
+                            <div key={index} className="token-select-item">
+                                <TokenIcon address={''} name={tokenList.name} url={tokenList.logoURI}/>
+                                <div className="token-name">
+                                    <span className="text-semibold">{tokenList.name}</span>
+                                    <span className="text-small">{tokenList.tokens.length} tokens</span>
+                                </div>
+                                <div className="token-balance">
+                                    <input type="checkbox" />
+                                </div>
+                            </div>
+                        )
+                    })
+                }
+            </div>
+        </div>
+    )
+}
 
 
 interface TokenSelectProps {
@@ -29,6 +74,7 @@ function TokenSelect({onClose, onSelect, balancesFirst}: TokenSelectProps) {
     const loader = useRef(null);
     const [page, setPage] = useState(1);
     const [query, setQuery] = useState('');
+    const [showTokenManage, setShowTokenManage] = useState(false);
 
     const visibleTokens = useMemo(() => {
         let result = tokens.filter((token) => token.symbol.toLowerCase().startsWith(query.toLowerCase())
@@ -81,40 +127,50 @@ function TokenSelect({onClose, onSelect, balancesFirst}: TokenSelectProps) {
         onClose();
     }, [onClose]);
 
+    const toggleManageTokens = useCallback(() => {
+       setShowTokenManage(prev => !prev);
+    }, []);
+
     return (
         <Modal className={'token-select-modal'} onClose={handleClose}>
-            <div className="token-select-wrapper">
-                <span className="text-semibold">{t('Select a token')}</span>
-                <input placeholder={t('Search name or paste address"')}
-                       value={query}
-                       onChange={(event) => setQuery(event.target.value)}/>
-                <div className="token-select-list">
-                    {
-                        visibleTokens.map((token, index) => {
-                            const balance = balances[token.symbol] ? new BigNumber(balances[token.symbol]).precision(BALANCE_PRECISION).toFixed() : '';
-                            return (
-                                <div key={token.address} className="token-select-item" onClick={() => onSelect(token)}>
-                                    <TokenIcon address={token.address} name={token.name}/>
-                                    <div className="token-name">
-                                        <span className="text-semibold">{token.symbol}</span>
-                                        <span className="text-small">{token.name}</span>
-                                    </div>
-                                    <div className="token-balance">
-                                        {balance}
-                                        {
-                                            walletAdapter && !balance && <Spinner className="btn outline" />
-                                        }
-                                    </div>
-                                </div>
-                            )
-                        })
-                    }
+            {
+                !showTokenManage &&
+                <div className="token-select-wrapper">
+                  <span className="text-semibold">{t('Select a token')}</span>
+                  <input placeholder={t('Search name or paste address"')}
+                         value={query}
+                         onChange={(event) => setQuery(event.target.value)}/>
+                  <div className="token-select-list">
+                      {
+                          visibleTokens.map((token, index) => {
+                              const balance = balances[token.symbol] ? new BigNumber(balances[token.symbol]).precision(BALANCE_PRECISION).toFixed() : '';
+                              return (
+                                  <div key={token.address} className="token-select-item" onClick={() => onSelect(token)}>
+                                      <TokenIcon address={token.address} name={token.name}/>
+                                      <div className="token-name">
+                                          <span className="text-semibold">{token.symbol}</span>
+                                          <span className="text-small">{token.name}</span>
+                                      </div>
+                                      <div className="token-balance">
+                                          {balance}
+                                          {
+                                              walletAdapter && !balance && <Spinner className="btn outline" />
+                                          }
+                                      </div>
+                                  </div>
+                              )
+                          })
+                      }
                     <div ref={loader}/>
-                </div>
-                <span className="text-center link__btn">
+                  </div>
+                  <span className="text-center link__btn" onClick={toggleManageTokens}>
                     {t('Manage Token Lists')}
-                </span>
-            </div>
+                  </span>
+                </div>
+            }
+            {
+                showTokenManage && <TokenManageList onBack={toggleManageTokens} />
+            }
         </Modal>
     )
 }

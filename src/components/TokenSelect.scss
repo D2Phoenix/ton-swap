@@ -22,6 +22,14 @@
   .link__btn {
     margin-top: 16px;
   }
+  .token-select-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    svg {
+      height: 20px;
+    }
+  }
   .token-select-list {
     height: calc(100% - 96px);
     overflow: auto;

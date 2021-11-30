@@ -5,14 +5,17 @@ import TokenInterface from 'types/tokenInterface';
 import { fetchTokens } from './appThunks';
 import { DEFAULT_DEADLINE, DEFAULT_SLIPPAGE } from 'constants/swap';
 import { SettingsInterface } from 'types/settingsInterface';
+import TokenListInterface from 'types/tokenListInterface';
 
 interface AppState {
-    tokens: TokenInterface[],
+    tokens: TokenInterface[];
+    tokenLists: TokenListInterface[];
     settings: SettingsInterface;
 }
 
 const initialState: AppState = {
     tokens: [],
+    tokenLists: [],
     settings: {
         slippage: DEFAULT_SLIPPAGE,
         deadline: DEFAULT_DEADLINE,
@@ -43,6 +46,7 @@ export const appSlice = createSlice({
 export const { setTokens, setSettingsSlippage, setSettingsDeadline } = appSlice.actions
 
 export const selectTokens = (state: RootState) => state.app.tokens;
+export const selectTokenLists = (state: RootState) => state.app.tokenLists;
 export const selectSettings = (state: RootState) => state.app.settings;
 
 export default appSlice.reducer;
