@@ -97,7 +97,7 @@ class SmartContractsService {
                 // if not supplied it will use 20 a deadline minutes
                 deadlineMinutes: new BigNumber(settings.deadline).toNumber(),
                 disableMultihops: true,
-                uniswapVersions: [UniswapVersion.v3],
+                uniswapVersions: [UniswapVersion.v2, UniswapVersion.v3],
             }),
         });
 
