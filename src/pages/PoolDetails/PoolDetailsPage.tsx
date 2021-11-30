@@ -31,7 +31,7 @@ const ChartTooltip = ({active, payload, label}: any) => {
 
 function PoolDetailsPage() {
     const dispatch = useAppDispatch();
-    const params = useParams();
+    const {address} = useParams();
     const {t} = useTranslation();
 
     const [chart, setChart] = useState('volume');
@@ -45,10 +45,10 @@ function PoolDetailsPage() {
     }, [dispatch]);
 
     useEffect(() => {
-        if (params.address) {
-            dispatch(fetchPool(params.address));
+        if (address) {
+            dispatch(fetchPool(address));
         }
-    }, [dispatch, params]);
+    }, [dispatch, address]);
 
     const fee24Display = useMemo(() => {
         if (chartData.length) {

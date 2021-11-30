@@ -19,7 +19,6 @@ interface TokenManageListParams {
 }
 
 function TokenManageList({onBack}: TokenManageListParams) {
-    const dispatch = useAppDispatch();
     const { t } = useTranslation();
 
     const [listUrl, setListUrl] = useState('');

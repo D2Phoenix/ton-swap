@@ -50,7 +50,7 @@ import { WalletStatus } from 'types/walletAdapterInterface';
 
 export function AddLiquidityPage() {
     const dispatch = useAppDispatch();
-    const params = useParams();
+    const {token0, token1} = useParams();
     const { t } = useTranslation();
 
     const [showSettings, setShowSettings] = useState(false);
@@ -111,13 +111,13 @@ export function AddLiquidityPage() {
     }, [dispatch]);
 
     useEffect(() => {
-        if (params.token0) {
-            dispatch(getLiquidityToken({address: params.token0, position: 'input0'}));
+        if (token0) {
+            dispatch(getLiquidityToken({address: token0, position: 'input0'}));
         }
-        if (params.token1) {
-            dispatch(getLiquidityToken({address: params.token1, position: 'input1'}));
+        if (token1) {
+            dispatch(getLiquidityToken({address: token1, position: 'input1'}));
         }
-    }, [dispatch, params]);
+    }, [dispatch, token0, token1]);
 
     useEffect(() => {
         if (input0.token && input1.token) {

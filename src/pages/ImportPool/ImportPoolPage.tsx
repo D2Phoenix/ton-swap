@@ -56,7 +56,7 @@ export function ImportPoolPage() {
             return t('You don’t have liquidity in this pool yet.');
         }
         return t('Import');
-    }, [input0, input1, pool]);
+    }, [t, input0, input1, pool]);
 
     useEffect(() => {
         return () => {

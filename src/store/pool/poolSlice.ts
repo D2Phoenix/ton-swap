@@ -24,8 +24,6 @@ export const poolSlice = createSlice({
     },
 })
 
-export const {  } = poolSlice.actions
-
 export const selectPoolPools = (state: RootState) => state.pool.pools;
 
 export default poolSlice.reducer;

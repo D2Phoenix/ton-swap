@@ -38,7 +38,7 @@ import Tooltip from 'components/Tooltip';
 
 export function RemoveLiquidityPage() {
     const dispatch = useAppDispatch();
-    const params = useParams();
+    const {token0, token1} = useParams();
     const { t } = useTranslation();
 
     const [showSettings, setShowSettings] = useState(false);
@@ -78,13 +78,13 @@ export function RemoveLiquidityPage() {
     }, [dispatch]);
 
     useEffect(() => {
-        if (params.token0 && params.token1) {
+        if (token0 && token1) {
             dispatch(getLiquidityPool({
-                token0: params.token0,
-                token1: params.token1,
+                token0: token0,
+                token1: token1,
             }));
         }
-    }, [dispatch, params]);
+    }, [dispatch, token0, token1]);
 
     //Update balance and check token permissions on token0 update
     useEffect(() => {

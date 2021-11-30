@@ -46,7 +46,7 @@ import { WalletStatus } from 'types/walletAdapterInterface';
 
 function SwapPage() {
     const dispatch = useAppDispatch();
-    const params = useParams();
+    const {token0, token1} = useParams();
     const {t} = useTranslation();
 
     const [showSettings, setShowSettings] = useState(false);
@@ -104,13 +104,13 @@ function SwapPage() {
     }, [dispatch]);
 
     useEffect(() => {
-        if (params.token0) {
-            dispatch(getSwapToken({address: params.token0, position: 'input0'}));
+        if (token0) {
+            dispatch(getSwapToken({address: token0, position: 'input0'}));
         }
-        if (params.token1) {
-            dispatch(getSwapToken({address: params.token1, position: 'input1'}));
+        if (token1) {
+            dispatch(getSwapToken({address: token1, position: 'input1'}));
         }
-    }, [dispatch, params]);
+    }, [dispatch, token0, token1]);
 
     // Estimate EXACT_IN transaction
     useEffect((): any => {

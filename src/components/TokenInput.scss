@@ -14,14 +14,17 @@
         padding-left: 0;
         .token-icon-wrapper {
           + .token-icon-wrapper {
-            left: 24px;
+            left: 1.5rem;
             + span {
-              margin-left: 52px;
+              margin-left: 3.25rem;
             }
           }
           + span {
-            margin-left: 36px;
+            margin-left: 2.25rem;
           }
+        }
+        span:first-child {
+          padding-left: 1rem;
         }
       }
     }

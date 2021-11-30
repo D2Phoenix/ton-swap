@@ -50,7 +50,7 @@
   .pool-item-wrapper {
     display: flex;
     flex-direction: row;
-    align-self: start;
+    align-self: flex-start;
     align-items: center;
     width: 100%;
     padding: 1rem 0;
@@ -74,7 +74,7 @@
   .pool-item-details-wrapper {
     display: flex;
     flex-direction: column;
-    justify-content: start;
+    justify-content: flex-start;
     gap: 0.5rem;
     > div {
       display: flex;
