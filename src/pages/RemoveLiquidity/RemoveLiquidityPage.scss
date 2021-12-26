@@ -1,38 +1,10 @@
-.remove-liquidity-wrapper {
+.actions-wrapper {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  max-width: 480px;
+  flex-direction: row;
+  gap: 16px;
   width: 100%;
-  padding: 0.5rem;
-  border-radius: 8px;
-  position: relative;
-  .remove-liquidity-header-wrapper {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    padding: 0 1rem;
-    .remove-liquidity-header {
-      display: flex;
-      flex-direction: column;
-      > div {
-        display: flex;
-        align-items: center;
-        .tooltip-wrapper {
-          margin-left: 0.5rem;
-        }
-      }
-    }
-  }
-  .actions-wrapper {
-    display: flex;
-    flex-direction: row;
-    gap: 16px;
-    width: 100%;
-  }
-  .remove__btn {
-    width: 100%;
-    margin: 8px 0;
-  }
+}
+.remove__btn {
+  width: 100%;
+  margin: 8px 0;
 }

@@ -1,11 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import BigNumber from 'bignumber.js';
 
 import './RemoveLiquidityPage.scss';
 import TokenInput from 'components/TokenInput';
-import SettingsIcon from 'components/icons/SettingsIcon';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { selectWalletAdapter } from 'store/wallet/walletSlice';
 import {
@@ -23,8 +22,6 @@ import {
     getWalletBalance,
     getWalletUseTokenPermission,
 } from 'store/wallet/walletThunks';
-import Settings from 'components/Settings';
-import ChevronRightIcon from 'components/icons/ChevronRightIcon';
 import LiquidityInfo from 'pages/AddLiquidity/LiquidityInfo';
 import ChevronDownIcon from 'components/icons/ChevronDownIcon';
 import { approveRemove, getLiquidityPool } from 'store/liquidity/liquidityThunks';
@@ -33,15 +30,13 @@ import { TxStatus } from 'types/transactionInterfaces';
 import Spinner from 'components/Spinner';
 import RemoveLiquidityConfirm from './RemoveLiquidityConfirm';
 import InputSlider from 'components/InputSlider';
-import QuestionIcon from 'components/icons/QuestionIcon';
-import Tooltip from 'components/Tooltip';
+import DexForm from '../../components/DexForm';
 
 export function RemoveLiquidityPage() {
     const dispatch = useAppDispatch();
     const {token0, token1} = useParams();
     const { t } = useTranslation();
 
-    const [showSettings, setShowSettings] = useState(false);
     const [showRemoveLiquidityConfirm, setShowRemoveLiquidityConfirm] = useState(false);
     const walletAdapter = useAppSelector(selectWalletAdapter);
     const input0 = useAppSelector(selectLiquidityInput0);
@@ -127,88 +122,74 @@ export function RemoveLiquidityPage() {
     }, []);
 
     return (
-        <form className="remove-liquidity-wrapper" onSubmit={e => { e.preventDefault(); }}>
-            <div className="remove-liquidity-header-wrapper">
-                <Link className="btn-icon chevron" to="/pool">
-                    <ChevronRightIcon revert={true}/>
-                </Link>
-                <div className="remove-liquidity-header">
-                    <div className="text-semibold">
-                        {t('Remove Liquidity')}
-                        <Tooltip content={<span className="text-small">{t('Removing pool tokens converts your position back into underlying tokens at the current rate, proportional to your share of the pool. Accrued fees are included in the amounts you receive.')}</span>}
-                                 direction="bottom">
-                            <div className="btn-icon">
-                                <QuestionIcon />
-                            </div>
-                        </Tooltip>
-                    </div>
-                    <div className="text-small">
-                        <Trans>
-                            To receive {{symbol0: input0.token?.symbol}} and {{symbol1: input1.token?.symbol}}
-                        </Trans>
-                    </div>
-                </div>
-                <div className="btn-icon" onClick={() => setShowSettings(!showSettings)}>
-                    <SettingsIcon/>
-                </div>
-            </div>
-            <InputSlider value={removePercent} pnChange={handleInputSliderChange}/>
-            <TokenInput token={pool.token}
-                        balance={pool.amount}
-                        value={pool.removeAmount}
-                        showMax={true}
-                        onChange={handlePoolTokenAmount}
-                        selectable={false}
-                        editable={true}/>
-            <div className="btn-icon">
-                <ChevronDownIcon/>
-            </div>
-            <TokenInput token={input0.token}
-                        value={input0.removeAmount}
-                        balance={input0.amount}
-                        showMax={true}
-                        onChange={handleToken0Amount}
-                        selectable={false}
-                        editable={true}/>
-            <div className="btn-icon">
-                +
-            </div>
-            <TokenInput token={input1.token}
-                        value={input1.removeAmount}
-                        balance={input1.amount}
-                        showMax={true}
-                        onChange={handleToken1Amount}
-                        selectable={false}
-                        editable={true}/>
-            <LiquidityInfo />
-            <div className="actions-wrapper">
-                {
-                    walletAdapter && <button className="btn btn-primary remove__btn"
-                                             disabled={!isFilled || [TxStatus.PENDING, TxStatus.CONFIRMED].indexOf(removeApproveTx.status) > -1}
-                                             onClick={handleApprove}>
-                        {
-                            removeApproveTx.status === TxStatus.PENDING && <Spinner className="btn"/>
-                        }
-                        {
-                            removeApproveTx.status !== TxStatus.PENDING && t('Approve')
-                        }
-                    </button>
-                }
-                {
-                    walletAdapter && <button className="btn btn-primary remove__btn"
-                                             disabled={!isFilled || removeApproveTx.status !== TxStatus.CONFIRMED}
-                                             onClick={handleSupply}>
-                        {removeButtonText}
-                    </button>
-                }
-            </div>
-            {
-                showSettings && <Settings onClose={() => setShowSettings(false)}/>
-            }
+        <>
+            <DexForm backLink={'/pool'}
+                     header={t('Remove Liquidity')}
+                     headerTooltip={t('Removing pool tokens converts your position back into underlying tokens at the current rate, proportional to your share of the pool. Accrued fees are included in the amounts you receive.')}
+                     subheader={<Trans>
+                         To receive {{symbol0: input0.token?.symbol}} and {{symbol1: input1.token?.symbol}}
+                     </Trans>}
+                     content={
+                         <>
+                             <InputSlider value={removePercent} pnChange={handleInputSliderChange}/>
+                             <TokenInput token={pool.token}
+                                         balance={pool.amount}
+                                         value={pool.removeAmount}
+                                         showMax={true}
+                                         onChange={handlePoolTokenAmount}
+                                         selectable={false}
+                                         editable={true}/>
+                             <div className="btn-icon">
+                                 <ChevronDownIcon/>
+                             </div>
+                             <TokenInput token={input0.token}
+                                         value={input0.removeAmount}
+                                         balance={input0.amount}
+                                         showMax={true}
+                                         onChange={handleToken0Amount}
+                                         selectable={false}
+                                         editable={true}/>
+                             <div className="btn-icon">
+                                 +
+                             </div>
+                             <TokenInput token={input1.token}
+                                         value={input1.removeAmount}
+                                         balance={input1.amount}
+                                         showMax={true}
+                                         onChange={handleToken1Amount}
+                                         selectable={false}
+                                         editable={true}/>
+                             <LiquidityInfo />
+                         </>
+                     }
+                     actions={
+                         <div className="actions-wrapper">
+                             {
+                                 walletAdapter && <button className="btn btn-primary remove__btn"
+                                                          disabled={!isFilled || [TxStatus.PENDING, TxStatus.CONFIRMED].indexOf(removeApproveTx.status) > -1}
+                                                          onClick={handleApprove}>
+                                     {
+                                         removeApproveTx.status === TxStatus.PENDING && <Spinner className="btn"/>
+                                     }
+                                     {
+                                         removeApproveTx.status !== TxStatus.PENDING && t('Approve')
+                                     }
+                               </button>
+                             }
+                             {
+                                 walletAdapter && <button className="btn btn-primary remove__btn"
+                                                          disabled={!isFilled || removeApproveTx.status !== TxStatus.CONFIRMED}
+                                                          onClick={handleSupply}>
+                                     {removeButtonText}
+                               </button>
+                             }
+                         </div>
+                     }
+            />
             {
                 showRemoveLiquidityConfirm && <RemoveLiquidityConfirm onClose={() => setShowRemoveLiquidityConfirm(false)}/>
             }
-        </form>
+        </>
     )
 }
 

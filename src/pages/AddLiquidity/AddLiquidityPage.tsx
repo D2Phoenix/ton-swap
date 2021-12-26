@@ -1,10 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 
 import './AddLiquidityPage.scss';
 import TokenInput from 'components/TokenInput';
-import SettingsIcon from 'components/icons/SettingsIcon';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import {
     selectWalletAdapter,
@@ -37,23 +36,19 @@ import {
 } from 'store/liquidity/liquidityThunks';
 import { EstimateTxType } from 'types/transactionInterfaces';
 import TokenSelect from 'components/TokenSelect';
-import Settings from 'components/Settings';
 import { WALLET_TX_UPDATE_INTERVAL } from 'constants/swap';
-import ChevronRightIcon from 'components/icons/ChevronRightIcon';
 import LiquidityInfo from './LiquidityInfo';
 import AddLiquidityConfirm from './AddLiquidityConfirm';
 import TokenUtils from 'utils/tokenUtils';
-import QuestionIcon from 'components/icons/QuestionIcon';
-import Tooltip from 'components/Tooltip';
 import Spinner from 'components/Spinner';
 import { WalletStatus } from 'types/walletAdapterInterface';
+import DexForm from '../../components/DexForm';
 
 export function AddLiquidityPage() {
     const dispatch = useAppDispatch();
     const {token0, token1} = useParams();
-    const { t } = useTranslation();
+    const {t} = useTranslation();
 
-    const [showSettings, setShowSettings] = useState(false);
     const [showTokenSelect, setShowTokenSelect] = useState(false);
     const [activeInput, setActiveInput] = useState('input0');
     const [showAddLiquidityConfirm, setShowAddLiquidityConfirm] = useState(false);
@@ -265,115 +260,103 @@ export function AddLiquidityPage() {
     }, []);
 
     return (
-        <form className="add-liquidity-wrapper" onSubmit={e => { e.preventDefault(); }}>
-            <div className="add-liquidity-header-wrapper">
-                <Link className="btn-icon chevron" to="/pool">
-                    <ChevronRightIcon revert={true}/>
-                </Link>
-                <div className="add-liquidity-header">
-                    <div className="text-semibold">
-                        {t('Add Liquidity')}
-                        <Tooltip content={<span className="text-small">{t('When you add liquidity, you are given pool tokens representing your position. These tokens automatically earn fees proportional to your share of the pool, and can be redeemed at any time.')}</span>}
-                                 direction="bottom">
-                            <div className="btn-icon">
-                                <QuestionIcon/>
-                            </div>
-                        </Tooltip>
-                    </div>
-                    <div className="text-small">
-                        {t('Add liquidity to receive LP tokens')}
-                    </div>
-                </div>
-                <div className="btn-icon" onClick={() => setShowSettings(!showSettings)}>
-                    <SettingsIcon/>
-                </div>
-            </div>
-            <TokenInput token={input0.token}
-                        balance={walletBalances[input0.token?.symbol || '']}
-                        value={input0.amount}
-                        showMax={true}
-                        onSelect={openTokenSelect.bind(null, 'input0')}
-                        onChange={handleInput0TokenAmount}
-                        selectable={true}
-                        editable={true}
-                        loading={txType === EstimateTxType.EXACT_OUT && loading}
-                        primary={txType === EstimateTxType.EXACT_IN}
+        <>
+            <DexForm backLink="/pool"
+                     header={t('Add Liquidity')}
+                     headerTooltip={t('When you add liquidity, you are given pool tokens representing your position. These tokens automatically earn fees proportional to your share of the pool, and can be redeemed at any time.')}
+                     subheader={t('Add liquidity to receive LP tokens')}
+                     content={
+                          <>
+                              <TokenInput token={input0.token}
+                                          balance={walletBalances[input0.token?.symbol || '']}
+                                          value={input0.amount}
+                                          showMax={true}
+                                          onSelect={openTokenSelect.bind(null, 'input0')}
+                                          onChange={handleInput0TokenAmount}
+                                          selectable={true}
+                                          editable={true}
+                                          loading={txType === EstimateTxType.EXACT_OUT && loading}
+                                          primary={txType === EstimateTxType.EXACT_IN}
+                              />
+                              <div className="btn-icon">
+                                  +
+                              </div>
+                              <TokenInput token={input1.token}
+                                          balance={walletBalances[input1.token?.symbol || '']}
+                                          value={input1.amount}
+                                          showMax={true}
+                                          onSelect={openTokenSelect.bind(null, 'input1')}
+                                          onChange={handleInput1TokenAmount}
+                                          selectable={true}
+                                          editable={true}
+                                          loading={txType === EstimateTxType.EXACT_IN && loading}
+                                          primary={txType === EstimateTxType.EXACT_OUT}
+                              />
+                              {
+                                  isFilled && <LiquidityInfo/>
+                              }
+                          </>
+                      }
+                     actions={
+                          <>
+                              {
+                                  walletConnectionStatus === WalletStatus.CONNECTED &&
+                                  isFilled &&
+                                  !walletPermissions[input0.token!.symbol] &&
+                                  !insufficientToken0Balance &&
+                                <button className="btn btn-primary supply__btn"
+                                        onClick={handleAllowUseToken0}>
+                                  <Trans>
+                                    Allow the TONSwap Protocol to use your {{symbol0: input0.token.symbol}}
+                                  </Trans>
+                                </button>
+                              }
+                              {
+                                  walletConnectionStatus === WalletStatus.CONNECTED &&
+                                  isFilled &&
+                                  !walletPermissions[input1.token!.symbol] &&
+                                  !insufficientToken1Balance &&
+                                <button className="btn btn-primary supply__btn"
+                                        onClick={handleAllowUseToken1}>
+                                  <Trans>
+                                    Allow the TONSwap Protocol to use your {{symbol0: input1.token.symbol}}
+                                  </Trans>
+                                </button>
+                              }
+                              {
+                                  walletConnectionStatus === WalletStatus.CONNECTED &&
+                                <button className="btn btn-primary supply__btn"
+                                        disabled={!isFilled
+                                            || insufficientBalance
+                                            || (!!input0.token && !walletPermissions[input0.token.symbol])
+                                            || (!!input1.token && !walletPermissions[input1.token.symbol])
+                                            || loading
+                                        }
+                                        onClick={handleSupply}>
+                                    {
+                                        loading && <Spinner className="btn"/>
+                                    }
+                                    {
+                                        !loading && supplyButtonText
+                                    }
+                                </button>
+                              }
+                              {
+                                  walletConnectionStatus !== WalletStatus.CONNECTED &&
+                                <button className="btn btn-outline supply__btn"
+                                        onClick={handleConnectWallet}>
+                                    {
+                                        walletConnectionStatus === WalletStatus.DISCONNECTED && t('Connect Wallet')
+                                    }
+                                    {
+                                        walletConnectionStatus === WalletStatus.CONNECTING &&
+                                      <Spinner className="btn outline"/>
+                                    }
+                                </button>
+                              }
+                          </>
+                      }
             />
-            <div className="btn-icon">
-                +
-            </div>
-            <TokenInput token={input1.token}
-                        balance={walletBalances[input1.token?.symbol || '']}
-                        value={input1.amount}
-                        showMax={true}
-                        onSelect={openTokenSelect.bind(null, 'input1')}
-                        onChange={handleInput1TokenAmount}
-                        selectable={true}
-                        editable={true}
-                        loading={txType === EstimateTxType.EXACT_IN && loading}
-                        primary={txType === EstimateTxType.EXACT_OUT}
-            />
-            {
-                isFilled && <LiquidityInfo />
-            }
-            {
-                walletConnectionStatus === WalletStatus.CONNECTED &&
-                isFilled &&
-                !walletPermissions[input0.token!.symbol] &&
-                !insufficientToken0Balance &&
-                <button className="btn btn-primary supply__btn"
-                        onClick={handleAllowUseToken0}>
-                  <Trans>
-                    Allow the TONSwap Protocol to use your {{symbol0: input0.token.symbol}}
-                  </Trans>
-                </button>
-            }
-            {
-                walletConnectionStatus === WalletStatus.CONNECTED &&
-                isFilled &&
-                !walletPermissions[input1.token!.symbol] &&
-                !insufficientToken1Balance &&
-                <button className="btn btn-primary supply__btn"
-                        onClick={handleAllowUseToken1}>
-                  <Trans>
-                    Allow the TONSwap Protocol to use your {{symbol0: input0.token.symbol}}
-                  </Trans>
-                </button>
-            }
-            {
-                walletConnectionStatus === WalletStatus.CONNECTED &&
-                <button className="btn btn-primary supply__btn"
-                        disabled={!isFilled
-                        || insufficientBalance
-                        || (!!input0.token && !walletPermissions[input0.token.symbol])
-                        || (!!input1.token && !walletPermissions[input1.token.symbol])
-                        || loading
-                        }
-                        onClick={handleSupply}>
-                    {
-                        loading && <Spinner className="btn"/>
-                    }
-                    {
-                        !loading && supplyButtonText
-                    }
-                </button>
-            }
-            {
-                walletConnectionStatus !== WalletStatus.CONNECTED &&
-                <button className="btn btn-outline supply__btn"
-                        onClick={handleConnectWallet}>
-                    {
-                        walletConnectionStatus === WalletStatus.DISCONNECTED && t('Connect Wallet')
-                    }
-                    {
-                        walletConnectionStatus === WalletStatus.CONNECTING &&
-                        <Spinner className="btn outline"/>
-                    }
-                </button>
-            }
-            {
-                showSettings && <Settings onClose={() => setShowSettings(false)}/>
-            }
             {
                 showTokenSelect && <TokenSelect balancesFirst={true}
                                                 onClose={handleSelectToken}
@@ -382,7 +365,7 @@ export function AddLiquidityPage() {
             {
                 showAddLiquidityConfirm && <AddLiquidityConfirm onClose={() => setShowAddLiquidityConfirm(false)}/>
             }
-        </form>
+        </>
     )
 }
 
