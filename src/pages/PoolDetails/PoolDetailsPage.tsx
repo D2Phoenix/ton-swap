@@ -14,7 +14,7 @@ import ChevronDownIcon from 'components/icons/ChevronDownIcon';
 import DateUtils from 'utils/dateUtils';
 import PoolTransactionsTable from './PoolTransactionsTable';
 import Spinner from 'components/Spinner';
-
+import Button from 'components/Button';
 
 const ChartTooltip = ({active, payload, label}: any) => {
     if (active && payload && payload.length) {
@@ -158,18 +158,24 @@ function PoolDetailsPage() {
                 </div>
                 <div className="pool-charts">
                     <div className="charts-select-wrapper">
-                        <button className={`btn btn-outline mini ${chart === 'volume' ? 'active' : ''}`}
-                                onClick={setChart.bind(null, 'volume')}>
+                        <Button type={'outline'}
+                                className={`mini ${chart === 'volume' ? 'active' : ''}`}
+                                onClick={setChart.bind(null, 'volume')}
+                        >
                             {t('Volume')}
-                        </button>
-                        <button className={`btn btn-outline mini ${chart === 'tvl' ? 'active' : ''}`}
-                                onClick={setChart.bind(null, 'tvl')}>
+                        </Button>
+                        <Button type={'outline'}
+                                className={`mini ${chart === 'tvl' ? 'active' : ''}`}
+                                onClick={setChart.bind(null, 'tvl')}
+                        >
                             {t('TVL')}
-                        </button>
-                        <button className={`btn btn-outline mini ${chart === 'fees' ? 'active' : ''}`}
-                                onClick={setChart.bind(null, 'fees')}>
+                        </Button>
+                        <Button type={'outline'}
+                                className={`mini ${chart === 'fees' ? 'active' : ''}`}
+                                onClick={setChart.bind(null, 'fees')}
+                        >
                             {t('Fees')}
-                        </button>
+                        </Button>
                     </div>
                     {
                         chart === 'volume' &&  <ResponsiveContainer width="100%" height="100%">

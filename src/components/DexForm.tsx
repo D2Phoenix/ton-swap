@@ -7,7 +7,16 @@ import { Link } from 'react-router-dom';
 import QuestionIcon from './icons/QuestionIcon';
 import Tooltip from './Tooltip';
 
-function DexForm({header, headerTooltip, subheader, backLink, content, actions}: any) {
+interface DexFormProps {
+    header: JSX.Element;
+    headerTooltip?: JSX.Element;
+    subheader: JSX.Element;
+    backLink?: string;
+    content: JSX.Element;
+    actions: JSX.Element;
+}
+
+function DexForm({header, headerTooltip, subheader, backLink, content, actions}: DexFormProps) {
     const [showSettings, setShowSettings] = useState(false);
 
     return (

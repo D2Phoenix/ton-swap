@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import './PoolTransactionsTable.scss';
@@ -8,6 +8,7 @@ import ChevronRightIcon from 'components/icons/ChevronRightIcon';
 import { useAppSelector } from 'store/hooks';
 import { selectPoolsTransactions } from 'store/pools/poolsSlice';
 import DateUtils from 'utils/dateUtils';
+import Button from 'components/Button';
 
 function PoolTransactionsTable() {
     const { t } = useTranslation();
@@ -151,19 +152,21 @@ function PoolTransactionsTable() {
                 }
             </div>
             <div className="pool-transactions-pagination">
-                <button className="btn-icon btn"
+                <Button type={'icon'}
                         disabled={(page - 1) === 0}
-                        onClick={handlePageChange.bind(null, -1)}>
+                        onClick={handlePageChange.bind(null, -1)}
+                >
                     <ChevronRightIcon revert={true}/>
-                </button>
+                </Button>
                 <Trans>
                     Page {{page: page}} of {{total: totalPages}}
                 </Trans>
-                <button className="btn-icon btn"
+                <Button type={'icon'}
                         disabled={page >= totalPages}
-                        onClick={handlePageChange.bind(null, 1)}>
+                        onClick={handlePageChange.bind(null, 1)}
+                >
                     <ChevronRightIcon/>
-                </button>
+                </Button>
             </div>
         </>
     )

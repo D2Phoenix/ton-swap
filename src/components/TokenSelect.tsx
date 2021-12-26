@@ -1,4 +1,4 @@
-import { MouseEventHandler, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { MouseEventHandler, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import BigNumber from 'bignumber.js';
 
 import './TokenSelect.scss';
@@ -13,6 +13,7 @@ import { getWalletBalances } from 'store/wallet/walletThunks';
 import Spinner from './Spinner';
 import { useTranslation } from 'react-i18next';
 import ChevronRightIcon from './icons/ChevronRightIcon';
+import Button from './Button';
 
 interface TokenManageListParams {
     onBack: MouseEventHandler;
@@ -27,9 +28,11 @@ function TokenManageList({onBack}: TokenManageListParams) {
     return (
         <div className="token-select-wrapper">
             <div className="token-select-header">
-                <button className="btn-icon btn" onClick={onBack}>
+                <Button type={'icon'}
+                        onClick={onBack}
+                >
                     <ChevronRightIcon revert={true}/>
-                </button>
+                </Button>
                 <span className="text-semibold">{t('Managa tokens')}</span>
             </div>
             <input placeholder={t('https:// or ipfs:// or ENS name')}

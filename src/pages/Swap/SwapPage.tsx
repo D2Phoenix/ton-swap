@@ -39,9 +39,9 @@ import SwapConfirm from './SwapConfirm';
 import Tooltip from 'components/Tooltip';
 import { WALLET_TX_UPDATE_INTERVAL } from 'constants/swap';
 import TokenUtils from 'utils/tokenUtils';
-import Spinner from 'components/Spinner';
 import { WalletStatus } from 'types/walletAdapterInterface';
 import DexForm from 'components/DexForm';
+import Button from 'components/Button';
 
 function SwapPage() {
     const dispatch = useAppDispatch();
@@ -237,88 +237,86 @@ function SwapPage() {
             <DexForm header={t('Swap')}
                      subheader={t('Trade tokens in an instant')}
                      content={(
-                          <>
-                              <TokenInput token={input0.token}
-                                          balance={walletBalances[input0.token?.symbol || '']}
-                                          value={input0.amount}
-                                          showMax={true}
-                                          onSelect={openTokenSelect.bind(null, 'input0')}
-                                          onChange={handleInput0TokenAmount}
-                                          selectable={true}
-                                          editable={true}
-                                          loading={txType === EstimateTxType.EXACT_OUT && loading}
-                                          primary={txType === EstimateTxType.EXACT_IN}
-                              />
-                              <div className="switch__btn btn-icon" onClick={handleSwitchTokens}>
-                                  <ChevronDownIcon/>
-                              </div>
-                              <TokenInput token={input1.token}
-                                          balance={walletBalances[input1.token?.symbol || '']}
-                                          value={input1.amount}
-                                          showMax={false}
-                                          onSelect={openTokenSelect.bind(null, 'input1')}
-                                          onChange={handleToTokenAmount}
-                                          selectable={true}
-                                          editable={true}
-                                          loading={txType === EstimateTxType.EXACT_IN && loading}
-                                          primary={txType === EstimateTxType.EXACT_OUT}
-                              />
-                              {
-                                  isFilled && <div className={`swap-info text-small ${loading ? 'loading' : ''}`}>
-                    <span className={`text-small`}>
-                      1 {input1.token.symbol} = {TokenUtils.getNumberDisplay(trade.rate)} {input0.token.symbol}
-                    </span>
-                                  <Tooltip content={<SwapInfo/>} direction="left">
-                                    <div className="btn-icon">
-                                      <InfoIcon/>
-                                    </div>
-                                  </Tooltip>
-                                </div>
-                              }
-                          </>
-                      )}
+                         <>
+                             <TokenInput token={input0.token}
+                                         balance={walletBalances[input0.token?.symbol || '']}
+                                         value={input0.amount}
+                                         showMax={true}
+                                         onSelect={openTokenSelect.bind(null, 'input0')}
+                                         onChange={handleInput0TokenAmount}
+                                         selectable={true}
+                                         editable={true}
+                                         loading={txType === EstimateTxType.EXACT_OUT && loading}
+                                         primary={txType === EstimateTxType.EXACT_IN}
+                             />
+                             <div className="switch__btn btn-icon" onClick={handleSwitchTokens}>
+                                 <ChevronDownIcon/>
+                             </div>
+                             <TokenInput token={input1.token}
+                                         balance={walletBalances[input1.token?.symbol || '']}
+                                         value={input1.amount}
+                                         showMax={false}
+                                         onSelect={openTokenSelect.bind(null, 'input1')}
+                                         onChange={handleToTokenAmount}
+                                         selectable={true}
+                                         editable={true}
+                                         loading={txType === EstimateTxType.EXACT_IN && loading}
+                                         primary={txType === EstimateTxType.EXACT_OUT}
+                             />
+                             {
+                                 isFilled &&
+                               <div className={`swap-info text-small ${loading ? 'loading' : ''}`}>
+                                <span className={`text-small`}>
+                                  1 {input1.token.symbol} = {TokenUtils.getNumberDisplay(trade.rate)} {input0.token.symbol}
+                                </span>
+                                 <Tooltip content={<SwapInfo/>} direction="left">
+                                   <div className="btn-icon">
+                                     <InfoIcon/>
+                                   </div>
+                                 </Tooltip>
+                               </div>
+                             }
+                         </>
+                     )}
                      actions={(
-                          <>
-                              {
-                                  walletConnectionStatus === WalletStatus.CONNECTED &&
-                                  isFilled &&
-                                  !insufficientBalance &&
-                                  !walletPermissions[input0.token.symbol] &&
-                                <button className="btn btn-primary swap__btn"
-                                        onClick={handleAllowUseToken}>
-                                  <Trans>
-                                    Allow the TONSwap Protocol to use your {{symbol0: input0.token.symbol}}
-                                  </Trans>
-                                </button>
-                              }
-                              {
-                                  walletConnectionStatus === WalletStatus.CONNECTED &&
-                                <button className="btn btn-primary swap__btn"
-                                        disabled={loading || hasErrors}
-                                        onClick={handleSwap}>
-                                    {
-                                        loading && <Spinner className="btn"/>
-                                    }
-                                    {
-                                        !loading && swapButtonText
-                                    }
-                                </button>
-                              }
-                              {
-                                  walletConnectionStatus !== WalletStatus.CONNECTED &&
-                                <button className="btn btn-outline swap__btn"
-                                        onClick={handleConnectWallet}>
-                                    {
-                                        walletConnectionStatus === WalletStatus.DISCONNECTED && t('Connect Wallet')
-                                    }
-                                    {
-                                        walletConnectionStatus === WalletStatus.CONNECTING &&
-                                      <Spinner className="btn outline"/>
-                                    }
-                                </button>
-                              }
-                          </>
-                      )}
+                         <>
+                             {
+                                 walletConnectionStatus === WalletStatus.CONNECTED &&
+                                 isFilled &&
+                                 !insufficientBalance &&
+                                 !walletPermissions[input0.token.symbol] &&
+                               <Button type={'primary'}
+                                       className={'swap__btn'}
+                                       onClick={handleAllowUseToken}
+                               >
+                                 <Trans>
+                                   Allow the TONSwap Protocol to use your {{symbol0: input0.token.symbol}}
+                                 </Trans>
+                               </Button>
+                             }
+                             {
+                                 walletConnectionStatus === WalletStatus.CONNECTED &&
+                               <Button type={'primary'}
+                                       className={'swap__btn'}
+                                       disabled={loading || hasErrors}
+                                       loading={loading}
+                                       onClick={handleSwap}
+                               >
+                                   {swapButtonText}
+                               </Button>
+                             }
+                             {
+                                 walletConnectionStatus !== WalletStatus.CONNECTED &&
+                               <Button type={'outline'}
+                                       className={'swap__btn'}
+                                       loading={walletConnectionStatus === WalletStatus.CONNECTING}
+                                       onClick={handleConnectWallet}
+                               >
+                                   {t('Connect Wallet')}
+                               </Button>
+                             }
+                         </>
+                     )}
             />
             {
                 showTokenSelect && <TokenSelect onClose={handleSelectToken}

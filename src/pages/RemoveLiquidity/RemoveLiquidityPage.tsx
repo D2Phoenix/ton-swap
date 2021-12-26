@@ -27,10 +27,10 @@ import ChevronDownIcon from 'components/icons/ChevronDownIcon';
 import { approveRemove, getLiquidityPool } from 'store/liquidity/liquidityThunks';
 import TokenUtils from 'utils/tokenUtils';
 import { TxStatus } from 'types/transactionInterfaces';
-import Spinner from 'components/Spinner';
 import RemoveLiquidityConfirm from './RemoveLiquidityConfirm';
 import InputSlider from 'components/InputSlider';
-import DexForm from '../../components/DexForm';
+import DexForm from 'components/DexForm';
+import Button from 'components/Button';
 
 export function RemoveLiquidityPage() {
     const dispatch = useAppDispatch();
@@ -165,23 +165,25 @@ export function RemoveLiquidityPage() {
                      actions={
                          <div className="actions-wrapper">
                              {
-                                 walletAdapter && <button className="btn btn-primary remove__btn"
-                                                          disabled={!isFilled || [TxStatus.PENDING, TxStatus.CONFIRMED].indexOf(removeApproveTx.status) > -1}
-                                                          onClick={handleApprove}>
-                                     {
-                                         removeApproveTx.status === TxStatus.PENDING && <Spinner className="btn"/>
-                                     }
-                                     {
-                                         removeApproveTx.status !== TxStatus.PENDING && t('Approve')
-                                     }
-                               </button>
+                                 walletAdapter &&
+                               <Button type={'primary'}
+                                       className={'remove__btn'}
+                                       disabled={!isFilled || [TxStatus.PENDING, TxStatus.CONFIRMED].indexOf(removeApproveTx.status) > -1}
+                                       loading={removeApproveTx.status === TxStatus.PENDING}
+                                       onClick={handleApprove}
+                               >
+                                   {t('Approve')}
+                               </Button>
                              }
                              {
-                                 walletAdapter && <button className="btn btn-primary remove__btn"
-                                                          disabled={!isFilled || removeApproveTx.status !== TxStatus.CONFIRMED}
-                                                          onClick={handleSupply}>
-                                     {removeButtonText}
-                               </button>
+                                 walletAdapter &&
+                               <Button type={'primary'}
+                                       className={'remove__btn'}
+                                       disabled={!isFilled || removeApproveTx.status !== TxStatus.CONFIRMED}
+                                       onClick={handleSupply}
+                               >
+                                   {removeButtonText}
+                               </Button>
                              }
                          </div>
                      }

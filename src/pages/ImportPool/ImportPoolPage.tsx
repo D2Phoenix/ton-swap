@@ -22,10 +22,10 @@ import {
 import ChevronDownIcon from 'components/icons/ChevronDownIcon';
 import { getLiquidityPool } from 'store/liquidity/liquidityThunks';
 import TokenUtils from 'utils/tokenUtils';
-import Spinner from 'components/Spinner';
 import { WalletStatus } from 'types/walletAdapterInterface';
 import TokenSelect from 'components/TokenSelect';
-import DexForm from '../../components/DexForm';
+import DexForm from 'components/DexForm';
+import Button from 'components/Button';
 
 export function ImportPoolPage() {
     const dispatch = useAppDispatch();
@@ -143,11 +143,13 @@ export function ImportPoolPage() {
                          <>
                              {
                                  walletConnectionStatus === WalletStatus.CONNECTED &&
-                               <button className="btn btn-primary import__btn"
+                               <Button type={'primary'}
+                                       className={'import__btn'}
                                        disabled={!isFilled}
-                                       onClick={handleImport}>
+                                       onClick={handleImport}
+                               >
                                    {importButtonText}
-                               </button>
+                               </Button>
                              }
                              {
                                  walletConnectionStatus === WalletStatus.CONNECTED &&
@@ -161,16 +163,13 @@ export function ImportPoolPage() {
                              }
                              {
                                  walletConnectionStatus !== WalletStatus.CONNECTED &&
-                               <button className="btn btn-outline import__btn"
-                                       onClick={handleConnectWallet}>
-                                   {
-                                       walletConnectionStatus === WalletStatus.DISCONNECTED && t('Connect Wallet')
-                                   }
-                                   {
-                                       walletConnectionStatus === WalletStatus.CONNECTING &&
-                                     <Spinner className="btn outline"/>
-                                   }
-                               </button>
+                               <Button type={'outline'}
+                                       className={'import__btn'}
+                                       loading={walletConnectionStatus === WalletStatus.CONNECTING}
+                                       onClick={handleConnectWallet}
+                               >
+                                   {t('Connect Wallet')}
+                               </Button>
                              }
                          </>
                      }

@@ -40,9 +40,9 @@ import { WALLET_TX_UPDATE_INTERVAL } from 'constants/swap';
 import LiquidityInfo from './LiquidityInfo';
 import AddLiquidityConfirm from './AddLiquidityConfirm';
 import TokenUtils from 'utils/tokenUtils';
-import Spinner from 'components/Spinner';
 import { WalletStatus } from 'types/walletAdapterInterface';
-import DexForm from '../../components/DexForm';
+import DexForm from 'components/DexForm';
+import Button from 'components/Button';
 
 export function AddLiquidityPage() {
     const dispatch = useAppDispatch();
@@ -304,55 +304,53 @@ export function AddLiquidityPage() {
                                   isFilled &&
                                   !walletPermissions[input0.token!.symbol] &&
                                   !insufficientToken0Balance &&
-                                <button className="btn btn-primary supply__btn"
-                                        onClick={handleAllowUseToken0}>
+                                <Button type={'primary'}
+                                        className={'supply__btn'}
+                                        onClick={handleAllowUseToken0}
+                                >
                                   <Trans>
                                     Allow the TONSwap Protocol to use your {{symbol0: input0.token.symbol}}
                                   </Trans>
-                                </button>
+                                </Button>
                               }
                               {
                                   walletConnectionStatus === WalletStatus.CONNECTED &&
                                   isFilled &&
                                   !walletPermissions[input1.token!.symbol] &&
                                   !insufficientToken1Balance &&
-                                <button className="btn btn-primary supply__btn"
-                                        onClick={handleAllowUseToken1}>
+                                <Button type={'primary'}
+                                        className={'supply__btn'}
+                                        onClick={handleAllowUseToken1}
+                                >
                                   <Trans>
                                     Allow the TONSwap Protocol to use your {{symbol0: input1.token.symbol}}
                                   </Trans>
-                                </button>
+                                </Button>
                               }
                               {
                                   walletConnectionStatus === WalletStatus.CONNECTED &&
-                                <button className="btn btn-primary supply__btn"
+                                <Button type={'primary'}
+                                        className={'supply__btn'}
                                         disabled={!isFilled
                                             || insufficientBalance
                                             || (!!input0.token && !walletPermissions[input0.token.symbol])
                                             || (!!input1.token && !walletPermissions[input1.token.symbol])
-                                            || loading
-                                        }
-                                        onClick={handleSupply}>
-                                    {
-                                        loading && <Spinner className="btn"/>
-                                    }
-                                    {
-                                        !loading && supplyButtonText
-                                    }
-                                </button>
+                                            || loading}
+                                        loading={loading}
+                                        onClick={handleSupply}
+                                >
+                                    {supplyButtonText}
+                                </Button>
                               }
                               {
                                   walletConnectionStatus !== WalletStatus.CONNECTED &&
-                                <button className="btn btn-outline supply__btn"
-                                        onClick={handleConnectWallet}>
-                                    {
-                                        walletConnectionStatus === WalletStatus.DISCONNECTED && t('Connect Wallet')
-                                    }
-                                    {
-                                        walletConnectionStatus === WalletStatus.CONNECTING &&
-                                      <Spinner className="btn outline"/>
-                                    }
-                                </button>
+                                <Button type={'outline'}
+                                        className={'supply__btn'}
+                                        loading={walletConnectionStatus === WalletStatus.CONNECTING}
+                                        onClick={handleConnectWallet}
+                                >
+                                    {t('Connect Wallet')}
+                                </Button>
                               }
                           </>
                       }

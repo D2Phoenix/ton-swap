@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import './RemoveLiquidityConfirm.scss';
@@ -19,6 +19,7 @@ import Spinner from 'components/Spinner';
 import { selectSettings } from 'store/app/appSlice';
 import TokenUtils from 'utils/tokenUtils';
 import { getLiquidityPool } from 'store/liquidity/liquidityThunks';
+import Button from 'components/Button';
 
 interface RemoveLiquidityConfirmProps {
     onClose: Function;
@@ -100,10 +101,12 @@ function RemoveLiquidityConfirm({onClose}: RemoveLiquidityConfirmProps) {
                         Output is estimated. If the price changes by more than {{slippage: settings.slippage || DEFAULT_SLIPPAGE}}% your transaction will revert.
                       </Trans>
                     </span>
-                    <button className="btn btn-primary remove__btn"
-                            onClick={handleConfirmRemove}>
+                    <Button type={'primary'}
+                            className={'remove__btn'}
+                            onClick={handleConfirmRemove}
+                    >
                         {t('Confirm Remove Liquidity')}
-                    </button>
+                    </Button>
                   </div>
                 </>
             }
@@ -132,10 +135,12 @@ function RemoveLiquidityConfirm({onClose}: RemoveLiquidityConfirmProps) {
                           {t('Transaction submitted')}
                       </h2>
                       <a>{t('View on Explorer')}</a>
-                      <button className="btn btn-primary"
-                              onClick={handleClose}>
+                      <Button type={'primary'}
+                              className={'remove__btn'}
+                              onClick={handleClose}
+                      >
                           {t('Close')}
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </>
@@ -148,10 +153,12 @@ function RemoveLiquidityConfirm({onClose}: RemoveLiquidityConfirmProps) {
                       <h2 className="text-semibold text-error">
                           {t('Transaction rejected')}
                       </h2>
-                      <button className="btn btn-primary"
-                              onClick={handleClose}>
+                      <Button type={'primary'}
+                              className={'remove__btn'}
+                              onClick={handleClose}
+                      >
                           {t('Dismiss')}
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </>

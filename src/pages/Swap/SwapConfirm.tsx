@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import './SwapConfirm.scss';
@@ -17,6 +17,7 @@ import { TxStatus } from 'types/transactionInterfaces';
 import { walletSwap } from 'store/wallet/walletThunks';
 import Spinner from 'components/Spinner';
 import TokenUtils from 'utils/tokenUtils';
+import Button from 'components/Button';
 
 interface SwapConfirmProps {
     onClose: Function;
@@ -105,10 +106,12 @@ function SwapConfirm({onClose}: SwapConfirmProps) {
                             </Trans>
                           </span>
                       }
-                    <button className="btn btn-primary swap__btn"
-                            onClick={handleConfirmSwap}>
+                    <Button type={'primary'}
+                            className={'swap__btn'}
+                            onClick={handleConfirmSwap}
+                    >
                         {t('Confirm Swap')}
-                    </button>
+                    </Button>
                   </div>
                 </>
             }
@@ -137,10 +140,12 @@ function SwapConfirm({onClose}: SwapConfirmProps) {
                           {t('Transaction submitted')}
                       </h2>
                       <a>{t('View on Explorer')}</a>
-                      <button className="btn btn-primary"
-                              onClick={handleClose}>
+                      <Button type={'primary'}
+                              className={'swap__btn'}
+                              onClick={handleClose}
+                      >
                           {t('Close')}
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </>
@@ -153,10 +158,12 @@ function SwapConfirm({onClose}: SwapConfirmProps) {
                       <h2 className="text-semibold text-error">
                           {t('Transaction rejected')}
                       </h2>
-                      <button className="btn btn-primary"
-                              onClick={handleClose}>
+                      <Button type={'primary'}
+                              className={'swap__btn'}
+                              onClick={handleClose}
+                      >
                           {t('Dismiss')}
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </>

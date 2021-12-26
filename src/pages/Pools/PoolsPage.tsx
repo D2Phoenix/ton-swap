@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -11,6 +11,7 @@ import ChevronRightIcon from 'components/icons/ChevronRightIcon';
 import CurrencyUtils from 'utils/currencyUtils';
 import TokenIcon from 'components/TokenIcon';
 import PoolItemInterface from 'types/poolItemInterface';
+import Button from 'components/Button';
 
 function PoolsPage() {
     const dispatch = useAppDispatch();
@@ -121,19 +122,21 @@ function PoolsPage() {
                 }
             </div>
             <div className="pools-list-pagination">
-                <button className="btn-icon btn"
+                <Button type={'icon'}
                         disabled={(page - 1) === 0}
-                        onClick={handlePageChange.bind(null, -1)}>
+                        onClick={handlePageChange.bind(null, -1)}
+                >
                     <ChevronRightIcon revert={true}/>
-                </button>
+                </Button>
                 <Trans>
                     Page {{page: page}} of {{total: totalPages}}
                 </Trans>
-                <button className="btn-icon btn"
+                <Button type={'icon'}
                         disabled={page >= totalPages}
-                        onClick={handlePageChange.bind(null, 1)}>
+                        onClick={handlePageChange.bind(null, 1)}
+                >
                     <ChevronRightIcon/>
-                </button>
+                </Button>
             </div>
         </div>
     )

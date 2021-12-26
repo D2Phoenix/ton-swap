@@ -7,8 +7,8 @@ import { connectWallet } from 'store/wallet/walletThunks';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { selectWalletAddress, selectWalletConnectionStatus } from 'store/wallet/walletSlice';
 import Account from './Account';
-import Spinner from './Spinner';
 import { WalletStatus } from 'types/walletAdapterInterface';
+import Button from './Button';
 
 function Header() {
     const dispatch = useAppDispatch();
@@ -59,21 +59,20 @@ function Header() {
                         <div className="nav-item wallet">
                             {
                                 walletConnectionStatus !== WalletStatus.CONNECTED &&
-                                <button className="btn btn-outline"
-                                     onClick={handleConnectWallet}>
-                                    {
-                                        walletConnectionStatus === WalletStatus.DISCONNECTED && t('Connect Wallet')
-                                    }
-                                    {
-                                        walletConnectionStatus === WalletStatus.CONNECTING && <Spinner className="btn outline" />
-                                    }
-                                </button>
+                              <Button type={'outline'}
+                                      loading={walletConnectionStatus === WalletStatus.CONNECTING}
+                                      onClick={handleConnectWallet}
+                              >
+                                  {t('Connect Wallet')}
+                              </Button>
                             }
                             {
                                 walletAddress &&
-                                <div className="btn btn-primary" onClick={handleShowAccount}>
-                                    {walletAddress}
-                                </div>
+                              <Button type={'primary'}
+                                      onClick={handleShowAccount}
+                              >
+                                  {walletAddress}
+                              </Button>
                             }
                         </div>
                     </div>

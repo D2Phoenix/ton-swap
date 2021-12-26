@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import './AddLiquidityConfirm.scss';
@@ -19,6 +19,7 @@ import { selectSettings } from 'store/app/appSlice';
 import { DEFAULT_SLIPPAGE } from 'constants/swap';
 import { TxStatus } from 'types/transactionInterfaces';
 import TokenUtils from 'utils/tokenUtils';
+import Button from 'components/Button';
 
 interface AddLiquidityConfirmProps {
     onClose: Function;
@@ -96,10 +97,12 @@ function AddLiquidityConfirm({onClose}: AddLiquidityConfirmProps) {
                               </Trans>
                           </span>
                       }
-                    <button className="btn btn-primary supply__btn"
-                            onClick={handleConfirmSupply}>
+                    <Button type={'primary'}
+                            className={'supply__btn'}
+                            onClick={handleConfirmSupply}
+                    >
                         {t('Confirm Supply')}
-                    </button>
+                    </Button>
                   </div>
                 </>
             }
@@ -128,10 +131,12 @@ function AddLiquidityConfirm({onClose}: AddLiquidityConfirmProps) {
                           {t('Transaction submitted')}
                       </h2>
                       <a>{t('View on Explorer')}</a>
-                      <button className="btn btn-primary"
-                              onClick={handleClose}>
+                      <Button type={'primary'}
+                              className={'supply__btn'}
+                              onClick={handleClose}
+                      >
                           {t('Close')}
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </>
@@ -144,10 +149,12 @@ function AddLiquidityConfirm({onClose}: AddLiquidityConfirmProps) {
                       <h2 className="text-semibold text-error">
                           {t('Transaction rejected')}
                       </h2>
-                      <button className="btn btn-primary"
-                              onClick={handleClose}>
+                      <Button type={'primary'}
+                              className={'supply__btn'}
+                              onClick={handleClose}
+                      >
                           {t('Dismiss')}
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </>
