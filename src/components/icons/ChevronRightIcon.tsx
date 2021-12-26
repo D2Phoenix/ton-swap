@@ -8,6 +8,7 @@ function ChevronRightIcon({revert}: ChevronRightIconProps) {
              aria-hidden="true"
              role="img"
              transform={revert ? 'rotate(180)': ''}
+             style={{transform: revert ? 'rotate(180deg)' : ''}}
              width="24px"
              height="24px"
              preserveAspectRatio="xMidYMid meet"
