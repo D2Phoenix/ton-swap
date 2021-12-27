@@ -9,7 +9,7 @@ import { RootState } from 'store/store';
 import TokenInterface from 'types/tokenInterface';
 import { getTokens } from 'api/tokens';
 
-const swapService = new SmartContractsService();
+export const swapService = new SmartContractsService();
 
 let previousPromise: any = null;
 

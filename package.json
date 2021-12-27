@@ -30,6 +30,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:coverage": "yarn test --coverage --watchAll=false",
     "docker:build": "docker build -f Dockerfile.prod -t  ton-swap:prod .",
     "docker:build:dev": "docker build -t ton-swap:dev .",
     "docker:run": "docker run -it --rm -p 1337:80 ton-swap:prod",

@@ -30,7 +30,7 @@ interface WalletState {
     },
 }
 
-const initialState: WalletState = {
+export const initialState: WalletState = {
     adapter: null,
     connectionStatus: WalletStatus.DISCONNECTED,
     address: '',
