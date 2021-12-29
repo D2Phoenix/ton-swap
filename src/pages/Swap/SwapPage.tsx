@@ -6,7 +6,6 @@ import './SwapPage.scss';
 import ChevronDownIcon from 'components/icons/ChevronDownIcon';
 import InfoIcon from 'components/icons/InfoIcon';
 import TokenInput from 'components/TokenInput';
-import TokenSelect from 'components/TokenSelect';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import {
     selectWalletAdapter,
@@ -48,9 +47,7 @@ function SwapPage() {
     const {token0, token1} = useParams();
     const {t} = useTranslation();
 
-    const [showTokenSelect, setShowTokenSelect] = useState(false);
     const [showSwapConfirm, setShowSwapConfirm] = useState(false);
-    const [activeInput, setActiveInput] = useState('input0');
     const input0 = useAppSelector(selectSwapInput0);
     const input1 = useAppSelector(selectSwapInput1);
     const txType = useAppSelector(selectSwapTxType);
@@ -176,17 +173,11 @@ function SwapPage() {
         return () => clearInterval(intervalId);
     }, [dispatch, walletAdapter, input0, input1, txType]);
 
-    const openTokenSelect = useCallback((activeInput) => {
-        setShowTokenSelect((prev) => !prev);
-        setActiveInput(activeInput);
-    }, []);
-
     const handleSwitchTokens = useCallback(() => {
         dispatch(switchSwapTokens());
     }, [dispatch]);
 
-    const handleSelectToken = useCallback((token) => {
-        setShowTokenSelect(false);
+    const handleSelectToken = useCallback((input, token) => {
         if (!token) {
             return;
         }
@@ -194,17 +185,17 @@ function SwapPage() {
             dispatch(getWalletBalance(token));
             dispatch(getWalletUseTokenPermission(token));
         }
-        if (activeInput === 'input0' && TokenUtils.compareToken(input1, token)) {
+        if (input === 'input0' && TokenUtils.compareToken(input1, token)) {
             return handleSwitchTokens();
         }
-        if (activeInput === 'input1' && TokenUtils.compareToken(input0, token)) {
+        if (input === 'input1' && TokenUtils.compareToken(input0, token)) {
             return handleSwitchTokens();
         }
-        if (activeInput === 'input0') {
+        if (input === 'input0') {
             return dispatch(setSwapInput0Token(token));
         }
         dispatch(setSwapInput1Token(token));
-    }, [dispatch, input0, input1, activeInput, walletAdapter, handleSwitchTokens]);
+    }, [dispatch, input0, input1, walletAdapter, handleSwitchTokens]);
 
     const handleInput0TokenAmount = useCallback((value) => {
         dispatch(setSwapInput0Amount({
@@ -242,7 +233,7 @@ function SwapPage() {
                                          balance={walletBalances[input0.token?.symbol || '']}
                                          value={input0.amount}
                                          showMax={true}
-                                         onSelect={openTokenSelect.bind(null, 'input0')}
+                                         onSelect={handleSelectToken.bind(null, 'input0')}
                                          onChange={handleInput0TokenAmount}
                                          selectable={true}
                                          editable={true}
@@ -256,7 +247,7 @@ function SwapPage() {
                                          balance={walletBalances[input1.token?.symbol || '']}
                                          value={input1.amount}
                                          showMax={false}
-                                         onSelect={openTokenSelect.bind(null, 'input1')}
+                                         onSelect={handleSelectToken.bind(null, 'input1')}
                                          onChange={handleToTokenAmount}
                                          selectable={true}
                                          editable={true}
@@ -318,10 +309,6 @@ function SwapPage() {
                          </>
                      )}
             />
-            {
-                showTokenSelect && <TokenSelect onClose={handleSelectToken}
-                                                onSelect={handleSelectToken}/>
-            }
             {
                 showSwapConfirm && <SwapConfirm onClose={() => setShowSwapConfirm(false)}/>
             }

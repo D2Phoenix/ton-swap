@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
 
 import './TokenInput.scss';
@@ -9,6 +9,7 @@ import PoolInterface from 'types/poolInterface';
 import TokenIcon from './TokenIcon';
 import TokenUtils from 'utils/tokenUtils';
 import { useTranslation } from 'react-i18next';
+import TokenSelect from './TokenSelect';
 
 interface TokenInputProps {
     balance?: string;
@@ -21,15 +22,23 @@ interface TokenInputProps {
     onSelect?: Function;
     loading?: boolean;
     primary?: boolean;
+    balancesFirst?: boolean;
 }
 
 const INPUT_REGEXP = RegExp(`^\\d*(?:\\\\[.])?\\d*$`)
 
-function TokenInput({balance, token, value, showMax, editable, selectable, loading, primary, onChange, onSelect}: TokenInputProps) {
+function TokenInput({balance, token, value, showMax, editable, selectable, loading, primary, onChange, onSelect, balancesFirst}: TokenInputProps) {
     const { t } = useTranslation();
-    const handleClick = useCallback(() => {
-        onSelect && onSelect();
-    }, [onSelect]);
+    const [showTokenSelect, setShowTokenSelect] = useState(false);
+
+    const toggleTokenSelect = useCallback(() => {
+        setShowTokenSelect((prev) => !prev);
+    }, []);
+
+    const handleTokenSelect = useCallback((token) => {
+        toggleTokenSelect();
+        onSelect && onSelect(token);
+    }, [onSelect, toggleTokenSelect]);
 
     const handleChange = useCallback((event) => {
         const value = event.target.value.replace(/,/g, '.');
@@ -74,7 +83,7 @@ function TokenInput({balance, token, value, showMax, editable, selectable, loadi
     return (
         <div className={"input-wrapper" + (!selectable ? ' view-only' : '')}>
             <div className={"token-input" + (loading ? ' loading' : '')}>
-                <div className="btn btn-outline small text-medium" onClick={handleClick}>
+                <div className="btn btn-outline small text-medium" onClick={toggleTokenSelect}>
                     {
                         simpleToken?.logoURI && <TokenIcon address={simpleToken.address} name={simpleToken.name} url={simpleToken.logoURI} />
                     }
@@ -113,6 +122,11 @@ function TokenInput({balance, token, value, showMax, editable, selectable, loadi
                         )
                     }
                 </div>
+            }
+            {
+                showTokenSelect && <TokenSelect balancesFirst={balancesFirst}
+                                                onClose={toggleTokenSelect}
+                                                onSelect={handleTokenSelect}/>
             }
         </div>
     )

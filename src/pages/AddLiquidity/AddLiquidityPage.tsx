@@ -35,7 +35,6 @@ import {
     getLiquidityToken
 } from 'store/liquidity/liquidityThunks';
 import { EstimateTxType } from 'types/transactionInterfaces';
-import TokenSelect from 'components/TokenSelect';
 import { WALLET_TX_UPDATE_INTERVAL } from 'constants/swap';
 import LiquidityInfo from './LiquidityInfo';
 import AddLiquidityConfirm from './AddLiquidityConfirm';
@@ -49,8 +48,6 @@ export function AddLiquidityPage() {
     const {token0, token1} = useParams();
     const {t} = useTranslation();
 
-    const [showTokenSelect, setShowTokenSelect] = useState(false);
-    const [activeInput, setActiveInput] = useState('input0');
     const [showAddLiquidityConfirm, setShowAddLiquidityConfirm] = useState(false);
     const walletAdapter = useAppSelector(selectWalletAdapter);
     const walletBalances = useAppSelector(selectWalletBalances);
@@ -202,32 +199,25 @@ export function AddLiquidityPage() {
         }
     }, [dispatch, input1.token, walletAdapter])
 
-
-    const openTokenSelect = useCallback((activeInput) => {
-        setShowTokenSelect(!showTokenSelect);
-        setActiveInput(activeInput);
-    }, [showTokenSelect]);
-
     const handleSwitchTokens = useCallback(() => {
         dispatch(switchLiquidityTokens());
     }, [dispatch]);
 
-    const handleSelectToken = useCallback((token) => {
-        setShowTokenSelect(false);
+    const handleSelectToken = useCallback((input, token) => {
         if (!token) {
             return;
         }
-        if (input1.token && activeInput === 'input0' && input1.token.symbol === token.symbol) {
+        if (input1.token && input === 'input0' && input1.token.symbol === token.symbol) {
             return handleSwitchTokens();
         }
-        if (input0.token && activeInput === 'input1' && input0.token.symbol === token.symbol) {
+        if (input0.token && input === 'input1' && input0.token.symbol === token.symbol) {
             return handleSwitchTokens();
         }
-        if (activeInput === 'input0') {
+        if (input === 'input0') {
             return dispatch(setLiquidityInput0Token(token));
         }
         dispatch(setLiquidityInput1Token(token));
-    }, [dispatch, input0, input1, activeInput, handleSwitchTokens]);
+    }, [dispatch, input0, input1, handleSwitchTokens]);
 
     const handleInput0TokenAmount = useCallback((value) => {
         dispatch(setLiquidityInput0Amount({
@@ -269,9 +259,10 @@ export function AddLiquidityPage() {
                           <>
                               <TokenInput token={input0.token}
                                           balance={walletBalances[input0.token?.symbol || '']}
+                                          balancesFirst={true}
                                           value={input0.amount}
                                           showMax={true}
-                                          onSelect={openTokenSelect.bind(null, 'input0')}
+                                          onSelect={handleSelectToken.bind(null, 'input0')}
                                           onChange={handleInput0TokenAmount}
                                           selectable={true}
                                           editable={true}
@@ -283,9 +274,10 @@ export function AddLiquidityPage() {
                               </div>
                               <TokenInput token={input1.token}
                                           balance={walletBalances[input1.token?.symbol || '']}
+                                          balancesFirst={true}
                                           value={input1.amount}
                                           showMax={true}
-                                          onSelect={openTokenSelect.bind(null, 'input1')}
+                                          onSelect={handleSelectToken.bind(null, 'input1')}
                                           onChange={handleInput1TokenAmount}
                                           selectable={true}
                                           editable={true}
@@ -355,11 +347,6 @@ export function AddLiquidityPage() {
                           </>
                       }
             />
-            {
-                showTokenSelect && <TokenSelect balancesFirst={true}
-                                                onClose={handleSelectToken}
-                                                onSelect={handleSelectToken}/>
-            }
             {
                 showAddLiquidityConfirm && <AddLiquidityConfirm onClose={() => setShowAddLiquidityConfirm(false)}/>
             }

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -23,7 +23,6 @@ import ChevronDownIcon from 'components/icons/ChevronDownIcon';
 import { getLiquidityPool } from 'store/liquidity/liquidityThunks';
 import TokenUtils from 'utils/tokenUtils';
 import { WalletStatus } from 'types/walletAdapterInterface';
-import TokenSelect from 'components/TokenSelect';
 import DexForm from 'components/DexForm';
 import Button from 'components/Button';
 
@@ -32,8 +31,6 @@ export function ImportPoolPage() {
     const navigate = useNavigate();
     const {t} = useTranslation();
 
-    const [showTokenSelect, setShowTokenSelect] = useState(false);
-    const [activeInput, setActiveInput] = useState('input0');
     const walletConnectionStatus = useAppSelector(selectWalletConnectionStatus);
     const input0 = useAppSelector(selectLiquidityInput0);
     const input1 = useAppSelector(selectLiquidityInput1);
@@ -72,27 +69,21 @@ export function ImportPoolPage() {
         dispatch(switchLiquidityTokens());
     }, [dispatch]);
 
-    const openTokenSelect = useCallback((activeInput) => {
-        setShowTokenSelect(!showTokenSelect);
-        setActiveInput(activeInput);
-    }, [showTokenSelect]);
-
-    const handleSelectToken = useCallback((token) => {
-        setShowTokenSelect(false);
+    const handleSelectToken = useCallback((input, token) => {
         if (!token) {
             return;
         }
-        if (input1.token && activeInput === 'input0' && input1.token.symbol === token.symbol) {
+        if (input1.token && input === 'input0' && input1.token.symbol === token.symbol) {
             return handleSwitchTokens();
         }
-        if (input0.token && activeInput === 'input1' && input0.token.symbol === token.symbol) {
+        if (input0.token && input === 'input1' && input0.token.symbol === token.symbol) {
             return handleSwitchTokens();
         }
-        if (activeInput === 'input0') {
+        if (input === 'input0') {
             return dispatch(setLiquidityInput0Token(token));
         }
         dispatch(setLiquidityInput1Token(token));
-    }, [dispatch, input0, input1, activeInput, handleSwitchTokens]);
+    }, [dispatch, input0, input1, handleSwitchTokens]);
 
     const handleConnectWallet = useCallback(() => {
         dispatch(connectWallet());
@@ -114,7 +105,7 @@ export function ImportPoolPage() {
                              <TokenInput token={input0.token}
                                          value={input0.amount}
                                          showMax={false}
-                                         onSelect={openTokenSelect.bind(null, 'input0')}
+                                         onSelect={handleSelectToken.bind(null, 'input0')}
                                          selectable={true}
                                          editable={false}/>
                              <div className="btn-icon">
@@ -123,7 +114,7 @@ export function ImportPoolPage() {
                              <TokenInput token={input1.token}
                                          value={input1.amount}
                                          showMax={false}
-                                         onSelect={openTokenSelect.bind(null, 'input1')}
+                                         onSelect={handleSelectToken.bind(null, 'input1')}
                                          selectable={true}
                                          editable={false}/>
                              {
@@ -174,11 +165,6 @@ export function ImportPoolPage() {
                          </>
                      }
             />
-            {
-                showTokenSelect && <TokenSelect balancesFirst={true}
-                                                onClose={handleSelectToken}
-                                                onSelect={handleSelectToken}/>
-            }
         </>
 
     )
