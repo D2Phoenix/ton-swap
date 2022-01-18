@@ -1,4 +1,4 @@
-a {
+a:not(.nav-item__btn) {
   color: $primary-color;
   text-decoration: none;
   -webkit-transition: color .3s;
@@ -6,8 +6,6 @@ a {
   transition: color .3s;
   &:hover {
     color: $secondary-color;
-    -webkit-transition: color .3s;
-    -o-transition: color .3s;
     transition: color .3s;
   }
   &.active {

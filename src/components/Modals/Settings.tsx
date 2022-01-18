@@ -1,4 +1,4 @@
-import { MouseEventHandler, useCallback } from 'react';
+import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import './Settings.scss';
@@ -6,14 +6,14 @@ import Modal from 'components/Modal';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { DEFAULT_DEADLINE, DEFAULT_SLIPPAGE } from 'constants/swap';
 import { selectSettings, setSettingsDeadline, setSettingsSlippage } from 'store/app/appSlice';
-import QuestionIcon from './icons/QuestionIcon';
-import Tooltip from './Tooltip';
+import QuestionIcon from 'components/icons/QuestionIcon';
+import Tooltip from 'components/Tooltip';
 
 const SLIPPAGE_INPUT_REGEXP = RegExp(`^\\d*(?:\\\\[.])?\\d*$`);
 const DEADLINE_INPUT_REGEXP = RegExp(`^\\d*(?:\\\\[])?\\d*$`);
 
 interface SettingsProps {
-    onClose: MouseEventHandler;
+    onClose: () => void;
 }
 
 function Settings({onClose}: SettingsProps) {

@@ -1,118 +1,57 @@
-@import "../styles/vars";
-
 .header-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
   position: relative;
-  padding: 2rem 2rem 1rem;
-  justify-content: space-between;
+  padding: 1rem 4rem;
 }
 
 header {
-  -webkit-box-flex: 0;
-  -ms-flex: 0 0 auto;
   flex: 0 0 auto;
   align-self: center;
-}
+  h4 {
+    display: inline-block;
+    color: var(--primary-color);
+  }
 
-nav {
-  background-color: #fff;
-  width: 100%;
-  box-shadow: none;
-  overflow: auto;
-  z-index: 10;
-  display: block !important;
-  -webkit-box-flex: 1;
-  -ms-flex: 1 1 calc(100% - 200px);
-  flex: 1 1 calc(100% - 200px);
-  overflow: unset;
-  max-width: unset;
-  -webkit-box-pack: end;
-  -ms-flex-pack: end;
-  justify-content: flex-end;
-  &.open {
-    right: 0;
-    -webkit-transition: right .5s;
-    -o-transition: right .5s;
-    transition: right .5s;
-  }
-  .nav-header {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
-  }
-  .nav-list {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    margin-top: 0;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    gap: 24px;
-    -webkit-box-pack: end;
-    -ms-flex-pack: end;
-    justify-content: center;
-    align-items: center;
-  }
-  .nav-item__btn {
-    display: block;
-    padding: 8px 4px;
-    color: $primary-color;
-    font-size: 19px;
-    line-height: 24px;
-    cursor: pointer;
-    -webkit-transition: color .3s;
-    -o-transition: color .3s;
-    transition: color .3s;
-    font-family: 'Mulish', sans-serif;
-    font-weight: 700;
+  .logo {
+    display: inline-block;
     text-decoration: none;
-    &.active {
-      color: $secondary-color;
-    }
   }
-  .nav-item__btn:hover {
-    color: $secondary-color;
-  }
-  .nav-item {
-    position: relative;
-    width: auto;
-    margin-bottom: 0;
 
-    &.wallet {
-      > .btn {
-        width: 178px;
-        &:not(.btn-outline) {
-          text-overflow: ellipsis;
-          overflow: hidden;
-          white-space: nowrap;
-        }
-      }
+  .logo img {
+    display: inline-block;
+    vertical-align: middle;
+    width: 32px;
+    margin-right: 12px;
+  }
+
+  .logo h4 {
+    vertical-align: middle;
+  }
+}
+.header-buttons {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: row;
+  margin-left: auto;
+  .wallet {
+    .btn {
+      width: 190px;
     }
+  }
+  .btn {
+    margin-left: 0.5rem;
   }
 }
 
 
 @media screen and (min-width: 1000px) {
   .header-wrapper {
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
     justify-content: space-between;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
     align-items: center;
     width: 100%;
-    max-width: 1000px;
+    max-width: 1440px;
     margin-left: auto;
     margin-right: auto;
   }
@@ -121,12 +60,5 @@ nav {
 @media screen and (min-width: 700px) {
   .header-wrapper {
     flex-direction: row;
-    gap: 0;
-    padding: 4rem 2rem 2rem;
-  }
-  nav {
-    .nav-list {
-      justify-content: flex-end;
-    }
   }
 }

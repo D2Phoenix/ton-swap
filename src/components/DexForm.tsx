@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './DexForm.scss';
-import Settings from './Settings';
+import Settings from './Modals/Settings';
 import SettingsIcon from './icons/SettingsIcon';
 import ChevronRightIcon from './icons/ChevronRightIcon';
 import { Link } from 'react-router-dom';
@@ -30,7 +30,7 @@ function DexForm({header, headerTooltip, subheader, backLink, content, actions}:
                   </Link>
                 }
                 <div className="box-header">
-                    <div className="text-semibold">
+                    <div className="title-1">
                         {header}
                         {
                             headerTooltip && <Tooltip content={<span className="text-small">{headerTooltip}</span>} direction="bottom">
@@ -40,7 +40,7 @@ function DexForm({header, headerTooltip, subheader, backLink, content, actions}:
                           </Tooltip>
                         }
                     </div>
-                    <span className="text-small">{subheader}</span>
+                    <span className="sub-title-1">{subheader}</span>
                 </div>
                 <div className="btn-icon" onClick={() => setShowSettings(!showSettings)}>
                     <SettingsIcon/>

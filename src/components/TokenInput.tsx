@@ -9,7 +9,7 @@ import PoolInterface from 'types/poolInterface';
 import TokenIcon from './TokenIcon';
 import TokenUtils from 'utils/tokenUtils';
 import { useTranslation } from 'react-i18next';
-import TokenSelect from './TokenSelect';
+import TokenSelect from './Modals/TokenSelect';
 
 interface TokenInputProps {
     balance?: string;

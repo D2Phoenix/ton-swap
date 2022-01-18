@@ -1,28 +1,28 @@
 import React, { MouseEventHandler } from 'react';
 
 import './Button.scss';
-import Spinner from './Spinner';
 
 interface ButtonProps {
     className?: string;
-    type: 'primary' | 'outline' | 'icon';
+    type: 'primary' | 'secondary' | 'outline' | 'icon';
     loading?: boolean;
     disabled?: boolean;
+    alt?: string;
+    icon?: JSX.Element;
     onClick: MouseEventHandler;
-    children: JSX.Element | string;
+    children: any;
 }
 
-function Button({className, type, loading, disabled, onClick, children}: ButtonProps) {
+function Button({className, type, loading, disabled, alt, icon, onClick, children}: ButtonProps) {
     return (
         <button className={`btn btn-${type} ${className || ''}`}
+                title={alt}
                 disabled={disabled}
                 onClick={onClick}>
             {
-                loading && <Spinner className={`btn ${type}`}/>
+                !!icon && icon
             }
-            {
-                !loading && children
-            }
+            {children}
         </button>
     )
 }

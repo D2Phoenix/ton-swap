@@ -1,19 +1,19 @@
 import React, { MouseEventHandler, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import BigNumber from 'bignumber.js';
 
 import './TokenSelect.scss';
-import Modal from './Modal';
+import Modal from 'components/Modal';
 import TokenInterface from 'types/tokenInterface';
 import { BALANCE_PRECISION } from 'constants/swap';
-import TokenIcon from './TokenIcon';
+import TokenIcon from 'components/TokenIcon';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { selectTokenLists, selectTokens } from 'store/app/appSlice';
 import { selectWalletAdapter, selectWalletBalances } from 'store/wallet/walletSlice';
 import { getWalletBalances } from 'store/wallet/walletThunks';
-import Spinner from './Spinner';
-import { useTranslation } from 'react-i18next';
-import ChevronRightIcon from './icons/ChevronRightIcon';
-import Button from './Button';
+import Spinner from 'components/Spinner';
+import ChevronRightIcon from 'components/icons/ChevronRightIcon';
+import Button from 'components/Button';
 
 interface TokenManageListParams {
     onBack: MouseEventHandler;

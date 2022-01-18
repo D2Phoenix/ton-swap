@@ -109,13 +109,16 @@ function SwapPage() {
 
     // Estimate EXACT_IN transaction
     useEffect((): any => {
-        if (txType === EstimateTxType.EXACT_IN && !TokenUtils.hasAmount(input0)) {
+        if (txType !== EstimateTxType.EXACT_IN) {
+            return;
+        }
+        if (!TokenUtils.hasAmount(input0)) {
             return dispatch(setSwapInput1Amount({
                 value: null,
                 txType,
             }));
         }
-        if (txType === EstimateTxType.EXACT_IN && input1.token && TokenUtils.isFilled(input0)) {
+        if (input1.token && TokenUtils.isFilled(input0)) {
             return dispatch(estimateTransaction({
                 input: input0,
                 token: input1.token,
@@ -126,13 +129,16 @@ function SwapPage() {
 
     // Estimate EXACT_OUT transaction
     useEffect((): any => {
-        if (txType === EstimateTxType.EXACT_OUT && !TokenUtils.hasAmount(input1)) {
+        if (txType !== EstimateTxType.EXACT_OUT) {
+            return;
+        }
+        if (!TokenUtils.hasAmount(input1)) {
             return dispatch(setSwapInput0Amount({
                 value: null,
                 txType,
             }));
         }
-        if (txType === EstimateTxType.EXACT_OUT && input0.token && TokenUtils.isFilled(input1)) {
+        if (input0.token && TokenUtils.isFilled(input1)) {
             return dispatch(estimateTransaction({
                 input: input1,
                 token: input0.token,
@@ -204,7 +210,7 @@ function SwapPage() {
         }));
     }, [dispatch]);
 
-    const handleToTokenAmount = useCallback((value) => {
+    const handleInput1TokenAmount = useCallback((value) => {
         dispatch(setSwapInput1Amount({
             value,
             txType: EstimateTxType.EXACT_OUT
@@ -248,7 +254,7 @@ function SwapPage() {
                                          value={input1.amount}
                                          showMax={false}
                                          onSelect={handleSelectToken.bind(null, 'input1')}
-                                         onChange={handleToTokenAmount}
+                                         onChange={handleInput1TokenAmount}
                                          selectable={true}
                                          editable={true}
                                          loading={txType === EstimateTxType.EXACT_IN && loading}

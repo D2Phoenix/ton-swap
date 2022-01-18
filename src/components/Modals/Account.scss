@@ -1,0 +1,54 @@
+@import "../../styles/vars";
+
+.account-modal.modal-container {
+  .modal-content {
+    height: 520px;
+    width: 50vw;
+    max-width: 420px;
+  }
+}
+
+.account-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 0.5em;
+  .account-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    > .btn:first-of-type {
+      margin-left: auto;
+    }
+  }
+  .account-actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: space-between;
+    margin-bottom: 3rem;
+    > button {
+      flex: 1;
+    }
+  }
+  .transactions-list {
+    overflow: auto;
+    margin-top: 2rem;
+    padding-bottom: 8px;
+    .transactions-empty {
+      display: flex;
+      justify-content: center;
+    }
+    .transaction-item {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 56px;
+      cursor: pointer;
+      padding: 8px 0;
+    }
+  }
+}

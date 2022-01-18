@@ -1,89 +1,101 @@
 h1 {
-  font-family: 'Mulish', sans-serif;
-  font-size: 32px;
-  line-height: 40px;
-  font-weight: 900;
-}
-h3 {
-  font-family: 'Mulish', sans-serif;
-  font-size: 24px;
-  line-height: 40px;
-  font-weight: 900;
+  font-size: 96px;
+  line-height: 104px;
+  font-weight: 600;
 }
 
-h1 span,
-h3 span,
-h1 a,
-h3 a {
-  font: inherit;
+h2 {
+  font-size: 60px;
+  line-height: 68px;
+  font-weight: 600;
+}
+
+h3 {
+  font-size: 48px;
+  line-height: 56px;
+  font-weight: 600;
 }
 
 h4 {
-  font-family: 'Mulish', sans-serif;
-  font-weight: 700;
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 600;
 }
 
-sup {
-  font-size: 10px;
-  color: inherit;
+h5 {
+  font-size: 24px;
+  line-height: 36px;
+  font-weight: 600;
 }
 
-.text-primary {
-  color: $primary-color;
+h6 {
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 600;
 }
 
-.text-gray,
-.text-gray span {
-  color: $text-gray-color;
+.title-1 {
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 600;
 }
 
-.text-medium,
-.text-medium span,
-.text-medium a {
-  font-size: 19px;
+.title-2 {
+  font-size: 16px;
   line-height: 24px;
+  font-weight: 600;
 }
 
-.text-bold,
-.text-bold span,
-strong, b {
-  font-family: 'Mulish', sans-serif;
-  font-weight: 900;
-}
-
-.text-semibold {
-  font-family: 'Mulish', sans-serif;
-  font-weight: 700;
-}
-
-.text-small {
-  font-size: 13px;
-  line-height: 16px;
+.sub-title-1 {
+  font-size: 18px;
+  line-height: 28px;
   font-weight: 400;
 }
 
-.text-error {
-  color: $error-color;
+.sub-title-2 {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
 }
 
-.text-warning {
-  color: $warning-color;
+p {
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 400;
 }
 
-.align-right {
-  margin-left: auto;
-}
-
-@media screen and (min-width: 600px) {
-  h1 {
-    font-size: 38px;
-    line-height: 48px;
+button, a {
+  line-height: 24px;
+  &.small {
+    font-size: 12px;
+    font-weight: 700;
+  }
+  &.medium {
+    font-size: 14px;
+    font-weight: 600;
+  }
+  &.large {
+    font-size: 16px;
+    font-weight: 600;
   }
 }
 
-@media screen and (min-width: 1000px) {
-  h1 {
-    font-size: 45px;
-    line-height: 56px;
+label {
+  color: var(--label-color);
+  &.small {
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 700;
+  }
+  &.medium {
+    font-size: 12px;
+    line-height: 18px;
+    font-weight: 700;
+  }
+  &.large {
+    font-size: 14px;
+    line-height: 22px;
+    font-weight: 700;
   }
 }
+
