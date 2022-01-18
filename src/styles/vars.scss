@@ -27,4 +27,8 @@ $warning-color: rgb(253, 193, 64);
   // Modals
   --modal-background-color: #{map-get($gray-palette, 2400)};
   --modal-text-color: #{map-get($gray-palette, 'white')};
+  // Links
+  --link-color: #{map-get($blue-palette, 500)};
+  --link-hover-color: #{map-get($blue-palette, 600)};
+  --link-disabled-color: #{map-get($gray-palette, 1800)};
 }

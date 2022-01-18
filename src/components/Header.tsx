@@ -2,22 +2,21 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import './Header.scss';
-import { connectWallet } from 'store/wallet/walletThunks';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { selectWalletAddress, selectWalletBalances, selectWalletConnectionStatus } from 'store/wallet/walletSlice';
+import { selectWalletAddress, selectWalletBalances } from 'store/wallet/walletSlice';
 import Account from './Modals/Account';
-import { WalletStatus } from 'types/walletAdapterInterface';
 import Button from './Button';
 import SunIcon from './icons/SunIcon';
 import NavList from './NavList';
+import SelectWallet from './Modals/SelectWallet';
 
 function Header() {
     const dispatch = useAppDispatch();
     const { t } = useTranslation();
     const balances = useAppSelector(selectWalletBalances);
-    const walletConnectionStatus = useAppSelector(selectWalletConnectionStatus)
     const walletAddress = useAppSelector(selectWalletAddress)
     const [showAccount ,setShowAccount] = useState(false);
+    const [showConnectWallet , setShowConnectWallet] = useState(false);
 
     const links = useMemo(() => {
        return [
@@ -44,17 +43,21 @@ function Header() {
     }, [walletAddress]);
 
 
-    const handleConnectWallet = useCallback(() => {
-        dispatch(connectWallet());
-    }, [dispatch]);
+    const connectWalletHandler = useCallback(() => {
+        setShowConnectWallet(true);
+    }, []);
 
-    const handleShowAccount = useCallback(() => {
+    const showAccountHandler = useCallback(() => {
         setShowAccount(true);
     }, []);
 
-    const handleCloseAccount = useCallback(() => {
+    const closeAccountHandler = useCallback(() => {
         setShowAccount(false);
     }, []);
+
+    const closeConnectWalletHandler = useCallback(() => {
+        setShowConnectWallet(false);
+    }, [])
 
     return (
         <div className="header-wrapper">
@@ -78,11 +81,10 @@ function Header() {
                 }
                 <div className="nav-item wallet">
                     {
-                        walletConnectionStatus !== WalletStatus.CONNECTED &&
+                        !walletAddress &&
                       <Button type={'secondary'}
                               className={'large'}
-                              loading={walletConnectionStatus === WalletStatus.CONNECTING}
-                              onClick={handleConnectWallet}
+                              onClick={connectWalletHandler}
                       >
                           {t('Connect Wallet')}
                       </Button>
@@ -91,7 +93,7 @@ function Header() {
                         walletAddress &&
                       <Button type={'secondary'}
                               className={'large'}
-                              onClick={handleShowAccount}
+                              onClick={showAccountHandler}
                       >
                           {visibleWalletAddress}
                       </Button>
@@ -104,7 +106,10 @@ function Header() {
                 </div>
             </div>
             {
-                showAccount && <Account onClose={handleCloseAccount} />
+                showAccount && <Account onClose={closeAccountHandler} onConnect={connectWalletHandler} />
+            }
+            {
+                showConnectWallet && <SelectWallet onClose={closeConnectWalletHandler} />
             }
         </div>
     )

@@ -15,10 +15,11 @@ import { copyToClipboard } from '../../utils/domUtils';
 
 
 interface AccountProps {
-    onClose: Function;
+    onClose: () => void;
+    onConnect: () => void;
 }
 
-function Account({onClose}: AccountProps) {
+function Account({onClose, onConnect}: AccountProps) {
     const dispatch = useAppDispatch();
     const { t } = useTranslation();
     const loader = useRef(null);
@@ -77,6 +78,11 @@ function Account({onClose}: AccountProps) {
         setIsClose(true);
     }, [dispatch]);
 
+    const connectHandler = useCallback(() => {
+        onConnect();
+        setIsClose(true);
+    }, [onConnect]);
+
     return (
         <Modal header={t('Account')}
                className={'account-modal'}
@@ -97,7 +103,7 @@ function Account({onClose}: AccountProps) {
                     <Button type={'secondary'}
                             className="title-2"
                             icon={<SwitchExchangeIcon />}
-                            onClick={() => {}}>
+                            onClick={connectHandler}>
                         {t('Switch Wallet')}
                     </Button>
                     <Button type={'primary'}

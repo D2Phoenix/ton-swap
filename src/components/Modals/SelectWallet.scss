@@ -1,0 +1,40 @@
+.connect-wallet-modal.modal-container {
+  .modal-content {
+    height: 220px;
+    width: 50vw;
+    max-width: 512px;
+  }
+}
+
+.connect-wallet-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 2rem;
+
+  .wallet-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 90px;
+    padding: 24px 16px;
+    border: 1px solid transparent;
+    border-radius: 16px;
+    cursor: pointer;
+    background-color: var(--secondary-color);
+    &:hover {
+      border-color: var(--primary-hover-color);
+    }
+    img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+    }
+    p {
+      label {
+        margin-left: 1rem;
+      }
+    }
+  }
+}

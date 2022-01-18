@@ -1,15 +1,15 @@
 a:not(.nav-item__btn) {
-  color: $primary-color;
-  text-decoration: none;
-  -webkit-transition: color .3s;
-  -o-transition: color .3s;
+  color: var(--link-color);
+  text-decoration: underline;
   transition: color .3s;
   &:hover {
-    color: $secondary-color;
-    transition: color .3s;
+    color: var(--link-hover-color);
+  }
+  &:disabled {
+    color: var(--link-disabled-color);
   }
   &.active {
-    color: $secondary-color;
+    color: var(--link-hover-color);
   }
 }
 

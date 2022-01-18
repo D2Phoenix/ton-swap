@@ -12,6 +12,11 @@ export enum WalletStatus {
     CONNECTING = 'CONNECTING',
 }
 
+export enum WalletType {
+    stubWallet = 'STUB_WALLET',
+    tonWallet = 'TON_WALLET',
+}
+
 export interface WalletAdapterInterface {
     getWalletAddress(): Promise<string>;
     getBalance(token: TokenInterface): Promise<string>;

@@ -22,7 +22,7 @@ import {
 import ChevronDownIcon from 'components/icons/ChevronDownIcon';
 import { getLiquidityPool } from 'store/liquidity/liquidityThunks';
 import TokenUtils from 'utils/tokenUtils';
-import { WalletStatus } from 'types/walletAdapterInterface';
+import { WalletStatus, WalletType } from 'types/walletAdapterInterface';
 import DexForm from 'components/DexForm';
 import Button from 'components/Button';
 
@@ -86,7 +86,7 @@ export function ImportPoolPage() {
     }, [dispatch, input0, input1, handleSwitchTokens]);
 
     const handleConnectWallet = useCallback(() => {
-        dispatch(connectWallet());
+        dispatch(connectWallet(WalletType.stubWallet));
     }, [dispatch]);
 
     const handleImport = useCallback(() => {
