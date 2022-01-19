@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { selectWalletAddress, selectWalletBalances } from 'store/wallet/walletSlice';
 import Account from './Modals/Account';
 import Button from './Button';
-import SunIcon from './icons/SunIcon';
+import SunIcon from './Icons/SunIcon';
 import NavList from './NavList';
 import SelectWallet from './Modals/SelectWallet';
 import TokenUtils from 'utils/tokenUtils';
@@ -64,7 +64,7 @@ function Header() {
       <header>
         <a href="/" className="logo">
           <img src="/images/toncoin_symbol.svg" alt="" />
-          <h4>TON Dex</h4>
+          <h4>Dex</h4>
         </a>
       </header>
       <NavList links={links} />

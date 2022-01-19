@@ -6,7 +6,7 @@ import Modal from 'components/Modal';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { DEFAULT_DEADLINE, DEFAULT_SLIPPAGE } from 'constants/swap';
 import { selectSettings, setSettingsDeadline, setSettingsSlippage } from 'store/app/appSlice';
-import QuestionIcon from 'components/icons/QuestionIcon';
+import QuestionIcon from 'components/Icons/QuestionIcon';
 import Tooltip from 'components/Tooltip';
 
 const SLIPPAGE_INPUT_REGEXP = RegExp(`^\\d*(?:\\\\[.])?\\d*$`);

@@ -20,7 +20,7 @@ import {
 } from 'store/liquidity/liquiditySlice';
 import { getWalletBalance, getWalletUseTokenPermission } from 'store/wallet/walletThunks';
 import LiquidityInfo from 'pages/AddLiquidity/LiquidityInfo';
-import ChevronDownIcon from 'components/icons/ChevronDownIcon';
+import ChevronDownIcon from 'components/Icons/ChevronDownIcon';
 import { approveRemove, getLiquidityPool } from 'store/liquidity/liquidityThunks';
 import TokenUtils from 'utils/tokenUtils';
 import { TxStatus } from 'types/transactionInterfaces';

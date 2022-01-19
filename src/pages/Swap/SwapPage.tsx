@@ -3,8 +3,8 @@ import { useParams } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 
 import './SwapPage.scss';
-import ChevronDownIcon from 'components/icons/ChevronDownIcon';
-import InfoIcon from 'components/icons/InfoIcon';
+import ChevronDownIcon from 'components/Icons/ChevronDownIcon';
+import InfoIcon from 'components/Icons/InfoIcon';
 import TokenInput from 'components/TokenInput';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import {
@@ -34,7 +34,7 @@ import {
   selectSwapTrade,
   selectSwapLoading,
 } from 'store/swap/swapSlice';
-import SwapIcon from '../../components/icons/SwapIcon';
+import SwapIcon from '../../components/Icons/SwapIcon';
 import SelectWallet from '../../components/Modals/SelectWallet';
 import SwapInfo from './SwapInfo';
 import SwapConfirm from './SwapConfirm';
@@ -284,7 +284,7 @@ function SwapPage() {
               loading={txType === EstimateTxType.EXACT_OUT && loading}
               primary={txType === EstimateTxType.EXACT_IN}
             />
-            <Button type={'default'} icon={<SwapIcon />} onClick={switchTokensHandler} />
+            <Button type={'icon'} icon={<SwapIcon />} onClick={switchTokensHandler} />
             <TokenInput
               token={input1.token}
               balance={walletBalances[input1.token?.symbol || '']}

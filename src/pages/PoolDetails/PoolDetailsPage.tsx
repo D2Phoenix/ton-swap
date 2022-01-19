@@ -10,7 +10,7 @@ import { fetchPool } from 'store/pools/poolsThunks';
 import { resetPoolDetails, selectPoolsChartData, selectPoolsPool } from 'store/pools/poolsSlice';
 import TokenIcon from 'components/TokenIcon';
 import CurrencyUtils from 'utils/currencyUtils';
-import ChevronDownIcon from 'components/icons/ChevronDownIcon';
+import ChevronDownIcon from 'components/Icons/ChevronDownIcon';
 import DateUtils from 'utils/dateUtils';
 import PoolTransactionsTable from './PoolTransactionsTable';
 import Spinner from 'components/Spinner';

@@ -8,9 +8,9 @@ import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { disconnectWallet } from 'store/wallet/walletThunks';
 import { TxType } from 'types/transactionInterfaces';
 import Button from 'components/Button';
-import DirectIcon from 'components/icons/DirectIcon';
-import CopyIcon from 'components/icons/CopyIcon';
-import SwitchExchangeIcon from 'components/icons/SwitchExchangeIcon';
+import DirectIcon from 'components/Icons/DirectIcon';
+import CopyIcon from 'components/Icons/CopyIcon';
+import SwitchExchangeIcon from 'components/Icons/SwitchExchangeIcon';
 import { copyToClipboard } from '../../utils/domUtils';
 
 interface AccountProps {

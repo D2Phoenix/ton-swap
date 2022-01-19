@@ -16,7 +16,7 @@ import {
   setLiquidityInput1Token,
 } from 'store/liquidity/liquiditySlice';
 import { connectWallet, walletImportLiquidity } from 'store/wallet/walletThunks';
-import ChevronDownIcon from 'components/icons/ChevronDownIcon';
+import ChevronDownIcon from 'components/Icons/ChevronDownIcon';
 import { getLiquidityPool } from 'store/liquidity/liquidityThunks';
 import TokenUtils from 'utils/tokenUtils';
 import { WalletStatus, WalletType } from 'types/walletAdapterInterface';

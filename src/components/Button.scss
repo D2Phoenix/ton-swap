@@ -59,6 +59,7 @@
       }
     }
     > .icon {
+      margin-right: 0;
       color: var(--primary-color);
     }
   }
@@ -67,9 +68,7 @@
     border-radius: 8px;
   }
   > .icon {
-    & ~ * {
-      margin-left: 1rem;
-    }
+    margin-right: 12px;
     color: var(--primary-color);
   }
 }

@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 
 import './TokenInput.scss';
 import Button from './Button';
-import ArrowDownIcon from './icons/ArrowDownIcon';
+import ArrowDownIcon from './Icons/ArrowDownIcon';
 import TokenInterface from 'types/tokenInterface';
 import { BALANCE_PRECISION } from 'constants/swap';
 import PoolInterface from 'types/poolInterface';
@@ -63,10 +63,9 @@ function TokenInput({
 
   const tokenSelectHandler = useCallback(
     (token) => {
-      tokenSelectToggle();
       onSelect && onSelect(token);
     },
-    [onSelect, tokenSelectToggle],
+    [onSelect],
   );
 
   const changeHandler = useCallback(

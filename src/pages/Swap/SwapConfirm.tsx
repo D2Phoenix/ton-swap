@@ -4,7 +4,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import './SwapConfirm.scss';
 import Modal from 'components/Modal';
 import TokenInput from 'components/TokenInput';
-import ChevronDownIcon from 'components/icons/ChevronDownIcon';
+import ChevronDownIcon from 'components/Icons/ChevronDownIcon';
 import SwapInfo from './SwapInfo';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { resetSwap, selectSwapInput0, selectSwapInput1, selectSwapTrade } from 'store/swap/swapSlice';

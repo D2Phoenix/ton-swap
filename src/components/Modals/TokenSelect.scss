@@ -1,26 +1,18 @@
-@import '../../styles/vars';
-
 .token-select-modal.modal-container {
-  .modal-content {
-    height: 600px;
-    width: 50vw;
-    max-width: 420px;
+  .modal-background {
+    .modal {
+      height: 712px;
+      width: 100%;
+      max-width: 512px;
+    }
   }
 }
 .token-select-wrapper {
   display: flex;
   flex-direction: column;
   height: 100%;
-  > span:first-child {
-    margin-bottom: 8px;
-  }
   input {
-    width: 100%;
-    padding: 16px;
-    font-size: 18px;
-  }
-  .link__btn {
-    margin-top: 16px;
+    margin-bottom: 24px;
   }
   .token-select-header {
     display: flex;
@@ -31,26 +23,29 @@
     }
   }
   .token-select-list {
-    height: calc(100% - 96px);
     overflow: auto;
-    padding-bottom: 8px;
+    margin-bottom: 12px;
     .token-select-item {
       display: flex;
       flex-direction: row;
       align-items: center;
-      height: 56px;
+      height: 66px;
       cursor: pointer;
-      gap: 16px;
-      padding: 8px 16px 8px 8px;
+      gap: 20px;
+      padding: 8px 16px;
+      border-radius: 8px;
       &:hover {
-        background-color: $hover-color;
+        background-color: var(--list-hover-color);
       }
       .token-name {
         display: flex;
         flex-direction: column;
+        gap: 8px
       }
       .token-balance {
         margin-left: auto;
+        color: var(--label-color);
+        align-self: flex-start;
       }
     }
   }

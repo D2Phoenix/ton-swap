@@ -45,21 +45,23 @@ function NavList({ links }: NavListProps) {
     [setUnderlinePosition, activeLink],
   );
 
+  const isActiveHandler = useCallback((index: number, value: { isActive: boolean }) => {
+    if (value.isActive) {
+      setTimeout(() => {
+        setActiveLink(index);
+      });
+    }
+    return `nav-item__btn title-1 ${value.isActive ? 'active' : ''}`;
+  }, []);
+
   return (
     <nav className="nav-wrapper">
       <div ref={navListRef} className="nav-list">
         {links.map((link, index) => {
-          const isActive = (value: { isActive: boolean }) => {
-            if (value.isActive) {
-              setActiveLink(index);
-            }
-            return `nav-item__btn title-1 ${value.isActive ? 'active' : ''}`;
-          };
-
           return (
             <div key={index} className="nav-item">
               <NavLink
-                className={isActive}
+                className={isActiveHandler.bind(null, index)}
                 to={link.to}
                 onMouseEnter={mouseEnterHandler}
                 onMouseLeave={mouseLeaveHandler}

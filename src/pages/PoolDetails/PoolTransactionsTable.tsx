@@ -2,9 +2,9 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import './PoolTransactionsTable.scss';
-import ChevronDownIcon from 'components/icons/ChevronDownIcon';
+import ChevronDownIcon from 'components/Icons/ChevronDownIcon';
 import CurrencyUtils from 'utils/currencyUtils';
-import ChevronRightIcon from 'components/icons/ChevronRightIcon';
+import ChevronRightIcon from 'components/Icons/ChevronRightIcon';
 import { useAppSelector } from 'store/hooks';
 import { selectPoolsTransactions } from 'store/pools/poolsSlice';
 import DateUtils from 'utils/dateUtils';

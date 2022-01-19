@@ -1,8 +1,10 @@
 .connect-wallet-modal.modal-container {
-  .modal-content {
-    height: 220px;
-    width: 50vw;
-    max-width: 512px;
+  .modal-background {
+    .modal {
+      height: auto;
+      width: 50vw;
+      max-width: 512px;
+    }
   }
 }
 

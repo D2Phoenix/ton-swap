@@ -47,7 +47,7 @@ body.modal-active {
       background-color: var(--modal-background-color);
       border-radius: 1rem;
       position: relative;
-      padding: 40px 24px;
+      padding: 24px;
       min-height: 50px;
       min-width: 50px;
       max-height: 80%;
@@ -58,6 +58,7 @@ body.modal-active {
 
   .modal-content {
     position: relative;
+    height: calc(100% - 60px);
   }
 
   .modal-header {
@@ -75,6 +76,20 @@ body.modal-active {
         display: block;
       }
     }
+  }
+
+  ::-webkit-scrollbar-track {
+    -webkit-box-shadow: var(--modal-scrollbar-track-shadow);
+    background-color: var(--modal-scrollbar-track-background);
+  }
+
+  ::-webkit-scrollbar {
+    width: var(--modal-scrollbar-width);
+    background-color: var(--modal-scrollbar-background);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--modal-scrollbar-thumb-background);
   }
 }
 
