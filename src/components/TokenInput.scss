@@ -1,4 +1,4 @@
-@import "../styles/vars";
+@import '../styles/vars';
 
 .input-wrapper {
   display: flex;
@@ -74,8 +74,9 @@
       outline: 0;
       -moz-appearance: textfield;
       padding: 0;
+      background-color: transparent;
       &:focus {
-        outline:none !important;
+        outline: none !important;
       }
       &::-webkit-outer-spin-button,
       &::-webkit-inner-spin-button {

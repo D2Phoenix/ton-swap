@@ -1,6 +1,6 @@
-import { createSlice, PayloadAction} from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import type { RootState } from 'store/store'
+import type { RootState } from 'store/store';
 import TokenInterface from 'types/tokenInterface';
 import { fetchTokens } from './appThunks';
 import { DEFAULT_DEADLINE, DEFAULT_SLIPPAGE } from 'constants/swap';
@@ -8,42 +8,42 @@ import { SettingsInterface } from 'types/settingsInterface';
 import TokenListInterface from 'types/tokenListInterface';
 
 interface AppState {
-    tokens: TokenInterface[];
-    tokenLists: TokenListInterface[];
-    settings: SettingsInterface;
+  tokens: TokenInterface[];
+  tokenLists: TokenListInterface[];
+  settings: SettingsInterface;
 }
 
 const initialState: AppState = {
-    tokens: [],
-    tokenLists: [],
-    settings: {
-        slippage: DEFAULT_SLIPPAGE,
-        deadline: DEFAULT_DEADLINE,
-    },
-}
+  tokens: [],
+  tokenLists: [],
+  settings: {
+    slippage: DEFAULT_SLIPPAGE,
+    deadline: DEFAULT_DEADLINE,
+  },
+};
 
 export const appSlice = createSlice({
-    name: 'app',
-    initialState,
-    reducers: {
-        setTokens: (state, action: PayloadAction<any[]>) => {
-            state.tokens = action.payload;
-        },
-        setSettingsSlippage: (state, action: PayloadAction<any>) => {
-            state.settings.slippage = action.payload;
-        },
-        setSettingsDeadline: (state, action: PayloadAction<any>) => {
-            state.settings.deadline = action.payload;
-        },
+  name: 'app',
+  initialState,
+  reducers: {
+    setTokens: (state, action: PayloadAction<any[]>) => {
+      state.tokens = action.payload;
     },
-    extraReducers: (builder) => {
-        builder.addCase(fetchTokens.fulfilled, (state, action) => {
-            state.tokens = action.payload;
-        })
+    setSettingsSlippage: (state, action: PayloadAction<any>) => {
+      state.settings.slippage = action.payload;
     },
-})
+    setSettingsDeadline: (state, action: PayloadAction<any>) => {
+      state.settings.deadline = action.payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchTokens.fulfilled, (state, action) => {
+      state.tokens = action.payload;
+    });
+  },
+});
 
-export const { setTokens, setSettingsSlippage, setSettingsDeadline } = appSlice.actions
+export const { setTokens, setSettingsSlippage, setSettingsDeadline } = appSlice.actions;
 
 export const selectTokens = (state: RootState) => state.app.tokens;
 export const selectTokenLists = (state: RootState) => state.app.tokenLists;

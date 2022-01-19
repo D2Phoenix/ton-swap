@@ -1,4 +1,4 @@
-@import "../../styles/vars";
+@import '../../styles/vars';
 
 .pool-transactions-wrapper {
   display: flex;
@@ -28,7 +28,8 @@
       }
     }
   }
-  .pool-transactions__item, .pool-transactions-header {
+  .pool-transactions__item,
+  .pool-transactions-header {
     display: flex;
     flex-direction: row;
     gap: 16px;
@@ -69,7 +70,8 @@
   .pool-transactions__item:not(:last-child) {
     border-bottom: 1px solid $border-color;
   }
-  .pool-transactions__item, .pool-transactions-header {
+  .pool-transactions__item,
+  .pool-transactions-header {
     .column:not(:last-child) {
       display: none;
     }

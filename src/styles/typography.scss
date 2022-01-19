@@ -64,7 +64,8 @@ p {
   font-weight: 400;
 }
 
-button, a {
+button,
+a {
   line-height: 24px;
   &.small {
     font-size: 12px;
@@ -98,4 +99,3 @@ label {
     font-weight: 700;
   }
 }
-

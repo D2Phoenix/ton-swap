@@ -20,9 +20,10 @@ nav {
     padding: 14px 16px;
     color: var(--nav-text-color);
     cursor: pointer;
-    transition: color .3s;
+    transition: color 0.3s;
     text-decoration: none;
-    &.active, &:hover {
+    &.active,
+    &:hover {
       color: var(--nav-active-text-color);
     }
   }
@@ -33,6 +34,6 @@ nav {
     width: 120px;
     height: 2px;
     will-change: left, width;
-    transition: left .2s, width .2s;
+    transition: left 0.2s, width 0.2s;
   }
 }

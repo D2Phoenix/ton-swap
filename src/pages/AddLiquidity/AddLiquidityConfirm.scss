@@ -1,4 +1,4 @@
-@import "../../styles/vars";
+@import '../../styles/vars';
 .add-liquidity-confirm-modal.modal-container {
   .modal-content {
     height: 526px;
@@ -19,7 +19,6 @@
   flex-direction: column;
   gap: 8px;
   width: 100%;
-  background-color: white;
   border-radius: 8px;
   overflow: auto;
   height: calc(100% - 20px);
@@ -66,7 +65,7 @@
 }
 
 @media screen and (max-width: 599px) {
-  .add-liquidity-confirm-modal.modal-container  {
+  .add-liquidity-confirm-modal.modal-container {
     .modal-content {
       height: 83% !important;
       max-height: 83%;

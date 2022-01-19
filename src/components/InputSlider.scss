@@ -1,4 +1,4 @@
-@import "../styles/vars";
+@import '../styles/vars';
 
 $range-width: 100% !default;
 
@@ -33,7 +33,7 @@ $range-label-width: 70px !default;
     border-radius: 50%;
     background: $range-handle-color;
     cursor: pointer;
-    transition: background .15s ease-in-out;
+    transition: background 0.15s ease-in-out;
 
     &:hover {
       background: $range-handle-color-hover;
@@ -51,7 +51,7 @@ $range-label-width: 70px !default;
     border-radius: 50%;
     background: $range-handle-color;
     cursor: pointer;
-    transition: background .15s ease-in-out;
+    transition: background 0.15s ease-in-out;
 
     &:hover {
       background: $range-handle-color-hover;
@@ -69,11 +69,9 @@ $range-label-width: 70px !default;
         background-color: $range-handle-color-hover;
       }
     }
-
   }
 
   &:focus {
-
     &::-webkit-slider-thumb {
       box-shadow: 0 0 0 3px #fff, 0 0 0 6px $primary-color;
     }

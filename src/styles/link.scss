@@ -1,7 +1,7 @@
 a:not(.nav-item__btn) {
   color: var(--link-color);
   text-decoration: underline;
-  transition: color .3s;
+  transition: color 0.3s;
   &:hover {
     color: var(--link-hover-color);
   }
@@ -17,9 +17,9 @@ a:not(.nav-item__btn) {
   display: inline-block;
   color: $primary-color;
   cursor: pointer;
-  -webkit-transition: color .3s;
-  -o-transition: color .3s;
-  transition: color .3s;
+  -webkit-transition: color 0.3s;
+  -o-transition: color 0.3s;
+  transition: color 0.3s;
   font-family: 'Mulish', sans-serif;
   font-weight: 700;
   text-decoration: none;

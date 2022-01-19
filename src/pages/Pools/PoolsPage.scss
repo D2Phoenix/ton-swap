@@ -1,4 +1,4 @@
-@import "../../styles/vars";
+@import '../../styles/vars';
 
 .pools-wrapper {
   display: flex;
@@ -37,7 +37,8 @@
       }
     }
   }
-  .pool-list__item, .pools-list-header {
+  .pool-list__item,
+  .pools-list-header {
     display: flex;
     flex-direction: row;
     gap: 16px;
@@ -86,7 +87,8 @@
   .pool-list__item:not(:last-child) {
     border-bottom: 1px solid $border-color;
   }
-  .pool-list__item, .pools-list-header {
+  .pool-list__item,
+  .pools-list-header {
     .position__column,
     .total-day__column,
     .total-7day__column {

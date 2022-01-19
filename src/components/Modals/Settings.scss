@@ -1,4 +1,4 @@
-@import "../../styles/vars";
+@import '../../styles/vars';
 .swap-settings-modal.modal-container {
   .modal-content {
     height: 250px;
@@ -11,7 +11,6 @@
   flex-direction: column;
   gap: 8px;
   width: 100%;
-  background-color: white;
   border-radius: 8px;
   > div {
     display: flex;

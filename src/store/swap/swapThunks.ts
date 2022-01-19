@@ -14,33 +14,36 @@ export const swapService = new SmartContractsService();
 let previousPromise: any = null;
 
 export const estimateTransaction = createAsyncThunk(
-    'swap/estimate',
-    async (data: SwapTradeRequestInterface, thunkAPI) => {
-        const state = thunkAPI.getState() as RootState;
-        if (previousPromise) {
-            previousPromise.cancel();
-        }
-        const getTradePromise = PromiseUtils.makeCancelable<SwapTradeInterface>(swapService.getTrade(data, state.app.settings));
-        previousPromise = getTradePromise;
-        const transaction = await getTradePromise.promise;
-        return {
-            fromAmount: transaction.txType === EstimateTxType.EXACT_IN ? transaction.amount : transaction.quote,
-            toAmount: transaction.txType === EstimateTxType.EXACT_IN ? transaction.quote : transaction.amount,
-            type: data.txType,
-            trade: transaction.trade,
-        }
+  'swap/estimate',
+  async (data: SwapTradeRequestInterface, thunkAPI) => {
+    const state = thunkAPI.getState() as RootState;
+    if (previousPromise) {
+      previousPromise.cancel();
     }
+    const getTradePromise = PromiseUtils.makeCancelable<SwapTradeInterface>(
+      swapService.getTrade(data, state.app.settings),
+    );
+    previousPromise = getTradePromise;
+    const transaction = await getTradePromise.promise;
+    return {
+      fromAmount: transaction.txType === EstimateTxType.EXACT_IN ? transaction.amount : transaction.quote,
+      toAmount: transaction.txType === EstimateTxType.EXACT_IN ? transaction.quote : transaction.amount,
+      type: data.txType,
+      trade: transaction.trade,
+    };
+  },
 );
 
 export const getSwapToken = createAsyncThunk(
-    'swap/token',
-    async ({address, position}: { address: string, position: string }, thunkAPI) => {
-        const state = thunkAPI.getState() as RootState;
-        const tokens: TokenInterface[] = state.app.tokens.length ? state.app.tokens : (await getTokens()).tokens;
-        return {
-            token: tokens.find((token) =>
-                token.address.toLowerCase() === address.toLowerCase() || token.symbol === address) as TokenInterface,
-            position
-        }
-    },
-)
+  'swap/token',
+  async ({ address, position }: { address: string; position: string }, thunkAPI) => {
+    const state = thunkAPI.getState() as RootState;
+    const tokens: TokenInterface[] = state.app.tokens.length ? state.app.tokens : (await getTokens()).tokens;
+    return {
+      token: tokens.find(
+        (token) => token.address.toLowerCase() === address.toLowerCase() || token.symbol === address,
+      ) as TokenInterface,
+      position,
+    };
+  },
+);

@@ -38,19 +38,26 @@
     }
   }
   &.btn-icon {
-    border: 1px solid var(--primary-color);
     box-sizing: border-box;
     background-color: transparent;
     &:hover {
-      border-color: var(--primary-hover-color);
-      color: var(--primary-hover-color);
+      > .icon {
+        color: var(--primary-hover-color);
+      }
     }
     &:disabled {
-      border-color: var(----primary-disabled-color);
+      > .icon {
+        color: var(--primary-disabled-color);
+      }
+    }
+    > .icon {
+      color: var(--primary-text-color);
     }
   }
   > .icon {
-    margin-right: 1rem;
+    & ~ * {
+      margin-left: 1rem;
+    }
     color: var(--primary-color);
   }
 }

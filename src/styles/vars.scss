@@ -1,6 +1,6 @@
-@import "palletes";
+@import 'palletes';
 
-$primary-color: #0088CC;
+$primary-color: #0088cc;
 $secondary-color: #303757;
 $text-gray-color: rgba(48, 55, 87, 0.56);
 $border-color: rgba(48, 55, 87, 0.16);
@@ -13,7 +13,7 @@ $warning-color: rgb(253, 193, 64);
 :root {
   // Common
   --background-color: #{map-get($gray-palette, 2400)};
-  --text-color: #{map-get($gray-palette, "white")};
+  --text-color: #{map-get($gray-palette, 'white')};
   --label-color: #{map-get($gray-palette, 900)};
   --primary-color: #{map-get($gold-palette, 500)};
   --primary-hover-color: #{map-get($gold-palette, 600)};

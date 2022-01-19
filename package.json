@@ -19,7 +19,7 @@
     "react-i18next": "^11.14.3",
     "react-redux": "^7.2.6",
     "react-router-dom": "6",
-    "react-scripts": "4.0.3",
+    "react-scripts": "^5.0.0",
     "recharts": "^2.1.6",
     "redux-thunk": "^2.4.0",
     "simple-uniswap-sdk": "^3.6.2",
@@ -36,7 +36,9 @@
     "docker:run": "docker run -it --rm -p 1337:80 ton-swap:prod",
     "docker:run:dev": "docker run -it --rm -v ${PWD}:/app -v /app/node_modules -p 3001:3000 -e CHOKIDAR_USEPOLLING=true ton-swap:dev",
     "i18n": "i18next-scanner",
-    "analyze": "source-map-explorer 'build/static/js/*.js'"
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
+    "lint": "lint",
+    "prettier": "prettier \"src/**/*\" --write --ignore-unknown"
   },
   "eslintConfig": {
     "extends": [
@@ -57,8 +59,11 @@
     ]
   },
   "devDependencies": {
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "i18next-scanner": "^3.1.0",
     "i18next-scanner-typescript": "^1.0.6",
+    "prettier": "^2.5.1",
     "source-map-explorer": "^2.5.2"
   }
 }

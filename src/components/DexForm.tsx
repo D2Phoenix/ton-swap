@@ -8,51 +8,52 @@ import QuestionIcon from './icons/QuestionIcon';
 import Tooltip from './Tooltip';
 
 interface DexFormProps {
-    header: JSX.Element;
-    headerTooltip?: JSX.Element;
-    subheader: JSX.Element;
-    backLink?: string;
-    content: JSX.Element;
-    actions: JSX.Element;
+  header: JSX.Element;
+  headerTooltip?: JSX.Element;
+  subheader: JSX.Element;
+  backLink?: string;
+  content: JSX.Element;
+  actions: JSX.Element;
 }
 
-function DexForm({header, headerTooltip, subheader, backLink, content, actions}: DexFormProps) {
-    const [showSettings, setShowSettings] = useState(false);
+function DexForm({ header, headerTooltip, subheader, backLink, content, actions }: DexFormProps) {
+  const [showSettings, setShowSettings] = useState(false);
 
-    return (
-        <form className="box-wrapper" onSubmit={e => {
-            e.preventDefault();
-        }}>
-            <div className="box-header-wrapper">
-                {
-                    backLink && <Link className="btn-icon chevron" to={backLink}>
-                    <ChevronRightIcon revert={true}/>
-                  </Link>
-                }
-                <div className="box-header">
-                    <div className="title-1">
-                        {header}
-                        {
-                            headerTooltip && <Tooltip content={<span className="text-small">{headerTooltip}</span>} direction="bottom">
-                            <div className="btn-icon">
-                              <QuestionIcon/>
-                            </div>
-                          </Tooltip>
-                        }
-                    </div>
-                    <span className="sub-title-1">{subheader}</span>
+  return (
+    <form
+      className="box-wrapper"
+      onSubmit={(e) => {
+        e.preventDefault();
+      }}
+    >
+      <div className="box-header-wrapper">
+        {backLink && (
+          <Link className="btn-icon chevron" to={backLink}>
+            <ChevronRightIcon revert={true} />
+          </Link>
+        )}
+        <div className="box-header">
+          <div>
+            <h5>{header}</h5>
+            {headerTooltip && (
+              <Tooltip content={<span className="text-small">{headerTooltip}</span>} direction="bottom">
+                <div className="btn-icon">
+                  <QuestionIcon />
                 </div>
-                <div className="btn-icon" onClick={() => setShowSettings(!showSettings)}>
-                    <SettingsIcon/>
-                </div>
-            </div>
-            {content}
-            {actions}
-            {
-                showSettings && <Settings onClose={() => setShowSettings(false)}/>
-            }
-        </form>
-    )
+              </Tooltip>
+            )}
+          </div>
+          <span className="sub-title-2">{subheader}</span>
+        </div>
+        <div className="btn-icon" onClick={() => setShowSettings(!showSettings)}>
+          <SettingsIcon />
+        </div>
+      </div>
+      {content}
+      {actions}
+      {showSettings && <Settings onClose={() => setShowSettings(false)} />}
+    </form>
+  );
 }
 
 export default DexForm;
