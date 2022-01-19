@@ -10,13 +10,13 @@ import Tooltip from './Tooltip';
 interface DexFormProps {
   header: JSX.Element;
   headerTooltip?: JSX.Element;
-  subheader: JSX.Element;
+  subheader?: JSX.Element;
   backLink?: string;
   content: JSX.Element;
   actions: JSX.Element;
 }
 
-function DexForm({ header, headerTooltip, subheader, backLink, content, actions }: DexFormProps) {
+function DexForm({ header, headerTooltip, backLink, content, actions }: DexFormProps) {
   const [showSettings, setShowSettings] = useState(false);
 
   return (
@@ -43,14 +43,13 @@ function DexForm({ header, headerTooltip, subheader, backLink, content, actions 
               </Tooltip>
             )}
           </div>
-          <span className="sub-title-2">{subheader}</span>
         </div>
         <div className="btn-icon" onClick={() => setShowSettings(!showSettings)}>
           <SettingsIcon />
         </div>
       </div>
       {content}
-      {actions}
+      <div className="box-actions">{actions}</div>
       {showSettings && <Settings onClose={() => setShowSettings(false)} />}
     </form>
   );

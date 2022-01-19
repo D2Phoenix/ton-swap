@@ -1,6 +1,7 @@
 .token-icon-wrapper {
   display: inline-block;
-  height: 24px;
+  height: 26px;
+  width: 26px;
   overflow: hidden;
   &.small {
     height: 20px;
@@ -11,8 +12,8 @@
     }
   }
   img {
-    width: 24px;
-    height: 24px;
-    border-radius: 12px;
+    width: 26px;
+    height: 26px;
+    border-radius: 13px;
   }
 }

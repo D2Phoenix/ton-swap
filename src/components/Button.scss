@@ -37,8 +37,16 @@
       color: var(--primary-text-color);
     }
   }
+  &.btn-default {
+    background-color: transparent;
+    &:hover {
+      color: var(--primary-hover-color);
+    }
+    &:disabled {
+      color: var(--primary-disabled-color);
+    }
+  }
   &.btn-icon {
-    box-sizing: border-box;
     background-color: transparent;
     &:hover {
       > .icon {
@@ -51,8 +59,12 @@
       }
     }
     > .icon {
-      color: var(--primary-text-color);
+      color: var(--primary-color);
     }
+  }
+  &.medium {
+    padding: 8px 16px;
+    border-radius: 8px;
   }
   > .icon {
     & ~ * {

@@ -31,4 +31,14 @@ $warning-color: rgb(253, 193, 64);
   --link-color: #{map-get($blue-palette, 500)};
   --link-hover-color: #{map-get($blue-palette, 600)};
   --link-disabled-color: #{map-get($gray-palette, 1800)};
+  // Inputs
+  --input-border-color: #{map-get($gray-palette, 2200)};
+  --input-hover-color: #{map-get($gray-palette, 2200)};
+  --input-focus-color: #{map-get($gray-palette, "white")};
+  --input-text-color: #{map-get($gray-palette, "white")};
+  --input-placeholder-color: #{map-get($gray-palette, 1200)};
+  // Dropdown
+  --dropdown-border-color: #{map-get($gray-palette, 2300)};
+  --dropdown-hover-color: #{map-get($gray-palette, 2300)};
+  --dropdown-focus-color: #{map-get($gray-palette, "white")};
 }

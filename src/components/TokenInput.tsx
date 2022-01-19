@@ -2,7 +2,8 @@ import React, { useCallback, useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
 
 import './TokenInput.scss';
-import ChevronRightIcon from './icons/ChevronRightIcon';
+import Button from './Button';
+import ArrowDownIcon from './icons/ArrowDownIcon';
 import TokenInterface from 'types/tokenInterface';
 import { BALANCE_PRECISION } from 'constants/swap';
 import PoolInterface from 'types/poolInterface';
@@ -23,6 +24,7 @@ interface TokenInputProps {
   loading?: boolean;
   primary?: boolean;
   balancesFirst?: boolean;
+  label?: string;
 }
 
 const INPUT_REGEXP = RegExp(`^\\d*(?:\\\\[.])?\\d*$`);
@@ -39,23 +41,35 @@ function TokenInput({
   onChange,
   onSelect,
   balancesFirst,
+  label,
 }: TokenInputProps) {
   const { t } = useTranslation();
   const [showTokenSelect, setShowTokenSelect] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
 
-  const toggleTokenSelect = useCallback(() => {
+  const valueDisplay = useMemo(() => {
+    if (!value) {
+      return '';
+    }
+    if (primary) {
+      return value;
+    }
+    return TokenUtils.toNumberDisplay(value);
+  }, [value, primary]);
+
+  const tokenSelectToggle = useCallback(() => {
     setShowTokenSelect((prev) => !prev);
   }, []);
 
-  const handleTokenSelect = useCallback(
+  const tokenSelectHandler = useCallback(
     (token) => {
-      toggleTokenSelect();
+      tokenSelectToggle();
       onSelect && onSelect(token);
     },
-    [onSelect, toggleTokenSelect],
+    [onSelect, tokenSelectToggle],
   );
 
-  const handleChange = useCallback(
+  const changeHandler = useCallback(
     (event) => {
       const value = event.target.value.replace(/,/g, '.');
       if (value === '') {
@@ -68,51 +82,34 @@ function TokenInput({
     [onChange],
   );
 
-  const handleMax = useCallback(
-    (event) => {
-      if (balance) {
-        handleChange({
-          target: {
-            value: balance,
-          },
-        });
-      }
-    },
-    [handleChange, balance],
-  );
+  const maxHandler = useCallback(() => {
+    if (balance) {
+      changeHandler({
+        target: {
+          value: balance,
+        },
+      });
+    }
+  }, [changeHandler, balance]);
+
+  const focusHandler = useCallback(() => {
+    setIsFocused((value) => !value);
+  }, []);
 
   const balanceVisible = useMemo(() => {
     if (balance) {
       return new BigNumber(balance).precision(BALANCE_PRECISION).toFixed();
     }
-    return '0';
+    return '-';
   }, [balance]);
 
   const simpleToken = token as TokenInterface;
   const poolToken = token as PoolInterface;
 
-  const valueDisplay = useMemo(() => {
-    if (!value) {
-      return '';
-    }
-    if (primary) {
-      return value;
-    }
-    return TokenUtils.toNumberDisplay(value);
-  }, [value, primary]);
-
   return (
-    <div className={'input-wrapper' + (!selectable ? ' view-only' : '')}>
+    <div className={`input-wrapper ${isFocused ? 'focused' : ''}`}>
       <div className={'token-input' + (loading ? ' loading' : '')}>
-        <div className="btn btn-outline small text-medium" onClick={toggleTokenSelect}>
-          {simpleToken?.logoURI && (
-            <TokenIcon address={simpleToken.address} name={simpleToken.name} url={simpleToken.logoURI} />
-          )}
-          {poolToken?.address0 && <TokenIcon address={poolToken.address0} name={poolToken.name} />}
-          {poolToken?.address1 && <TokenIcon address={poolToken.address1} name={poolToken.name} />}
-          <span>{token ? token.symbol : t('Select')}</span>
-          {selectable && <ChevronRightIcon />}
-        </div>
+        {label && <p>{label}</p>}
         <input
           type="text"
           inputMode="decimal"
@@ -124,25 +121,42 @@ function TokenInput({
           placeholder="0.0"
           readOnly={!editable}
           value={valueDisplay}
-          onChange={handleChange}
+          onChange={changeHandler}
+          onFocus={focusHandler}
+          onBlur={focusHandler}
         />
+        <label className="balance small">
+          {t('Balance')}: {balanceVisible} {!!token && token.symbol}
+        </label>
       </div>
-      {token && balance != null && (
-        <div className="balance text-small">
-          {t('Balance')}: {balanceVisible} {token.symbol}
-          {showMax && !new BigNumber(balance).eq('0') && (!value || !new BigNumber(balance).eq(value)) && (
-            <>
-              &nbsp;(
-              <span className="text-primary text-small link__btn" onClick={handleMax}>
-                MAX
-              </span>
-              )
-            </>
+      <div className="token-select">
+        {showMax &&
+          balance != null &&
+          !new BigNumber(balance).eq('0') &&
+          (!value || !new BigNumber(balance).eq(value)) && (
+            <Button className="medium max__btn" type={'default'} onClick={maxHandler}>
+              MAX
+            </Button>
           )}
-        </div>
-      )}
+        {token && (
+          <div className="dropdown" onClick={tokenSelectToggle}>
+            {simpleToken?.logoURI && (
+              <TokenIcon address={simpleToken.address} name={simpleToken.name} url={simpleToken.logoURI} />
+            )}
+            {poolToken?.address0 && <TokenIcon address={poolToken.address0} name={poolToken.name} />}
+            {poolToken?.address1 && <TokenIcon address={poolToken.address1} name={poolToken.name} />}
+            <p>{token.symbol}</p>
+            <ArrowDownIcon />
+          </div>
+        )}
+        {!token && (
+          <Button type={'primary'} className="medium select__btn" onClick={tokenSelectToggle}>
+            {t('Select a Token')}
+          </Button>
+        )}
+      </div>
       {showTokenSelect && (
-        <TokenSelect balancesFirst={balancesFirst} onClose={toggleTokenSelect} onSelect={handleTokenSelect} />
+        <TokenSelect balancesFirst={balancesFirst} onClose={tokenSelectToggle} onSelect={tokenSelectHandler} />
       )}
     </div>
   );

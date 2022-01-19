@@ -1,79 +1,34 @@
-@import '../styles/vars';
-
 .input-wrapper {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
   width: 100%;
-  border-radius: 0.25rem;
-  padding: 1rem 1rem 0.75rem;
-  border: 1px solid $border-color;
-  &.view-only {
-    .token-input {
-      .btn {
-        pointer-events: none;
-        padding-left: 0;
-        .token-icon-wrapper {
-          + .token-icon-wrapper {
-            left: 1.5rem;
-            + span {
-              margin-left: 3.25rem;
-            }
-          }
-          + span {
-            margin-left: 2.25rem;
-          }
-        }
-        span:first-child {
-          padding-left: 1rem;
-        }
-      }
-    }
-  }
+  border-radius: 8px;
+  padding: 12px 24px;
+  border: 1px solid var(--input-border-color);
+  transition: border-color 0.3s;
   &:hover {
-    border-color: $primary-color;
+    border-color: var(--input-hover-color);
   }
-  > div {
-    display: flex;
-    flex-direction: row;
+  &.focused {
+    border-color: var(--input-focus-color);
   }
   .token-input {
+    flex: 1 1 100%;
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 8px;
-    .btn {
-      position: relative;
-      margin-right: 0.75rem;
-      flex: 0 0 auto;
-      .token-icon-wrapper {
-        position: absolute;
-        left: 8px;
-        + .token-icon-wrapper {
-          left: 32px;
-          + span {
-            margin-left: 44px;
-          }
-        }
-      }
-      .token-icon-wrapper + span {
-        margin-left: 20px;
-      }
-      span {
-        margin-right: 20px;
-      }
-      svg {
-        position: absolute;
-        right: 10px;
-        float: right;
-      }
+    flex-direction: column;
+    p {
+      font-weight: 600;
     }
     input {
-      flex: 1 1 auto;
-      font-size: 24px;
-      text-align: right;
+      width: 100%;
+      font-size: 34px;
+      line-height: 42px;
+      color: var(--input-text-color);
       border: 0;
       outline: 0;
-      -moz-appearance: textfield;
       padding: 0;
+      -moz-appearance: textfield;
       background-color: transparent;
       &:focus {
         outline: none !important;
@@ -82,11 +37,51 @@
       &::-webkit-inner-spin-button {
         -webkit-appearance: none;
       }
+      &::placeholder {
+        color: var(--input-placeholder-color);
+      }
+    }
+    label {
+      font-weight: 400;
     }
     &.loading {
       input {
         opacity: 0.5;
       }
     }
+  }
+  .token-select {
+    display: flex;
+    flex-direction: row;
+    flex: 0 0 auto;
+    .dropdown {
+      width: 136px;
+      border: 1px solid var(--dropdown-border-color);
+      box-sizing: border-box;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      padding: 18px 16px 18px 10px;
+      gap: 10px;
+      cursor: pointer;
+      transition: border-color 0.3s;
+      &:hover {
+        border-color: var(--dropdown-hover-color);
+      }
+      &:focus {
+        border-color: var(--dropdown-focus-color);
+      }
+      > *:not(p) {
+        flex: 0 0 auto;
+      }
+      p {
+        flex: 1 1 100%;
+        white-space: nowrap;
+        font-weight: 600;
+      }
+    }
+  }
+  label.balance {
+    color: var(--text-color);
   }
 }

@@ -1,5 +1,3 @@
-@import '../../styles/vars';
-
 .swap-info {
   display: flex;
   width: 100%;
@@ -16,15 +14,4 @@
   &.loading {
     opacity: 0.5;
   }
-}
-
-.switch__btn {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  cursor: pointer;
-}
-.swap__btn {
-  width: 100%;
-  margin: 8px 0;
 }

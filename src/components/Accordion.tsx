@@ -24,8 +24,8 @@ function Panel({ label, content, activeTab, index, onActivateTab }: PanelProps) 
       // eslint-disable-next-line react/no-find-dom-node
       const el = ReactDOM.findDOMNode(element.current) as Element;
       if (el) {
-        const height = el.querySelector('.panel__inner')!.scrollHeight;
-        setHeight(height);
+        const height = el.querySelector('.panel__inner')?.scrollHeight;
+        setHeight(height || 0);
       }
     }, 300);
   }, []);

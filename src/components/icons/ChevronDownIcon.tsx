@@ -6,11 +6,12 @@ function ChevronDownIcon({ revert }: ChevronDownIconParams) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
+      className="icon"
       width="16"
       height="16"
       viewBox="0 0 24 24"
       fill="none"
-      stroke="#000000"
+      stroke="currentColor"
       strokeWidth="2"
       transform={revert ? 'rotate(180)' : ''}
       style={{ transform: revert ? 'rotate(180deg)' : '' }}

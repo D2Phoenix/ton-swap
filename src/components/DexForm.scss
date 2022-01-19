@@ -2,7 +2,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
   max-width: 512px;
   width: 100%;
   padding: 0.5rem;
@@ -12,8 +11,9 @@
   .box-header-wrapper {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     width: 100%;
-    margin-bottom: 32px;
+    margin-bottom: 40px;
 
     .box-header {
       display: flex;
@@ -26,5 +26,12 @@
         }
       }
     }
+  }
+  .box-actions {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 40px;
+    align-items: stretch;
   }
 }

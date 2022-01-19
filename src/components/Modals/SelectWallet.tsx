@@ -1,11 +1,11 @@
 import { useCallback, useMemo, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
 
 import './SelectWallet.scss';
 import Modal from 'components/Modal';
 import { useAppDispatch } from 'store/hooks';
 import { connectWallet } from 'store/wallet/walletThunks';
 import { WalletType } from 'types/walletAdapterInterface';
+import { Trans, useTranslation } from 'react-i18next';
 
 interface ConnectWalletProps {
   onClose: () => void;
