@@ -1,5 +1,8 @@
-import React, { MouseEventHandler, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { CSSProperties, MouseEventHandler, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { FixedSizeList as List } from 'react-window';
+import AutoSizer from 'react-virtualized-auto-sizer';
+
 import BigNumber from 'bignumber.js';
 
 import './TokenSelect.scss';
@@ -11,7 +14,6 @@ import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { selectTokenLists, selectTokens } from 'store/app/appSlice';
 import { selectWalletAdapter, selectWalletBalances } from 'store/wallet/walletSlice';
 import { getWalletBalances } from 'store/wallet/walletThunks';
-import Spinner from 'components/Spinner';
 import ChevronRightIcon from 'components/Icons/ChevronRightIcon';
 import Button from 'components/Button';
 
@@ -98,8 +100,8 @@ function TokenSelect({ onClose, onSelect, balancesFirst }: TokenSelectProps) {
         return 0;
       });
     }
-    return result.slice(0, page * 10);
-  }, [tokens, page, query, balancesFirst, balances]);
+    return result;
+  }, [tokens, query, balancesFirst, balances]);
 
   const handleObserver = useCallback((entries) => {
     const target = entries[0];
@@ -152,22 +154,26 @@ function TokenSelect({ onClose, onSelect, balancesFirst }: TokenSelectProps) {
             onChange={(event) => setQuery(event.target.value)}
           />
           <div className="token-select-list">
-            {visibleTokens.map((token) => {
-              const balance = balances[token.symbol]
-                ? new BigNumber(balances[token.symbol]).precision(BALANCE_PRECISION).toFixed()
-                : '';
-              return (
-                <div key={token.address} className="token-select-item" onClick={selectHandler.bind(null, token)}>
-                  <TokenIcon address={token.address} name={token.name} />
-                  <div className="token-name">
-                    <span className="title-2">{token.symbol}</span>
-                    <label className="small">{token.name}</label>
-                  </div>
-                  <p className="token-balance">{balance}</p>
-                </div>
-              );
-            })}
-            <div ref={loader} />
+            <AutoSizer>
+              {({ width, height }: { width: number; height: number }) => (
+                <List height={height} width={width} itemCount={visibleTokens.length} itemSize={66}>
+                  {({ index, style }: { index: number; style: CSSProperties | undefined }) => {
+                    const token = visibleTokens[index];
+                    const balance = balances[token.symbol] ? '' : '';
+                    return (
+                      <div style={style} className="token-select-item" onClick={selectHandler.bind(null, token)}>
+                        <TokenIcon address={token.address} name={token.name} />
+                        <div className="token-name">
+                          <span className="title-2">{token.symbol}</span>
+                          <label className="small">{token.name}</label>
+                        </div>
+                        <p className="token-balance">{balance}</p>
+                      </div>
+                    );
+                  }}
+                </List>
+              )}
+            </AutoSizer>
           </div>
           <Button type={'default'} className="large" onClick={toggleManageTokens}>
             {t('Manage')}

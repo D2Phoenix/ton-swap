@@ -12,6 +12,7 @@
   flex-direction: column;
   height: 100%;
   input {
+    flex: 0 0 auto;
     margin-bottom: 24px;
   }
   .token-select-header {
@@ -23,7 +24,7 @@
     }
   }
   .token-select-list {
-    overflow: auto;
+    flex: 1 1 auto;
     margin-bottom: 12px;
     .token-select-item {
       display: flex;

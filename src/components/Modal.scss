@@ -10,15 +10,17 @@ body.modal-active {
   left: 0;
   z-index: 10;
   transform: scale(1);
+  will-change: transform, contents;
 
   .modal-background {
     background: rgba(0, 0, 0, 0);
     backdrop-filter: blur(4px);
     animation: fadeIn 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+    transform: translate3d(0, 0, 0);
 
     .modal {
-      opacity: 0;
       animation: scaleUp 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+      transform: translate3d(0, 0, 0);
     }
   }
 
@@ -130,21 +132,29 @@ body.modal-active {
 @keyframes scaleUp {
   0% {
     transform: scale(0.8) translateY(1000px);
-    opacity: 0;
   }
   100% {
     transform: scale(1) translateY(0px);
-    opacity: 1;
   }
 }
 
 @keyframes scaleDown {
   0% {
     transform: scale(1) translateY(0px);
-    opacity: 1;
   }
   100% {
     transform: scale(0.8) translateY(1000px);
-    opacity: 0;
+  }
+}
+
+@keyframes quickScaleDown {
+  0% {
+    transform:scale(1);
+  }
+  99.9% {
+    transform:scale(1);
+  }
+  100% {
+    transform:scale(0);
   }
 }
