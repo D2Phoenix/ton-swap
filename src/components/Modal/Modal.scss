@@ -1,5 +1,19 @@
-body.modal-active {
-  overflow: hidden;
+body {
+  &.modal-active {
+    overflow: hidden;
+    #root {
+      filter: blur(4px);
+      animation: blurIn 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+      will-change: filter;
+    }
+  }
+  &.modal-inactive {
+    #root {
+      filter: blur(0);
+      animation: blurOut 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+      will-change: filter;
+    }
+  }
 }
 
 .modal-container {
@@ -10,11 +24,10 @@ body.modal-active {
   left: 0;
   z-index: 10;
   transform: scale(1);
-  will-change: transform, contents;
+  will-change: transform;
 
   .modal-background {
     background: rgba(0, 0, 0, 0);
-    backdrop-filter: blur(4px);
     animation: fadeIn 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
     transform: translate3d(0, 0, 0);
 
@@ -42,7 +55,7 @@ body.modal-active {
     height: 100%;
     background: rgba(0, 0, 0, 0.4);
     vertical-align: middle;
-    will-change: background, backdrop-filter;
+    will-change: background;
 
     .modal {
       margin: auto;
@@ -54,7 +67,7 @@ body.modal-active {
       min-width: 50px;
       max-height: 80%;
       max-width: 80%;
-      will-change: transform, opacity;
+      will-change: transform;
     }
   }
 
@@ -107,25 +120,39 @@ body.modal-active {
   }
 }
 
+@keyframes blurIn {
+  0% {
+    filter: blur(0);
+  }
+  100% {
+    filter: blur(4px);
+  }
+}
+
+@keyframes blurOut {
+  0% {
+    filter: blur(4px);
+  }
+  100% {
+    filter: blur(0);
+  }
+}
+
 @keyframes fadeIn {
   0% {
     background: rgba(0, 0, 0, 0);
-    backdrop-filter: blur(0);
   }
   100% {
     background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(4px);
   }
 }
 
 @keyframes fadeOut {
   0% {
     background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(4px);
   }
   100% {
     background: rgba(0, 0, 0, 0);
-    backdrop-filter: blur(0);
   }
 }
 

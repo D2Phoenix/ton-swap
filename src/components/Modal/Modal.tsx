@@ -19,6 +19,7 @@ export function Modal({ header, children, className, close, onClose }: ModalProp
   useEffect(() => {
     const target = document.body;
     const classList = ['modal-container'];
+    target.classList.remove('modal-inactive');
     target.classList.add('modal-active');
     if (className) {
       className.split(' ').forEach((item: string) => classList.push(item));
@@ -32,10 +33,11 @@ export function Modal({ header, children, className, close, onClose }: ModalProp
 
   const onCloseHandler = useCallback(() => {
     document.body.classList.remove('modal-active');
+    document.body.classList.add('modal-inactive');
     el.classList.add('out');
     setTimeout(() => {
       onClose();
-    }, 500);
+    }, 400);
   }, [el, onClose]);
 
   useEffect(() => {
