@@ -1,21 +1,24 @@
+import BigNumber from 'bignumber.js';
 import React, { CSSProperties, MouseEventHandler, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FixedSizeList as List } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
+import { FixedSizeList as List } from 'react-window';
 
-import BigNumber from 'bignumber.js';
-
-import './SelectTokenModal.scss';
-import Modal from 'components/Modal';
-import TokenInterface from 'types/tokenInterface';
 import { BALANCE_PRECISION } from 'constants/swap';
+
+import TokenInterface from 'types/tokenInterface';
+
+import Button from 'components/Button';
+import ChevronRightIcon from 'components/Icons/ChevronRightIcon';
+import Modal from 'components/Modal';
 import TokenIcon from 'components/TokenIcon';
-import { useAppDispatch, useAppSelector } from 'store/hooks';
+
 import { selectTokenLists, selectTokens } from 'store/app/appSlice';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { selectWalletAdapter, selectWalletBalances } from 'store/wallet/walletSlice';
 import { getWalletBalances } from 'store/wallet/walletThunks';
-import ChevronRightIcon from 'components/Icons/ChevronRightIcon';
-import Button from 'components/Button';
+
+import './SelectTokenModal.scss';
 
 interface TokenManageListParams {
   onBack: MouseEventHandler;
@@ -157,7 +160,7 @@ export function SelectTokenModal({ onClose, onSelect, balancesFirst }: TokenSele
               )}
             </AutoSizer>
           </div>
-          <Button type={'default'} className="large" onClick={toggleManageTokens}>
+          <Button type={'default'} onClick={toggleManageTokens}>
             {t('Manage')}
           </Button>
         </div>

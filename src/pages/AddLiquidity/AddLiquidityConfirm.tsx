@@ -1,25 +1,30 @@
 import React, { useCallback, useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import './AddLiquidityConfirm.scss';
-import LiquidityInfo from './LiquidityInfo';
+import { DEFAULT_SLIPPAGE } from 'constants/swap';
+
+import { TxStatus } from 'types/transactionInterfaces';
+
+import TokenUtils from 'utils/tokenUtils';
+
+import Button from 'components/Button';
 import Modal from 'components/Modal';
-import TokenInput from 'components/TokenInput';
 import Spinner from 'components/Spinner';
+import TokenInput from 'components/TokenInput';
+
+import { selectSettings } from 'store/app/appSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import {
   resetLiquidity,
-  selectLiquidityPool,
   selectLiquidityInput0,
   selectLiquidityInput1,
+  selectLiquidityPool,
 } from 'store/liquidity/liquiditySlice';
 import { resetTransaction, selectWalletTransaction } from 'store/wallet/walletSlice';
 import { walletAddLiquidity } from 'store/wallet/walletThunks';
-import { selectSettings } from 'store/app/appSlice';
-import { DEFAULT_SLIPPAGE } from 'constants/swap';
-import { TxStatus } from 'types/transactionInterfaces';
-import TokenUtils from 'utils/tokenUtils';
-import Button from 'components/Button';
+
+import './AddLiquidityConfirm.scss';
+import LiquidityInfo from './LiquidityInfo';
 
 interface AddLiquidityConfirmProps {
   onClose: () => void;

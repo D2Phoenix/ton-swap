@@ -4,6 +4,9 @@
   justify-content: center;
   align-items: center;
   padding: 16px;
+  line-height: 24px;
+  font-size: 16px;
+  font-weight: 600;
   background-color: var(--secondary-color);
   color: var(--primary-color);
   border-radius: 12px;
@@ -66,9 +69,14 @@
       color: var(--primary-color);
     }
   }
-
-  &.medium {
+  // Button sizes
+  &.small {
+    font-size: 14px;
     padding: 8px 16px;
+    border-radius: 8px;
+  }
+  &.medium {
+    padding: 12px 16px;
     border-radius: 8px;
   }
   > .icon {

@@ -1,33 +1,38 @@
+import BigNumber from 'bignumber.js';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import BigNumber from 'bignumber.js';
 
-import './RemoveLiquidityPage.scss';
+import { TxStatus } from 'types/transactionInterfaces';
+
+import TokenUtils from 'utils/tokenUtils';
+
+import Button from 'components/Button';
+import DexForm from 'components/DexForm';
+import ChevronDownIcon from 'components/Icons/ChevronDownIcon';
+import InputSlider from 'components/InputSlider';
 import TokenInput from 'components/TokenInput';
+
+import LiquidityInfo from 'pages/AddLiquidity/LiquidityInfo';
+
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { selectWalletAdapter } from 'store/wallet/walletSlice';
 import {
+  resetLiquidity,
   selectLiquidityInput0,
   selectLiquidityInput1,
-  resetLiquidity,
   selectLiquidityPool,
+  selectLiquidityRemoveApproveTx,
   setLiquidityInput0RemoveAmount,
   setLiquidityInput1RemoveAmount,
-  setLiquidityPoolRemoveAmount,
-  selectLiquidityRemoveApproveTx,
   setLiquidityPercentRemoveAmount,
+  setLiquidityPoolRemoveAmount,
 } from 'store/liquidity/liquiditySlice';
-import { getWalletBalance, getWalletUseTokenPermission } from 'store/wallet/walletThunks';
-import LiquidityInfo from 'pages/AddLiquidity/LiquidityInfo';
-import ChevronDownIcon from 'components/Icons/ChevronDownIcon';
 import { approveRemove, getLiquidityPool } from 'store/liquidity/liquidityThunks';
-import TokenUtils from 'utils/tokenUtils';
-import { TxStatus } from 'types/transactionInterfaces';
+import { selectWalletAdapter } from 'store/wallet/walletSlice';
+import { getWalletBalance, getWalletUseTokenPermission } from 'store/wallet/walletThunks';
+
 import RemoveLiquidityConfirm from './RemoveLiquidityConfirm';
-import InputSlider from 'components/InputSlider';
-import DexForm from 'components/DexForm';
-import Button from 'components/Button';
+import './RemoveLiquidityPage.scss';
 
 export function RemoveLiquidityPage() {
   const dispatch = useAppDispatch();

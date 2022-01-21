@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import './DexForm.scss';
-import SettingsModal from 'components/Modals/SettingsModal';
-import SettingsIcon from 'components/Icons/SettingsIcon';
-import ChevronRightIcon from 'components/Icons/ChevronRightIcon';
 import { Link } from 'react-router-dom';
+
+import ChevronRightIcon from 'components/Icons/ChevronRightIcon';
 import QuestionIcon from 'components/Icons/QuestionIcon';
+import SettingsIcon from 'components/Icons/SettingsIcon';
+import SettingsModal from 'components/Modals/SettingsModal';
 import Tooltip from 'components/Tooltip';
+
+import './DexForm.scss';
 
 interface DexFormProps {
   header: JSX.Element;

@@ -27,7 +27,7 @@ $warning-color: rgb(253, 193, 64);
   // Modals
   --modal-background-color: #{map-get($gray-palette, 2400)};
   --modal-text-color: #{map-get($gray-palette, 'white')};
-  --modal-scrollbar-track-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  --modal-scrollbar-track-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   --modal-scrollbar-track-background: #{map-get($gray-palette, 2300)};
   --modal-scrollbar-width: 6px;
   --modal-scrollbar-background: #{map-get($gray-palette, 2300)};
@@ -39,14 +39,14 @@ $warning-color: rgb(253, 193, 64);
   // Inputs
   --input-border-color: #{map-get($gray-palette, 2200)};
   --input-hover-color: #{map-get($gray-palette, 2200)};
-  --input-focus-color: #{map-get($gray-palette, "white")};
-  --input-text-color: #{map-get($gray-palette, "white")};
+  --input-focus-color: #{map-get($gray-palette, 'white')};
+  --input-text-color: #{map-get($gray-palette, 'white')};
   --input-placeholder-color: #{map-get($gray-palette, 1200)};
   --input-background-color: transparent;
   // Dropdown
   --dropdown-border-color: #{map-get($gray-palette, 2300)};
   --dropdown-hover-color: #{map-get($gray-palette, 2300)};
-  --dropdown-focus-color: #{map-get($gray-palette, "white")};
+  --dropdown-focus-color: #{map-get($gray-palette, 'white')};
   // List
   --list-hover-color: #{map-get($gray-palette, 2300)};
   --list-border-color: #{map-get($gray-palette, 2300)};

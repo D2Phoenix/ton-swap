@@ -1,5 +1,6 @@
-import './InputSlider.scss';
 import { RefObject, useCallback, useEffect, useRef } from 'react';
+
+import './InputSlider.scss';
 
 interface InputSliderProps {
   value: string;

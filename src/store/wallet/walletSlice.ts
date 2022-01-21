@@ -1,6 +1,14 @@
-import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit';
+
+import { TransactionInterface, TxStatus, TxType } from 'types/transactionInterfaces';
+import { WalletAdapterInterface, WalletStatus } from 'types/walletAdapterInterface';
+
+import TokenUtils from 'utils/tokenUtils';
+
+import StubWalletService from 'api/stubWalletService';
 
 import type { RootState } from 'store/store';
+
 import {
   connectWallet,
   disconnectWallet,
@@ -14,10 +22,6 @@ import {
   walletRemoveLiquidity,
   walletSwap,
 } from './walletThunks';
-import { WalletAdapterInterface, WalletStatus } from 'types/walletAdapterInterface';
-import { TransactionInterface, TxStatus, TxType } from 'types/transactionInterfaces';
-import TokenUtils from 'utils/tokenUtils';
-import StubWalletService from 'api/stubWalletService';
 
 interface WalletState {
   adapter: WalletAdapterInterface | null;

@@ -1,16 +1,20 @@
-import React, { useCallback, useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
+import React, { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import './TokenInput.scss';
+import { BALANCE_PRECISION } from 'constants/swap';
+
+import PoolInterface from 'types/poolInterface';
+import TokenInterface from 'types/tokenInterface';
+
+import TokenUtils from 'utils/tokenUtils';
+
 import Button from 'components/Button';
 import ArrowDownIcon from 'components/Icons/ArrowDownIcon';
-import TokenInterface from 'types/tokenInterface';
-import { BALANCE_PRECISION } from 'constants/swap';
-import PoolInterface from 'types/poolInterface';
-import TokenIcon from 'components/TokenIcon';
-import TokenUtils from 'utils/tokenUtils';
-import { useTranslation } from 'react-i18next';
 import SelectTokenModal from 'components/Modals/SelectTokenModal';
+import TokenIcon from 'components/TokenIcon';
+
+import './TokenInput.scss';
 
 interface TokenInputProps {
   balance?: string;
@@ -133,7 +137,7 @@ export function TokenInput({
           balance != null &&
           !new BigNumber(balance).eq('0') &&
           (!value || !new BigNumber(balance).eq(value)) && (
-            <Button className="medium max__btn" type={'default'} onClick={maxHandler}>
+            <Button className="small max__btn" type={'default'} onClick={maxHandler}>
               MAX
             </Button>
           )}
@@ -149,7 +153,7 @@ export function TokenInput({
           </div>
         )}
         {!token && (
-          <Button type={'primary'} className="medium select__btn" onClick={tokenSelectToggle}>
+          <Button type={'primary'} className="small select__btn" onClick={tokenSelectToggle}>
             {t('Select a Token')}
           </Button>
         )}

@@ -1,7 +1,12 @@
-import { createSlice, Draft, PayloadAction } from '@reduxjs/toolkit';
+import { Draft, PayloadAction, createSlice } from '@reduxjs/toolkit';
 import BigNumber from 'bignumber.js';
 
+import { InputPoolInterface } from 'types/inputPoolInterface';
+import { InputTokenInterface } from 'types/inputTokenInterface';
+import { EstimateTxType, TxStatus } from 'types/transactionInterfaces';
+
 import type { RootState } from 'store/store';
+
 import {
   approveRemove,
   estimateLiquidityTransaction,
@@ -9,9 +14,6 @@ import {
   getLiquidityPoolToken,
   getLiquidityToken,
 } from './liquidityThunks';
-import { EstimateTxType, TxStatus } from 'types/transactionInterfaces';
-import { InputTokenInterface } from 'types/inputTokenInterface';
-import { InputPoolInterface } from 'types/inputPoolInterface';
 
 export interface LiquidityState {
   input0: InputTokenInterface;

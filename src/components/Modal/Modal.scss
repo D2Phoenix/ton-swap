@@ -149,12 +149,12 @@ body.modal-active {
 
 @keyframes quickScaleDown {
   0% {
-    transform:scale(1);
+    transform: scale(1);
   }
   99.9% {
-    transform:scale(1);
+    transform: scale(1);
   }
   100% {
-    transform:scale(0);
+    transform: scale(0);
   }
 }

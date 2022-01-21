@@ -1,17 +1,21 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
-import './PoolsPage.scss';
+import PoolItemInterface from 'types/poolItemInterface';
+
+import CurrencyUtils from 'utils/currencyUtils';
+
+import Button from 'components/Button';
+import ChevronDownIcon from 'components/Icons/ChevronDownIcon';
+import ChevronRightIcon from 'components/Icons/ChevronRightIcon';
+import TokenIcon from 'components/TokenIcon';
+
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { selectPoolsList } from 'store/pools/poolsSlice';
 import { fetchPools } from 'store/pools/poolsThunks';
-import ChevronDownIcon from 'components/Icons/ChevronDownIcon';
-import ChevronRightIcon from 'components/Icons/ChevronRightIcon';
-import CurrencyUtils from 'utils/currencyUtils';
-import TokenIcon from 'components/TokenIcon';
-import PoolItemInterface from 'types/poolItemInterface';
-import Button from 'components/Button';
+
+import './PoolsPage.scss';
 
 function PoolsPage() {
   const dispatch = useAppDispatch();

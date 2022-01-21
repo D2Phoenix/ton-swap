@@ -1,16 +1,18 @@
-import { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
+import { useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import './LiquidityInfo.scss';
+import TokenUtils from 'utils/tokenUtils';
+
 import { useAppSelector } from 'store/hooks';
 import {
+  selectLiquidityInfo,
   selectLiquidityInput0,
   selectLiquidityInput1,
   selectLiquidityLoading,
-  selectLiquidityInfo,
 } from 'store/liquidity/liquiditySlice';
-import TokenUtils from 'utils/tokenUtils';
+
+import './LiquidityInfo.scss';
 
 function LiquidityInfo() {
   const { t } = useTranslation();

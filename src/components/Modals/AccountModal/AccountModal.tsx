@@ -1,17 +1,21 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import './AccountModal.scss';
-import Modal from 'components/Modal';
-import { selectWalletAddress, selectWalletTransactions } from 'store/wallet/walletSlice';
-import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { disconnectWallet } from 'store/wallet/walletThunks';
 import { TxType } from 'types/transactionInterfaces';
-import Button from 'components/Button';
-import DirectIcon from 'components/Icons/DirectIcon';
-import CopyIcon from 'components/Icons/CopyIcon';
-import SwitchExchangeIcon from 'components/Icons/SwitchExchangeIcon';
+
 import { copyToClipboard } from 'utils/domUtils';
+
+import Button from 'components/Button';
+import CopyIcon from 'components/Icons/CopyIcon';
+import DirectIcon from 'components/Icons/DirectIcon';
+import SwitchExchangeIcon from 'components/Icons/SwitchExchangeIcon';
+import Modal from 'components/Modal';
+
+import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { selectWalletAddress, selectWalletTransactions } from 'store/wallet/walletSlice';
+import { disconnectWallet } from 'store/wallet/walletThunks';
+
+import './AccountModal.scss';
 
 interface AccountProps {
   onClose: () => void;

@@ -1,15 +1,18 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import './Header.scss';
-import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { selectWalletAddress, selectWalletBalances } from 'store/wallet/walletSlice';
-import AccountModal from 'components/Modals/AccountModal';
+import TokenUtils from 'utils/tokenUtils';
+
 import Button from 'components/Button';
 import SunIcon from 'components/Icons/SunIcon';
-import NavList from 'components/NavList';
+import AccountModal from 'components/Modals/AccountModal';
 import SelectWalletModal from 'components/Modals/SelectWalletModal';
-import TokenUtils from 'utils/tokenUtils';
+import NavList from 'components/NavList';
+
+import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { selectWalletAddress, selectWalletBalances } from 'store/wallet/walletSlice';
+
+import './Header.scss';
 
 export function Header() {
   const dispatch = useAppDispatch();
@@ -71,19 +74,17 @@ export function Header() {
       <div className="header-buttons">
         {balances['TON'] && (
           <div className="nav-item balance">
-            <Button type={'primary'} className={'large'}>
-              {TokenUtils.toNumberDisplay(balances['TON'], 2)} TON
-            </Button>
+            <Button type={'primary'}>{TokenUtils.toNumberDisplay(balances['TON'], 2)} TON</Button>
           </div>
         )}
         <div className="nav-item wallet">
           {!walletAddress && (
-            <Button type={'secondary'} className={'large'} onClick={connectWalletHandler}>
+            <Button type={'secondary'} onClick={connectWalletHandler}>
               {t('Connect Wallet')}
             </Button>
           )}
           {walletAddress && (
-            <Button type={'secondary'} className={'large'} onClick={showAccountHandler}>
+            <Button type={'secondary'} onClick={showAccountHandler}>
               {visibleWalletAddress}
             </Button>
           )}

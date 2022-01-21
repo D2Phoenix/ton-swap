@@ -1,10 +1,11 @@
+import { LiquidityState } from 'store/liquidity/liquiditySlice';
+import { SwapState } from 'store/swap/swapSlice';
+
+import { InputPoolInterface } from './inputPoolInterface';
+import PoolInterface from './poolInterface';
 import TokenInterface from './tokenInterface';
 import { TransactionInterface, TxStatus } from './transactionInterfaces';
-import { SwapState } from 'store/swap/swapSlice';
-import { LiquidityState } from 'store/liquidity/liquiditySlice';
 import WalletPoolInterface from './walletPoolInterface';
-import PoolInterface from './poolInterface';
-import { InputPoolInterface } from './inputPoolInterface';
 
 export enum WalletStatus {
   DISCONNECTED = 'DISCONNECTED',

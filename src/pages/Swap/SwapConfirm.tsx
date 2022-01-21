@@ -2,22 +2,22 @@ import BigNumber from 'bignumber.js';
 import React, { useCallback, useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import './SwapConfirm.scss';
+import { TxStatus } from 'types/transactionInterfaces';
+
+import TokenUtils from 'utils/tokenUtils';
+
+import Button from 'components/Button';
 import Modal from 'components/Modal';
-import TokenInput from 'components/TokenInput';
-import ChevronDownIcon from 'components/Icons/ChevronDownIcon';
-import ArrowDownIcon from '../../components/Icons/ArrowDownIcon';
-import TokenIcon from '../../components/TokenIcon';
-import { BALANCE_PRECISION } from '../../constants/swap';
-import SwapInfo from './SwapInfo';
+import Spinner from 'components/Spinner';
+import TokenIcon from 'components/TokenIcon';
+
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { resetSwap, selectSwapInput0, selectSwapInput1, selectSwapTrade } from 'store/swap/swapSlice';
 import { resetTransaction, selectWalletTransaction } from 'store/wallet/walletSlice';
-import { TxStatus } from 'types/transactionInterfaces';
 import { walletSwap } from 'store/wallet/walletThunks';
-import Spinner from 'components/Spinner';
-import TokenUtils from 'utils/tokenUtils';
-import Button from 'components/Button';
+
+import './SwapConfirm.scss';
+import SwapInfo from './SwapInfo';
 
 interface SwapConfirmProps {
   onClose: () => void;
@@ -112,7 +112,7 @@ function SwapConfirm({ onClose }: SwapConfirmProps) {
               </div>
               <SwapInfo />
             </div>
-            <Button type={'primary'} className={'large'} onClick={handleConfirmSwap}>
+            <Button type={'primary'} onClick={handleConfirmSwap}>
               {t('Confirm Swap')}
             </Button>
           </div>

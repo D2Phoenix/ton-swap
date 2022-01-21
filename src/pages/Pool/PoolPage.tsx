@@ -1,17 +1,20 @@
-import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Trans, useTranslation } from 'react-i18next';
-
-import './PoolPage.scss';
-import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { selectWalletAdapter } from 'store/wallet/walletSlice';
-import { getPoolPools } from 'store/pool/poolThunks';
-import { selectPoolPools } from 'store/pool/poolSlice';
-import Accordion from 'components/Accordion';
-import TokenUtils from 'utils/tokenUtils';
-import TokenIcon from 'components/TokenIcon';
 import BigNumber from 'bignumber.js';
+import { useEffect } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
+
+import TokenUtils from 'utils/tokenUtils';
+
+import Accordion from 'components/Accordion';
+import TokenIcon from 'components/TokenIcon';
+
+import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { selectPoolPools } from 'store/pool/poolSlice';
+import { getPoolPools } from 'store/pool/poolThunks';
+import { selectWalletAdapter } from 'store/wallet/walletSlice';
+
 import DexForm from '../../components/DexForm';
+import './PoolPage.scss';
 
 function PoolPage() {
   const dispatch = useAppDispatch();

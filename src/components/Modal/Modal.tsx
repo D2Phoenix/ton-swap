@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useMemo } from 'react';
 import ReactDOM from 'react-dom';
 
-import './Modal.scss';
 import CloseIcon from 'components/Icons/CloseIcon';
+
+import './Modal.scss';
 
 interface ModalProps {
   header?: string;

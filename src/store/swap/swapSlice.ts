@@ -1,9 +1,11 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+
+import { InputTokenInterface } from 'types/inputTokenInterface';
+import { EstimateTxType } from 'types/transactionInterfaces';
 
 import type { RootState } from 'store/store';
+
 import { estimateTransaction, getSwapToken } from './swapThunks';
-import { EstimateTxType } from 'types/transactionInterfaces';
-import { InputTokenInterface } from 'types/inputTokenInterface';
 
 export interface SwapState {
   input0: InputTokenInterface;

@@ -1,16 +1,16 @@
+import translationEN from 'i18n/en/translation.json';
+import i18n from 'i18next';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { initReactI18next } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
 
-import './styles/index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { store } from './store/store';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
-import translationEN from 'i18n/en/translation.json';
+import { store } from './store/store';
+import './styles/index.scss';
 
 // the translations
 const resources = {

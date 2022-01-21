@@ -1,21 +1,27 @@
 import React, { useCallback, useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import './RemoveLiquidityConfirm.scss';
-import Modal from 'components/Modal';
-import TokenInput from 'components/TokenInput';
-import LiquidityInfo from 'pages/AddLiquidity/LiquidityInfo';
-import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { selectLiquidityPool, selectLiquidityInput0, selectLiquidityInput1 } from 'store/liquidity/liquiditySlice';
-import { resetTransaction, selectWalletTransaction } from 'store/wallet/walletSlice';
 import { DEFAULT_SLIPPAGE } from 'constants/swap';
+
 import { TxStatus } from 'types/transactionInterfaces';
-import { walletRemoveLiquidity } from 'store/wallet/walletThunks';
-import Spinner from 'components/Spinner';
-import { selectSettings } from 'store/app/appSlice';
+
 import TokenUtils from 'utils/tokenUtils';
-import { getLiquidityPool } from 'store/liquidity/liquidityThunks';
+
 import Button from 'components/Button';
+import Modal from 'components/Modal';
+import Spinner from 'components/Spinner';
+import TokenInput from 'components/TokenInput';
+
+import LiquidityInfo from 'pages/AddLiquidity/LiquidityInfo';
+
+import { selectSettings } from 'store/app/appSlice';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { selectLiquidityInput0, selectLiquidityInput1, selectLiquidityPool } from 'store/liquidity/liquiditySlice';
+import { getLiquidityPool } from 'store/liquidity/liquidityThunks';
+import { resetTransaction, selectWalletTransaction } from 'store/wallet/walletSlice';
+import { walletRemoveLiquidity } from 'store/wallet/walletThunks';
+
+import './RemoveLiquidityConfirm.scss';
 
 interface RemoveLiquidityConfirmProps {
   onClose: () => void;

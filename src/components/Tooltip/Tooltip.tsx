@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react';
+
 import './Tooltip.scss';
 
 interface TooltipProps {

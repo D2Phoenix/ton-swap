@@ -1,10 +1,36 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
-import './AddLiquidityPage.scss';
+import { WALLET_TX_UPDATE_INTERVAL } from 'constants/swap';
+
+import { EstimateTxType } from 'types/transactionInterfaces';
+import { WalletStatus, WalletType } from 'types/walletAdapterInterface';
+
+import TokenUtils from 'utils/tokenUtils';
+
+import Button from 'components/Button';
+import DexForm from 'components/DexForm';
 import TokenInput from 'components/TokenInput';
+
 import { useAppDispatch, useAppSelector } from 'store/hooks';
+import {
+  resetLiquidity,
+  selectLiquidityInput0,
+  selectLiquidityInput1,
+  selectLiquidityLoading,
+  selectLiquidityTxType,
+  setLiquidityInput0Amount,
+  setLiquidityInput0Token,
+  setLiquidityInput1Amount,
+  setLiquidityInput1Token,
+  switchLiquidityTokens,
+} from 'store/liquidity/liquiditySlice';
+import {
+  estimateLiquidityTransaction,
+  getLiquidityPoolToken,
+  getLiquidityToken,
+} from 'store/liquidity/liquidityThunks';
 import {
   selectWalletAdapter,
   selectWalletBalances,
@@ -12,36 +38,15 @@ import {
   selectWalletPermissions,
 } from 'store/wallet/walletSlice';
 import {
-  selectLiquidityInput0,
-  selectLiquidityTxType,
-  selectLiquidityInput1,
-  setLiquidityInput0Amount,
-  setLiquidityInput0Token,
-  setLiquidityInput1Amount,
-  setLiquidityInput1Token,
-  switchLiquidityTokens,
-  resetLiquidity,
-  selectLiquidityLoading,
-} from 'store/liquidity/liquiditySlice';
-import {
   connectWallet,
   getWalletBalance,
   getWalletUseTokenPermission,
   setWalletUseTokenPermission,
 } from 'store/wallet/walletThunks';
-import {
-  estimateLiquidityTransaction,
-  getLiquidityPoolToken,
-  getLiquidityToken,
-} from 'store/liquidity/liquidityThunks';
-import { EstimateTxType } from 'types/transactionInterfaces';
-import { WALLET_TX_UPDATE_INTERVAL } from 'constants/swap';
-import LiquidityInfo from './LiquidityInfo';
+
 import AddLiquidityConfirm from './AddLiquidityConfirm';
-import TokenUtils from 'utils/tokenUtils';
-import { WalletStatus, WalletType } from 'types/walletAdapterInterface';
-import DexForm from 'components/DexForm';
-import Button from 'components/Button';
+import './AddLiquidityPage.scss';
+import LiquidityInfo from './LiquidityInfo';
 
 export function AddLiquidityPage() {
   const dispatch = useAppDispatch();

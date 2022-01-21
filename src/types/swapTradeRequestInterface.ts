@@ -1,6 +1,6 @@
-import { EstimateTxType } from './transactionInterfaces';
 import { InputTokenInterface } from './inputTokenInterface';
 import TokenInterface from './tokenInterface';
+import { EstimateTxType } from './transactionInterfaces';
 
 export interface SwapTradeRequestInterface {
   input: InputTokenInterface;

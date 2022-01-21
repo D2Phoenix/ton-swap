@@ -1,12 +1,12 @@
 import BigNumber from 'bignumber.js';
 import { ChainId, UniswapPair, UniswapPairSettings, UniswapVersion } from 'simple-uniswap-sdk';
 
-import { SwapTradeRequestInterface } from 'types/swapTradeRequestInterface';
-import { SwapTradeInterface } from 'types/swapTradeInterface';
 import { LiquidityTxInterface } from 'types/liquidityTxInterface';
 import { LiquidityTxRequestInterface } from 'types/liquidityTxRequestInterface';
-import { EstimateTxType } from 'types/transactionInterfaces';
 import { SettingsInterface } from 'types/settingsInterface';
+import { SwapTradeInterface } from 'types/swapTradeInterface';
+import { SwapTradeRequestInterface } from 'types/swapTradeRequestInterface';
+import { EstimateTxType } from 'types/transactionInterfaces';
 
 class SmartContractsService {
   async getTrade(data: SwapTradeRequestInterface, settings: SettingsInterface): Promise<SwapTradeInterface> {

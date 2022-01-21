@@ -1,27 +1,31 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Link, useNavigate } from 'react-router-dom';
 
-import './ImportPoolPage.scss';
+import { WalletStatus, WalletType } from 'types/walletAdapterInterface';
+
+import TokenUtils from 'utils/tokenUtils';
+
+import Button from 'components/Button';
+import DexForm from 'components/DexForm';
+import ChevronDownIcon from 'components/Icons/ChevronDownIcon';
 import TokenInput from 'components/TokenInput';
-import { selectWalletConnectionStatus } from 'store/wallet/walletSlice';
+
+import { useAppDispatch, useAppSelector } from 'store/hooks';
 import {
+  resetLiquidity,
   selectLiquidityInput0,
   selectLiquidityInput1,
-  resetLiquidity,
   selectLiquidityPool,
-  switchLiquidityTokens,
   setLiquidityInput0Token,
   setLiquidityInput1Token,
+  switchLiquidityTokens,
 } from 'store/liquidity/liquiditySlice';
-import { connectWallet, walletImportLiquidity } from 'store/wallet/walletThunks';
-import ChevronDownIcon from 'components/Icons/ChevronDownIcon';
 import { getLiquidityPool } from 'store/liquidity/liquidityThunks';
-import TokenUtils from 'utils/tokenUtils';
-import { WalletStatus, WalletType } from 'types/walletAdapterInterface';
-import DexForm from 'components/DexForm';
-import Button from 'components/Button';
+import { selectWalletConnectionStatus } from 'store/wallet/walletSlice';
+import { connectWallet, walletImportLiquidity } from 'store/wallet/walletThunks';
+
+import './ImportPoolPage.scss';
 
 export function ImportPoolPage() {
   const dispatch = useAppDispatch();

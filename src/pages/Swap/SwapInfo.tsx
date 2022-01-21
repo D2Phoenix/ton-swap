@@ -1,14 +1,19 @@
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import './SwapInfo.scss';
-import { useAppSelector } from 'store/hooks';
-import { selectSwapTrade, selectSwapInput0, selectSwapTxType, selectSwapInput1 } from 'store/swap/swapSlice';
-import { EstimateTxType } from 'types/transactionInterfaces';
 import { DEFAULT_SLIPPAGE } from 'constants/swap';
-import { selectSettings } from 'store/app/appSlice';
+
+import { EstimateTxType } from 'types/transactionInterfaces';
+
 import TokenUtils from 'utils/tokenUtils';
+
 import ChevronDownIcon from 'components/Icons/ChevronDownIcon';
-import React, { useMemo } from 'react';
+
+import { selectSettings } from 'store/app/appSlice';
+import { useAppSelector } from 'store/hooks';
+import { selectSwapInput0, selectSwapInput1, selectSwapTrade, selectSwapTxType } from 'store/swap/swapSlice';
+
+import './SwapInfo.scss';
 
 function SwapInfo() {
   const { t } = useTranslation();

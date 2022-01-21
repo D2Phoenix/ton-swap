@@ -1,15 +1,19 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { render, tick } from 'utils/testUtils';
-import SwapPage from './SwapPage';
-import * as walletThunks from 'store/wallet/walletThunks';
-import StubWalletService from 'api/stubWalletService';
+import { EstimateTxType } from 'types/transactionInterfaces';
 import { WalletStatus } from 'types/walletAdapterInterface';
-import { initialState as walletInitialState } from 'store/wallet/walletSlice';
+
+import { render, tick } from 'utils/testUtils';
+
+import StubWalletService from 'api/stubWalletService';
+
 import { initialState as swapInitialState } from 'store/swap/swapSlice';
 import { swapService } from 'store/swap/swapThunks';
-import { EstimateTxType } from 'types/transactionInterfaces';
+import { initialState as walletInitialState } from 'store/wallet/walletSlice';
+import * as walletThunks from 'store/wallet/walletThunks';
+
+import SwapPage from './SwapPage';
 
 test('[Swap Page] Render', () => {
   render(<SwapPage />);

@@ -1,11 +1,14 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+
+import { DEFAULT_DEADLINE, DEFAULT_SLIPPAGE } from 'constants/swap';
+
+import { SettingsInterface } from 'types/settingsInterface';
+import TokenInterface from 'types/tokenInterface';
+import TokenListInterface from 'types/tokenListInterface';
 
 import type { RootState } from 'store/store';
-import TokenInterface from 'types/tokenInterface';
+
 import { fetchTokens } from './appThunks';
-import { DEFAULT_DEADLINE, DEFAULT_SLIPPAGE } from 'constants/swap';
-import { SettingsInterface } from 'types/settingsInterface';
-import TokenListInterface from 'types/tokenListInterface';
 
 interface AppState {
   tokens: TokenInterface[];

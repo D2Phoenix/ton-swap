@@ -1,15 +1,16 @@
-import React from 'react';
+import { configureStore } from '@reduxjs/toolkit';
 import { render as rtlRender } from '@testing-library/react';
+import React from 'react';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
-import { configureStore } from '@reduxjs/toolkit';
+
 // Import your own reducer
 import appReducer from 'store/app/appSlice';
-import swapReducer from 'store/swap/swapSlice';
-import walletReducer from 'store/wallet/walletSlice';
 import liquidityReducer from 'store/liquidity/liquiditySlice';
 import poolReducer from 'store/pool/poolSlice';
 import poolsReducer from 'store/pools/poolsSlice';
+import swapReducer from 'store/swap/swapSlice';
+import walletReducer from 'store/wallet/walletSlice';
 
 function render(
   ui: JSX.Element,

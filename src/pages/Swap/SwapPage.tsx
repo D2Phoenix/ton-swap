@@ -1,12 +1,38 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 
-import './SwapPage.scss';
+import { WALLET_TX_UPDATE_INTERVAL } from 'constants/swap';
+
+import { EstimateTxType } from 'types/transactionInterfaces';
+import { WalletStatus } from 'types/walletAdapterInterface';
+
+import TokenUtils from 'utils/tokenUtils';
+
+import Button from 'components/Button';
+import DexForm from 'components/DexForm';
 import ChevronDownIcon from 'components/Icons/ChevronDownIcon';
 import InfoIcon from 'components/Icons/InfoIcon';
+import SwapIcon from 'components/Icons/SwapIcon';
+import SelectWalletModal from 'components/Modals/SelectWalletModal';
 import TokenInput from 'components/TokenInput';
+import Tooltip from 'components/Tooltip';
+
 import { useAppDispatch, useAppSelector } from 'store/hooks';
+import {
+  resetSwap,
+  selectSwapInput0,
+  selectSwapInput1,
+  selectSwapLoading,
+  selectSwapTrade,
+  selectSwapTxType,
+  setSwapInput0Amount,
+  setSwapInput0Token,
+  setSwapInput1Amount,
+  setSwapInput1Token,
+  switchSwapTokens,
+} from 'store/swap/swapSlice';
+import { estimateTransaction, getSwapToken } from 'store/swap/swapThunks';
 import {
   selectWalletAdapter,
   selectWalletBalances,
@@ -19,31 +45,10 @@ import {
   getWalletUseTokenPermission,
   setWalletUseTokenPermission,
 } from 'store/wallet/walletThunks';
-import { estimateTransaction, getSwapToken } from 'store/swap/swapThunks';
-import { EstimateTxType } from 'types/transactionInterfaces';
-import {
-  selectSwapInput0,
-  selectSwapInput1,
-  selectSwapTxType,
-  setSwapInput0Token,
-  setSwapInput0Amount,
-  setSwapInput1Token,
-  setSwapInput1Amount,
-  switchSwapTokens,
-  resetSwap,
-  selectSwapTrade,
-  selectSwapLoading,
-} from 'store/swap/swapSlice';
-import SwapIcon from 'components/Icons/SwapIcon';
-import SelectWalletModal from 'components/Modals/SelectWalletModal';
-import SwapInfo from './SwapInfo';
+
 import SwapConfirm from './SwapConfirm';
-import Tooltip from 'components/Tooltip';
-import { WALLET_TX_UPDATE_INTERVAL } from 'constants/swap';
-import TokenUtils from 'utils/tokenUtils';
-import { WalletStatus } from 'types/walletAdapterInterface';
-import DexForm from 'components/DexForm';
-import Button from 'components/Button';
+import SwapInfo from './SwapInfo';
+import './SwapPage.scss';
 
 function SwapPage() {
   const dispatch = useAppDispatch();
@@ -318,17 +323,17 @@ function SwapPage() {
               isFilled &&
               !insufficientBalance &&
               !walletPermissions[input0.token.symbol] && (
-                <Button type={'primary'} className="large" onClick={allowUseTokenHandler}>
+                <Button type={'primary'} onClick={allowUseTokenHandler}>
                   <Trans>Allow the TONSwap Protocol to use your {{ symbol0: input0.token.symbol }}</Trans>
                 </Button>
               )}
             {walletConnectionStatus === WalletStatus.CONNECTED && (
-              <Button type={'primary'} className="large" disabled={loading || hasErrors} onClick={swapHandler}>
+              <Button type={'primary'} disabled={loading || hasErrors} onClick={swapHandler}>
                 {swapButtonText}
               </Button>
             )}
             {walletConnectionStatus !== WalletStatus.CONNECTED && (
-              <Button type={'outline'} className="large" onClick={connectWalletHandler}>
+              <Button type={'secondary'} onClick={connectWalletHandler}>
                 {t('Connect Wallet')}
               </Button>
             )}

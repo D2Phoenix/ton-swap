@@ -1,13 +1,14 @@
 import BigNumber from 'bignumber.js';
 
-import { WalletAdapterInterface } from 'types/walletAdapterInterface';
+import { InputPoolInterface } from 'types/inputPoolInterface';
+import PoolInterface from 'types/poolInterface';
 import TokenInterface from 'types/tokenInterface';
 import { TransactionInterface, TxStatus } from 'types/transactionInterfaces';
-import { SwapState } from 'store/swap/swapSlice';
-import { LiquidityState } from 'store/liquidity/liquiditySlice';
+import { WalletAdapterInterface } from 'types/walletAdapterInterface';
 import WalletPoolInterface from 'types/walletPoolInterface';
-import PoolInterface from 'types/poolInterface';
-import { InputPoolInterface } from 'types/inputPoolInterface';
+
+import { LiquidityState } from 'store/liquidity/liquiditySlice';
+import { SwapState } from 'store/swap/swapSlice';
 
 const permissions: any = {
   TON: true,

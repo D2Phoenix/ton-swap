@@ -1,20 +1,23 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { Area, AreaChart, Bar, BarChart, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
 import BigNumber from 'bignumber.js';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Link, useParams } from 'react-router-dom';
+import { Area, AreaChart, Bar, BarChart, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
+
+import CurrencyUtils from 'utils/currencyUtils';
+import DateUtils from 'utils/dateUtils';
+
+import Button from 'components/Button';
+import ChevronDownIcon from 'components/Icons/ChevronDownIcon';
+import Spinner from 'components/Spinner';
+import TokenIcon from 'components/TokenIcon';
+
+import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { resetPoolDetails, selectPoolsChartData, selectPoolsPool } from 'store/pools/poolsSlice';
+import { fetchPool } from 'store/pools/poolsThunks';
 
 import './PoolDetailsPage.scss';
-import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { fetchPool } from 'store/pools/poolsThunks';
-import { resetPoolDetails, selectPoolsChartData, selectPoolsPool } from 'store/pools/poolsSlice';
-import TokenIcon from 'components/TokenIcon';
-import CurrencyUtils from 'utils/currencyUtils';
-import ChevronDownIcon from 'components/Icons/ChevronDownIcon';
-import DateUtils from 'utils/dateUtils';
 import PoolTransactionsTable from './PoolTransactionsTable';
-import Spinner from 'components/Spinner';
-import Button from 'components/Button';
 
 const ChartTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {

@@ -1,14 +1,17 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import './PoolTransactionsTable.scss';
-import ChevronDownIcon from 'components/Icons/ChevronDownIcon';
 import CurrencyUtils from 'utils/currencyUtils';
+import DateUtils from 'utils/dateUtils';
+
+import Button from 'components/Button';
+import ChevronDownIcon from 'components/Icons/ChevronDownIcon';
 import ChevronRightIcon from 'components/Icons/ChevronRightIcon';
+
 import { useAppSelector } from 'store/hooks';
 import { selectPoolsTransactions } from 'store/pools/poolsSlice';
-import DateUtils from 'utils/dateUtils';
-import Button from 'components/Button';
+
+import './PoolTransactionsTable.scss';
 
 function PoolTransactionsTable() {
   const { t } = useTranslation();

@@ -1,13 +1,16 @@
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import './SettingsModal.scss';
-import Modal from 'components/Modal';
-import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { DEFAULT_DEADLINE, DEFAULT_SLIPPAGE } from 'constants/swap';
-import { selectSettings, setSettingsDeadline, setSettingsSlippage } from 'store/app/appSlice';
+
 import QuestionIcon from 'components/Icons/QuestionIcon';
+import Modal from 'components/Modal';
 import Tooltip from 'components/Tooltip';
+
+import { selectSettings, setSettingsDeadline, setSettingsSlippage } from 'store/app/appSlice';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
+
+import './SettingsModal.scss';
 
 const SLIPPAGE_INPUT_REGEXP = RegExp(`^\\d*(?:\\\\[.])?\\d*$`);
 const DEADLINE_INPUT_REGEXP = RegExp(`^\\d*(?:\\\\[])?\\d*$`);

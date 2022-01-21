@@ -1,13 +1,16 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { SwapTradeRequestInterface } from 'types/swapTradeRequestInterface';
-import SmartContractsService from 'api/smartContractsService';
-import { EstimateTxType } from 'types/transactionInterfaces';
-import PromiseUtils from 'utils/promiseUtils';
 import { SwapTradeInterface } from 'types/swapTradeInterface';
-import { RootState } from 'store/store';
+import { SwapTradeRequestInterface } from 'types/swapTradeRequestInterface';
 import TokenInterface from 'types/tokenInterface';
+import { EstimateTxType } from 'types/transactionInterfaces';
+
+import PromiseUtils from 'utils/promiseUtils';
+
+import SmartContractsService from 'api/smartContractsService';
 import { getTokens } from 'api/tokens';
+
+import { RootState } from 'store/store';
 
 export const swapService = new SmartContractsService();
 

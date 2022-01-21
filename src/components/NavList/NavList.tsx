@@ -1,5 +1,6 @@
 import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { NavLink } from 'react-router-dom';
+
 import './NavList.scss';
 
 interface NavListProps {

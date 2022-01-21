@@ -1,9 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import TokenInterface from 'types/tokenInterface';
-import { RootState } from 'store/store';
 import { TransactionInterface, TxStatus } from 'types/transactionInterfaces';
 import { WalletType } from 'types/walletAdapterInterface';
+
+import { RootState } from 'store/store';
 
 export const connectWallet = createAsyncThunk('wallet/connect', async (type: WalletType, thunkAPI) => {
   const state = thunkAPI.getState() as RootState;

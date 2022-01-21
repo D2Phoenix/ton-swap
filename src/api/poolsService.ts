@@ -1,5 +1,6 @@
-import PoolItemInterface from 'types/poolItemInterface';
 import BigNumber from 'bignumber.js';
+
+import PoolItemInterface from 'types/poolItemInterface';
 
 class PoolsService {
   getPools(): Promise<PoolItemInterface[]> {

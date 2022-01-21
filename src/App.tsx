@@ -1,22 +1,22 @@
-import React, { useCallback, useEffect, lazy, Suspense } from 'react';
-import { Route, Routes, Navigate } from 'react-router-dom';
+import React, { Suspense, lazy, useCallback, useEffect } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 import './App.scss';
 import Header from './components/Header';
+import Notifications, { Notification } from './components/Notifications';
+import Spinner from './components/Spinner';
+import { WALLET_TX_UPDATE_INTERVAL } from './constants/swap';
 import { fetchTokens } from './store/app/appThunks';
 import { useAppDispatch, useAppSelector } from './store/hooks';
-import { walletCheckTransactions } from './store/wallet/walletThunks';
-import { WALLET_TX_UPDATE_INTERVAL } from './constants/swap';
 import {
   selectWalletAdapter,
   selectWalletConfirmedTransactions,
   selectWalletNotNotifiedTransactions,
   setNotified,
 } from './store/wallet/walletSlice';
-import Notifications, { Notification } from './components/Notifications';
+import { walletCheckTransactions } from './store/wallet/walletThunks';
 import { TxStatus, TxType } from './types/transactionInterfaces';
-import Spinner from './components/Spinner';
 
 const SwapPage = lazy(() => import('./pages/Swap/SwapPage'));
 const PoolPage = lazy(() => import('./pages/Pool/PoolPage'));

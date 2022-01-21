@@ -1,15 +1,18 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import BigNumber from 'bignumber.js';
+
+import { InputPoolInterface } from 'types/inputPoolInterface';
+import { LiquidityTxInterface } from 'types/liquidityTxInterface';
+import { LiquidityTxRequestInterface } from 'types/liquidityTxRequestInterface';
+import TokenInterface from 'types/tokenInterface';
+import { EstimateTxType } from 'types/transactionInterfaces';
+
+import PromiseUtils from 'utils/promiseUtils';
 
 import SmartContractsService from 'api/smartContractsService';
-import { EstimateTxType } from 'types/transactionInterfaces';
-import { LiquidityTxRequestInterface } from 'types/liquidityTxRequestInterface';
-import { RootState } from 'store/store';
-import TokenInterface from 'types/tokenInterface';
 import { getTokens } from 'api/tokens';
-import { InputPoolInterface } from 'types/inputPoolInterface';
-import PromiseUtils from 'utils/promiseUtils';
-import { LiquidityTxInterface } from 'types/liquidityTxInterface';
-import BigNumber from 'bignumber.js';
+
+import { RootState } from 'store/store';
 
 const swapService = new SmartContractsService();
 

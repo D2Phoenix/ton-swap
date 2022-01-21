@@ -1,9 +1,10 @@
 import BigNumber from 'bignumber.js';
 
-import { InputTokenInterface } from 'types/inputTokenInterface';
 import { TOKEN_PRECISION } from 'constants/swap';
-import TokenInterface from 'types/tokenInterface';
+
 import { InputPoolInterface } from 'types/inputPoolInterface';
+import { InputTokenInterface } from 'types/inputTokenInterface';
+import TokenInterface from 'types/tokenInterface';
 
 class TokenUtils {
   static isFilled(input: InputTokenInterface | InputPoolInterface) {
