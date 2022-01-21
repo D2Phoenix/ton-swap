@@ -49,4 +49,7 @@ $warning-color: rgb(253, 193, 64);
   --dropdown-focus-color: #{map-get($gray-palette, "white")};
   // List
   --list-hover-color: #{map-get($gray-palette, 2300)};
+  --list-border-color: #{map-get($gray-palette, 2300)};
+  // Spinner
+  --spinner-color: #{map-get($gold-palette, 500)};
 }

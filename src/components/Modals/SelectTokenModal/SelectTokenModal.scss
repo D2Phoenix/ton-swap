@@ -1,0 +1,57 @@
+.token-select-modal.modal-container {
+  .modal-background {
+    .modal {
+      height: 712px;
+      width: 100%;
+      max-width: 512px;
+    }
+  }
+}
+.token-select-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  input {
+    flex: 0 0 auto;
+    margin-bottom: 24px;
+  }
+  .token-select-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    svg {
+      height: 20px;
+    }
+  }
+  .token-select-list {
+    flex: 1 1 auto;
+    margin-bottom: 12px;
+    width: calc(100% + 12px);
+    > div > div {
+      overflow: hidden scroll !important;
+    }
+    .token-select-item {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      height: 66px;
+      cursor: pointer;
+      gap: 20px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      &:hover {
+        background-color: var(--list-hover-color);
+      }
+      .token-name {
+        display: flex;
+        flex-direction: column;
+        gap: 8px
+      }
+      .token-balance {
+        margin-left: auto;
+        color: var(--label-color);
+        align-self: flex-start;
+      }
+    }
+  }
+}

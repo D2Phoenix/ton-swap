@@ -67,10 +67,9 @@ function RemoveLiquidityConfirm({ onClose }: RemoveLiquidityConfirmProps) {
   }, [dispatch, input0, input1, walletTransaction, onClose]);
 
   return (
-    <Modal className={className} onClose={handleClose}>
+    <Modal className={className} header={t('Confirm Remove Liquidity')} onClose={handleClose}>
       {walletTransaction.status === TxStatus.INITIAL && (
         <>
-          <h4>{t('Confirm Remove Liquidity')}</h4>
           <div className="remove-liquidity-confirm-wrapper">
             <span>{t('You will receive')}</span>
             <TokenInput

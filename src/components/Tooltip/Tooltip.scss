@@ -1,0 +1,44 @@
+@import '../../styles/vars';
+
+$tooltip-margin: 5px;
+$tooltip-margin-bottom: 15px;
+$tooltip-arrow-size: 6px;
+
+/* Wrapping */
+.tooltip-wrapper {
+  display: inline-block;
+  position: relative;
+}
+
+/* Absolute positioning */
+.tooltip-tip {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 1rem;
+  background: #fff;
+  font-size: 14px;
+  font-family: sans-serif;
+  line-height: 1;
+  z-index: 1000;
+  width: 300px;
+  border: 1px solid $border-color;
+  border-radius: 8px;
+  &.bottom {
+    top: calc(#{$tooltip-margin-bottom} * 1);
+  }
+  &.right {
+    left: calc(100% + #{$tooltip-margin});
+    top: 50%;
+    transform: translateX(0) translateY(-50%);
+  }
+  &.top {
+    bottom: calc(#{$tooltip-margin} * -1);
+  }
+  &.left {
+    left: auto;
+    right: calc(100% + #{$tooltip-margin});
+    top: 50%;
+    transform: translateX(0) translateY(-50%);
+  }
+}

@@ -73,7 +73,7 @@ class StubWalletService implements WalletAdapterInterface {
           .plus(state.input1.amount)
           .toString();
         resolve(TxStatus.CONFIRMED);
-      }, 2000);
+      }, 20000);
     });
   }
 

@@ -34,14 +34,14 @@ import {
   selectSwapTrade,
   selectSwapLoading,
 } from 'store/swap/swapSlice';
-import SwapIcon from '../../components/Icons/SwapIcon';
-import SelectWallet from '../../components/Modals/SelectWallet';
+import SwapIcon from 'components/Icons/SwapIcon';
+import SelectWalletModal from 'components/Modals/SelectWalletModal';
 import SwapInfo from './SwapInfo';
 import SwapConfirm from './SwapConfirm';
 import Tooltip from 'components/Tooltip';
 import { WALLET_TX_UPDATE_INTERVAL } from 'constants/swap';
 import TokenUtils from 'utils/tokenUtils';
-import { WalletStatus, WalletType } from 'types/walletAdapterInterface';
+import { WalletStatus } from 'types/walletAdapterInterface';
 import DexForm from 'components/DexForm';
 import Button from 'components/Button';
 
@@ -299,7 +299,7 @@ function SwapPage() {
               primary={txType === EstimateTxType.EXACT_OUT}
             />
             {isFilled && (
-              <div className={`swap-info text-small ${loading ? 'loading' : ''}`}>
+              <div className={`swap-price text-small ${loading ? 'loading' : ''}`}>
                 <span className={`text-small`}>
                   1 {input1.token.symbol} = {TokenUtils.toNumberDisplay(trade.rate)} {input0.token.symbol}
                 </span>
@@ -336,7 +336,7 @@ function SwapPage() {
         }
       />
       {showSwapConfirm && <SwapConfirm onClose={() => setShowSwapConfirm(false)} />}
-      {showConnectWallet && <SelectWallet onClose={closeConnectWalletHandler} />}
+      {showConnectWallet && <SelectWalletModal onClose={closeConnectWalletHandler} />}
     </>
   );
 }

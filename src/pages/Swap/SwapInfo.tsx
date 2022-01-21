@@ -24,44 +24,43 @@ function SwapInfo() {
 
   return (
     <div className={'swap-info-wrapper'}>
-      <span>{t('Transaction Details')}</span>
-      <div>
-        <span className="text-small">{t('Liquidity Provider Fee')}</span>
-        <span className="text-small text-semibold">
-          {TokenUtils.toNumberDisplay(trade.liquidityProviderFee)} {from.token.symbol}
-        </span>
-      </div>
+      {type === EstimateTxType.EXACT_IN && trade.minimumReceived && (
+        <div>
+          <p>{t('Minimum received')}</p>
+          <p>
+            {TokenUtils.toNumberDisplay(trade.minimumReceived)} {to.token.symbol}
+          </p>
+        </div>
+      )}
+      {type === EstimateTxType.EXACT_OUT && trade.maximumSent && (
+        <div>
+          <p>{t('Maximum sent')}</p>
+          <p>
+            {TokenUtils.toNumberDisplay(trade.maximumSent)} {from.token.symbol}
+          </p>
+        </div>
+      )}
       {priceChangeDirection !== 0 && (
         <div>
-          <span className="text-small">{t('Price Impact')}</span>
+          <p>{t('Price Impact')}</p>
           <span className="price">
             <span className={priceChangeDirection > 0 ? 'positive' : 'negative'}>
               <ChevronDownIcon revert={priceChangeDirection > 0} />
-              <span className="text-small text-semibold">{trade.priceImpact} %</span>
+              <p>{trade.priceImpact} %</p>
             </span>
           </span>
         </div>
       )}
       <div>
-        <span className="text-small">{t('Allowed slippage')}</span>
-        <span className="text-small text-semibold">{settings.slippage || DEFAULT_SLIPPAGE} %</span>
+        <p>{t('Liquidity Provider Fee')}</p>
+        <p>
+          {TokenUtils.toNumberDisplay(trade.liquidityProviderFee)} {from.token.symbol}
+        </p>
       </div>
-      {type === EstimateTxType.EXACT_IN && trade.minimumReceived && (
-        <div>
-          <span className="text-small">{t('Minimum received')}</span>
-          <span className="text-small text-semibold">
-            {TokenUtils.toNumberDisplay(trade.minimumReceived)} {to.token.symbol}
-          </span>
-        </div>
-      )}
-      {type === EstimateTxType.EXACT_OUT && trade.maximumSent && (
-        <div>
-          <span className="text-small">{t('Maximum sent')}</span>
-          <span className="text-small text-semibold">
-            {TokenUtils.toNumberDisplay(trade.maximumSent)} {from.token.symbol}
-          </span>
-        </div>
-      )}
+      <div>
+        <p>{t('Allowed slippage')}</p>
+        <p>{settings.slippage || DEFAULT_SLIPPAGE} %</p>
+      </div>
     </div>
   );
 }

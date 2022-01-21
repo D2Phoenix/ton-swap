@@ -3,15 +3,11 @@
 .swap-info-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  > span {
-    border-bottom: 1px solid $border-color;
-    padding: 0 0 8px;
-  }
   > div {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    padding: 8px 0;
     > span:not(:first-child) {
       text-align: end;
     }

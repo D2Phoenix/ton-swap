@@ -14,7 +14,7 @@ import {
   selectWalletNotNotifiedTransactions,
   setNotified,
 } from './store/wallet/walletSlice';
-import { Notifications, Notification } from './components/Notifications';
+import Notifications, { Notification } from './components/Notifications';
 import { TxStatus, TxType } from './types/transactionInterfaces';
 import Spinner from './components/Spinner';
 
