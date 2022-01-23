@@ -10,7 +10,6 @@ import TokenInterface from 'types/tokenInterface';
 
 import Button from 'components/Button';
 import ChevronRightIcon from 'components/Icons/ChevronRightIcon';
-import Modal from 'components/Modal';
 import TokenIcon from 'components/TokenIcon';
 
 import { selectTokenLists, selectTokens } from 'store/app/appSlice';
@@ -64,18 +63,21 @@ function TokenManageList({ onBack }: TokenManageListParams) {
 }
 
 interface TokenSelectProps {
-  onClose: () => void;
-  onSelect: (value: TokenInterface) => void;
+  onClose: (value: TokenInterface) => void;
   balancesFirst?: boolean;
 }
 
-export function SelectTokenModal({ onClose, onSelect, balancesFirst }: TokenSelectProps) {
+export const SelectTokenModalOptions = {
+  header: 'Select a token',
+  className: 'token-select-modal',
+};
+
+export function SelectTokenModal({ onClose, balancesFirst }: TokenSelectProps) {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const tokens = useAppSelector(selectTokens);
   const balances = useAppSelector(selectWalletBalances);
   const walletAdapter = useAppSelector(selectWalletAdapter);
-  const [isClose, setIsClose] = useState(false);
   const [query, setQuery] = useState('');
   const [showTokenManage, setShowTokenManage] = useState(false);
 
@@ -112,22 +114,17 @@ export function SelectTokenModal({ onClose, onSelect, balancesFirst }: TokenSele
 
   const selectHandler = useCallback(
     (token: TokenInterface) => {
-      onSelect(token);
-      setIsClose(true);
+      onClose(token);
     },
     [onClose],
   );
-
-  const handleClose = useCallback(() => {
-    onClose();
-  }, [onClose]);
 
   const toggleManageTokens = useCallback(() => {
     setShowTokenManage((prev) => !prev);
   }, []);
 
   return (
-    <Modal className={'token-select-modal'} header={t('Select a token')} close={isClose} onClose={handleClose}>
+    <>
       {!showTokenManage && (
         <div className="token-select-wrapper">
           <input
@@ -138,7 +135,7 @@ export function SelectTokenModal({ onClose, onSelect, balancesFirst }: TokenSele
           <div className="token-select-list">
             <AutoSizer>
               {({ width, height }: { width: number; height: number }) => (
-                <List height={height} width={width} itemCount={visibleTokens.length} itemSize={66}>
+                <List className="list" height={height} width={width} itemCount={visibleTokens.length} itemSize={66}>
                   {({ index, style }: { index: number; style: CSSProperties | undefined }) => {
                     const token = visibleTokens[index];
                     const balance = balances[token.symbol]
@@ -166,6 +163,6 @@ export function SelectTokenModal({ onClose, onSelect, balancesFirst }: TokenSele
         </div>
       )}
       {showTokenManage && <TokenManageList onBack={toggleManageTokens} />}
-    </Modal>
+    </>
   );
 }

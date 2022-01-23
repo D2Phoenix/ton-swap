@@ -25,25 +25,21 @@ class StubWalletService implements WalletAdapterInterface {
   getBalance(token: TokenInterface): Promise<string> {
     // TODO: Implement real api for wallet operation
     return new Promise<string>((resolve) => {
-      setTimeout(() => {
-        resolve(balances[token.symbol] || '0');
-      }, 300);
+      resolve(balances[token.symbol] || '0');
     });
   }
 
   getBalances(tokens: TokenInterface[]): Promise<{ token: TokenInterface; value: string }[]> {
     // TODO: Implement real api for wallet operation
     return new Promise<any>((resolve) => {
-      setTimeout(() => {
-        const result = [];
-        for (const token of tokens) {
-          result.push({
-            token,
-            value: balances[token.symbol] || '0',
-          });
-        }
-        resolve(result);
-      }, 1000);
+      const result = [];
+      for (const token of tokens) {
+        result.push({
+          token,
+          value: balances[token.symbol] || '0',
+        });
+      }
+      resolve(result);
     });
   }
 
@@ -74,7 +70,7 @@ class StubWalletService implements WalletAdapterInterface {
           .plus(state.input1.amount)
           .toString();
         resolve(TxStatus.CONFIRMED);
-      }, 20000);
+      }, 2000);
     });
   }
 
@@ -205,9 +201,7 @@ class StubWalletService implements WalletAdapterInterface {
   approveRemovePool(pool: InputPoolInterface): Promise<TxStatus> {
     // TODO: Implement real api for wallet operation
     return new Promise<TxStatus>((resolve) => {
-      setTimeout(() => {
-        resolve(TxStatus.CONFIRMED);
-      }, 2000);
+      resolve(TxStatus.CONFIRMED);
     });
   }
 
@@ -281,13 +275,11 @@ class StubWalletService implements WalletAdapterInterface {
 
   checkTransactions(transactions: TransactionInterface[]): Promise<Record<string, TxStatus>> {
     return new Promise((resolve) => {
-      setTimeout(() => {
-        const result: Record<string, TxStatus> = {};
-        transactions.forEach((item) => {
-          result[item.id] = TxStatus.SUCCEED;
-        });
-        resolve(result);
-      }, 2000);
+      const result: Record<string, TxStatus> = {};
+      transactions.forEach((item) => {
+        result[item.id] = TxStatus.SUCCEED;
+      });
+      resolve(result);
     });
   }
 }

@@ -1,1 +1,1 @@
-export { AccountModal as default } from './AccountModal';
+export { AccountModal as default, AccountModalOptions } from './AccountModal';

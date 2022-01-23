@@ -20,4 +20,8 @@ input {
   &::placeholder {
     color: var(--input-placeholder-color);
   }
+  &.small {
+    padding: 8px 16px;
+    width: 120px;
+  }
 }

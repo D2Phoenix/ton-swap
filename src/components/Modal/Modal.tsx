@@ -1,22 +1,30 @@
-import { useCallback, useEffect, useMemo } from 'react';
-import ReactDOM from 'react-dom';
+import { useCallback, useEffect, useLayoutEffect } from 'react';
 
 import CloseIcon from 'components/Icons/CloseIcon';
 
 import './Modal.scss';
 
 interface ModalProps {
+  container?: HTMLDivElement;
   header?: string;
   children: React.ReactNode;
   className: string;
+  open?: boolean;
   close?: boolean;
-  onClose: () => void;
+  onClose: (result?: any) => void;
+  onCloseComplete?: () => void;
 }
 
-export function Modal({ header, children, className, close, onClose }: ModalProps) {
-  const el = useMemo(() => document.createElement('div'), []);
-
-  useEffect(() => {
+export function Modal({
+  container = document.createElement('div'),
+  header,
+  children,
+  className,
+  open,
+  onClose,
+  onCloseComplete,
+}: ModalProps) {
+  useLayoutEffect(() => {
     const target = document.body;
     const classList = ['modal-container'];
     target.classList.remove('modal-inactive');
@@ -24,29 +32,27 @@ export function Modal({ header, children, className, close, onClose }: ModalProp
     if (className) {
       className.split(' ').forEach((item: string) => classList.push(item));
     }
-    classList.forEach((item) => el.classList.add(item));
-    target.appendChild(el);
-    return () => {
-      target.removeChild(el);
-    };
-  }, [el, className]);
+    classList.forEach((item) => container.classList.add(item));
+  }, [container, className]);
 
   const onCloseHandler = useCallback(() => {
     document.body.classList.remove('modal-active');
     document.body.classList.add('modal-inactive');
-    el.classList.add('out');
+    container.classList.add('out');
+    onClose && onClose();
     setTimeout(() => {
-      onClose();
+      onCloseComplete && onCloseComplete();
+      container.classList.remove('out');
     }, 400);
-  }, [el, onClose]);
+  }, [container, onClose, onCloseComplete]);
 
   useEffect(() => {
-    if (close) {
+    if (!open) {
       onCloseHandler();
     }
-  }, [onCloseHandler, close]);
+  }, [onCloseHandler, open]);
 
-  return ReactDOM.createPortal(
+  return (
     <div className="modal-background">
       <div className="modal">
         <div className="modal-header">
@@ -57,8 +63,7 @@ export function Modal({ header, children, className, close, onClose }: ModalProp
         </div>
         <div className="modal-content">{children}</div>
       </div>
-    </div>,
-    el,
+    </div>
   );
 }
 

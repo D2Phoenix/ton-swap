@@ -1,12 +1,18 @@
-import React, { Suspense, lazy, useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import './App.scss';
 import Header from './components/Header';
 import Notifications, { Notification } from './components/Notifications';
-import Spinner from './components/Spinner';
 import { WALLET_TX_UPDATE_INTERVAL } from './constants/swap';
+import AddLiquidityPage from './pages/AddLiquidity/AddLiquidityPage';
+import ImportPoolPage from './pages/ImportPool/ImportPoolPage';
+import PoolPage from './pages/Pool/PoolPage';
+import PoolDetailsPage from './pages/PoolDetails/PoolDetailsPage';
+import PoolsPage from './pages/Pools/PoolsPage';
+import RemoveLiquidityPage from './pages/RemoveLiquidity/RemoveLiquidityPage';
+import SwapPage from './pages/Swap/SwapPage';
 import { fetchTokens } from './store/app/appThunks';
 import { useAppDispatch, useAppSelector } from './store/hooks';
 import {
@@ -17,14 +23,6 @@ import {
 } from './store/wallet/walletSlice';
 import { walletCheckTransactions } from './store/wallet/walletThunks';
 import { TxStatus, TxType } from './types/transactionInterfaces';
-
-const SwapPage = lazy(() => import('./pages/Swap/SwapPage'));
-const PoolPage = lazy(() => import('./pages/Pool/PoolPage'));
-const AddLiquidityPage = lazy(() => import('./pages/AddLiquidity/AddLiquidityPage'));
-const RemoveLiquidityPage = lazy(() => import('./pages/RemoveLiquidity/RemoveLiquidityPage'));
-const PoolsPage = lazy(() => import('./pages/Pools/PoolsPage'));
-const PoolDetailsPage = lazy(() => import('./pages/PoolDetails/PoolDetailsPage'));
-const ImportPoolPage = lazy(() => import('./pages/ImportPool/ImportPoolPage'));
 
 function App() {
   const dispatch = useAppDispatch();
@@ -60,28 +58,20 @@ function App() {
       <Header />
       <main>
         <div className="container">
-          <Suspense
-            fallback={
-              <div className="lazy-loader">
-                <Spinner />
-              </div>
-            }
-          >
-            <Routes>
-              <Route path="swap" element={<SwapPage />} />
-              <Route path="swap/:token0" element={<SwapPage />} />
-              <Route path="swap/:token0/:token1" element={<SwapPage />} />
-              <Route path="pool" element={<PoolPage />} />
-              <Route path="pool/add" element={<AddLiquidityPage />} />
-              <Route path="pool/add/:token0" element={<AddLiquidityPage />} />
-              <Route path="pool/add/:token0/:token1" element={<AddLiquidityPage />} />
-              <Route path="pool/remove/:token0/:token1" element={<RemoveLiquidityPage />} />
-              <Route path="pool/import" element={<ImportPoolPage />} />
-              <Route path="pools" element={<PoolsPage />} />
-              <Route path="pools/:address" element={<PoolDetailsPage />} />
-              <Route path="*" element={<Navigate replace to="/swap" />} />
-            </Routes>
-          </Suspense>
+          <Routes>
+            <Route path="swap" element={<SwapPage />} />
+            <Route path="swap/:token0" element={<SwapPage />} />
+            <Route path="swap/:token0/:token1" element={<SwapPage />} />
+            <Route path="pool" element={<PoolPage />} />
+            <Route path="pool/add" element={<AddLiquidityPage />} />
+            <Route path="pool/add/:token0" element={<AddLiquidityPage />} />
+            <Route path="pool/add/:token0/:token1" element={<AddLiquidityPage />} />
+            <Route path="pool/remove/:token0/:token1" element={<RemoveLiquidityPage />} />
+            <Route path="pool/import" element={<ImportPoolPage />} />
+            <Route path="pools" element={<PoolsPage />} />
+            <Route path="pools/:address" element={<PoolDetailsPage />} />
+            <Route path="*" element={<Navigate replace to="/swap" />} />
+          </Routes>
         </div>
         <Notifications>
           {notNotifiedTransactions.map((tx) => {

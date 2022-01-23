@@ -13,12 +13,30 @@
   gap: 8px;
   width: 100%;
   border-radius: 8px;
-  > div {
+  h6 {
+    margin-bottom: 12px;
+  }
+  .setting-section {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    .tooltip-wrapper {
-      margin-left: 0.5rem;
+    flex-direction: column;
+    margin-bottom: 24px;
+    > p {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-bottom: 24px;
+      .tooltip-wrapper {
+        margin-left: 8px;
+        height: 24px;
+      }
+      .icon {
+        cursor: pointer;
+      }
+    }
+    > div {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
     }
   }
 }

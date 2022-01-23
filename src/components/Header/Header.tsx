@@ -1,12 +1,13 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import TokenUtils from 'utils/tokenUtils';
 
 import Button from 'components/Button';
 import SunIcon from 'components/Icons/SunIcon';
-import AccountModal from 'components/Modals/AccountModal';
-import SelectWalletModal from 'components/Modals/SelectWalletModal';
+import { useModal } from 'components/Modal';
+import AccountModal, { AccountModalOptions } from 'components/Modals/AccountModal';
+import SelectWalletModal, { SelectWalletModalOptions } from 'components/Modals/SelectWalletModal';
 import NavList from 'components/NavList';
 
 import { useAppDispatch, useAppSelector } from 'store/hooks';
@@ -15,12 +16,20 @@ import { selectWalletAddress, selectWalletBalances } from 'store/wallet/walletSl
 import './Header.scss';
 
 export function Header() {
-  const dispatch = useAppDispatch();
   const { t } = useTranslation();
+
+  const dispatch = useAppDispatch();
   const balances = useAppSelector(selectWalletBalances);
   const walletAddress = useAppSelector(selectWalletAddress);
-  const [showAccount, setShowAccount] = useState(false);
-  const [showConnectWallet, setShowConnectWallet] = useState(false);
+
+  const selectWalletModal = useModal(SelectWalletModal, SelectWalletModalOptions);
+  const accountModal = useModal(AccountModal, AccountModalOptions);
+
+  accountModal.onClose((result: string) => {
+    if (result === 'showSelectWallet') {
+      selectWalletModal.open();
+    }
+  });
 
   const links = useMemo(() => {
     return [
@@ -46,22 +55,6 @@ export function Header() {
     return '';
   }, [walletAddress]);
 
-  const connectWalletHandler = useCallback(() => {
-    setShowConnectWallet(true);
-  }, []);
-
-  const showAccountHandler = useCallback(() => {
-    setShowAccount(true);
-  }, []);
-
-  const closeAccountHandler = useCallback(() => {
-    setShowAccount(false);
-  }, []);
-
-  const closeConnectWalletHandler = useCallback(() => {
-    setShowConnectWallet(false);
-  }, []);
-
   return (
     <div className="header-wrapper">
       <header>
@@ -79,12 +72,12 @@ export function Header() {
         )}
         <div className="nav-item wallet">
           {!walletAddress && (
-            <Button type={'secondary'} onClick={connectWalletHandler}>
+            <Button type={'secondary'} onClick={selectWalletModal.open}>
               {t('Connect Wallet')}
             </Button>
           )}
           {walletAddress && (
-            <Button type={'secondary'} onClick={showAccountHandler}>
+            <Button type={'secondary'} onClick={accountModal.open}>
               {visibleWalletAddress}
             </Button>
           )}
@@ -95,8 +88,6 @@ export function Header() {
           </Button>
         </div>
       </div>
-      {showAccount && <AccountModal onClose={closeAccountHandler} onConnect={connectWalletHandler} />}
-      {showConnectWallet && <SelectWalletModal onClose={closeConnectWalletHandler} />}
     </div>
   );
 }

@@ -51,5 +51,8 @@ $warning-color: rgb(253, 193, 64);
   --list-hover-color: #{map-get($gray-palette, 2300)};
   --list-border-color: #{map-get($gray-palette, 2300)};
   // Spinner
-  --spinner-color: #{map-get($gold-palette, 500)};
+  --spinner-color: #{map-get($green-palette, 500)};
+  --spinner-failed-color: #{map-get($red-palette, 500)};
+  // Tooltip
+  --tooltip-background-color: #{map-get($gray-palette, 2200)};
 }

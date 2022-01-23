@@ -1,1 +1,1 @@
-export { SelectWalletModal as default } from './SelectWalletModal';
+export { SelectWalletModal as default, SelectWalletModalOptions } from './SelectWalletModal';

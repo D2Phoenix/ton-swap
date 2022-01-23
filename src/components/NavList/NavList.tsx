@@ -37,14 +37,11 @@ export function NavList({ links }: NavListProps) {
     [setUnderlinePosition],
   );
 
-  const mouseLeaveHandler = useCallback(
-    (event) => {
-      if (underlineRef.current && navListRef.current) {
-        setUnderlinePosition(navListRef.current.children[activeLink] as HTMLDivElement);
-      }
-    },
-    [setUnderlinePosition, activeLink],
-  );
+  const mouseLeaveHandler = useCallback(() => {
+    if (underlineRef.current && navListRef.current) {
+      setUnderlinePosition(navListRef.current.children[activeLink] as HTMLDivElement);
+    }
+  }, [setUnderlinePosition, activeLink]);
 
   const isActiveHandler = useCallback((index: number, value: { isActive: boolean }) => {
     if (value.isActive) {

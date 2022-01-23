@@ -29,6 +29,7 @@ nav {
   }
   .nav-item__underline {
     position: absolute;
+    pointer-events: none;
     bottom: 0;
     box-shadow: inset 0px -2px 0px var(--nav-active-text-color);
     width: 120px;

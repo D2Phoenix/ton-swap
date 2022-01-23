@@ -1,7 +1,6 @@
 .swap-confirm-modal.modal-container {
   .modal-background {
     .modal {
-      height: auto;
       width: 100%;
       max-width: 512px;
     }
@@ -40,7 +39,13 @@
       display: flex;
       flex-direction: row;
       justify-content: space-between;
-      margin-bottom: 16px;
+      align-items: center;
+      padding: 8px 0;
+      margin-bottom: 8px;
+      .swap-price-text {
+        margin-left: auto;
+        margin-right: 8px;
+      }
     }
   }
   .swap-status {
@@ -49,7 +54,6 @@
     align-items: center;
     justify-content: center;
     height: 100%;
-    gap: 8px;
     padding-top: 20px;
     > h5 {
       margin-top: 40px;
@@ -58,11 +62,8 @@
     > p {
       margin-bottom: 8px;
     }
-    > label {
+    > label, > .btn {
       margin-bottom: 56px;
-    }
-    .btn {
-      width: 100%;
     }
   }
 }

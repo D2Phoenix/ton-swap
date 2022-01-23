@@ -1,20 +1,21 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { WALLET_TX_UPDATE_INTERVAL } from 'constants/swap';
 
-import { EstimateTxType } from 'types/transactionInterfaces';
+import { EstimateTxType, TxStatus } from 'types/transactionInterfaces';
 import { WalletStatus } from 'types/walletAdapterInterface';
 
 import TokenUtils from 'utils/tokenUtils';
 
 import Button from 'components/Button';
 import DexForm from 'components/DexForm';
-import ChevronDownIcon from 'components/Icons/ChevronDownIcon';
 import InfoIcon from 'components/Icons/InfoIcon';
 import SwapIcon from 'components/Icons/SwapIcon';
-import SelectWalletModal from 'components/Modals/SelectWalletModal';
+import { useModal } from 'components/Modal';
+import SelectWalletModal, { SelectWalletModalOptions } from 'components/Modals/SelectWalletModal';
+import TransactionModal, { TransactionModalOptions } from 'components/Modals/TransactionModal';
 import TokenInput from 'components/TokenInput';
 import Tooltip from 'components/Tooltip';
 
@@ -34,29 +35,24 @@ import {
 } from 'store/swap/swapSlice';
 import { estimateTransaction, getSwapToken } from 'store/swap/swapThunks';
 import {
+  resetTransaction,
   selectWalletAdapter,
   selectWalletBalances,
   selectWalletConnectionStatus,
   selectWalletPermissions,
+  selectWalletTransaction,
 } from 'store/wallet/walletSlice';
-import {
-  connectWallet,
-  getWalletBalance,
-  getWalletUseTokenPermission,
-  setWalletUseTokenPermission,
-} from 'store/wallet/walletThunks';
+import { getWalletBalance, getWalletUseTokenPermission, setWalletUseTokenPermission } from 'store/wallet/walletThunks';
 
-import SwapConfirm from './SwapConfirm';
+import SwapConfirm, { SwapConfirmOptions } from './SwapConfirm';
 import SwapInfo from './SwapInfo';
 import './SwapPage.scss';
 
 function SwapPage() {
-  const dispatch = useAppDispatch();
-  const { token0, token1 } = useParams();
   const { t } = useTranslation();
+  const { token0, token1 } = useParams();
 
-  const [showSwapConfirm, setShowSwapConfirm] = useState(false);
-  const [showConnectWallet, setShowConnectWallet] = useState(false);
+  const dispatch = useAppDispatch();
   const input0 = useAppSelector(selectSwapInput0);
   const input1 = useAppSelector(selectSwapInput1);
   const txType = useAppSelector(selectSwapTxType);
@@ -66,6 +62,24 @@ function SwapPage() {
   const walletAdapter = useAppSelector(selectWalletAdapter);
   const walletConnectionStatus = useAppSelector(selectWalletConnectionStatus);
   const walletPermissions = useAppSelector(selectWalletPermissions);
+  const walletTransaction = useAppSelector(selectWalletTransaction);
+
+  const swapConfirmModal = useModal(SwapConfirm, SwapConfirmOptions);
+  const selectWalletModal = useModal(SelectWalletModal, SelectWalletModalOptions);
+  const transactionModal = useModal(TransactionModal, TransactionModalOptions);
+
+  swapConfirmModal.onClose((result: boolean) => {
+    if (result) {
+      transactionModal.open();
+    }
+  });
+
+  transactionModal.onClose(() => {
+    dispatch(resetTransaction());
+    if (walletTransaction.status === TxStatus.CONFIRMED) {
+      dispatch(resetSwap());
+    }
+  });
 
   const isFilled = useMemo(() => {
     return TokenUtils.isFilled(input0) && TokenUtils.isFilled(input1);
@@ -253,27 +267,15 @@ function SwapPage() {
     [dispatch],
   );
 
-  const connectWalletHandler = useCallback(() => {
-    setShowConnectWallet(true);
-  }, []);
-
-  const closeConnectWalletHandler = useCallback(() => {
-    setShowConnectWallet(false);
-  }, []);
-
   const allowUseTokenHandler = useCallback(() => {
     dispatch(setWalletUseTokenPermission(input0.token));
   }, [dispatch, input0]);
-
-  const swapHandler = useCallback(() => {
-    setShowSwapConfirm(true);
-  }, []);
 
   return (
     <>
       <DexForm
         header={t('Swap')}
-        subheader={t('Trade tokens in an instant')}
+        className={'swap-form'}
         content={
           <>
             <TokenInput
@@ -289,7 +291,7 @@ function SwapPage() {
               loading={txType === EstimateTxType.EXACT_OUT && loading}
               primary={txType === EstimateTxType.EXACT_IN}
             />
-            <Button type={'icon'} icon={<SwapIcon />} onClick={switchTokensHandler} />
+            <Button type={'icon'} icon={<SwapIcon />} className={'small'} onClick={switchTokensHandler} />
             <TokenInput
               token={input1.token}
               balance={walletBalances[input1.token?.symbol || '']}
@@ -305,13 +307,12 @@ function SwapPage() {
             />
             {isFilled && (
               <div className={`swap-price text-small ${loading ? 'loading' : ''}`}>
-                <span className={`text-small`}>
-                  1 {input1.token.symbol} = {TokenUtils.toNumberDisplay(trade.rate)} {input0.token.symbol}
-                </span>
+                <p>{t('Price')}</p>
+                <p className="swap-price-text">
+                  {TokenUtils.toNumberDisplay(trade.rate)} {input0.token.symbol} per 1 {input1.token.symbol}
+                </p>
                 <Tooltip content={<SwapInfo />} direction="left">
-                  <div className="btn-icon">
-                    <InfoIcon />
-                  </div>
+                  <SwapIcon />
                 </Tooltip>
               </div>
             )}
@@ -328,20 +329,18 @@ function SwapPage() {
                 </Button>
               )}
             {walletConnectionStatus === WalletStatus.CONNECTED && (
-              <Button type={'primary'} disabled={loading || hasErrors} onClick={swapHandler}>
+              <Button type={'primary'} disabled={loading || hasErrors} onClick={swapConfirmModal.open}>
                 {swapButtonText}
               </Button>
             )}
             {walletConnectionStatus !== WalletStatus.CONNECTED && (
-              <Button type={'secondary'} onClick={connectWalletHandler}>
+              <Button type={'secondary'} onClick={selectWalletModal.open}>
                 {t('Connect Wallet')}
               </Button>
             )}
           </>
         }
       />
-      {showSwapConfirm && <SwapConfirm onClose={() => setShowSwapConfirm(false)} />}
-      {showConnectWallet && <SelectWalletModal onClose={closeConnectWalletHandler} />}
     </>
   );
 }

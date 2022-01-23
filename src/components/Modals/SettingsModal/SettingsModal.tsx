@@ -15,11 +15,12 @@ import './SettingsModal.scss';
 const SLIPPAGE_INPUT_REGEXP = RegExp(`^\\d*(?:\\\\[.])?\\d*$`);
 const DEADLINE_INPUT_REGEXP = RegExp(`^\\d*(?:\\\\[])?\\d*$`);
 
-interface SettingsProps {
-  onClose: () => void;
-}
+export const SettingsModalOptions = {
+  header: 'Settings',
+  className: 'swap-settings-modal',
+};
 
-export function SettingsModal({ onClose }: SettingsProps) {
+export function SettingsModal() {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const settings = useAppSelector(selectSettings);
@@ -68,24 +69,22 @@ export function SettingsModal({ onClose }: SettingsProps) {
   const deadlineNumber = parseFloat(settings.deadline);
 
   return (
-    <Modal className={'swap-settings-modal'} onClose={onClose}>
-      <div className="settings-wrapper">
-        <h4>{t('Transaction Settings')}</h4>
-        <div className="text-small">
+    <div className="settings-wrapper">
+      <h6>{t('Transaction Settings')}</h6>
+      <div className="setting-section">
+        <p>
           {t('Slippage tolerance')}
           <Tooltip
             content={
-              <span className="text-small">
+              <span>
                 {t('Your transaction will revert if the price changes unfavorably by more than this percentage.')}
               </span>
             }
             direction="bottom"
           >
-            <div className="btn-icon">
-              <QuestionIcon />
-            </div>
+            <QuestionIcon />
           </Tooltip>
-        </div>
+        </p>
         <div>
           <input
             type="text"
@@ -93,34 +92,30 @@ export function SettingsModal({ onClose }: SettingsProps) {
             autoComplete="off"
             autoCorrect="off"
             pattern="^[0-9]*[.,]?[0-9]*$"
-            className="number__input"
+            className="number__input small"
             placeholder={DEFAULT_SLIPPAGE}
             value={settings.slippage}
             onChange={handleSlippageChange}
             onBlur={handleSlippageBlur}
           />
-          <span>&nbsp;%</span>
+          <p>&nbsp;%</p>
         </div>
-        {slippageNumber < 0.05 && <span className="text-warning text-small">{t('Your transaction may fail')}</span>}
+        {slippageNumber < 0.05 && <span className="text-warning">{t('Your transaction may fail')}</span>}
         {slippageNumber > 1 && slippageNumber <= 50 && (
-          <span className="text-warning text-small">{t('Your transaction may be frontrun')}</span>
+          <span className="text-warning">{t('Your transaction may be frontrun')}</span>
         )}
-        {slippageNumber > 50 && <span className="text-error text-small">{t('Enter a valid slippage percentage')}</span>}
-        <div className="text-small">
+        {slippageNumber > 50 && <span className="text-error">{t('Enter a valid slippage percentage')}</span>}
+      </div>
+      <div className="setting-section">
+        <p>
           {t('Transaction deadline')}
           <Tooltip
-            content={
-              <span className="text-small">
-                {t('Your transaction will revert if it is pending for more than this long.')}
-              </span>
-            }
+            content={<span>{t('Your transaction will revert if it is pending for more than this long.')}</span>}
             direction="bottom"
           >
-            <div className="btn-icon">
-              <QuestionIcon />
-            </div>
+            <QuestionIcon />
           </Tooltip>
-        </div>
+        </p>
         <div>
           <input
             type="text"
@@ -128,18 +123,18 @@ export function SettingsModal({ onClose }: SettingsProps) {
             autoComplete="off"
             autoCorrect="off"
             pattern="^[0-9]*[.,]?[0-9]*$"
-            className="number__input"
+            className="number__input small"
             placeholder={DEFAULT_DEADLINE}
             value={settings.deadline}
             onChange={handleDeadlineChange}
             onBlur={handleDeadlineBlur}
           />
-          <span>&nbsp;{t('minutes')}</span>
+          <p>&nbsp;{t('minutes')}</p>
         </div>
         {(deadlineNumber === 0 || deadlineNumber > 180) && (
-          <span className="text-error text-small">{t('Enter a valid deadline')}</span>
+          <span className="text-error">{t('Enter a valid deadline')}</span>
         )}
       </div>
-    </Modal>
+    </div>
   );
 }

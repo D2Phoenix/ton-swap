@@ -1,1 +1,1 @@
-export { SelectTokenModal as default } from './SelectTokenModal';
+export { SelectTokenModal as default, SelectTokenModalOptions } from './SelectTokenModal';

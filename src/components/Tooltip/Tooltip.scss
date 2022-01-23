@@ -1,8 +1,5 @@
-@import '../../styles/vars';
-
 $tooltip-margin: 5px;
-$tooltip-margin-bottom: 15px;
-$tooltip-arrow-size: 6px;
+$tooltip-margin-bottom: 24px;
 
 /* Wrapping */
 .tooltip-wrapper {
@@ -15,17 +12,16 @@ $tooltip-arrow-size: 6px;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  padding: 1rem;
-  background: #fff;
-  font-size: 14px;
+  padding: 8px;
+  background: var(--tooltip-background-color);
+  font-size: 12px;
   font-family: sans-serif;
-  line-height: 1;
+  line-height: 16px;
   z-index: 1000;
   width: 300px;
-  border: 1px solid $border-color;
-  border-radius: 8px;
+  border-radius: 4px;
   &.bottom {
-    top: calc(#{$tooltip-margin-bottom} * 1);
+    top: calc(#{$tooltip-margin-bottom});
   }
   &.right {
     left: calc(100% + #{$tooltip-margin});

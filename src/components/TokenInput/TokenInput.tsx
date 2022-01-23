@@ -11,9 +11,10 @@ import TokenUtils from 'utils/tokenUtils';
 
 import Button from 'components/Button';
 import ArrowDownIcon from 'components/Icons/ArrowDownIcon';
-import SelectTokenModal from 'components/Modals/SelectTokenModal';
+import SelectTokenModal, { SelectTokenModalOptions } from 'components/Modals/SelectTokenModal';
 import TokenIcon from 'components/TokenIcon';
 
+import { useModal } from '../Modal';
 import './TokenInput.scss';
 
 interface TokenInputProps {
@@ -48,8 +49,16 @@ export function TokenInput({
   label,
 }: TokenInputProps) {
   const { t } = useTranslation();
-  const [showTokenSelect, setShowTokenSelect] = useState(false);
+
   const [isFocused, setIsFocused] = useState(false);
+
+  const selectTokenModal = useModal(SelectTokenModal, SelectTokenModalOptions);
+
+  selectTokenModal.onClose((token: TokenInterface) => {
+    if (token) {
+      onSelect && onSelect(token);
+    }
+  });
 
   const valueDisplay = useMemo(() => {
     if (!value) {
@@ -60,17 +69,6 @@ export function TokenInput({
     }
     return TokenUtils.toNumberDisplay(value);
   }, [value, primary]);
-
-  const tokenSelectToggle = useCallback(() => {
-    setShowTokenSelect((prev) => !prev);
-  }, []);
-
-  const tokenSelectHandler = useCallback(
-    (token) => {
-      onSelect && onSelect(token);
-    },
-    [onSelect],
-  );
 
   const changeHandler = useCallback(
     (event) => {
@@ -138,11 +136,11 @@ export function TokenInput({
           !new BigNumber(balance).eq('0') &&
           (!value || !new BigNumber(balance).eq(value)) && (
             <Button className="small max__btn" type={'default'} onClick={maxHandler}>
-              MAX
+              Max
             </Button>
           )}
         {token && (
-          <div className="dropdown" onClick={tokenSelectToggle}>
+          <div className="dropdown" onClick={selectTokenModal.open.bind(null, { balancesFirst })}>
             {simpleToken?.logoURI && (
               <TokenIcon address={simpleToken.address} name={simpleToken.name} url={simpleToken.logoURI} />
             )}
@@ -153,14 +151,15 @@ export function TokenInput({
           </div>
         )}
         {!token && (
-          <Button type={'primary'} className="small select__btn" onClick={tokenSelectToggle}>
+          <Button
+            type={'primary'}
+            className="small select__btn"
+            onClick={selectTokenModal.open.bind(null, { balancesFirst })}
+          >
             {t('Select a Token')}
           </Button>
         )}
       </div>
-      {showTokenSelect && (
-        <SelectTokenModal balancesFirst={balancesFirst} onClose={tokenSelectToggle} onSelect={tokenSelectHandler} />
-      )}
     </div>
   );
 }

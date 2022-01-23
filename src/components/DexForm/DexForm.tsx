@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import ChevronRightIcon from 'components/Icons/ChevronRightIcon';
 import QuestionIcon from 'components/Icons/QuestionIcon';
 import SettingsIcon from 'components/Icons/SettingsIcon';
-import SettingsModal from 'components/Modals/SettingsModal';
+import { useModal } from 'components/Modal';
+import SettingsModal, { SettingsModalOptions } from 'components/Modals/SettingsModal';
 import Tooltip from 'components/Tooltip';
 
 import './DexForm.scss';
@@ -16,14 +16,15 @@ interface DexFormProps {
   backLink?: string;
   content: JSX.Element;
   actions: JSX.Element;
+  className?: string;
 }
 
-export function DexForm({ header, headerTooltip, backLink, content, actions }: DexFormProps) {
-  const [showSettings, setShowSettings] = useState(false);
+export function DexForm({ header, headerTooltip, backLink, content, actions, className }: DexFormProps) {
+  const settingsModal = useModal(SettingsModal, SettingsModalOptions);
 
   return (
     <form
-      className="box-wrapper"
+      className={`box-wrapper ${className}`}
       onSubmit={(e) => {
         e.preventDefault();
       }}
@@ -46,13 +47,12 @@ export function DexForm({ header, headerTooltip, backLink, content, actions }: D
             )}
           </div>
         </div>
-        <div className="btn-icon" onClick={() => setShowSettings(!showSettings)}>
+        <div className="btn-icon" onClick={settingsModal.open}>
           <SettingsIcon />
         </div>
       </div>
       {content}
       <div className="box-actions">{actions}</div>
-      {showSettings && <SettingsModal onClose={() => setShowSettings(false)} />}
     </form>
   );
 }
