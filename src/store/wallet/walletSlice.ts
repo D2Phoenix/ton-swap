@@ -9,6 +9,8 @@ import StubWalletService from 'api/stubWalletService';
 
 import type { RootState } from 'store/store';
 
+import { InputPoolInterface } from '../../types/inputPoolInterface';
+import { InputTokenInterface } from '../../types/inputTokenInterface';
 import {
   connectWallet,
   disconnectWallet,
@@ -31,7 +33,11 @@ interface WalletState {
   permissions: Record<string, boolean>;
   transactions: TransactionInterface[];
   tx: {
+    type: TxType;
     status: TxStatus;
+    input0: InputTokenInterface;
+    input1: InputTokenInterface;
+    pool: InputPoolInterface;
   };
 }
 
@@ -43,7 +49,11 @@ export const initialState: WalletState = {
   permissions: {},
   transactions: [],
   tx: {
+    type: null as any,
     status: TxStatus.INITIAL,
+    input0: null as any,
+    input1: null as any,
+    pool: null as any,
   },
 };
 
@@ -100,6 +110,11 @@ export const walletSlice = createSlice({
     });
     builder.addCase(walletSwap.pending, (state, action) => {
       state.tx.status = TxStatus.PENDING;
+      state.tx.type = TxType.SWAP;
+      if (action.meta.arg) {
+        state.tx.input0 = action.meta.arg.input0;
+        state.tx.input1 = action.meta.arg.input1;
+      }
     });
     builder.addCase(walletSwap.fulfilled, (state, action) => {
       if (state.tx.status === TxStatus.PENDING) {
@@ -121,6 +136,11 @@ export const walletSlice = createSlice({
     });
     builder.addCase(walletAddLiquidity.pending, (state, action) => {
       state.tx.status = TxStatus.PENDING;
+      state.tx.type = TxType.MINT;
+      if (action.meta.arg) {
+        state.tx.input0 = action.meta.arg.input0;
+        state.tx.input1 = action.meta.arg.input1;
+      }
     });
     builder.addCase(walletAddLiquidity.fulfilled, (state, action) => {
       if (state.tx.status === TxStatus.PENDING) {
@@ -142,6 +162,12 @@ export const walletSlice = createSlice({
     });
     builder.addCase(walletRemoveLiquidity.pending, (state, action) => {
       state.tx.status = TxStatus.PENDING;
+      state.tx.type = TxType.BURN;
+      if (action.meta.arg) {
+        state.tx.input0 = action.meta.arg.input0;
+        state.tx.input1 = action.meta.arg.input1;
+        state.tx.pool = action.meta.arg.pool;
+      }
     });
     builder.addCase(walletRemoveLiquidity.fulfilled, (state, action) => {
       if (state.tx.status === TxStatus.PENDING) {

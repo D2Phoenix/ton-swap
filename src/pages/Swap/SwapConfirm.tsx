@@ -36,7 +36,7 @@ function SwapConfirm({ onClose }: SwapConfirmProps) {
   }, [trade]);
 
   const handleConfirmSwap = useCallback(() => {
-    dispatch(walletSwap());
+    dispatch(walletSwap({ input0, input1 }));
     onClose(true);
   }, [dispatch, onClose]);
 

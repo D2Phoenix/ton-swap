@@ -140,12 +140,14 @@ export const liquiditySlice = createSlice({
       }
     });
     builder.addCase(estimateLiquidityTransaction.fulfilled, (state, action) => {
-      state.input0.amount = action.payload.oneAmount;
-      state.input1.amount = action.payload.twoAmount;
-      state.txType = action.payload.txType;
-      state.pool.overallAmount = action.payload.poolOverallAmount;
-      state.pool.amount = action.payload.poolAmount;
-      state.info = action.payload.info;
+      if (state.input0.token && state.input1.token) {
+        state.input0.amount = action.payload.oneAmount;
+        state.input1.amount = action.payload.twoAmount;
+        state.txType = action.payload.txType;
+        state.pool.overallAmount = action.payload.poolOverallAmount;
+        state.pool.amount = action.payload.poolAmount;
+        state.info = action.payload.info;
+      }
       state.loading = false;
     });
     builder.addCase(getLiquidityToken.fulfilled, (state, action) => {

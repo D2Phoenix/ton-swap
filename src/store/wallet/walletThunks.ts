@@ -1,5 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
+import { InputPoolInterface } from 'types/inputPoolInterface';
+import { InputTokenInterface } from 'types/inputTokenInterface';
 import TokenInterface from 'types/tokenInterface';
 import { TransactionInterface, TxStatus } from 'types/transactionInterfaces';
 import { WalletType } from 'types/walletAdapterInterface';
@@ -91,19 +93,22 @@ export const getWalletAddress = createAsyncThunk('wallet/address', async (reques
   return '';
 });
 
-export const walletSwap = createAsyncThunk('wallet/swap', async (request, thunkAPI) => {
-  const state = thunkAPI.getState() as RootState;
-  const walletAdapterService = state.wallet.adapter;
-  if (walletAdapterService) {
+export const walletSwap = createAsyncThunk(
+  'wallet/swap',
+  async (request: { input0: InputTokenInterface; input1: InputTokenInterface }, thunkAPI) => {
+    const state = thunkAPI.getState() as RootState;
+    const walletAdapterService = state.wallet.adapter;
+    if (walletAdapterService) {
+      return {
+        status: await walletAdapterService.swap(state.swap),
+        state: state.swap,
+      };
+    }
     return {
-      status: await walletAdapterService.swap(state.swap),
-      state: state.swap,
+      status: TxStatus.INITIAL,
     };
-  }
-  return {
-    status: TxStatus.INITIAL,
-  };
-});
+  },
+);
 
 export const walletImportLiquidity = createAsyncThunk('wallet/liquidity/import', async (request, thunkAPI) => {
   const state = thunkAPI.getState() as RootState;
@@ -119,33 +124,39 @@ export const walletImportLiquidity = createAsyncThunk('wallet/liquidity/import',
   };
 });
 
-export const walletAddLiquidity = createAsyncThunk('wallet/liquidity/add', async (request, thunkAPI) => {
-  const state = thunkAPI.getState() as RootState;
-  const walletAdapterService = state.wallet.adapter;
-  if (walletAdapterService) {
+export const walletAddLiquidity = createAsyncThunk(
+  'wallet/liquidity/add',
+  async (request: { input0: InputTokenInterface; input1: InputTokenInterface }, thunkAPI) => {
+    const state = thunkAPI.getState() as RootState;
+    const walletAdapterService = state.wallet.adapter;
+    if (walletAdapterService) {
+      return {
+        status: await walletAdapterService.addLiquidity(state.liquidity),
+        state: state.liquidity,
+      };
+    }
     return {
-      status: await walletAdapterService.addLiquidity(state.liquidity),
-      state: state.liquidity,
+      status: TxStatus.INITIAL,
     };
-  }
-  return {
-    status: TxStatus.INITIAL,
-  };
-});
+  },
+);
 
-export const walletRemoveLiquidity = createAsyncThunk('wallet/liquidity/remove', async (request, thunkAPI) => {
-  const state = thunkAPI.getState() as RootState;
-  const walletAdapterService = state.wallet.adapter;
-  if (walletAdapterService) {
+export const walletRemoveLiquidity = createAsyncThunk(
+  'wallet/liquidity/remove',
+  async (request: { input0: InputTokenInterface; input1: InputTokenInterface; pool: InputPoolInterface }, thunkAPI) => {
+    const state = thunkAPI.getState() as RootState;
+    const walletAdapterService = state.wallet.adapter;
+    if (walletAdapterService) {
+      return {
+        status: await walletAdapterService.removeLiquidity(state.liquidity),
+        state: state.liquidity,
+      };
+    }
     return {
-      status: await walletAdapterService.removeLiquidity(state.liquidity),
-      state: state.liquidity,
+      status: TxStatus.INITIAL,
     };
-  }
-  return {
-    status: TxStatus.INITIAL,
-  };
-});
+  },
+);
 
 export const walletCheckTransactions = createAsyncThunk(
   'wallet/transactions/check',

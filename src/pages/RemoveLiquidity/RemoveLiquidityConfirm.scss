@@ -5,14 +5,6 @@
     width: 50vw;
     max-width: 420px;
   }
-  &.mini {
-    .modal-content {
-      height: 226px;
-      .remove-liquidity-confirm-wrapper {
-        height: 100%;
-      }
-    }
-  }
 }
 .remove-liquidity-confirm-wrapper {
   display: flex;
@@ -45,10 +37,6 @@
   .help-text {
     padding: 8px 0;
     text-align: center;
-    margin-top: auto;
-  }
-  .remove__btn {
-    margin-top: auto;
   }
   .remove-liquidity-status {
     display: flex;
@@ -73,11 +61,6 @@
     .modal-content {
       height: 82% !important;
       max-height: 82%;
-    }
-    &.mini {
-      .modal-content {
-        height: 40% !important;
-      }
     }
   }
 }

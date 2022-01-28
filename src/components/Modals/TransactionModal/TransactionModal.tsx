@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { TxStatus } from 'types/transactionInterfaces';
+import { TxStatus, TxType } from 'types/transactionInterfaces';
 
 import TokenUtils from 'utils/tokenUtils';
 
@@ -9,7 +9,6 @@ import Button from 'components/Button';
 import Spinner from 'components/Spinner';
 
 import { useAppSelector } from 'store/hooks';
-import { selectSwapInput0, selectSwapInput1 } from 'store/swap/swapSlice';
 import { selectWalletTransaction } from 'store/wallet/walletSlice';
 
 import './TransactionModal.scss';
@@ -21,17 +20,21 @@ export const TransactionModalOptions = {
 
 export function TransactionModal() {
   const { t } = useTranslation();
-  const input0 = useAppSelector(selectSwapInput0);
-  const input1 = useAppSelector(selectSwapInput1);
   const walletTransaction = useAppSelector(selectWalletTransaction);
 
   const token0Amount = useMemo(() => {
-    return TokenUtils.toDisplay(input1);
-  }, [input1]);
+    if (walletTransaction.type === TxType.BURN) {
+      return TokenUtils.toNumberDisplay(walletTransaction.input0.removeAmount!);
+    }
+    return TokenUtils.toDisplay(walletTransaction.input0);
+  }, [walletTransaction]);
 
   const token1Amount = useMemo(() => {
-    return TokenUtils.toDisplay(input0);
-  }, [input0]);
+    if (walletTransaction.type === TxType.BURN) {
+      return TokenUtils.toNumberDisplay(walletTransaction.input1.removeAmount!);
+    }
+    return TokenUtils.toDisplay(walletTransaction.input1);
+  }, [walletTransaction]);
 
   return (
     <div className="swap-confirm-wrapper">
@@ -41,10 +44,24 @@ export function TransactionModal() {
           <>
             <h5>{t('Waiting for confirmation')}</h5>
             <p>
-              <Trans>
-                Swapping {{ amount0: token1Amount }} {{ symbol0: input0.token.symbol }} for {{ amount1: token0Amount }}{' '}
-                {{ symbol1: input1.token.symbol }}
-              </Trans>
+              {walletTransaction.type === TxType.SWAP && (
+                <Trans>
+                  Swapping {{ amount0: token0Amount }} {{ symbol0: walletTransaction.input0.token.symbol }} for{' '}
+                  {{ amount1: token1Amount }} {{ symbol1: walletTransaction.input1.token.symbol }}
+                </Trans>
+              )}
+              {walletTransaction.type === TxType.MINT && (
+                <Trans>
+                  Supplying {{ token0: token0Amount }} {{ symbol0: walletTransaction.input0.token.symbol }} and{' '}
+                  {{ token1: token1Amount }} {{ symbol1: walletTransaction.input1.token.symbol }}
+                </Trans>
+              )}
+              {walletTransaction.type === TxType.BURN && (
+                <Trans>
+                  Removing {{ amount0: token0Amount }} {{ symbol0: walletTransaction.input0.token.symbol }} and{' '}
+                  {{ amount1: token1Amount }} {{ symbol1: walletTransaction.input1.token.symbol }}
+                </Trans>
+              )}
             </p>
             <label className="small">{t('Confirm this transaction in your wallet')}</label>
           </>

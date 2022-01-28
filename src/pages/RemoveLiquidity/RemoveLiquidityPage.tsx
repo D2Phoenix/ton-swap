@@ -11,6 +11,8 @@ import Button from 'components/Button';
 import DexForm from 'components/DexForm';
 import ChevronDownIcon from 'components/Icons/ChevronDownIcon';
 import InputSlider from 'components/InputSlider';
+import { useModal } from 'components/Modal';
+import TransactionModal, { TransactionModalOptions } from 'components/Modals/TransactionModal';
 import TokenInput from 'components/TokenInput';
 
 import LiquidityInfo from 'pages/AddLiquidity/LiquidityInfo';
@@ -28,10 +30,10 @@ import {
   setLiquidityPoolRemoveAmount,
 } from 'store/liquidity/liquiditySlice';
 import { approveRemove, getLiquidityPool } from 'store/liquidity/liquidityThunks';
-import { selectWalletAdapter } from 'store/wallet/walletSlice';
+import { resetTransaction, selectWalletAdapter, selectWalletTransaction } from 'store/wallet/walletSlice';
 import { getWalletBalance, getWalletUseTokenPermission } from 'store/wallet/walletThunks';
 
-import RemoveLiquidityConfirm from './RemoveLiquidityConfirm';
+import RemoveLiquidityConfirm, { RemoveLiquidityConfirmOptions } from './RemoveLiquidityConfirm';
 import './RemoveLiquidityPage.scss';
 
 export function RemoveLiquidityPage() {
@@ -39,12 +41,33 @@ export function RemoveLiquidityPage() {
   const { token0, token1 } = useParams();
   const { t } = useTranslation();
 
-  const [showRemoveLiquidityConfirm, setShowRemoveLiquidityConfirm] = useState(false);
   const walletAdapter = useAppSelector(selectWalletAdapter);
   const input0 = useAppSelector(selectLiquidityInput0);
   const input1 = useAppSelector(selectLiquidityInput1);
   const pool = useAppSelector(selectLiquidityPool);
   const removeApproveTx = useAppSelector(selectLiquidityRemoveApproveTx);
+  const walletTransaction = useAppSelector(selectWalletTransaction);
+
+  const removeLiquidityConfirmModal = useModal(RemoveLiquidityConfirm, RemoveLiquidityConfirmOptions);
+  const transactionModal = useModal(TransactionModal, TransactionModalOptions);
+
+  removeLiquidityConfirmModal.onClose((result: boolean) => {
+    if (result) {
+      transactionModal.open();
+    }
+  });
+
+  transactionModal.onClose(() => {
+    dispatch(resetTransaction());
+    if (walletTransaction.status === TxStatus.CONFIRMED) {
+      dispatch(
+        getLiquidityPool({
+          token0: input0.token.address,
+          token1: input1.token.address,
+        }),
+      );
+    }
+  });
 
   const isFilled = useMemo(() => {
     return TokenUtils.isRemoveFilled(input0) && TokenUtils.isRemoveFilled(input1) && TokenUtils.hasRemoveAmount(pool);
@@ -93,7 +116,7 @@ export function RemoveLiquidityPage() {
     }
   }, [dispatch, input0.token, walletAdapter]);
 
-  const handleInputSliderChange = useCallback(
+  const inputSliderChangeHandler = useCallback(
     (value) => {
       dispatch(
         setLiquidityPercentRemoveAmount({
@@ -104,7 +127,7 @@ export function RemoveLiquidityPage() {
     [dispatch],
   );
 
-  const handleToken0Amount = useCallback(
+  const token0AmountHandler = useCallback(
     (value) => {
       dispatch(
         setLiquidityInput0RemoveAmount({
@@ -115,7 +138,7 @@ export function RemoveLiquidityPage() {
     [dispatch],
   );
 
-  const handleToken1Amount = useCallback(
+  const token1AmountHandler = useCallback(
     (value) => {
       dispatch(
         setLiquidityInput1RemoveAmount({
@@ -126,7 +149,7 @@ export function RemoveLiquidityPage() {
     [dispatch],
   );
 
-  const handlePoolTokenAmount = useCallback(
+  const poolTokenAmountHandler = useCallback(
     (value) => {
       dispatch(
         setLiquidityPoolRemoveAmount({
@@ -137,13 +160,9 @@ export function RemoveLiquidityPage() {
     [dispatch],
   );
 
-  const handleApprove = useCallback(() => {
+  const approveHandler = useCallback(() => {
     dispatch(approveRemove(pool));
   }, [dispatch, pool]);
-
-  const handleSupply = useCallback(() => {
-    setShowRemoveLiquidityConfirm(true);
-  }, []);
 
   return (
     <>
@@ -160,13 +179,13 @@ export function RemoveLiquidityPage() {
         }
         content={
           <>
-            <InputSlider value={removePercent} pnChange={handleInputSliderChange} />
+            <InputSlider value={removePercent} pnChange={inputSliderChangeHandler} />
             <TokenInput
               token={pool.token}
               balance={pool.amount}
               value={pool.removeAmount}
               showMax={true}
-              onChange={handlePoolTokenAmount}
+              onChange={poolTokenAmountHandler}
               selectable={false}
               editable={true}
             />
@@ -178,7 +197,7 @@ export function RemoveLiquidityPage() {
               value={input0.removeAmount}
               balance={input0.amount}
               showMax={true}
-              onChange={handleToken0Amount}
+              onChange={token0AmountHandler}
               selectable={false}
               editable={true}
             />
@@ -188,7 +207,7 @@ export function RemoveLiquidityPage() {
               value={input1.removeAmount}
               balance={input1.amount}
               showMax={true}
-              onChange={handleToken1Amount}
+              onChange={token1AmountHandler}
               selectable={false}
               editable={true}
             />
@@ -202,7 +221,7 @@ export function RemoveLiquidityPage() {
                 variant={'primary'}
                 className={'remove__btn'}
                 disabled={!isFilled || [TxStatus.PENDING, TxStatus.CONFIRMED].indexOf(removeApproveTx.status) > -1}
-                onClick={handleApprove}
+                onClick={approveHandler}
               >
                 {t('Approve')}
               </Button>
@@ -212,7 +231,7 @@ export function RemoveLiquidityPage() {
                 variant={'primary'}
                 className={'remove__btn'}
                 disabled={!isFilled || removeApproveTx.status !== TxStatus.CONFIRMED}
-                onClick={handleSupply}
+                onClick={removeLiquidityConfirmModal.open}
               >
                 {removeButtonText}
               </Button>
@@ -220,7 +239,6 @@ export function RemoveLiquidityPage() {
           </div>
         }
       />
-      {showRemoveLiquidityConfirm && <RemoveLiquidityConfirm onClose={() => setShowRemoveLiquidityConfirm(false)} />}
     </>
   );
 }

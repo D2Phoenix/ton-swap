@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { WALLET_TX_UPDATE_INTERVAL } from 'constants/swap';
 
-import { EstimateTxType } from 'types/transactionInterfaces';
+import { EstimateTxType, TxStatus } from 'types/transactionInterfaces';
 import { WalletStatus, WalletType } from 'types/walletAdapterInterface';
 
 import TokenUtils from 'utils/tokenUtils';
@@ -12,6 +12,8 @@ import TokenUtils from 'utils/tokenUtils';
 import Button from 'components/Button';
 import DexForm from 'components/DexForm';
 import PlusIcon from 'components/Icons/PlusIcon';
+import { useModal } from 'components/Modal';
+import TransactionModal, { TransactionModalOptions } from 'components/Modals/TransactionModal';
 import TokenInput from 'components/TokenInput';
 
 import { useAppDispatch, useAppSelector } from 'store/hooks';
@@ -33,10 +35,12 @@ import {
   getLiquidityToken,
 } from 'store/liquidity/liquidityThunks';
 import {
+  resetTransaction,
   selectWalletAdapter,
   selectWalletBalances,
   selectWalletConnectionStatus,
   selectWalletPermissions,
+  selectWalletTransaction,
 } from 'store/wallet/walletSlice';
 import {
   connectWallet,
@@ -45,7 +49,7 @@ import {
   setWalletUseTokenPermission,
 } from 'store/wallet/walletThunks';
 
-import AddLiquidityConfirm from './AddLiquidityConfirm';
+import AddLiquidityConfirm, { AddLiquidityConfirmOptions } from './AddLiquidityConfirm';
 import './AddLiquidityPage.scss';
 import LiquidityInfo from './LiquidityInfo';
 
@@ -54,7 +58,6 @@ export function AddLiquidityPage() {
   const { token0, token1 } = useParams();
   const { t } = useTranslation();
 
-  const [showAddLiquidityConfirm, setShowAddLiquidityConfirm] = useState(false);
   const walletAdapter = useAppSelector(selectWalletAdapter);
   const walletBalances = useAppSelector(selectWalletBalances);
   const walletPermissions = useAppSelector(selectWalletPermissions);
@@ -63,6 +66,23 @@ export function AddLiquidityPage() {
   const input1 = useAppSelector(selectLiquidityInput1);
   const txType = useAppSelector(selectLiquidityTxType);
   const loading = useAppSelector(selectLiquidityLoading);
+  const walletTransaction = useAppSelector(selectWalletTransaction);
+
+  const addLiquidityConfirmModal = useModal(AddLiquidityConfirm, AddLiquidityConfirmOptions);
+  const transactionModal = useModal(TransactionModal, TransactionModalOptions);
+
+  addLiquidityConfirmModal.onClose((result: boolean) => {
+    if (result) {
+      transactionModal.open();
+    }
+  });
+
+  transactionModal.onClose(() => {
+    dispatch(resetTransaction());
+    if (walletTransaction.status === TxStatus.CONFIRMED) {
+      dispatch(resetLiquidity());
+    }
+  });
 
   const isFilled = useMemo(() => {
     return TokenUtils.isFilled(input0) && TokenUtils.isFilled(input1);
@@ -265,20 +285,16 @@ export function AddLiquidityPage() {
   );
 
   const handleAllowUseToken0 = useCallback(() => {
-    dispatch(setWalletUseTokenPermission(input0.token!));
+    dispatch(setWalletUseTokenPermission(input0.token));
   }, [dispatch, input0]);
 
   const handleAllowUseToken1 = useCallback(() => {
-    dispatch(setWalletUseTokenPermission(input1.token!));
+    dispatch(setWalletUseTokenPermission(input1.token));
   }, [dispatch, input1]);
 
   const handleConnectWallet = useCallback(() => {
     dispatch(connectWallet(WalletType.stubWallet));
   }, [dispatch]);
-
-  const handleSupply = useCallback(() => {
-    setShowAddLiquidityConfirm(true);
-  }, []);
 
   return (
     <>
@@ -351,7 +367,7 @@ export function AddLiquidityPage() {
                   (!!input1.token && !walletPermissions[input1.token.symbol]) ||
                   loading
                 }
-                onClick={handleSupply}
+                onClick={addLiquidityConfirmModal.open}
               >
                 {supplyButtonText}
               </Button>
@@ -364,7 +380,6 @@ export function AddLiquidityPage() {
           </>
         }
       />
-      {showAddLiquidityConfirm && <AddLiquidityConfirm onClose={() => setShowAddLiquidityConfirm(false)} />}
     </>
   );
 }
