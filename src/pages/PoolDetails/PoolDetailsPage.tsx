@@ -164,21 +164,21 @@ function PoolDetailsPage() {
         <div className="pool-charts">
           <div className="charts-select-wrapper">
             <Button
-              type={'outline'}
+              variant={'outline'}
               className={`mini ${chart === 'volume' ? 'active' : ''}`}
               onClick={setChart.bind(null, 'volume')}
             >
               {t('Volume')}
             </Button>
             <Button
-              type={'outline'}
+              variant={'outline'}
               className={`mini ${chart === 'tvl' ? 'active' : ''}`}
               onClick={setChart.bind(null, 'tvl')}
             >
               {t('TVL')}
             </Button>
             <Button
-              type={'outline'}
+              variant={'outline'}
               className={`mini ${chart === 'fees' ? 'active' : ''}`}
               onClick={setChart.bind(null, 'fees')}
             >

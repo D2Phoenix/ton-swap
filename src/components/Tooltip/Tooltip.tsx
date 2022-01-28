@@ -27,7 +27,7 @@ export function Tooltip({ delay, children, direction, content }: TooltipProps) {
 
   return (
     <div
-      className="tooltip-wrapper"
+      className="tooltip"
       // When to show the tooltip
       onClick={active ? hideTip : showTip}
       onMouseEnter={showTip}
@@ -36,7 +36,7 @@ export function Tooltip({ delay, children, direction, content }: TooltipProps) {
       {/* Wrapping */}
       {children}
       {active && (
-        <div className={`tooltip-tip ${direction || 'top'}`}>
+        <div className={`tooltip__tip tooltip__tip--${direction || 'top'}`}>
           {/* Content */}
           {content}
         </div>

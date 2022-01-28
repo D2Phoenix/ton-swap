@@ -199,7 +199,7 @@ export function RemoveLiquidityPage() {
           <div className="actions-wrapper">
             {walletAdapter && (
               <Button
-                type={'primary'}
+                variant={'primary'}
                 className={'remove__btn'}
                 disabled={!isFilled || [TxStatus.PENDING, TxStatus.CONFIRMED].indexOf(removeApproveTx.status) > -1}
                 onClick={handleApprove}
@@ -209,7 +209,7 @@ export function RemoveLiquidityPage() {
             )}
             {walletAdapter && (
               <Button
-                type={'primary'}
+                variant={'primary'}
                 className={'remove__btn'}
                 disabled={!isFilled || removeApproveTx.status !== TxStatus.CONFIRMED}
                 onClick={handleSupply}

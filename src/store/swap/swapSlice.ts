@@ -87,10 +87,12 @@ export const swapSlice = createSlice({
       }
     });
     builder.addCase(estimateTransaction.fulfilled, (state, action) => {
-      state.input0.amount = action.payload.fromAmount;
-      state.input1.amount = action.payload.toAmount;
-      state.txType = action.payload.type;
-      state.trade = action.payload.trade;
+      if (state.input0.token && state.input1.token) {
+        state.input0.amount = action.payload.fromAmount;
+        state.input1.amount = action.payload.toAmount;
+        state.txType = action.payload.type;
+        state.trade = action.payload.trade;
+      }
       state.loading = false;
     });
     builder.addCase(getSwapToken.fulfilled, (state, action) => {

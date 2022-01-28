@@ -92,20 +92,6 @@ body {
       }
     }
   }
-
-  ::-webkit-scrollbar-track {
-    -webkit-box-shadow: var(--modal-scrollbar-track-shadow);
-    background-color: var(--modal-scrollbar-track-background);
-  }
-
-  ::-webkit-scrollbar {
-    width: var(--modal-scrollbar-width);
-    background-color: var(--modal-scrollbar-background);
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background-color: var(--modal-scrollbar-thumb-background);
-  }
 }
 
 @media screen and (max-width: 599px) {

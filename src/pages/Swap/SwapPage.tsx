@@ -11,7 +11,6 @@ import TokenUtils from 'utils/tokenUtils';
 
 import Button from 'components/Button';
 import DexForm from 'components/DexForm';
-import InfoIcon from 'components/Icons/InfoIcon';
 import SwapIcon from 'components/Icons/SwapIcon';
 import { useModal } from 'components/Modal';
 import SelectWalletModal, { SelectWalletModalOptions } from 'components/Modals/SelectWalletModal';
@@ -272,76 +271,74 @@ function SwapPage() {
   }, [dispatch, input0]);
 
   return (
-    <>
-      <DexForm
-        header={t('Swap')}
-        className={'swap-form'}
-        content={
-          <>
-            <TokenInput
-              token={input0.token}
-              balance={walletBalances[input0.token?.symbol || '']}
-              value={input0.amount}
-              showMax={true}
-              label={t('From')}
-              onSelect={selectTokenHandler.bind(null, 'input0')}
-              onChange={input0TokenAmountHandler}
-              selectable={true}
-              editable={true}
-              loading={txType === EstimateTxType.EXACT_OUT && loading}
-              primary={txType === EstimateTxType.EXACT_IN}
-            />
-            <Button type={'icon'} icon={<SwapIcon />} className={'small'} onClick={switchTokensHandler} />
-            <TokenInput
-              token={input1.token}
-              balance={walletBalances[input1.token?.symbol || '']}
-              value={input1.amount}
-              showMax={false}
-              label={t('To')}
-              onSelect={selectTokenHandler.bind(null, 'input1')}
-              onChange={input1TokenAmountHandler}
-              selectable={true}
-              editable={true}
-              loading={txType === EstimateTxType.EXACT_IN && loading}
-              primary={txType === EstimateTxType.EXACT_OUT}
-            />
-            {isFilled && (
-              <div className={`swap-price text-small ${loading ? 'loading' : ''}`}>
-                <p>{t('Price')}</p>
-                <p className="swap-price-text">
-                  {TokenUtils.toNumberDisplay(trade.rate)} {input0.token.symbol} per 1 {input1.token.symbol}
-                </p>
-                <Tooltip content={<SwapInfo />} direction="left">
-                  <SwapIcon />
-                </Tooltip>
-              </div>
-            )}
-          </>
-        }
-        actions={
-          <>
-            {walletConnectionStatus === WalletStatus.CONNECTED &&
-              isFilled &&
-              !insufficientBalance &&
-              !walletPermissions[input0.token.symbol] && (
-                <Button type={'primary'} onClick={allowUseTokenHandler}>
-                  <Trans>Allow the TONSwap Protocol to use your {{ symbol0: input0.token.symbol }}</Trans>
-                </Button>
-              )}
-            {walletConnectionStatus === WalletStatus.CONNECTED && (
-              <Button type={'primary'} disabled={loading || hasErrors} onClick={swapConfirmModal.open}>
-                {swapButtonText}
+    <DexForm
+      header={t('Swap')}
+      className={'swap-form'}
+      content={
+        <>
+          <TokenInput
+            token={input0.token}
+            balance={walletBalances[input0.token?.symbol || '']}
+            value={input0.amount}
+            showMax={true}
+            label={t('From')}
+            onSelect={selectTokenHandler.bind(null, 'input0')}
+            onChange={input0TokenAmountHandler}
+            selectable={true}
+            editable={true}
+            loading={txType === EstimateTxType.EXACT_OUT && loading}
+            primary={txType === EstimateTxType.EXACT_IN}
+          />
+          <Button variant={'default'} size={'small'} icon={<SwapIcon />} onClick={switchTokensHandler} />
+          <TokenInput
+            token={input1.token}
+            balance={walletBalances[input1.token?.symbol || '']}
+            value={input1.amount}
+            showMax={false}
+            label={t('To')}
+            onSelect={selectTokenHandler.bind(null, 'input1')}
+            onChange={input1TokenAmountHandler}
+            selectable={true}
+            editable={true}
+            loading={txType === EstimateTxType.EXACT_IN && loading}
+            primary={txType === EstimateTxType.EXACT_OUT}
+          />
+          {isFilled && (
+            <div className={`swap-price text-small ${loading ? 'loading' : ''}`}>
+              <p>{t('Price')}</p>
+              <p className="swap-price-text">
+                {TokenUtils.toNumberDisplay(trade.rate)} {input0.token.symbol} per 1 {input1.token.symbol}
+              </p>
+              <Tooltip content={<SwapInfo />} direction="left">
+                <SwapIcon />
+              </Tooltip>
+            </div>
+          )}
+        </>
+      }
+      actions={
+        <>
+          {walletConnectionStatus === WalletStatus.CONNECTED &&
+            isFilled &&
+            !insufficientBalance &&
+            !walletPermissions[input0.token.symbol] && (
+              <Button variant={'primary'} onClick={allowUseTokenHandler}>
+                <Trans>Allow the TONSwap Protocol to use your {{ symbol0: input0.token.symbol }}</Trans>
               </Button>
             )}
-            {walletConnectionStatus !== WalletStatus.CONNECTED && (
-              <Button type={'secondary'} onClick={selectWalletModal.open}>
-                {t('Connect Wallet')}
-              </Button>
-            )}
-          </>
-        }
-      />
-    </>
+          {walletConnectionStatus === WalletStatus.CONNECTED && (
+            <Button variant={'primary'} disabled={loading || hasErrors} onClick={swapConfirmModal.open}>
+              {swapButtonText}
+            </Button>
+          )}
+          {walletConnectionStatus !== WalletStatus.CONNECTED && (
+            <Button variant={'secondary'} onClick={selectWalletModal.open}>
+              {t('Connect Wallet')}
+            </Button>
+          )}
+        </>
+      }
+    />
   );
 }
 

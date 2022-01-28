@@ -6,13 +6,13 @@ import { useAppSelector } from 'store/hooks';
 import './TokenIcon.scss';
 
 interface TokenIconProps {
-  address: string;
+  address?: string;
   name: string;
-  size?: 'small';
+  size?: 'small' | 'default' | '32';
   url?: string;
 }
 
-export function TokenIcon({ address, name, size, url }: TokenIconProps) {
+export function TokenIcon({ address = '', name, size = 'default', url }: TokenIconProps) {
   const tokens = useAppSelector(selectTokens);
 
   const iconUrl = useMemo(() => {
@@ -27,7 +27,7 @@ export function TokenIcon({ address, name, size, url }: TokenIconProps) {
   }, [tokens, address, url]);
 
   return (
-    <div className={`token-icon-wrapper ${size || ''}`}>
+    <div className={`token-icon token-icon--size-${size || ''}`}>
       <img src={iconUrl} alt={name} />
     </div>
   );

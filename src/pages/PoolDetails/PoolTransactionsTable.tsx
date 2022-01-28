@@ -139,15 +139,21 @@ function PoolTransactionsTable() {
         })}
       </div>
       <div className="pool-transactions-pagination">
-        <Button type={'icon'} disabled={page - 1 === 0} onClick={handlePageChange.bind(null, -1)}>
-          <ChevronRightIcon revert={true} />
-        </Button>
+        <Button
+          variant={'default'}
+          icon={<ChevronRightIcon revert={true} />}
+          disabled={page - 1 === 0}
+          onClick={handlePageChange.bind(null, -1)}
+        />
         <Trans>
           Page {{ page: page }} of {{ total: totalPages }}
         </Trans>
-        <Button type={'icon'} disabled={page >= totalPages} onClick={handlePageChange.bind(null, 1)}>
-          <ChevronRightIcon />
-        </Button>
+        <Button
+          variant={'default'}
+          icon={<ChevronRightIcon />}
+          disabled={page >= totalPages}
+          onClick={handlePageChange.bind(null, 1)}
+        />
       </div>
     </>
   );

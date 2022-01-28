@@ -21,6 +21,9 @@ $warning-color: rgb(253, 193, 64);
   --primary-text-color: #{map-get($gray-palette, 'black')};
   --secondary-color: #{map-get($gray-palette, 2300)};
   --secondary-hover-color: #{map-get($gray-palette, 2200)};
+  --error-color: #{map-get($red-palette, 500)};
+  --success-color: #{map-get($green-palette, 500)};
+  --warning-color: #{map-get($yellow-palette, 500)};
   // Header navigation
   --nav-text-color: #{map-get($gray-palette, 900)};
   --nav-active-text-color: #{map-get($gold-palette, 500)};
@@ -43,6 +46,7 @@ $warning-color: rgb(253, 193, 64);
   --input-text-color: #{map-get($gray-palette, 'white')};
   --input-placeholder-color: #{map-get($gray-palette, 1200)};
   --input-background-color: transparent;
+  --input-help-text-color: #{map-get($gray-palette, 1200)};
   // Dropdown
   --dropdown-border-color: #{map-get($gray-palette, 2300)};
   --dropdown-hover-color: #{map-get($gray-palette, 2300)};
@@ -50,6 +54,7 @@ $warning-color: rgb(253, 193, 64);
   // List
   --list-hover-color: #{map-get($gray-palette, 2300)};
   --list-border-color: #{map-get($gray-palette, 2300)};
+  --list-empty-text-color: #{map-get($gray-palette, 900)};
   // Spinner
   --spinner-color: #{map-get($green-palette, 500)};
   --spinner-failed-color: #{map-get($red-palette, 500)};

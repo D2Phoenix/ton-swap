@@ -1,11 +1,12 @@
 import BigNumber from 'bignumber.js';
 import { useEffect } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import TokenUtils from 'utils/tokenUtils';
 
 import Accordion from 'components/Accordion';
+import DexForm from 'components/DexForm';
 import TokenIcon from 'components/TokenIcon';
 
 import { useAppDispatch, useAppSelector } from 'store/hooks';
@@ -13,12 +14,13 @@ import { selectPoolPools } from 'store/pool/poolSlice';
 import { getPoolPools } from 'store/pool/poolThunks';
 import { selectWalletAdapter } from 'store/wallet/walletSlice';
 
-import DexForm from '../../components/DexForm';
+import Button from '../../components/Button';
 import './PoolPage.scss';
 
 function PoolPage() {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const walletAdapter = useAppSelector(selectWalletAdapter);
   const pools = useAppSelector(selectPoolPools);
 
@@ -119,14 +121,12 @@ function PoolPage() {
         }
         actions={
           <>
-            <Link className="btn btn-primary add__btn" to="add">
-              {t('Add Liquidity')}
-            </Link>
+            <Button onClick={navigate.bind(null, 'add')}>{t('Add Liquidity')}</Button>
             <div className="import-pool">
               <span>{t("Don't see a pool you joined?")}</span>
-              <Link className="btn btn-outline" to="import">
+              <Button variant={'outline'} onClick={navigate.bind(null, 'import')}>
                 {t('Import Pool')}
-              </Link>
+              </Button>
             </div>
           </>
         }

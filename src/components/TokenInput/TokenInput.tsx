@@ -135,7 +135,7 @@ export function TokenInput({
           balance != null &&
           !new BigNumber(balance).eq('0') &&
           (!value || !new BigNumber(balance).eq(value)) && (
-            <Button className="small max__btn" type={'default'} onClick={maxHandler}>
+            <Button variant={'default'} size={'small'} className="max__btn" onClick={maxHandler}>
               Max
             </Button>
           )}
@@ -152,8 +152,9 @@ export function TokenInput({
         )}
         {!token && (
           <Button
-            type={'primary'}
-            className="small select__btn"
+            variant={'primary'}
+            size={'small'}
+            className="select__btn"
             onClick={selectTokenModal.open.bind(null, { balancesFirst })}
           >
             {t('Select a Token')}

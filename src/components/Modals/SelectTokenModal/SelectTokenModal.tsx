@@ -1,8 +1,6 @@
 import BigNumber from 'bignumber.js';
 import React, { CSSProperties, MouseEventHandler, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import AutoSizer from 'react-virtualized-auto-sizer';
-import { FixedSizeList as List } from 'react-window';
 
 import { BALANCE_PRECISION } from 'constants/swap';
 
@@ -10,6 +8,8 @@ import TokenInterface from 'types/tokenInterface';
 
 import Button from 'components/Button';
 import ChevronRightIcon from 'components/Icons/ChevronRightIcon';
+import Input from 'components/Input';
+import List, { ListItem } from 'components/List';
 import TokenIcon from 'components/TokenIcon';
 
 import { selectTokenLists, selectTokens } from 'store/app/appSlice';
@@ -32,9 +32,7 @@ function TokenManageList({ onBack }: TokenManageListParams) {
   return (
     <div className="token-select-wrapper">
       <div className="token-select-header">
-        <Button type={'icon'} onClick={onBack}>
-          <ChevronRightIcon revert={true} />
-        </Button>
+        <Button variant={'default'} icon={<ChevronRightIcon revert={true} />} onClick={onBack} />
         <span className="text-semibold">{t('Managa tokens')}</span>
       </div>
       <input
@@ -119,6 +117,10 @@ export function SelectTokenModal({ onClose, balancesFirst }: TokenSelectProps) {
     [onClose],
   );
 
+  const changeHandler = useCallback((event) => {
+    setQuery(event.target.value);
+  }, []);
+
   const toggleManageTokens = useCallback(() => {
     setShowTokenManage((prev) => !prev);
   }, []);
@@ -127,37 +129,26 @@ export function SelectTokenModal({ onClose, balancesFirst }: TokenSelectProps) {
     <>
       {!showTokenManage && (
         <div className="token-select-wrapper">
-          <input
-            placeholder={t('Search name or paste address')}
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-          />
-          <div className="token-select-list">
-            <AutoSizer>
-              {({ width, height }: { width: number; height: number }) => (
-                <List className="list" height={height} width={width} itemCount={visibleTokens.length} itemSize={66}>
-                  {({ index, style }: { index: number; style: CSSProperties | undefined }) => {
-                    const token = visibleTokens[index];
-                    const balance = balances[token.symbol]
-                      ? new BigNumber(balances[token.symbol]).precision(BALANCE_PRECISION).toFixed()
-                      : '';
-                    const newStyle = Object.assign({}, style, { width: 'calc(100% - 6px)' });
-                    return (
-                      <div style={newStyle} className="token-select-item" onClick={selectHandler.bind(null, token)}>
-                        <TokenIcon address={token.address} name={token.name} />
-                        <div className="token-name">
-                          <span className="title-2">{token.symbol}</span>
-                          <label className="small">{token.name}</label>
-                        </div>
-                        <p className="token-balance">{balance}</p>
-                      </div>
-                    );
-                  }}
-                </List>
-              )}
-            </AutoSizer>
-          </div>
-          <Button type={'default'} onClick={toggleManageTokens}>
+          <Input placeholder={t('Search name or paste address')} value={query} onChange={changeHandler} />
+          <List height={436} itemCount={visibleTokens.length} emptyText={t('No Tokens found')}>
+            {(index: number, style: CSSProperties) => {
+              const token = visibleTokens[index];
+              const balance = balances[token.symbol]
+                ? new BigNumber(balances[token.symbol]).precision(BALANCE_PRECISION).toFixed()
+                : '';
+              return (
+                <ListItem
+                  icon={<TokenIcon address={token.address} name={token.name} size={'32'} />}
+                  title={token.symbol}
+                  subtitle={token.name}
+                  total={balance}
+                  style={style}
+                  onClick={selectHandler.bind(null, token)}
+                />
+              );
+            }}
+          </List>
+          <Button variant={'default'} onClick={toggleManageTokens}>
             {t('Manage')}
           </Button>
         </div>

@@ -1,22 +1,35 @@
-import React, { MouseEventHandler } from 'react';
+import React, { ButtonHTMLAttributes, MouseEventHandler } from 'react';
 
 import './Button.scss';
 
 interface ButtonProps {
-  className?: string;
-  type: 'primary' | 'secondary' | 'outline' | 'icon' | 'default';
-  disabled?: boolean;
-  alt?: string;
+  variant?: 'primary' | 'secondary' | 'outline' | 'default';
+  size?: 'large' | 'medium' | 'small';
   icon?: JSX.Element;
-  onClick?: MouseEventHandler;
-  children?: any;
+  iconPosition?: 'start' | 'end';
 }
 
-export function Button({ className, type = 'default', disabled, alt, icon, onClick, children }: ButtonProps) {
+export function Button({
+  variant = 'primary',
+  size = 'large',
+  icon,
+  iconPosition = 'start',
+  children,
+  className,
+  ...props
+}: ButtonProps & ButtonHTMLAttributes<HTMLButtonElement>) {
+  const calcClassName = ['btn', `btn-${variant}`, `btn-${size}`];
+  if (!!icon) {
+    calcClassName.push('btn-icon-' + iconPosition);
+  }
+  if (className) {
+    calcClassName.push(className);
+  }
   return (
-    <button className={`btn btn-${type} ${className || ''}`} title={alt} disabled={disabled} onClick={onClick}>
-      {!!icon && icon}
-      {!!children && children}
+    <button className={calcClassName.join(' ')} {...props}>
+      {!!icon && iconPosition === 'start' && icon}
+      {!!children && <span>{children}</span>}
+      {!!icon && iconPosition === 'end' && icon}
     </button>
   );
 }

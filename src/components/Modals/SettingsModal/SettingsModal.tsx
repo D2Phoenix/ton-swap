@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { DEFAULT_DEADLINE, DEFAULT_SLIPPAGE } from 'constants/swap';
@@ -10,6 +10,7 @@ import Tooltip from 'components/Tooltip';
 import { selectSettings, setSettingsDeadline, setSettingsSlippage } from 'store/app/appSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 
+import Input from '../../Input';
 import './SettingsModal.scss';
 
 const SLIPPAGE_INPUT_REGEXP = RegExp(`^\\d*(?:\\\\[.])?\\d*$`);
@@ -24,6 +25,46 @@ export function SettingsModal() {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const settings = useAppSelector(selectSettings);
+
+  const slippageInput = useMemo((): { inputState: 'default' | 'success' | 'warning' | 'error'; helpText: string } => {
+    const slippageNumber = parseFloat(settings.slippage);
+    if (slippageNumber < 0.05) {
+      return {
+        inputState: 'warning',
+        helpText: t('Your transaction may fail'),
+      };
+    }
+    if (slippageNumber > 1 && slippageNumber <= 50) {
+      return {
+        inputState: 'warning',
+        helpText: t('Your transaction may be frontrun'),
+      };
+    }
+    if (slippageNumber > 50) {
+      return {
+        inputState: 'error',
+        helpText: t('Enter a valid slippage'),
+      };
+    }
+    return {
+      inputState: 'default',
+      helpText: '',
+    };
+  }, [settings.slippage]);
+
+  const deadlineInput = useMemo((): { inputState: 'default' | 'success' | 'warning' | 'error'; helpText: string } => {
+    const deadlineNumber = parseFloat(settings.deadline);
+    if (deadlineNumber === 0 || deadlineNumber > 180) {
+      return {
+        inputState: 'error',
+        helpText: t('Enter a valid deadline'),
+      };
+    }
+    return {
+      inputState: 'default',
+      helpText: '',
+    };
+  }, [settings.deadline]);
 
   const handleSlippageChange = useCallback(
     (event) => {
@@ -65,9 +106,6 @@ export function SettingsModal() {
     [dispatch],
   );
 
-  const slippageNumber = parseFloat(settings.slippage);
-  const deadlineNumber = parseFloat(settings.deadline);
-
   return (
     <div className="settings-wrapper">
       <h6>{t('Transaction Settings')}</h6>
@@ -86,25 +124,23 @@ export function SettingsModal() {
           </Tooltip>
         </p>
         <div>
-          <input
+          <Input
+            inputSize={'small'}
+            inputType={'number'}
+            inputState={slippageInput.inputState}
+            helpText={slippageInput.helpText}
             type="text"
             inputMode="decimal"
             autoComplete="off"
             autoCorrect="off"
             pattern="^[0-9]*[.,]?[0-9]*$"
-            className="number__input small"
             placeholder={DEFAULT_SLIPPAGE}
             value={settings.slippage}
             onChange={handleSlippageChange}
             onBlur={handleSlippageBlur}
           />
-          <p>&nbsp;%</p>
+          <p>%</p>
         </div>
-        {slippageNumber < 0.05 && <span className="text-warning">{t('Your transaction may fail')}</span>}
-        {slippageNumber > 1 && slippageNumber <= 50 && (
-          <span className="text-warning">{t('Your transaction may be frontrun')}</span>
-        )}
-        {slippageNumber > 50 && <span className="text-error">{t('Enter a valid slippage percentage')}</span>}
       </div>
       <div className="setting-section">
         <p>
@@ -117,23 +153,23 @@ export function SettingsModal() {
           </Tooltip>
         </p>
         <div>
-          <input
+          <Input
+            inputSize={'small'}
+            inputType={'number'}
+            inputState={deadlineInput.inputState}
+            helpText={deadlineInput.helpText}
             type="text"
             inputMode="decimal"
             autoComplete="off"
             autoCorrect="off"
             pattern="^[0-9]*[.,]?[0-9]*$"
-            className="number__input small"
             placeholder={DEFAULT_DEADLINE}
             value={settings.deadline}
             onChange={handleDeadlineChange}
             onBlur={handleDeadlineBlur}
           />
-          <p>&nbsp;{t('minutes')}</p>
+          <p>{t('minutes')}</p>
         </div>
-        {(deadlineNumber === 0 || deadlineNumber > 180) && (
-          <span className="text-error">{t('Enter a valid deadline')}</span>
-        )}
       </div>
     </div>
   );

@@ -87,18 +87,24 @@ export function AccountModal({ onClose }: AccountProps) {
     <div className="account-wrapper">
       <div className="account-info">
         <div className="title-1">{visibleWalletAddress}</div>
-        <Button type={'secondary'} alt={t('Open at explorer')} onClick={openAtExplorerHandler}>
-          <DirectIcon />
-        </Button>
-        <Button type={'secondary'} alt={t('Copy to clipboard')} onClick={copyToClipboardHandler}>
-          <CopyIcon />
-        </Button>
+        <Button
+          variant={'secondary'}
+          icon={<DirectIcon />}
+          title={t('Open at explorer')}
+          onClick={openAtExplorerHandler}
+        />
+        <Button
+          variant={'secondary'}
+          icon={<CopyIcon />}
+          title={t('Copy to clipboard')}
+          onClick={copyToClipboardHandler}
+        />
       </div>
       <div className="account-actions">
-        <Button type={'secondary'} className="title-2" icon={<SwitchExchangeIcon />} onClick={switchWalletHandler}>
+        <Button variant={'secondary'} className="title-2" icon={<SwitchExchangeIcon />} onClick={switchWalletHandler}>
           {t('Switch Wallet')}
         </Button>
-        <Button type={'primary'} className="title-2" onClick={disconnectHandler}>
+        <Button variant={'primary'} className="title-2" onClick={disconnectHandler}>
           {t('Disconnect')}
         </Button>
       </div>

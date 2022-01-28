@@ -101,7 +101,7 @@ function AddLiquidityConfirm({ onClose }: AddLiquidityConfirmProps) {
                 </Trans>
               </span>
             }
-            <Button type={'primary'} className={'supply__btn'} onClick={handleConfirmSupply}>
+            <Button variant={'primary'} className={'supply__btn'} onClick={handleConfirmSupply}>
               {t('Confirm Supply')}
             </Button>
           </div>
@@ -129,7 +129,7 @@ function AddLiquidityConfirm({ onClose }: AddLiquidityConfirmProps) {
             <div className="add-liquidity-status">
               <h2 className="text-semibold">{t('Transaction submitted')}</h2>
               <a>{t('View on Explorer')}</a>
-              <Button type={'primary'} className={'supply__btn'} onClick={handleClose}>
+              <Button variant={'primary'} className={'supply__btn'} onClick={handleClose}>
                 {t('Close')}
               </Button>
             </div>
@@ -142,7 +142,7 @@ function AddLiquidityConfirm({ onClose }: AddLiquidityConfirmProps) {
           <div className="add-liquidity-confirm-wrapper">
             <div className="add-liquidity-status">
               <h2 className="text-semibold text-error">{t('Transaction rejected')}</h2>
-              <Button type={'primary'} className={'supply__btn'} onClick={handleClose}>
+              <Button variant={'primary'} className={'supply__btn'} onClick={handleClose}>
                 {t('Dismiss')}
               </Button>
             </div>

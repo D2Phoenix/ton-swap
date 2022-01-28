@@ -6,6 +6,7 @@ function ChevronRightIcon({ revert }: ChevronRightIconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
+      className="icon"
       aria-hidden="true"
       role="img"
       transform={revert ? 'rotate(180)' : ''}

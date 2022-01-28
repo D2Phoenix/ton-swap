@@ -11,6 +11,7 @@ import TokenUtils from 'utils/tokenUtils';
 
 import Button from 'components/Button';
 import DexForm from 'components/DexForm';
+import PlusIcon from 'components/Icons/PlusIcon';
 import TokenInput from 'components/TokenInput';
 
 import { useAppDispatch, useAppSelector } from 'store/hooks';
@@ -220,7 +221,7 @@ export function AddLiquidityPage() {
     dispatch(switchLiquidityTokens());
   }, [dispatch]);
 
-  const handleSelectToken = useCallback(
+  const selectTokenHandler = useCallback(
     (input, token) => {
       if (!token) {
         return;
@@ -291,26 +292,28 @@ export function AddLiquidityPage() {
         content={
           <>
             <TokenInput
+              label={t('Input')}
               token={input0.token}
               balance={walletBalances[input0.token?.symbol || '']}
               balancesFirst={true}
               value={input0.amount}
               showMax={true}
-              onSelect={handleSelectToken.bind(null, 'input0')}
+              onSelect={selectTokenHandler.bind(null, 'input0')}
               onChange={handleInput0TokenAmount}
               selectable={true}
               editable={true}
               loading={txType === EstimateTxType.EXACT_OUT && loading}
               primary={txType === EstimateTxType.EXACT_IN}
             />
-            <div className="btn-icon">+</div>
+            <Button variant={'default'} size={'small'} icon={<PlusIcon />} />
             <TokenInput
+              label={t('Input')}
               token={input1.token}
               balance={walletBalances[input1.token?.symbol || '']}
               balancesFirst={true}
               value={input1.amount}
               showMax={true}
-              onSelect={handleSelectToken.bind(null, 'input1')}
+              onSelect={selectTokenHandler.bind(null, 'input1')}
               onChange={handleInput1TokenAmount}
               selectable={true}
               editable={true}
@@ -324,24 +327,23 @@ export function AddLiquidityPage() {
           <>
             {walletConnectionStatus === WalletStatus.CONNECTED &&
               isFilled &&
-              !walletPermissions[input0.token!.symbol] &&
+              !walletPermissions[input0.token?.symbol] &&
               !insufficientToken0Balance && (
-                <Button type={'primary'} className={'supply__btn'} onClick={handleAllowUseToken0}>
+                <Button variant={'primary'} onClick={handleAllowUseToken0}>
                   <Trans>Allow the TONSwap Protocol to use your {{ symbol0: input0.token.symbol }}</Trans>
                 </Button>
               )}
             {walletConnectionStatus === WalletStatus.CONNECTED &&
               isFilled &&
-              !walletPermissions[input1.token!.symbol] &&
+              !walletPermissions[input1.token?.symbol] &&
               !insufficientToken1Balance && (
-                <Button type={'primary'} className={'supply__btn'} onClick={handleAllowUseToken1}>
+                <Button variant={'primary'} onClick={handleAllowUseToken1}>
                   <Trans>Allow the TONSwap Protocol to use your {{ symbol0: input1.token.symbol }}</Trans>
                 </Button>
               )}
             {walletConnectionStatus === WalletStatus.CONNECTED && (
               <Button
-                type={'primary'}
-                className={'supply__btn'}
+                variant={'primary'}
                 disabled={
                   !isFilled ||
                   insufficientBalance ||
@@ -355,7 +357,7 @@ export function AddLiquidityPage() {
               </Button>
             )}
             {walletConnectionStatus !== WalletStatus.CONNECTED && (
-              <Button type={'outline'} className={'supply__btn'} onClick={handleConnectWallet}>
+              <Button variant={'secondary'} onClick={handleConnectWallet}>
                 {t('Connect Wallet')}
               </Button>
             )}

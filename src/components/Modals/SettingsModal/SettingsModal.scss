@@ -19,13 +19,12 @@
   .setting-section {
     display: flex;
     flex-direction: column;
-    margin-bottom: 24px;
     > p {
       display: flex;
       flex-direction: row;
       align-items: center;
       margin-bottom: 24px;
-      .tooltip-wrapper {
+      .tooltip {
         margin-left: 8px;
         height: 24px;
       }
@@ -36,7 +35,13 @@
     > div {
       display: flex;
       flex-direction: row;
-      align-items: center;
+      > p {
+        line-height: 42px;
+        margin-left: 8px;
+      }
+      .input {
+        max-width: 150px;
+      }
     }
   }
 }

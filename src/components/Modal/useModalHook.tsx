@@ -32,14 +32,14 @@ export const useModal = (ModalElement: JSXElementConstructor<any>, options: Moda
   }, []);
 
   const closeFromChildHandler = useCallback((params) => {
-    render(false, () => {
+    render(false, null, () => {
       if (onClose.current) {
         onClose.current(params);
       }
     });
   }, []);
 
-  const render = (isOpen: boolean, callback?: () => void) => {
+  const render = (isOpen: boolean, args?: any, callback?: () => void) => {
     if (isOpen && container.parentNode !== document.body) {
       const target = document.body;
       target.append(container);
@@ -55,7 +55,7 @@ export const useModal = (ModalElement: JSXElementConstructor<any>, options: Moda
             onClose={closeFromModalHandler}
             onCloseComplete={closeCompleteHandler}
           >
-            <ModalElement onClose={closeFromChildHandler} />
+            <ModalElement onClose={closeFromChildHandler} {...args} />
           </Modal>
         </Provider>
       </React.StrictMode>,
@@ -64,8 +64,8 @@ export const useModal = (ModalElement: JSXElementConstructor<any>, options: Moda
     );
   };
 
-  const openHandler = useCallback(() => {
-    render(true);
+  const openHandler = useCallback((args?: any) => {
+    render(true, args);
   }, []);
 
   const closeHandler = useCallback(() => {

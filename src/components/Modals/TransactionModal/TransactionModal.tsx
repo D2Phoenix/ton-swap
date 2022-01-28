@@ -52,7 +52,7 @@ export function TransactionModal() {
         {walletTransaction.status === TxStatus.CONFIRMED && (
           <>
             <h5>{t('Transaction submitted')}</h5>
-            <Button type={'default'} className="medium">
+            <Button variant={'default'} className="medium">
               {t('View on Explorer')}
             </Button>
           </>

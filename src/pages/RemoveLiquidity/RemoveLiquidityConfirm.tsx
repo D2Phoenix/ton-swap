@@ -110,7 +110,7 @@ function RemoveLiquidityConfirm({ onClose }: RemoveLiquidityConfirmProps) {
                 {{ slippage: settings.slippage || DEFAULT_SLIPPAGE }}% your transaction will revert.
               </Trans>
             </span>
-            <Button type={'primary'} className={'remove__btn'} onClick={handleConfirmRemove}>
+            <Button variant={'primary'} className={'remove__btn'} onClick={handleConfirmRemove}>
               {t('Confirm Remove Liquidity')}
             </Button>
           </div>
@@ -138,7 +138,7 @@ function RemoveLiquidityConfirm({ onClose }: RemoveLiquidityConfirmProps) {
             <div className="remove-liquidity-status">
               <h2 className="text-semibold">{t('Transaction submitted')}</h2>
               <a>{t('View on Explorer')}</a>
-              <Button type={'primary'} className={'remove__btn'} onClick={handleClose}>
+              <Button variant={'primary'} className={'remove__btn'} onClick={handleClose}>
                 {t('Close')}
               </Button>
             </div>
@@ -151,7 +151,7 @@ function RemoveLiquidityConfirm({ onClose }: RemoveLiquidityConfirmProps) {
           <div className="remove-liquidity-confirm-wrapper">
             <div className="remove-liquidity-status">
               <h2 className="text-semibold text-error">{t('Transaction rejected')}</h2>
-              <Button type={'primary'} className={'remove__btn'} onClick={handleClose}>
+              <Button variant={'primary'} className={'remove__btn'} onClick={handleClose}>
                 {t('Dismiss')}
               </Button>
             </div>

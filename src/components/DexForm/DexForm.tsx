@@ -40,9 +40,7 @@ export function DexForm({ header, headerTooltip, backLink, content, actions, cla
             <h5>{header}</h5>
             {headerTooltip && (
               <Tooltip content={<span className="text-small">{headerTooltip}</span>} direction="bottom">
-                <div className="btn-icon">
-                  <QuestionIcon />
-                </div>
+                <QuestionIcon />
               </Tooltip>
             )}
           </div>

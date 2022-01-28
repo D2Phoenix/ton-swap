@@ -1,14 +1,11 @@
 $tooltip-margin: 5px;
 $tooltip-margin-bottom: 24px;
-
-/* Wrapping */
-.tooltip-wrapper {
-  display: inline-block;
+.tooltip {
+  display: flex;
   position: relative;
 }
 
-/* Absolute positioning */
-.tooltip-tip {
+.tooltip__tip {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
@@ -20,18 +17,18 @@ $tooltip-margin-bottom: 24px;
   z-index: 1000;
   width: 300px;
   border-radius: 4px;
-  &.bottom {
+  &--bottom {
     top: calc(#{$tooltip-margin-bottom});
   }
-  &.right {
+  &--right {
     left: calc(100% + #{$tooltip-margin});
     top: 50%;
     transform: translateX(0) translateY(-50%);
   }
-  &.top {
+  &--top {
     bottom: calc(#{$tooltip-margin} * -1);
   }
-  &.left {
+  &--left {
     left: auto;
     right: calc(100% + #{$tooltip-margin});
     top: 50%;

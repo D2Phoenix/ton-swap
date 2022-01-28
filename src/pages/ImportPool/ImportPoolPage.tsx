@@ -139,7 +139,7 @@ export function ImportPoolPage() {
         actions={
           <>
             {walletConnectionStatus === WalletStatus.CONNECTED && (
-              <Button type={'primary'} className={'import__btn'} disabled={!isFilled} onClick={handleImport}>
+              <Button variant={'primary'} className={'import__btn'} disabled={!isFilled} onClick={handleImport}>
                 {importButtonText}
               </Button>
             )}
@@ -152,7 +152,7 @@ export function ImportPoolPage() {
               </Link>
             )}
             {walletConnectionStatus !== WalletStatus.CONNECTED && (
-              <Button type={'outline'} className={'import__btn'} onClick={handleConnectWallet}>
+              <Button variant={'outline'} className={'import__btn'} onClick={handleConnectWallet}>
                 {t('Connect Wallet')}
               </Button>
             )}

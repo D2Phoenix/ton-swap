@@ -94,7 +94,7 @@ function SwapConfirm({ onClose }: SwapConfirmProps) {
         </div>
         <SwapInfo />
       </div>
-      <Button type={'primary'} onClick={handleConfirmSwap}>
+      <Button variant={'primary'} onClick={handleConfirmSwap}>
         {t('Confirm Swap')}
       </Button>
     </div>

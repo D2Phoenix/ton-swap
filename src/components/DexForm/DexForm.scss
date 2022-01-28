@@ -13,24 +13,26 @@
     align-items: center;
     width: 100%;
     margin-bottom: 40px;
-
     .box-header {
       display: flex;
       flex-direction: column;
       > div {
         display: flex;
         align-items: center;
-        .tooltip-wrapper {
+        .tooltip {
           margin-left: 0.5rem;
         }
       }
+    }
+    .icon {
+      cursor: pointer;
     }
   }
   .box-actions {
     display: flex;
     flex-direction: column;
     width: 100%;
-    margin-top: 24px;
+    margin-top: 40px;
     align-items: stretch;
   }
 }

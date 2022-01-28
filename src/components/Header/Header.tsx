@@ -67,25 +67,23 @@ export function Header() {
       <div className="header-buttons">
         {balances['TON'] && (
           <div className="nav-item balance">
-            <Button type={'primary'}>{TokenUtils.toNumberDisplay(balances['TON'], 2)} TON</Button>
+            <Button variant={'primary'}>{TokenUtils.toNumberDisplay(balances['TON'], 2)} TON</Button>
           </div>
         )}
         <div className="nav-item wallet">
           {!walletAddress && (
-            <Button type={'secondary'} onClick={selectWalletModal.open}>
+            <Button variant={'secondary'} onClick={selectWalletModal.open}>
               {t('Connect Wallet')}
             </Button>
           )}
           {walletAddress && (
-            <Button type={'secondary'} onClick={accountModal.open}>
+            <Button variant={'secondary'} onClick={accountModal.open}>
               {visibleWalletAddress}
             </Button>
           )}
         </div>
         <div className="nav-item">
-          <Button type={'secondary'}>
-            <SunIcon />
-          </Button>
+          <Button variant={'secondary'} icon={<SunIcon />} />
         </div>
       </div>
     </div>
