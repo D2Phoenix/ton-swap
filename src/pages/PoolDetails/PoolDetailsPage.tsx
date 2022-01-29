@@ -1,8 +1,10 @@
 import BigNumber from 'bignumber.js';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Area, AreaChart, Bar, BarChart, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
+
+import { TxStatus } from 'types/transactionInterfaces';
 
 import CurrencyUtils from 'utils/currencyUtils';
 import DateUtils from 'utils/dateUtils';
@@ -10,6 +12,7 @@ import DateUtils from 'utils/dateUtils';
 import Button from 'components/Button';
 import ChevronDownIcon from 'components/Icons/ChevronDownIcon';
 import Spinner from 'components/Spinner';
+import Tag from 'components/Tag';
 import TokenIcon from 'components/TokenIcon';
 
 import { useAppDispatch, useAppSelector } from 'store/hooks';
@@ -23,7 +26,7 @@ const ChartTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
       <div className="chart-tooltip">
-        <h3>{CurrencyUtils.toUSDDisplay(payload[0].value)}</h3>
+        <h6>{CurrencyUtils.toUSDDisplay(payload[0].value)}</h6>
         <span className="text-small">{DateUtils.toShortFormat(new Date(label * 1000))} (UTC)</span>
       </div>
     );
@@ -34,6 +37,7 @@ const ChartTooltip = ({ active, payload, label }: any) => {
 
 function PoolDetailsPage() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { address } = useParams();
   const { t } = useTranslation();
 
@@ -93,97 +97,79 @@ function PoolDetailsPage() {
   if (!pool) {
     return (
       <div className="lazy-loader">
-        <Spinner />
+        <Spinner status={TxStatus.PENDING} />
       </div>
     );
   }
 
   return (
     <div className="pool-details-wrapper">
-      <span className="breadcrumbs">
-        <span>{'< '}</span>
-        <Link to="/pools">{t('Back')}</Link>
-      </span>
       <div className="pool-pair-wrapper">
         <div className="pool-pair">
           <TokenIcon address={pool.token0.id} name={pool.token0.name} />
           <TokenIcon address={pool.token1.id} name={pool.token1.name} />
-          <span className="text-semibold">
+          <h5 className="text-semibold">
             {pool.token0.symbol} / {pool.token1.symbol}
-          </span>
+          </h5>
         </div>
         <div className="pool-actions">
-          <Link to={`/pool/add/${pool.token0.id}/${pool.token1.id}`} className="btn btn-primary">
+          <Button onClick={navigate.bind(null, `/pool/add/${pool.token0.id}/${pool.token1.id}`)}>
             {t('Add Liquidity')}
-          </Link>
-          <Link to={`/swap/${pool.token0.id}/${pool.token1.id}`} className="btn btn-primary">
-            {t('Swap')}
-          </Link>
+          </Button>
+          <Button onClick={navigate.bind(null, `/swap/${pool.token0.id}/${pool.token1.id}`)}>{t('Swap')}</Button>
         </div>
       </div>
       <div className="pool-details">
         <div className="pool-info">
-          <span>{t('Total Tokens Locked')}</span>
+          <p className="title-1">{t('Total Tokens Locked')}</p>
           <div className="pool-info__section">
             <div>
               <TokenIcon address={pool.token0.id} name={pool.token0.name} />
-              <span>{pool.token0.symbol}</span>
-              <span className="align-right text-semibold">{CurrencyUtils.toDisplay(pool.totalValueLockedToken0)}</span>
+              <p>{pool.token0.symbol}</p>
+              <p className="align-right">{CurrencyUtils.toDisplay(pool.totalValueLockedToken0)}</p>
             </div>
             <div>
               <TokenIcon address={pool.token1.id} name={pool.token1.name} />
-              <span>{pool.token1.symbol}</span>
-              <span className="align-right text-semibold">{CurrencyUtils.toDisplay(pool.totalValueLockedToken1)}</span>
+              <p>{pool.token1.symbol}</p>
+              <p className="align-right">{CurrencyUtils.toDisplay(pool.totalValueLockedToken1)}</p>
             </div>
           </div>
-          <span>{t('TVL')}</span>
+          <p className="title-1">{t('TVL')}</p>
           <div className="pool-info__section">
-            <h3>{CurrencyUtils.toUSDDisplay(pool.totalValueLockedUSD)}</h3>
+            <p className="title-2">{CurrencyUtils.toUSDDisplay(pool.totalValueLockedUSD)}</p>
             {tvlChangeDirection !== 0 && (
-              <h4 className={tvlChangeDirection > 0 ? 'positive' : 'negative'}>
+              <p className={tvlChangeDirection > 0 ? 'sub-title-2 positive' : 'sub-title-2 negative'}>
                 <ChevronDownIcon revert={tvlChangeDirection > 0} />
                 {tvlChangeDisplay}%
-              </h4>
+              </p>
             )}
           </div>
-          <span>{t('Volume 24h')}</span>
+          <p className="title-1">{t('Volume 24h')}</p>
           <div className="pool-info__section">
-            <h3>{CurrencyUtils.toUSDDisplay(pool.volume24USD)}</h3>
+            <p className="title-2">{CurrencyUtils.toUSDDisplay(pool.volume24USD)}</p>
             {volume24ChangeDirection !== 0 && (
-              <h4 className={volume24ChangeDirection > 0 ? 'positive' : 'negative'}>
+              <p className={volume24ChangeDirection > 0 ? 'sub-title-2 positive' : 'sub-title-2 negative'}>
                 <ChevronDownIcon revert={volume24ChangeDirection > 0} />
                 {volume24ChangeDisplay}%
-              </h4>
+              </p>
             )}
           </div>
-          <span>{t('24h Fees')}</span>
+          <p className="title-1">{t('24h Fees')}</p>
           <div className="pool-info__section">
-            <h3>{fee24Display}</h3>
+            <p className="title-2">{fee24Display}</p>
           </div>
         </div>
         <div className="pool-charts">
           <div className="charts-select-wrapper">
-            <Button
-              variant={'outline'}
-              className={`mini ${chart === 'volume' ? 'active' : ''}`}
-              onClick={setChart.bind(null, 'volume')}
-            >
+            <Tag selected={chart === 'volume'} onClick={setChart.bind(null, 'volume')}>
               {t('Volume')}
-            </Button>
-            <Button
-              variant={'outline'}
-              className={`mini ${chart === 'tvl' ? 'active' : ''}`}
-              onClick={setChart.bind(null, 'tvl')}
-            >
+            </Tag>
+            <Tag selected={chart === 'tvl'} onClick={setChart.bind(null, 'tvl')}>
               {t('TVL')}
-            </Button>
-            <Button
-              variant={'outline'}
-              className={`mini ${chart === 'fees' ? 'active' : ''}`}
-              onClick={setChart.bind(null, 'fees')}
-            >
+            </Tag>
+            <Tag selected={chart === 'fees'} onClick={setChart.bind(null, 'fees')}>
               {t('Fees')}
-            </Button>
+            </Tag>
           </div>
           {chart === 'volume' && (
             <ResponsiveContainer width="100%" height="100%">

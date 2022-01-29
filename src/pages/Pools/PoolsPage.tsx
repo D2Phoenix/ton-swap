@@ -9,6 +9,7 @@ import CurrencyUtils from 'utils/currencyUtils';
 import Button from 'components/Button';
 import ChevronDownIcon from 'components/Icons/ChevronDownIcon';
 import ChevronRightIcon from 'components/Icons/ChevronRightIcon';
+import Input from 'components/Input';
 import TokenIcon from 'components/TokenIcon';
 
 import { useAppDispatch, useAppSelector } from 'store/hooks';
@@ -80,8 +81,12 @@ function PoolsPage() {
 
   return (
     <div className="pools-wrapper">
-      <span className="text-semibold">{t('All Pools')}</span>
-      <input placeholder={t('Search pools')} value={query} onChange={handleQuery} />
+      <div className="pools-header-wrapper">
+        <div className="pools-header">
+          <h5>{t('All Pools')}</h5>
+        </div>
+      </div>
+      <Input inputSize={'small'} placeholder={t('Search Pool')} value={query} onChange={handleQuery} />
       <div className="pools-list-wrapper">
         <div className="pools-list-header">
           <div className="position__column">#</div>
@@ -109,7 +114,7 @@ function PoolsPage() {
               <div className="name__column">
                 <TokenIcon address={pool.token0.id} name={pool.token0.name} />
                 <TokenIcon address={pool.token1.id} name={pool.token1.name} />
-                {`${pool.token0.symbol}/${pool.token1.symbol}`}
+                <p>{`${pool.token0.symbol}/${pool.token1.symbol}`}</p>
               </div>
               <div className="tvl__column">{CurrencyUtils.toUSDDisplay(pool.totalValueLockedUSD)}</div>
               <div className="total-day__column">{CurrencyUtils.toUSDDisplay(pool.volume24USD)}</div>
@@ -125,9 +130,11 @@ function PoolsPage() {
           disabled={page - 1 === 0}
           onClick={handlePageChange.bind(null, -1)}
         />
-        <Trans>
-          Page {{ page: page }} of {{ total: totalPages }}
-        </Trans>
+        <p>
+          <Trans>
+            Page {{ page: page }} of {{ total: totalPages }}
+          </Trans>
+        </p>
         <Button
           variant={'default'}
           icon={<ChevronRightIcon />}

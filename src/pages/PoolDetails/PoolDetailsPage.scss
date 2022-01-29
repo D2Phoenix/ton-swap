@@ -1,38 +1,24 @@
-@import '../../styles/vars';
-
 .pool-details-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
   width: 100%;
-  padding: 0.5rem;
-  .breadcrumbs {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-    > span {
-      color: $primary-color;
-    }
-  }
+  max-width: 832px;
   .pool-pair-wrapper {
     display: flex;
-    margin-bottom: 1rem;
+    margin-bottom: 30px;
     align-items: center;
     position: relative;
     .pool-pair {
       display: flex;
       align-items: center;
-      padding-left: 3rem;
-      .token-icon-wrapper {
-        position: absolute;
-        left: 0;
-        + .token-icon-wrapper {
-          position: absolute;
-          margin-left: 1rem;
+      .token-icon {
+        + .token-icon {
+          margin-left: 3px;
         }
       }
+    }
+    h5 {
+      margin-left: 8px;
     }
     .pool-actions {
       display: flex;
@@ -62,19 +48,19 @@
         align-items: center;
         gap: 0.5rem;
       }
-      h4 {
+      p {
         display: flex;
         align-items: center;
         &.positive {
-          color: $success-color;
+          color: var(--success-color);
           svg {
-            stroke: $success-color;
+            stroke: var(--success-color);
           }
         }
         &.negative {
-          color: $error-color;
+          color: var(--error-color);
           svg {
-            stroke: $error-color;
+            stroke: var(--error-color);
           }
         }
       }

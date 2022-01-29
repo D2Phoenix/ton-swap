@@ -3,21 +3,41 @@
 .pools-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 8px;
   width: 100%;
-  padding: 0.5rem;
+  max-width: 832px;
+  .pools-header-wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 30px;
+    height: 56px;
+    .pool-header {
+      display: flex;
+      flex-direction: column;
+    }
+    > .btn {
+      margin-left: auto;
+    }
+  }
+  input {
+    max-width: 350px;
+  }
 }
 .pools-list-wrapper {
   display: flex;
   flex-direction: column;
   width: 100%;
+  gap: 16px;
   .pools-list-header {
+    background-color: var(--secondary-color);
+    padding: 20px 16px;
+    border-radius: 8px;
     > div {
       display: flex;
       align-items: center;
-      font-family: 'Mulish', sans-serif;
-      font-weight: 700;
-      color: $primary-color;
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text-color);
       &.tvl__column,
       &.total-day__column,
       &.total-7day__column {
@@ -26,15 +46,21 @@
       &:not(.position__column) {
         cursor: pointer;
         &:hover {
-          color: $secondary-color;
+          color: var(--primary-color);
           svg {
-            stroke: $secondary-color;
+            stroke: var(--primary-hover-color);
           }
         }
       }
       svg {
-        stroke: $primary-color;
+        stroke: var(--primary-color);
       }
+    }
+  }
+  .pool-list__item {
+    padding: 8px 16px;
+    > div {
+      font-size: 14px;
     }
   }
   .pool-list__item,
@@ -42,12 +68,11 @@
     display: flex;
     flex-direction: row;
     gap: 16px;
-    padding: 1rem 0;
     align-items: center;
     &:hover:not(.pools-list-header) {
       > div {
         cursor: pointer;
-        color: $primary-color;
+        color: var(--primary-color);
       }
     }
     .position__column {
@@ -59,13 +84,13 @@
       flex: 1 1 auto;
       position: relative;
       padding-left: 3rem;
-      .token-icon-wrapper {
-        position: absolute;
-        left: 0;
-        + .token-icon-wrapper {
-          position: absolute;
-          margin-left: 1rem;
+      .token-icon {
+        + .token-icon {
+          margin-left: 3px;
         }
+      }
+      p {
+        margin-left: 8px;
       }
     }
     .tvl__column,
@@ -76,6 +101,7 @@
     }
   }
 }
+
 .pools-list-pagination {
   display: flex;
   align-items: center;

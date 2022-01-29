@@ -60,10 +60,10 @@ function RemoveLiquidityConfirm({ onClose }: RemoveLiquidityConfirmProps) {
   }, [info.share]);
 
   const poolRemoveDisplay = useMemo(() => {
-    return TokenUtils.toNumberDisplay(pool.removeAmount!);
+    return TokenUtils.toNumberDisplay(pool.removeAmount);
   }, [pool]);
 
-  const handleConfirmRemove = useCallback(() => {
+  const confirmRemoveHandler = useCallback(() => {
     dispatch(walletRemoveLiquidity({ input0, input1, pool }));
     onClose && onClose(true);
   }, [dispatch]);
@@ -128,7 +128,7 @@ function RemoveLiquidityConfirm({ onClose }: RemoveLiquidityConfirmProps) {
           <p className="remove-liquidity-pool__share">{shareDisplay}</p>
         </div>
       </div>
-      <Button variant={'primary'} onClick={handleConfirmRemove}>
+      <Button variant={'primary'} onClick={confirmRemoveHandler}>
         {t('Confirm Remove Liquidity')}
       </Button>
     </div>
