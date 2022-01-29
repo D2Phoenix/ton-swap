@@ -12,6 +12,7 @@
     font-size: 14px;
     line-height: 24px;
     font-weight: 600;
+    text-overflow: ellipsis;
     &:hover {
       border-color: var(--input-hover-color);
     }

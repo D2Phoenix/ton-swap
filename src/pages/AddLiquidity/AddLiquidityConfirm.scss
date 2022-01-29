@@ -1,31 +1,68 @@
-@import '../../styles/vars';
 .add-liquidity-confirm-modal.modal-container {
-  .modal-content {
-    height: 526px;
-    width: 50vw;
-    max-width: 420px;
-  }
-  &.mini {
-    .modal-content {
-      height: 226px;
-      .add-liquidity-confirm-wrapper {
-        height: 100%;
-      }
+  .modal-background {
+    .modal {
+      width: 100%;
+      max-width: 512px;
     }
   }
 }
 .add-liquidity-confirm-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 8px;
   width: 100%;
-  border-radius: 8px;
-  overflow: auto;
-  height: calc(100% - 20px);
-  padding-top: 2px;
-  .btn-icon {
-    align-self: center;
+  .add-liquidity-list {
+    display: flex;
+    flex-direction: column;
+    > .add-liquidity-list-item {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      > .add-liquidity-item-token {
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+      }
+    }
   }
+  .help-text {
+    padding: 24px 0;
+    font-weight: 400;
+  }
+  .liquidity-info {
+    padding: 8px 16px;
+    border: 1px solid var(--list-border-color);
+    border-radius: 8px;
+    margin-bottom: 24px;
+    .liquidity-info__item {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 8px 0;
+      .liquidity-pool__tokens {
+        display: flex;
+        align-items: flex-end;
+        margin-left: auto;
+        .token-icon:first-of-type {
+          margin-left: 8px;
+        }
+        .token-icon:not(:first-of-type) {
+          margin-left: 2px;
+        }
+      }
+      .liquidity-pool__price, .liquidity-pool__share {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+      }
+      .liquidity-pool__price {
+        margin-bottom: 8px;
+      }
+    }
+  }
+
   .liquidity-info-wrapper {
     > span {
       padding: 0 0 8px;
@@ -35,11 +72,6 @@
     }
   }
   .pool-tokens-info {
-    text-align: center;
-    margin-top: auto;
-  }
-  .help-text {
-    padding: 8px 0;
     text-align: center;
     margin-top: auto;
   }

@@ -42,27 +42,27 @@ function LiquidityInfo() {
 
   return (
     <div className={`liquidity-info-wrapper ${loading ? 'loading' : ''}`}>
-      <span>{t('Prices and pool share')}</span>
-      <div className="liquidity-price-wrapper">
-        <div className="liquidity-price">
-          <div className="text-semibold">{token1PerToken0Display}</div>
-          <div className="text-small">
+      <p>{t('Prices and pool share')}</p>
+      <div className="liquidity-info">
+        <div className="liquidity-info__item">
+          <p>{token1PerToken0Display}</p>
+          <label className="small">
             <Trans>
               {{ symbol0: input1.token?.symbol }} per {{ symbol1: input0.token?.symbol }}
             </Trans>
-          </div>
+          </label>
         </div>
-        <div className="liquidity-price">
-          <div className="text-semibold">{token0PerToken1Display}</div>
-          <div className="text-small">
+        <div className="liquidity-info__item">
+          <p>{token0PerToken1Display}</p>
+          <label className="small">
             <Trans>
               {{ symbol0: input0.token?.symbol }} per {{ symbol1: input1.token?.symbol }}
             </Trans>
-          </div>
+          </label>
         </div>
-        <div className="liquidity-price">
-          <div className="text-semibold">{shareDisplay}</div>
-          <div className="text-small">{t('Share of Pool')}</div>
+        <div className="liquidity-info__item">
+          <p>{shareDisplay}</p>
+          <label className="small">{t('Share of Pool')}</label>
         </div>
       </div>
     </div>

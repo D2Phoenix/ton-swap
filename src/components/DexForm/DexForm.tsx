@@ -1,12 +1,13 @@
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import ChevronRightIcon from 'components/Icons/ChevronRightIcon';
 import QuestionIcon from 'components/Icons/QuestionIcon';
 import SettingsIcon from 'components/Icons/SettingsIcon';
 import { useModal } from 'components/Modal';
 import SettingsModal, { SettingsModalOptions } from 'components/Modals/SettingsModal';
 import Tooltip from 'components/Tooltip';
 
+import Button from '../Button';
+import ArrowLeftIcon from '../Icons/ArrowLeftIcon';
 import './DexForm.scss';
 
 interface DexFormProps {
@@ -20,6 +21,7 @@ interface DexFormProps {
 }
 
 export function DexForm({ header, headerTooltip, backLink, content, actions, className }: DexFormProps) {
+  const navigate = useNavigate();
   const settingsModal = useModal(SettingsModal, SettingsModalOptions);
 
   return (
@@ -30,11 +32,7 @@ export function DexForm({ header, headerTooltip, backLink, content, actions, cla
       }}
     >
       <div className="box-header-wrapper">
-        {backLink && (
-          <Link className="btn-icon chevron" to={backLink}>
-            <ChevronRightIcon revert={true} />
-          </Link>
-        )}
+        {backLink && <ArrowLeftIcon onClick={navigate.bind(null, backLink)} />}
         <div className="box-header">
           <div>
             <h5>{header}</h5>

@@ -30,6 +30,7 @@
       padding: 0;
       -moz-appearance: textfield;
       background-color: transparent;
+      text-overflow: ellipsis;
       &:focus {
         outline: none !important;
       }

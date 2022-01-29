@@ -13,6 +13,7 @@ import Button from 'components/Button';
 import DexForm from 'components/DexForm';
 import PlusIcon from 'components/Icons/PlusIcon';
 import { useModal } from 'components/Modal';
+import SelectWalletModal, { SelectWalletModalOptions } from 'components/Modals/SelectWalletModal';
 import TransactionModal, { TransactionModalOptions } from 'components/Modals/TransactionModal';
 import TokenInput from 'components/TokenInput';
 
@@ -42,12 +43,7 @@ import {
   selectWalletPermissions,
   selectWalletTransaction,
 } from 'store/wallet/walletSlice';
-import {
-  connectWallet,
-  getWalletBalance,
-  getWalletUseTokenPermission,
-  setWalletUseTokenPermission,
-} from 'store/wallet/walletThunks';
+import { getWalletBalance, getWalletUseTokenPermission, setWalletUseTokenPermission } from 'store/wallet/walletThunks';
 
 import AddLiquidityConfirm, { AddLiquidityConfirmOptions } from './AddLiquidityConfirm';
 import './AddLiquidityPage.scss';
@@ -70,6 +66,7 @@ export function AddLiquidityPage() {
 
   const addLiquidityConfirmModal = useModal(AddLiquidityConfirm, AddLiquidityConfirmOptions);
   const transactionModal = useModal(TransactionModal, TransactionModalOptions);
+  const selectWalletModal = useModal(SelectWalletModal, SelectWalletModalOptions);
 
   addLiquidityConfirmModal.onClose((result: boolean) => {
     if (result) {
@@ -292,95 +289,89 @@ export function AddLiquidityPage() {
     dispatch(setWalletUseTokenPermission(input1.token));
   }, [dispatch, input1]);
 
-  const handleConnectWallet = useCallback(() => {
-    dispatch(connectWallet(WalletType.stubWallet));
-  }, [dispatch]);
-
   return (
-    <>
-      <DexForm
-        backLink="/pool"
-        header={t('Add Liquidity')}
-        headerTooltip={t(
-          'When you add liquidity, you are given pool tokens representing your position. These tokens automatically earn fees proportional to your share of the pool, and can be redeemed at any time.',
-        )}
-        subheader={t('Add liquidity to receive LP tokens')}
-        content={
-          <>
-            <TokenInput
-              label={t('Input')}
-              token={input0.token}
-              balance={walletBalances[input0.token?.symbol || '']}
-              balancesFirst={true}
-              value={input0.amount}
-              showMax={true}
-              onSelect={selectTokenHandler.bind(null, 'input0')}
-              onChange={handleInput0TokenAmount}
-              selectable={true}
-              editable={true}
-              loading={txType === EstimateTxType.EXACT_OUT && loading}
-              primary={txType === EstimateTxType.EXACT_IN}
-            />
-            <Button variant={'default'} size={'small'} icon={<PlusIcon />} />
-            <TokenInput
-              label={t('Input')}
-              token={input1.token}
-              balance={walletBalances[input1.token?.symbol || '']}
-              balancesFirst={true}
-              value={input1.amount}
-              showMax={true}
-              onSelect={selectTokenHandler.bind(null, 'input1')}
-              onChange={handleInput1TokenAmount}
-              selectable={true}
-              editable={true}
-              loading={txType === EstimateTxType.EXACT_IN && loading}
-              primary={txType === EstimateTxType.EXACT_OUT}
-            />
-            {isFilled && <LiquidityInfo />}
-          </>
-        }
-        actions={
-          <>
-            {walletConnectionStatus === WalletStatus.CONNECTED &&
-              isFilled &&
-              !walletPermissions[input0.token?.symbol] &&
-              !insufficientToken0Balance && (
-                <Button variant={'primary'} onClick={handleAllowUseToken0}>
-                  <Trans>Allow the TONSwap Protocol to use your {{ symbol0: input0.token.symbol }}</Trans>
-                </Button>
-              )}
-            {walletConnectionStatus === WalletStatus.CONNECTED &&
-              isFilled &&
-              !walletPermissions[input1.token?.symbol] &&
-              !insufficientToken1Balance && (
-                <Button variant={'primary'} onClick={handleAllowUseToken1}>
-                  <Trans>Allow the TONSwap Protocol to use your {{ symbol0: input1.token.symbol }}</Trans>
-                </Button>
-              )}
-            {walletConnectionStatus === WalletStatus.CONNECTED && (
-              <Button
-                variant={'primary'}
-                disabled={
-                  !isFilled ||
-                  insufficientBalance ||
-                  (!!input0.token && !walletPermissions[input0.token.symbol]) ||
-                  (!!input1.token && !walletPermissions[input1.token.symbol]) ||
-                  loading
-                }
-                onClick={addLiquidityConfirmModal.open}
-              >
-                {supplyButtonText}
+    <DexForm
+      backLink="/pool"
+      header={t('Add Liquidity')}
+      headerTooltip={t(
+        'When you add liquidity, you are given pool tokens representing your position. These tokens automatically earn fees proportional to your share of the pool, and can be redeemed at any time.',
+      )}
+      subheader={t('Add liquidity to receive LP tokens')}
+      content={
+        <>
+          <TokenInput
+            label={t('Input')}
+            token={input0.token}
+            balance={walletBalances[input0.token?.symbol || '']}
+            balancesFirst={true}
+            value={input0.amount}
+            showMax={true}
+            onSelect={selectTokenHandler.bind(null, 'input0')}
+            onChange={handleInput0TokenAmount}
+            selectable={true}
+            editable={true}
+            loading={txType === EstimateTxType.EXACT_OUT && loading}
+            primary={txType === EstimateTxType.EXACT_IN}
+          />
+          <Button variant={'default'} size={'small'} icon={<PlusIcon />} />
+          <TokenInput
+            label={t('Input')}
+            token={input1.token}
+            balance={walletBalances[input1.token?.symbol || '']}
+            balancesFirst={true}
+            value={input1.amount}
+            showMax={true}
+            onSelect={selectTokenHandler.bind(null, 'input1')}
+            onChange={handleInput1TokenAmount}
+            selectable={true}
+            editable={true}
+            loading={txType === EstimateTxType.EXACT_IN && loading}
+            primary={txType === EstimateTxType.EXACT_OUT}
+          />
+          {isFilled && <LiquidityInfo />}
+        </>
+      }
+      actions={
+        <>
+          {walletConnectionStatus === WalletStatus.CONNECTED &&
+            isFilled &&
+            !walletPermissions[input0.token?.symbol] &&
+            !insufficientToken0Balance && (
+              <Button variant={'primary'} onClick={handleAllowUseToken0}>
+                <Trans>Allow the TONSwap Protocol to use your {{ symbol0: input0.token.symbol }}</Trans>
               </Button>
             )}
-            {walletConnectionStatus !== WalletStatus.CONNECTED && (
-              <Button variant={'secondary'} onClick={handleConnectWallet}>
-                {t('Connect Wallet')}
+          {walletConnectionStatus === WalletStatus.CONNECTED &&
+            isFilled &&
+            !walletPermissions[input1.token?.symbol] &&
+            !insufficientToken1Balance && (
+              <Button variant={'primary'} onClick={handleAllowUseToken1}>
+                <Trans>Allow the TONSwap Protocol to use your {{ symbol0: input1.token.symbol }}</Trans>
               </Button>
             )}
-          </>
-        }
-      />
-    </>
+          {walletConnectionStatus === WalletStatus.CONNECTED && (
+            <Button
+              variant={'primary'}
+              disabled={
+                !isFilled ||
+                insufficientBalance ||
+                (!!input0.token && !walletPermissions[input0.token.symbol]) ||
+                (!!input1.token && !walletPermissions[input1.token.symbol]) ||
+                loading
+              }
+              onClick={addLiquidityConfirmModal.open}
+            >
+              {supplyButtonText}
+            </Button>
+          )}
+          {walletConnectionStatus !== WalletStatus.CONNECTED && (
+            <Button variant={'secondary'} onClick={selectWalletModal.open}>
+              {t('Connect Wallet')}
+            </Button>
+          )}
+        </>
+      }
+    />
   );
 }
 

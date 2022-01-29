@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 
 import CloseIcon from 'components/Icons/CloseIcon';
 
@@ -24,6 +24,7 @@ export function Modal({
   onClose,
   onCloseComplete,
 }: ModalProps) {
+  const backgroundRef = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
     const target = document.body;
     const classList = ['modal-container'];
@@ -52,8 +53,17 @@ export function Modal({
     }
   }, [onCloseHandler, open]);
 
+  const onBackgroundClickHandler = useCallback(
+    (event) => {
+      if (event.target === backgroundRef.current) {
+        onCloseHandler();
+      }
+    },
+    [onCloseHandler],
+  );
+
   return (
-    <div className="modal-background">
+    <div ref={backgroundRef} className="modal-background" onClick={onBackgroundClickHandler}>
       <div className="modal">
         <div className="modal-header">
           <h5>{header}</h5>
