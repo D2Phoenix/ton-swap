@@ -30,10 +30,12 @@ class TokenUtils {
     return inputToken.token.address === token.address;
   }
   static toDisplay(input: InputTokenInterface | InputPoolInterface, precision?: number) {
-    return new BigNumber(input.amount).precision(precision || TOKEN_PRECISION).toFixed();
+    const result = new BigNumber(input.amount);
+    return result.isNaN() ? input.amount : result.precision(precision || TOKEN_PRECISION).toFixed();
   }
-  static toNumberDisplay(value: string, precision?: number) {
-    return new BigNumber(value || '0').precision(precision || TOKEN_PRECISION).toFixed();
+  static toNumberDisplay(value: string | undefined, precision?: number) {
+    const result = new BigNumber(value || '0');
+    return result.isNaN() ? value : result.precision(precision || TOKEN_PRECISION).toFixed();
   }
 }
 

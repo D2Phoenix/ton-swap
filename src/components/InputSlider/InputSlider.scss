@@ -1,16 +1,11 @@
-@import '../../styles/vars';
-
 $range-width: 100% !default;
 
-$range-handle-color: $primary-color !default;
-$range-handle-color-hover: $btn-hover-color !default;
+$range-handle-color: var(--primary-color) !default;
+$range-handle-color-hover: var(--primary-hover-color) !default;
 $range-handle-size: 20px !default;
 
-$range-track-color: #fff !default;
+$range-track-color: var(--secondary-color) !default;
 $range-track-height: 10px !default;
-
-$range-label-color: $primary-color !default;
-$range-label-width: 70px !default;
 
 .input-slider-wrapper {
   width: $range-width;
@@ -18,7 +13,7 @@ $range-label-width: 70px !default;
 
 .input-slider__range {
   -webkit-appearance: none;
-  width: calc(100% - (#{$range-label-width + 13px}));
+  width: 100%;
   height: $range-track-height;
   border-radius: 5px;
   background: $range-track-color;
@@ -65,7 +60,7 @@ $range-label-width: 70px !default;
   &:hover {
     &:focus {
       &::-webkit-slider-thumb {
-        box-shadow: 0 0 0 3px #fff, 0 0 0 6px $range-handle-color-hover;
+        box-shadow: 0 0 0 3px var(--secondary-color), 0 0 0 6px $range-handle-color-hover;
         background-color: $range-handle-color-hover;
       }
     }
@@ -73,33 +68,8 @@ $range-label-width: 70px !default;
 
   &:focus {
     &::-webkit-slider-thumb {
-      box-shadow: 0 0 0 3px #fff, 0 0 0 6px $primary-color;
+      box-shadow: 0 0 0 3px var(--secondary-color), 0 0 0 6px var(--primary-color);
     }
-  }
-}
-
-.input-slider__value {
-  display: inline-block;
-  position: relative;
-  width: $range-label-width;
-  color: #fff;
-  line-height: 20px;
-  text-align: center;
-  border-radius: 3px;
-  background: $range-label-color;
-  padding: 5px 10px;
-  margin-left: 8px;
-
-  &:after {
-    position: absolute;
-    top: 8px;
-    left: -7px;
-    width: 0;
-    height: 0;
-    border-top: 7px solid transparent;
-    border-right: 7px solid $range-label-color;
-    border-bottom: 7px solid transparent;
-    content: '';
   }
 }
 

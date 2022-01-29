@@ -1,4 +1,4 @@
-import React, { ButtonHTMLAttributes, MouseEventHandler } from 'react';
+import React, { ButtonHTMLAttributes } from 'react';
 
 import './Button.scss';
 

@@ -12,7 +12,7 @@ export function InputSlider({ value, pnChange }: InputSliderProps) {
 
   useEffect(() => {
     if (ref.current) {
-      ref.current.style.background = `linear-gradient(90deg, #0088CC ${value}%, #fff ${value}%)`;
+      ref.current.style.background = `linear-gradient(90deg, var(--primary-color) ${value}%, var(--secondary-color) ${value}%)`;
     }
   }, [value]);
 
@@ -34,7 +34,6 @@ export function InputSlider({ value, pnChange }: InputSliderProps) {
         min="0"
         max="100"
       />
-      <span className="input-slider__value">{value}%</span>
     </div>
   );
 }

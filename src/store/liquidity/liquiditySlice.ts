@@ -205,7 +205,8 @@ function handleRemoveAmount(
     return;
   }
   deps.forEach((item) => {
-    item.removeAmount = new BigNumber(item.amount).div(percentBig).toString();
+    const result = new BigNumber(item.amount).div(percentBig);
+    item.removeAmount = result.isNaN() ? (null as any) : result.toString();
   });
 }
 

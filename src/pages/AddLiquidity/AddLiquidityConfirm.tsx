@@ -19,10 +19,7 @@ import {
 } from 'store/liquidity/liquiditySlice';
 import { walletAddLiquidity } from 'store/wallet/walletThunks';
 
-import SwapIcon from '../../components/Icons/SwapIcon';
-import SwapInfo from '../Swap/SwapInfo';
 import './AddLiquidityConfirm.scss';
-import LiquidityInfo from './LiquidityInfo';
 
 interface AddLiquidityConfirmProps {
   onClose: (result?: boolean) => void;

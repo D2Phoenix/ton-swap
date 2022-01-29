@@ -56,13 +56,13 @@
     flex-direction: row;
     flex: 0 0 auto;
     .dropdown {
-      width: 136px;
+      min-width: 136px;
       border: 1px solid var(--dropdown-border-color);
       box-sizing: border-box;
       border-radius: 8px;
       display: flex;
       align-items: center;
-      padding: 18px 16px 18px 10px;
+      padding: 18px 18px 18px 10px;
       gap: 10px;
       cursor: pointer;
       transition: border-color 0.3s;
@@ -79,6 +79,10 @@
         flex: 1 1 100%;
         white-space: nowrap;
         font-weight: 600;
+      }
+      .pool-tokens {
+        display: flex;
+        gap: 2px;
       }
     }
     .select__btn {

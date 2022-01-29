@@ -1,0 +1,15 @@
+.tag {
+  display: flex;
+  align-items: center;
+  padding: 8px 26px;
+  border-radius: 100px;
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 24px;
+  &--active, &:hover {
+    background-color: var(--primary-color);
+    color: var(--primary-text-color)
+  }
+}

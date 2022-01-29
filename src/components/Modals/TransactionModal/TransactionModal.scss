@@ -7,3 +7,22 @@
     }
   }
 }
+.tx-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.tx-status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  > h5 {
+    margin-top: 40px;
+    margin-bottom: 16px;
+  }
+  > p, > label {
+    margin-bottom: 8px;
+  }
+}

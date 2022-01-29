@@ -20,6 +20,7 @@ import LiquidityInfo from 'pages/AddLiquidity/LiquidityInfo';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import {
   resetLiquidity,
+  selectLiquidityInfo,
   selectLiquidityInput0,
   selectLiquidityInput1,
   selectLiquidityPool,
@@ -33,6 +34,10 @@ import { approveRemove, getLiquidityPool } from 'store/liquidity/liquidityThunks
 import { resetTransaction, selectWalletAdapter, selectWalletTransaction } from 'store/wallet/walletSlice';
 import { getWalletBalance, getWalletUseTokenPermission } from 'store/wallet/walletThunks';
 
+import ArrowDownIcon from '../../components/Icons/ArrowDownIcon';
+import PlusIcon from '../../components/Icons/PlusIcon';
+import Tag from '../../components/Tag';
+import TokenIcon from '../../components/TokenIcon';
 import RemoveLiquidityConfirm, { RemoveLiquidityConfirmOptions } from './RemoveLiquidityConfirm';
 import './RemoveLiquidityPage.scss';
 
@@ -41,12 +46,15 @@ export function RemoveLiquidityPage() {
   const { token0, token1 } = useParams();
   const { t } = useTranslation();
 
+  const [isDetailed, setIsDetailed] = useState(false);
+
   const walletAdapter = useAppSelector(selectWalletAdapter);
   const input0 = useAppSelector(selectLiquidityInput0);
   const input1 = useAppSelector(selectLiquidityInput1);
   const pool = useAppSelector(selectLiquidityPool);
   const removeApproveTx = useAppSelector(selectLiquidityRemoveApproveTx);
   const walletTransaction = useAppSelector(selectWalletTransaction);
+  const info = useAppSelector(selectLiquidityInfo);
 
   const removeLiquidityConfirmModal = useModal(RemoveLiquidityConfirm, RemoveLiquidityConfirmOptions);
   const transactionModal = useModal(TransactionModal, TransactionModalOptions);
@@ -68,6 +76,14 @@ export function RemoveLiquidityPage() {
       );
     }
   });
+
+  const token0PerToken1Display = useMemo(() => {
+    return TokenUtils.toNumberDisplay(info.token0PerToken1);
+  }, [info.token0PerToken1]);
+
+  const token1PerToken0Display = useMemo(() => {
+    return TokenUtils.toNumberDisplay(info.token1PerToken0);
+  }, [info.token1PerToken0]);
 
   const isFilled = useMemo(() => {
     return TokenUtils.isRemoveFilled(input0) && TokenUtils.isRemoveFilled(input1) && TokenUtils.hasRemoveAmount(pool);
@@ -164,6 +180,10 @@ export function RemoveLiquidityPage() {
     dispatch(approveRemove(pool));
   }, [dispatch, pool]);
 
+  const detailedHandler = useCallback(() => {
+    setIsDetailed((value) => !value);
+  }, []);
+
   return (
     <>
       <DexForm
@@ -179,43 +199,141 @@ export function RemoveLiquidityPage() {
         }
         content={
           <>
-            <InputSlider value={removePercent} pnChange={inputSliderChangeHandler} />
-            <TokenInput
-              token={pool.token}
-              balance={pool.amount}
-              value={pool.removeAmount}
-              showMax={true}
-              onChange={poolTokenAmountHandler}
-              selectable={false}
-              editable={true}
-            />
-            <div className="btn-icon">
-              <ChevronDownIcon />
-            </div>
-            <TokenInput
-              token={input0.token}
-              value={input0.removeAmount}
-              balance={input0.amount}
-              showMax={true}
-              onChange={token0AmountHandler}
-              selectable={false}
-              editable={true}
-            />
-            <div className="btn-icon">+</div>
-            <TokenInput
-              token={input1.token}
-              value={input1.removeAmount}
-              balance={input1.amount}
-              showMax={true}
-              onChange={token1AmountHandler}
-              selectable={false}
-              editable={true}
-            />
-            <LiquidityInfo />
+            {!isDetailed && (
+              <div className="remove-liquidity">
+                <div className="remove-liquidity__header">
+                  <p>{t('Amount')}</p>
+                  <Button variant={'default'} size={'medium'} onClick={detailedHandler}>
+                    {t('Detailed')}
+                  </Button>
+                </div>
+                <h3>{removePercent}%</h3>
+                <div className="remove-liquidity__tags">
+                  <Tag selected={removePercent === '25'} onClick={inputSliderChangeHandler.bind(null, '25')}>
+                    25%
+                  </Tag>
+                  <Tag selected={removePercent === '50'} onClick={inputSliderChangeHandler.bind(null, '50')}>
+                    50%
+                  </Tag>
+                  <Tag selected={removePercent === '75'} onClick={inputSliderChangeHandler.bind(null, '75')}>
+                    75%
+                  </Tag>
+                  <Tag selected={removePercent === '100'} onClick={inputSliderChangeHandler.bind(null, '100')}>
+                    Max
+                  </Tag>
+                </div>
+                <InputSlider value={removePercent} pnChange={inputSliderChangeHandler} />
+                <div className="remove-liquidity__list">
+                  <div className="remove-liquidity__list-item">
+                    <p>{t('You will receive')}</p>
+                    <div className="remove-liquidity__item-token">
+                      <p>
+                        {TokenUtils.toNumberDisplay(input0.removeAmount)} {input0.token?.symbol}
+                      </p>
+                      <TokenIcon
+                        address={input0.token?.address}
+                        name={input0.token?.name}
+                        url={input0.token?.logoURI}
+                      />
+                    </div>
+                  </div>
+                  <div className="remove-liquidity__list-item">
+                    <p />
+                    <div className="remove-liquidity__item-token">
+                      <p>
+                        {TokenUtils.toNumberDisplay(input1.removeAmount)} {input1.token?.symbol}
+                      </p>
+                      <TokenIcon
+                        address={input1.token?.address}
+                        name={input1.token?.name}
+                        url={input1.token?.logoURI}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="remove-liquidity__price">
+                  <p>{t('Price')}</p>
+                  <p>
+                    <p>
+                      <Trans>
+                        {token1PerToken0Display} {{ symbol0: input1.token?.symbol }} per 1{' '}
+                        {{ symbol1: input0.token?.symbol }}
+                      </Trans>
+                    </p>
+                    <p>
+                      <Trans>
+                        {token0PerToken1Display} {{ symbol0: input0.token?.symbol }} per 1{' '}
+                        {{ symbol1: input1.token?.symbol }}
+                      </Trans>
+                    </p>
+                  </p>
+                </div>
+              </div>
+            )}
+            {isDetailed && (
+              <div className="remove-liquidity">
+                <div className="remove-liquidity__header">
+                  <p>{t('Amount')}</p>
+                  <Button variant={'default'} size={'medium'} onClick={detailedHandler}>
+                    {t('Simple')}
+                  </Button>
+                </div>
+                <h3>{removePercent}%</h3>
+                <TokenInput
+                  label={t('Output')}
+                  token={pool.token}
+                  balance={pool.amount}
+                  value={pool.removeAmount}
+                  showMax={true}
+                  onChange={poolTokenAmountHandler}
+                  selectable={false}
+                  editable={true}
+                />
+                <Button variant={'default'} size={'small'} icon={<ArrowDownIcon />} />
+                <TokenInput
+                  label={t('Input')}
+                  token={input0.token}
+                  value={input0.removeAmount}
+                  balance={input0.amount}
+                  showMax={true}
+                  onChange={token0AmountHandler}
+                  selectable={false}
+                  editable={true}
+                />
+                <Button variant={'default'} size={'small'} icon={<PlusIcon />} />
+                <TokenInput
+                  label={t('Input')}
+                  token={input1.token}
+                  value={input1.removeAmount}
+                  balance={input1.amount}
+                  showMax={true}
+                  onChange={token1AmountHandler}
+                  selectable={false}
+                  editable={true}
+                />
+                <div className="remove-liquidity__price">
+                  <p>{t('Price')}</p>
+                  <p>
+                    <p>
+                      <Trans>
+                        {token1PerToken0Display} {{ symbol0: input1.token?.symbol }} per 1{' '}
+                        {{ symbol1: input0.token?.symbol }}
+                      </Trans>
+                    </p>
+                    <p>
+                      <Trans>
+                        {token0PerToken1Display} {{ symbol0: input0.token?.symbol }} per 1{' '}
+                        {{ symbol1: input1.token?.symbol }}
+                      </Trans>
+                    </p>
+                  </p>
+                </div>
+              </div>
+            )}
           </>
         }
         actions={
-          <div className="actions-wrapper">
+          <div className="remove-liquidity__actions">
             {walletAdapter && (
               <Button
                 variant={'primary'}

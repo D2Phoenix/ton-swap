@@ -24,6 +24,7 @@ interface TokenInputProps {
   editable: boolean;
   selectable: boolean;
   showMax?: boolean;
+  showBalance?: boolean;
   onChange?: (value: string | null) => void;
   onSelect?: (value: TokenInterface | PoolInterface | undefined) => void;
   loading?: boolean;
@@ -39,6 +40,7 @@ export function TokenInput({
   token,
   value,
   showMax,
+  showBalance = true,
   editable,
   selectable,
   loading,
@@ -64,11 +66,11 @@ export function TokenInput({
     if (!value) {
       return '';
     }
-    if (primary) {
+    if (primary || isFocused) {
       return value;
     }
     return TokenUtils.toNumberDisplay(value);
-  }, [value, primary]);
+  }, [value, primary, isFocused]);
 
   const changeHandler = useCallback(
     (event) => {
@@ -93,8 +95,8 @@ export function TokenInput({
     }
   }, [changeHandler, balance]);
 
-  const focusHandler = useCallback(() => {
-    setIsFocused((value) => !value);
+  const focusHandler = useCallback((value) => {
+    setIsFocused(value);
   }, []);
 
   const balanceVisible = useMemo(() => {
@@ -123,12 +125,14 @@ export function TokenInput({
           readOnly={!editable}
           value={valueDisplay}
           onChange={changeHandler}
-          onFocus={focusHandler}
-          onBlur={focusHandler}
+          onFocus={focusHandler.bind(null, true)}
+          onBlur={focusHandler.bind(null, false)}
         />
-        <label className="balance small">
-          {t('Balance')}: {balanceVisible} {!!token && token.symbol}
-        </label>
+        {showBalance && (
+          <label className="balance small">
+            {t('Balance')}: {balanceVisible} {!!token && token.symbol}
+          </label>
+        )}
       </div>
       <div className="token-select">
         {showMax &&
@@ -140,14 +144,18 @@ export function TokenInput({
             </Button>
           )}
         {token && (
-          <div className="dropdown" onClick={selectTokenModal.open.bind(null, { balancesFirst })}>
+          <div className="dropdown" onClick={selectable ? selectTokenModal.open.bind(null, { balancesFirst }) : null}>
             {simpleToken?.logoURI && (
               <TokenIcon address={simpleToken.address} name={simpleToken.name} url={simpleToken.logoURI} />
             )}
-            {poolToken?.address0 && <TokenIcon address={poolToken.address0} name={poolToken.name} />}
-            {poolToken?.address1 && <TokenIcon address={poolToken.address1} name={poolToken.name} />}
+            {poolToken?.address0 && poolToken?.address1 && (
+              <div className="pool-tokens">
+                <TokenIcon address={poolToken.address0} name={poolToken.name} />
+                <TokenIcon address={poolToken.address1} name={poolToken.name} />
+              </div>
+            )}
             <p>{token.symbol}</p>
-            <ArrowDownIcon />
+            {selectable && <ArrowDownIcon />}
           </div>
         )}
         {!token && (
