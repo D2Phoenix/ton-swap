@@ -60,4 +60,6 @@ $warning-color: rgb(253, 193, 64);
   --spinner-failed-color: #{map-get($red-palette, 500)};
   // Tooltip
   --tooltip-background-color: #{map-get($gray-palette, 2200)};
+  // Accordion
+  --accordion-border-color: #{map-get($gray-palette, 2300)};
 }

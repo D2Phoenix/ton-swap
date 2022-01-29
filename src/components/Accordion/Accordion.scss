@@ -14,7 +14,7 @@
   &:hover {
     &:after,
     &:before {
-      border-color: $primary-color;
+      border-color: var(--primary-hover-color);
     }
   }
   &:focus {
@@ -29,9 +29,8 @@
     height: 14px;
     margin-top: -4px;
     background-color: transparent;
-    border-top: 2px solid $secondary-color;
-    border-right: 2px solid $secondary-color;
-    box-shadow: 0 0 0 lightgray;
+    border-top: 2px solid var(--primary-color);
+    border-right: 2px solid var(--primary-color);
     transition: all 200ms ease;
   }
   &:before {

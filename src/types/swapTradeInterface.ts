@@ -10,6 +10,7 @@ export interface SwapTradeInterface {
     maximumSent: string | null;
     minimumReceived: string | null;
     priceImpact: string;
+    priceImpactSeverity: number;
     insufficientLiquidity: boolean;
     rate: string;
   };

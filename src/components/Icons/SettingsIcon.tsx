@@ -1,6 +1,16 @@
-function SettingsIcon() {
+import { SVGAttributes } from 'react';
+
+function SettingsIcon(props: SVGAttributes<SVGElement>) {
   return (
-    <svg className="icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      {...props}
+      className="icon"
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path
         d="M18.5466 13.4533C19.2221 14.1288 19.6015 15.0448 19.6015 16C19.6015 16.9552 19.2221 17.8712 18.5466 18.5467C17.8712 19.2221 16.9552 19.6015 16 19.6015C15.0448 19.6015 14.1287 19.2221 13.4533 18.5467C12.7779 17.8712 12.3984 16.9552 12.3984 16C12.3984 15.527 12.4916 15.0587 12.6726 14.6218C12.8536 14.1848 13.1189 13.7878 13.4533 13.4533C13.7877 13.1189 14.1848 12.8536 14.6217 12.6726C15.0587 12.4916 15.527 12.3985 16 12.3985C16.9552 12.3985 17.8712 12.7779 18.5466 13.4533"
         stroke="currentColor"

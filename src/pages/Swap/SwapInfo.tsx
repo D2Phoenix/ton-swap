@@ -32,7 +32,7 @@ function SwapInfo() {
       {type === EstimateTxType.EXACT_IN && trade.minimumReceived && (
         <div>
           <p>{t('Minimum received')}</p>
-          <p>
+          <p className="text-ellipsis">
             {TokenUtils.toNumberDisplay(trade.minimumReceived)} {to.token.symbol}
           </p>
         </div>
@@ -40,7 +40,7 @@ function SwapInfo() {
       {type === EstimateTxType.EXACT_OUT && trade.maximumSent && (
         <div>
           <p>{t('Maximum sent')}</p>
-          <p>
+          <p className="text-ellipsis">
             {TokenUtils.toNumberDisplay(trade.maximumSent)} {from.token.symbol}
           </p>
         </div>
@@ -58,7 +58,7 @@ function SwapInfo() {
       )}
       <div>
         <p>{t('Liquidity Provider Fee')}</p>
-        <p>
+        <p className="text-ellipsis">
           {TokenUtils.toNumberDisplay(trade.liquidityProviderFee)} {from.token.symbol}
         </p>
       </div>

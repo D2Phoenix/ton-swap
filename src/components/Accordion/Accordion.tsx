@@ -8,7 +8,7 @@ interface PanelProps {
   content: React.ReactNode;
   activeTab: number;
   index: number;
-  onActivateTab: MouseEventHandler<HTMLButtonElement>;
+  onActivateTab: MouseEventHandler<HTMLDivElement>;
 }
 
 function Panel({ label, content, activeTab, index, onActivateTab }: PanelProps) {
@@ -32,9 +32,9 @@ function Panel({ label, content, activeTab, index, onActivateTab }: PanelProps) 
 
   return (
     <div ref={element} className="panel" role="tabpanel" aria-expanded={isActive}>
-      <button className="panel__label" role="tab" onClick={onActivateTab}>
+      <div className="panel__label" role="tab" onClick={onActivateTab}>
         {label}
-      </button>
+      </div>
       <div className="panel__inner" style={innerStyle} aria-hidden={!isActive}>
         <div className="panel__content">{content}</div>
       </div>

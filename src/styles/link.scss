@@ -2,6 +2,7 @@ a:not(.nav-item__btn) {
   color: var(--link-color);
   text-decoration: underline;
   transition: color 0.3s;
+  font-size: 14px;
   &:hover {
     color: var(--link-hover-color);
   }

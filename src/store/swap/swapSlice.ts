@@ -15,6 +15,7 @@ export interface SwapState {
   trade: {
     fee: string;
     priceImpact: string;
+    priceImpactSeverity: number;
     liquidityProviderFee: string;
     insufficientLiquidity: boolean;
     maximumSent: string | null;
@@ -45,6 +46,7 @@ export const initialState: SwapState = {
     fee: '0',
     priceImpact: '0',
     liquidityProviderFee: '0',
+    priceImpactSeverity: 0,
     insufficientLiquidity: false,
     maximumSent: null,
     minimumReceived: null,

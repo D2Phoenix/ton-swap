@@ -101,7 +101,7 @@ function SwapPage() {
   }, [isFilled, insufficientBalance, input0, walletPermissions, trade]);
 
   const swapButtonText = useMemo(() => {
-    if (trade.insufficientLiquidity && input0.amount) {
+    if (trade.insufficientLiquidity && (input0.amount || input1.amount)) {
       return t(`Insufficient liquidity for this trade.`);
     }
     if (!TokenUtils.isFilled(input0)) {
@@ -112,6 +112,12 @@ function SwapPage() {
     }
     if (insufficientBalance) {
       return t(`Insufficient {{symbol0}} balance`, { symbol0: input0.token.symbol });
+    }
+    if (trade.priceImpactSeverity > 3) {
+      return t('Price Impact Too High');
+    }
+    if (trade.priceImpactSeverity >= 2) {
+      return t('Swap Anyway');
     }
     return t('Swap');
   }, [t, input0, input1, insufficientBalance, trade]);

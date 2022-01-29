@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { WALLET_TX_UPDATE_INTERVAL } from 'constants/swap';
 
 import { EstimateTxType, TxStatus } from 'types/transactionInterfaces';
-import { WalletStatus, WalletType } from 'types/walletAdapterInterface';
+import { WalletStatus } from 'types/walletAdapterInterface';
 
 import TokenUtils from 'utils/tokenUtils';
 

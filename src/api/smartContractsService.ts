@@ -1,5 +1,20 @@
 import BigNumber from 'bignumber.js';
-import { ChainId, UniswapPair, UniswapPairSettings, UniswapVersion } from 'simple-uniswap-sdk';
+import {
+  ChainId,
+  TradeContext,
+  UniswapPair,
+  UniswapPairFactory,
+  UniswapPairSettings,
+  UniswapVersion,
+} from 'simple-uniswap-sdk';
+
+import {
+  ALLOWED_PRICE_IMPACT_HIGH,
+  ALLOWED_PRICE_IMPACT_LOW,
+  ALLOWED_PRICE_IMPACT_MEDIUM,
+  BLOCKED_PRICE_IMPACT,
+  CONFIRM_PRICE_IMPACT,
+} from 'constants/swap';
 
 import { LiquidityTxInterface } from 'types/liquidityTxInterface';
 import { LiquidityTxRequestInterface } from 'types/liquidityTxRequestInterface';
@@ -35,10 +50,14 @@ class SmartContractsService {
     const uniswapPairFactory = await uniswapPair.createFactory();
     const direction: any = data.txType === EstimateTxType.EXACT_IN ? 'input' : 'output';
     try {
-      const trade = await uniswapPairFactory.trade(data.input.amount, direction);
+      const tradePromise = uniswapPairFactory.trade(data.input.amount, direction);
+      const tradeForImpactPromise = uniswapPairFactory.trade('1', direction);
+      const trade = await tradePromise;
+      const tradeForImpact = await tradeForImpactPromise;
       const amount0 = data.txType === EstimateTxType.EXACT_IN ? data.input.amount : trade.expectedConvertQuote;
       const amount1 = data.txType === EstimateTxType.EXACT_IN ? trade.expectedConvertQuote : data.input.amount;
       const rate = new BigNumber(amount0).div(new BigNumber(amount1)).toString();
+      const priceImpact = await this.getPriceImpact(data, rate, tradeForImpact);
 
       const result = {
         amount: data.input.amount,
@@ -49,12 +68,14 @@ class SmartContractsService {
           liquidityProviderFee: trade.liquidityProviderFee,
           maximumSent: trade.maximumSent,
           minimumReceived: trade.minAmountConvertQuote,
-          priceImpact: await this.getPriceImpact(data),
+          priceImpact: priceImpact,
+          priceImpactSeverity: this.calcPriceImpactSeverity(priceImpact),
           insufficientLiquidity: false,
           rate: rate,
         },
       };
       trade.destroy();
+      tradeForImpact.destroy();
 
       return Promise.resolve(result);
     } catch (error) {
@@ -68,6 +89,7 @@ class SmartContractsService {
           maximumSent: '',
           minimumReceived: '',
           priceImpact: '0',
+          priceImpactSeverity: 0,
           insufficientLiquidity: true,
           rate: '0',
         },
@@ -138,9 +160,39 @@ class SmartContractsService {
     }
   }
 
-  getPriceImpact(data: LiquidityTxRequestInterface): Promise<string> {
+  async getPriceImpact(data: LiquidityTxRequestInterface, originalRate: string, trade: TradeContext): Promise<string> {
     // TODO: Implement real api for estimate price impact
-    return Promise.resolve('2.00');
+    const inputAmount = '1';
+    const amount0 = data.txType === EstimateTxType.EXACT_IN ? inputAmount : trade.expectedConvertQuote;
+    const amount1 = data.txType === EstimateTxType.EXACT_IN ? trade.expectedConvertQuote : inputAmount;
+    const rate = new BigNumber(amount0).div(new BigNumber(amount1)).toString();
+    const impact = new BigNumber(rate)
+      .multipliedBy(100)
+      .div(new BigNumber(originalRate))
+      .minus(100)
+      .precision(2)
+      .toFixed();
+    return Promise.resolve(impact);
+  }
+
+  calcPriceImpactSeverity(priceImpact: string): number {
+    const impact = Number(priceImpact);
+    if (impact <= -BLOCKED_PRICE_IMPACT) {
+      return 5;
+    }
+    if (impact <= -CONFIRM_PRICE_IMPACT) {
+      return 4;
+    }
+    if (impact <= -ALLOWED_PRICE_IMPACT_HIGH) {
+      return 3;
+    }
+    if (impact <= -ALLOWED_PRICE_IMPACT_MEDIUM) {
+      return 2;
+    }
+    if (impact <= -ALLOWED_PRICE_IMPACT_LOW) {
+      return 1;
+    }
+    return 0;
   }
 
   checkLiquidity(data: LiquidityTxRequestInterface, transaction: SwapTradeInterface): Promise<boolean> {
