@@ -34,6 +34,9 @@ export const poolsSlice = createSlice({
     builder.addCase(fetchPools.fulfilled, (state, action) => {
       state.list = action.payload;
     });
+    builder.addCase(fetchPool.pending, (state, action) => {
+      state.pool = state.list.find((pool) => pool.id === action.meta.arg) as PoolItemInterface;
+    });
     builder.addCase(fetchPool.fulfilled, (state, action) => {
       state.pool = action.payload.pool;
       state.transactions = action.payload.transactions;

@@ -1,94 +1,92 @@
-.pool-details-wrapper {
+.pool-details {
   display: flex;
   flex-direction: column;
   width: 100%;
   max-width: 832px;
-  .pool-pair-wrapper {
-    display: flex;
-    margin-bottom: 30px;
-    align-items: center;
-    position: relative;
-    .pool-pair {
-      display: flex;
-      align-items: center;
-      .token-icon {
-        + .token-icon {
-          margin-left: 3px;
-        }
-      }
-    }
-    h5 {
-      margin-left: 8px;
-    }
-    .pool-actions {
-      display: flex;
-      gap: 1rem;
-      margin-left: auto;
+  gap: 30px;
+}
+.pool-details__content {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+.pool-details__header {
+  display: flex;
+  align-items: center;
+  position: relative;
+  h5 {
+    margin-left: 8px;
+  }
+}
+.pool-details__pair {
+  display: flex;
+  align-items: center;
+  .token-icon {
+    + .token-icon {
+      margin-left: 3px;
     }
   }
 }
-.pool-details {
+.pool-details__header-actions {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.pool__info {
   display: flex;
   flex-direction: row;
-  gap: 1rem;
-  .pool-info {
-    display: flex;
-    flex-direction: column;
-    min-width: 300px;
-    flex: 0 1 auto;
-    gap: 0.5rem;
-    .pool-info__section {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
-      > div {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        gap: 0.5rem;
-      }
-      p {
-        display: flex;
-        align-items: center;
-        &.positive {
-          color: var(--success-color);
-          svg {
-            stroke: var(--success-color);
-          }
-        }
-        &.negative {
-          color: var(--error-color);
-          svg {
-            stroke: var(--error-color);
-          }
-        }
-      }
+  align-items: stretch;
+  gap: 8px;
+  > .card {
+    flex: 1;
+    gap: 8px;
+    .title-1 {
+      margin-bottom: 8px;
     }
-  }
-  .pool-charts {
-    position: relative;
-    flex: 1 1 auto;
-    min-height: 300px;
-    svg {
-      text {
-        tspan {
-          font-size: 13px;
+    .sub-title-1 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1 1 auto;
+      &.positive {
+        color: var(--success-color);
+        svg {
+          stroke: var(--success-color);
         }
       }
-    }
-    .charts-select-wrapper {
-      position: absolute;
-      right: 0;
-      z-index: 1;
-      display: flex;
-      gap: 0.5rem;
+      &.negative {
+        color: var(--error-color);
+        svg {
+          stroke: var(--error-color);
+        }
+      }
     }
   }
 }
 
+.pool-charts {
+  position: relative;
+  flex: 1 1 auto;
+  height: 350px;
+  svg {
+    text {
+      tspan {
+        font-size: 12px;
+      }
+    }
+  }
+  .pool-charts__tags {
+    position: absolute;
+    right: 0;
+    z-index: 1;
+    display: flex;
+    gap: 0.5rem;
+  }
+}
+
 @media screen and (max-width: 599px) {
-  .pool-details-wrapper {
+  .pool-details {
     .pool-pair-wrapper {
       flex-direction: column;
       gap: 1rem;
@@ -97,7 +95,7 @@
         justify-content: center;
       }
     }
-    .pool-details {
+    .pool-details__content {
       flex-direction: column;
     }
   }

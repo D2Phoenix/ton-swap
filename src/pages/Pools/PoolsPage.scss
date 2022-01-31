@@ -1,5 +1,3 @@
-@import '../../styles/vars';
-
 .pools-wrapper {
   display: flex;
   flex-direction: column;
@@ -23,96 +21,24 @@
     max-width: 350px;
   }
 }
-.pools-list-wrapper {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  gap: 16px;
-  .pools-list-header {
-    background-color: var(--secondary-color);
-    padding: 20px 16px;
-    border-radius: 8px;
-    > div {
-      display: flex;
-      align-items: center;
-      font-weight: 600;
-      font-size: 14px;
-      color: var(--text-color);
-      &.tvl__column,
-      &.total-day__column,
-      &.total-7day__column {
-        justify-content: flex-end;
-      }
-      &:not(.position__column) {
-        cursor: pointer;
-        &:hover {
-          color: var(--primary-color);
-          svg {
-            stroke: var(--primary-hover-color);
-          }
-        }
-      }
-      svg {
-        stroke: var(--primary-color);
-      }
-    }
-  }
-  .pool-list__item {
-    padding: 8px 16px;
-    > div {
-      font-size: 14px;
-    }
-  }
-  .pool-list__item,
-  .pools-list-header {
-    display: flex;
-    flex-direction: row;
-    gap: 16px;
-    align-items: center;
-    &:hover:not(.pools-list-header) {
-      > div {
-        cursor: pointer;
-        color: var(--primary-color);
-      }
-    }
-    .position__column {
-      flex: 0 1 30px;
-    }
-    .name__column {
-      display: flex;
-      align-items: center;
-      flex: 1 1 auto;
-      position: relative;
-      padding-left: 3rem;
-      .token-icon {
-        + .token-icon {
-          margin-left: 3px;
-        }
-      }
-      p {
-        margin-left: 8px;
-      }
-    }
-    .tvl__column,
-    .total-day__column,
-    .total-7day__column {
-      flex: 0 1 110px;
-      text-align: end;
-    }
-  }
-}
-
-.pools-list-pagination {
+.pool-name {
   display: flex;
   align-items: center;
-  align-self: center;
-  gap: 0.5rem;
+  flex: 1 1 auto;
+  position: relative;
+
+  .token-icon {
+    + .token-icon {
+      margin-left: 3px;
+    }
+  }
+
+  p {
+    margin-left: 8px;
+  }
 }
 
 @media screen and (max-width: 599px) {
-  .pool-list__item:not(:last-child) {
-    border-bottom: 1px solid $border-color;
-  }
   .pool-list__item,
   .pools-list-header {
     .position__column,

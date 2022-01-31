@@ -4,14 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Area, AreaChart, Bar, BarChart, ResponsiveContainer, Tooltip, XAxis } from 'recharts';
 
-import { TxStatus } from 'types/transactionInterfaces';
-
 import CurrencyUtils from 'utils/currencyUtils';
 import DateUtils from 'utils/dateUtils';
 
 import Button from 'components/Button';
 import ChevronDownIcon from 'components/Icons/ChevronDownIcon';
-import Spinner from 'components/Spinner';
 import Tag from 'components/Tag';
 import TokenIcon from 'components/TokenIcon';
 
@@ -19,6 +16,7 @@ import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { resetPoolDetails, selectPoolsChartData, selectPoolsPool } from 'store/pools/poolsSlice';
 import { fetchPool } from 'store/pools/poolsThunks';
 
+import Card from '../../components/Card';
 import './PoolDetailsPage.scss';
 import PoolTransactionsTable from './PoolTransactionsTable';
 
@@ -94,73 +92,61 @@ function PoolDetailsPage() {
     return DateUtils.toDayMonthFormat(new Date(value * 1000));
   }, []);
 
-  if (!pool) {
-    return (
-      <div className="lazy-loader">
-        <Spinner status={TxStatus.PENDING} />
-      </div>
-    );
-  }
-
   return (
-    <div className="pool-details-wrapper">
-      <div className="pool-pair-wrapper">
-        <div className="pool-pair">
-          <TokenIcon address={pool.token0.id} name={pool.token0.name} />
-          <TokenIcon address={pool.token1.id} name={pool.token1.name} />
+    <div className="pool-details">
+      <div className="pool-details__header">
+        <div className="pool-details__pair">
+          <TokenIcon address={pool?.token0.id} name={pool?.token0.name} />
+          <TokenIcon address={pool?.token1.id} name={pool?.token1.name} />
           <h5 className="text-semibold">
-            {pool.token0.symbol} / {pool.token1.symbol}
+            {pool?.token0.symbol} / {pool?.token1.symbol}
           </h5>
         </div>
-        <div className="pool-actions">
-          <Button onClick={navigate.bind(null, `/pool/add/${pool.token0.id}/${pool.token1.id}`)}>
+        <div className="pool-details__header-actions">
+          <Button onClick={navigate.bind(null, `/pool/add/${pool?.token0.id}/${pool?.token1.id}`)}>
             {t('Add Liquidity')}
           </Button>
-          <Button onClick={navigate.bind(null, `/swap/${pool.token0.id}/${pool.token1.id}`)}>{t('Swap')}</Button>
+          <Button onClick={navigate.bind(null, `/swap/${pool?.token0.id}/${pool?.token1.id}`)}>{t('Swap')}</Button>
         </div>
       </div>
-      <div className="pool-details">
-        <div className="pool-info">
-          <p className="title-1">{t('Total Tokens Locked')}</p>
-          <div className="pool-info__section">
-            <div>
-              <TokenIcon address={pool.token0.id} name={pool.token0.name} />
-              <p>{pool.token0.symbol}</p>
-              <p className="align-right">{CurrencyUtils.toDisplay(pool.totalValueLockedToken0)}</p>
-            </div>
-            <div>
-              <TokenIcon address={pool.token1.id} name={pool.token1.name} />
-              <p>{pool.token1.symbol}</p>
-              <p className="align-right">{CurrencyUtils.toDisplay(pool.totalValueLockedToken1)}</p>
-            </div>
-          </div>
-          <p className="title-1">{t('TVL')}</p>
-          <div className="pool-info__section">
-            <p className="title-2">{CurrencyUtils.toUSDDisplay(pool.totalValueLockedUSD)}</p>
+      <div className="pool-details__content">
+        <div className="pool__info">
+          <Card>
+            <p className="title-1">{t('Tokens Locked')}</p>
+            <p className="sub-title-1">
+              {CurrencyUtils.toDisplay(pool?.totalValueLockedToken0)} {pool?.token0.symbol}
+            </p>
+            <p className="sub-title-1">
+              {CurrencyUtils.toDisplay(pool?.totalValueLockedToken1)} {pool?.token1.symbol}
+            </p>
+          </Card>
+          <Card>
+            <p className="title-1">{t('TVL')}</p>
+            <p className="sub-title-1">{CurrencyUtils.toUSDDisplay(pool?.totalValueLockedUSD)}</p>
             {tvlChangeDirection !== 0 && (
-              <p className={tvlChangeDirection > 0 ? 'sub-title-2 positive' : 'sub-title-2 negative'}>
+              <p className={tvlChangeDirection > 0 ? 'sub-title-1 positive' : 'sub-title-1 negative'}>
                 <ChevronDownIcon revert={tvlChangeDirection > 0} />
                 {tvlChangeDisplay}%
               </p>
             )}
-          </div>
-          <p className="title-1">{t('Volume 24h')}</p>
-          <div className="pool-info__section">
-            <p className="title-2">{CurrencyUtils.toUSDDisplay(pool.volume24USD)}</p>
+          </Card>
+          <Card>
+            <p className="title-1">{t('Volume 24h')}</p>
+            <p className="sub-title-1">{CurrencyUtils.toUSDDisplay(pool?.volume24USD)}</p>
             {volume24ChangeDirection !== 0 && (
-              <p className={volume24ChangeDirection > 0 ? 'sub-title-2 positive' : 'sub-title-2 negative'}>
+              <p className={volume24ChangeDirection > 0 ? 'sub-title-1 positive' : 'sub-title-1 negative'}>
                 <ChevronDownIcon revert={volume24ChangeDirection > 0} />
                 {volume24ChangeDisplay}%
               </p>
             )}
-          </div>
-          <p className="title-1">{t('24h Fees')}</p>
-          <div className="pool-info__section">
-            <p className="title-2">{fee24Display}</p>
-          </div>
+          </Card>
+          <Card>
+            <p className="title-1">{t('24h Fees')}</p>
+            <p className="sub-title-1">{fee24Display}</p>
+          </Card>
         </div>
         <div className="pool-charts">
-          <div className="charts-select-wrapper">
+          <div className="pool-charts__tags">
             <Tag selected={chart === 'volume'} onClick={setChart.bind(null, 'volume')}>
               {t('Volume')}
             </Tag>
@@ -174,12 +160,12 @@ function PoolDetailsPage() {
           {chart === 'volume' && (
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData}>
-                <Bar dataKey="volumeUSD" fill="#0088CC" />
-                <XAxis dataKey="date" tickFormatter={formatXAxis} tick={{ stroke: '#303757', fontSize: '13' }} />
+                <Bar dataKey="volumeUSD" fill="var(--primary-color)" />
+                <XAxis dataKey="date" tickFormatter={formatXAxis} tick={{ stroke: 'currentColor' }} />
                 <Tooltip
                   content={<ChartTooltip />}
                   position={{ x: 0, y: 0 }}
-                  cursor={{ fill: 'rgba(48, 55, 87, 0.08)' }}
+                  cursor={{ fill: 'var(--primary-hover-color)', opacity: '0.08' }}
                 />
               </BarChart>
             </ResponsiveContainer>
@@ -189,23 +175,23 @@ function PoolDetailsPage() {
               <AreaChart data={chartData}>
                 <defs>
                   <linearGradient id="colorTvlUSD" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#0088CC" stopOpacity={0.6} />
-                    <stop offset="90%" stopColor="#0088CC" stopOpacity={0} />
+                    <stop offset="5%" stopColor="var(--primary-color)" stopOpacity={0.6} />
+                    <stop offset="90%" stopColor="var(--primary-color)" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <Area
                   type="monotone"
                   dataKey="tvlUSD"
-                  stroke="#0088CC"
+                  stroke="var(--primary-color)"
                   strokeWidth={1}
                   fillOpacity={1}
                   fill="url(#colorTvlUSD)"
                 />
-                <XAxis dataKey="date" tickFormatter={formatXAxis} tick={{ stroke: '#303757', fontSize: '13' }} />
+                <XAxis dataKey="date" tickFormatter={formatXAxis} tick={{ stroke: 'currentColor' }} />
                 <Tooltip
                   content={<ChartTooltip />}
                   position={{ x: 0, y: 0 }}
-                  cursor={{ fill: 'rgba(48, 55, 87, 0.08)' }}
+                  cursor={{ fill: 'var(--primary-hover-color)', opacity: '0.08' }}
                 />
               </AreaChart>
             </ResponsiveContainer>
@@ -213,19 +199,19 @@ function PoolDetailsPage() {
           {chart === 'fees' && (
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData}>
-                <Bar dataKey="feesUSD" fill="#0088CC" />
-                <XAxis dataKey="date" tickFormatter={formatXAxis} tick={{ stroke: '#303757', fontSize: '13' }} />
+                <Bar dataKey="feesUSD" fill="var(--primary-color)" />
+                <XAxis dataKey="date" tickFormatter={formatXAxis} tick={{ stroke: 'currentColor' }} />
                 <Tooltip
                   content={<ChartTooltip />}
                   position={{ x: 0, y: 0 }}
-                  cursor={{ fill: 'rgba(48, 55, 87, 0.08)' }}
+                  cursor={{ fill: 'var(--primary-hover-color)', opacity: '0.08' }}
                 />
               </BarChart>
             </ResponsiveContainer>
           )}
         </div>
       </div>
-      <h3 className="text-semibold">{t('Transactions')}</h3>
+      <h5 className="text-semibold">{t('Transactions')}</h5>
       <PoolTransactionsTable />
     </div>
   );

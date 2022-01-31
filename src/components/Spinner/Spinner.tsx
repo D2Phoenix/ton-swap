@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { HTMLProps } from 'react';
 
 import { TxStatus } from 'types/transactionInterfaces';
 

@@ -2,10 +2,7 @@
 
 $primary-color: #0088cc;
 $secondary-color: #303757;
-$text-gray-color: rgba(48, 55, 87, 0.56);
 $border-color: rgba(48, 55, 87, 0.16);
-$hover-color: rgba(48, 55, 87, 0.08);
-$btn-hover-color: #0072ab;
 $error-color: rgb(253, 64, 64);
 $success-color: rgb(39, 174, 96);
 $warning-color: rgb(253, 193, 64);
@@ -62,4 +59,6 @@ $warning-color: rgb(253, 193, 64);
   --tooltip-background-color: #{map-get($gray-palette, 2200)};
   // Accordion
   --accordion-border-color: #{map-get($gray-palette, 2300)};
+  // Card
+  --card-background-color: #{map-get($gray-palette, 2300)};
 }

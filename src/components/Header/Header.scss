@@ -34,13 +34,11 @@ header {
   display: flex;
   flex-direction: row;
   margin-left: auto;
+  gap: 8px;
   .wallet {
     .btn {
       width: 190px;
     }
-  }
-  .btn {
-    margin-left: 0.5rem;
   }
 }
 

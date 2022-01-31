@@ -1,75 +1,17 @@
-@import '../../styles/vars';
-
-.pool-transactions-wrapper {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  .pool-transactions-header {
-    > div {
-      display: flex;
-      align-items: center;
-      font-family: 'Mulish', sans-serif;
-      font-weight: 700;
-      color: $primary-color;
-      &.column {
-        justify-content: flex-end;
-      }
-      & {
-        cursor: pointer;
-        &:hover {
-          color: $secondary-color;
-          svg {
-            stroke: $secondary-color;
-          }
-        }
-      }
-      svg {
-        stroke: $primary-color;
-      }
-    }
-  }
-  .pool-transactions__item,
-  .pool-transactions-header {
-    display: flex;
-    flex-direction: row;
-    gap: 16px;
-    padding: 1rem 0;
-    align-items: center;
-    &:hover:not(.pool-transactions-header) {
-      > div {
-        cursor: pointer;
-        color: $primary-color;
-      }
-    }
-    .buttons__column {
-      display: flex;
-      align-items: center;
-      flex: 0 1 240px;
-      gap: 0.5rem;
-    }
-    .account__column {
-      flex: 0 1 100px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    .column {
-      flex: 0 1 150px;
-      text-align: end;
-    }
-  }
-}
-.pool-transactions-pagination {
+.buttons__column {
   display: flex;
   align-items: center;
-  align-self: center;
+  flex: 0 1 240px;
   gap: 0.5rem;
+}
+.account__column {
+  flex: 0 1 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 @media screen and (max-width: 599px) {
-  .pool-transactions__item:not(:last-child) {
-    border-bottom: 1px solid $border-color;
-  }
   .pool-transactions__item,
   .pool-transactions-header {
     .column:not(:last-child) {
