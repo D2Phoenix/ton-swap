@@ -62,7 +62,7 @@ header {
   }
 }
 
-@media screen and (min-width: 828px) {
+@media screen and (min-width: 954px) {
   .header-wrapper {
     flex-direction: row;
     padding: 12px 48px;
@@ -71,9 +71,11 @@ header {
   .nav-wrapper {
     margin-left: auto;
     justify-content: initial;
+    margin-right: auto;
   }
   .header-buttons {
-    margin-left: auto;
+    flex: 0 0 380px;
+    justify-content: flex-end;
   }
   .nav-item.balance, .nav-item.theme {
     display: block;
