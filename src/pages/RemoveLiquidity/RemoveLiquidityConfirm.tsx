@@ -72,7 +72,7 @@ function RemoveLiquidityConfirm({ onClose }: RemoveLiquidityConfirmProps) {
     <div className="remove-liquidity-confirm-wrapper">
       <div className="remove-liquidity-list">
         <div className="remove-liquidity-list-item">
-          <div className="title-2">{t('Input')}</div>
+          <div className="title-2">{t('You will receive')}</div>
           <div className="remove-liquidity-item-token">
             <div className="title-2">
               {TokenUtils.toNumberDisplay(input0.removeAmount)} {input0.token.symbol}
@@ -81,7 +81,7 @@ function RemoveLiquidityConfirm({ onClose }: RemoveLiquidityConfirmProps) {
           </div>
         </div>
         <div className="remove-liquidity-list-item">
-          <div className="title-2">{t('Input')}</div>
+          <div className="title-2">{t('You will receive')}</div>
           <div className="remove-liquidity-item-token">
             <div className="title-2">
               {TokenUtils.toNumberDisplay(input1.removeAmount)} {input1.token.symbol}
