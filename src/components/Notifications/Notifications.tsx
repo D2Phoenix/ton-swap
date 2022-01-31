@@ -36,7 +36,7 @@ export function Notification({ children, type, onClose }: NotificationProps) {
   useEffect(() => {
     setTimeout(() => {
       clickHandler();
-    }, 5000);
+    }, 500000);
   }, [clickHandler]);
 
   return (

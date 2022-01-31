@@ -106,7 +106,7 @@ function App() {
                   </p>
                 )}
                 <br />
-                <a>{t('View on Explorer')}</a>
+                <p>{t('View on Explorer')}</p>
               </Notification>
             );
           })}

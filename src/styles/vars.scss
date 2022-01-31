@@ -55,10 +55,10 @@
   // Card
   --card-background-color: #{map-get($gray-palette, 2300)};
   // Notifications
-  --notification-info-background: #{transparentize(map-get($gray-palette, 2300), 0.85)};
-  --notification-error-background: #{transparentize(map-get($red-palette, 500), 0.85)};
-  --notification-success-background: #{transparentize(map-get($green-palette, 500), 0.85)};
-  --notification-warning-background: #{transparentize(map-get($yellow-palette, 500), 0.85)};
+  --notification-info-background: #{transparentize(map-get($gray-palette, 2300), 0.15)};
+  --notification-error-background: #{transparentize(map-get($red-palette, 700), 0.15)};
+  --notification-success-background: #{transparentize(map-get($green-palette, 700), 0.15)};
+  --notification-warning-background: #{transparentize(map-get($yellow-palette, 700), 0.15)};
 }
 
 .light-theme {
@@ -116,8 +116,8 @@
   // Card
   --card-background-color: #f4f4f4;
   // Notifications
-  --notification-info-background: #{transparentize(map-get($gray-palette, 2300), 0.85)};
-  --notification-error-background: #{transparentize(map-get($red-palette, 500), 0.85)};
-  --notification-success-background: #{transparentize(map-get($green-palette, 500), 0.85)};
-  --notification-warning-background: #{transparentize(map-get($yellow-palette, 500), 0.85)};
+  --notification-info-background: #{transparentize(map-get($gray-palette, 2300), 0.15)};
+  --notification-error-background: #{transparentize(map-get($red-palette, 700), 0.15)};
+  --notification-success-background: #{transparentize(map-get($green-palette, 700), 0.15)};
+  --notification-warning-background: #{transparentize(map-get($yellow-palette, 700), 0.15)};
 }
