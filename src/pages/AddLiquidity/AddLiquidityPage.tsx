@@ -234,7 +234,7 @@ export function AddLiquidityPage() {
     }
   }, [dispatch, input1.token, walletAdapter]);
 
-  const handleSwitchTokens = useCallback(() => {
+  const switchTokensHandler = useCallback(() => {
     dispatch(switchLiquidityTokens());
   }, [dispatch]);
 
@@ -244,20 +244,20 @@ export function AddLiquidityPage() {
         return;
       }
       if (input1.token && input === 'input0' && input1.token.symbol === token.symbol) {
-        return handleSwitchTokens();
+        return switchTokensHandler();
       }
       if (input0.token && input === 'input1' && input0.token.symbol === token.symbol) {
-        return handleSwitchTokens();
+        return switchTokensHandler();
       }
       if (input === 'input0') {
         return dispatch(setLiquidityInput0Token(token));
       }
       dispatch(setLiquidityInput1Token(token));
     },
-    [dispatch, input0, input1, handleSwitchTokens],
+    [dispatch, input0, input1, switchTokensHandler],
   );
 
-  const handleInput0TokenAmount = useCallback(
+  const input0TokenAmountHandler = useCallback(
     (value) => {
       dispatch(
         setLiquidityInput0Amount({
@@ -269,7 +269,7 @@ export function AddLiquidityPage() {
     [dispatch],
   );
 
-  const handleInput1TokenAmount = useCallback(
+  const input1TokenAmountHandler = useCallback(
     (value) => {
       dispatch(
         setLiquidityInput1Amount({
@@ -281,11 +281,11 @@ export function AddLiquidityPage() {
     [dispatch],
   );
 
-  const handleAllowUseToken0 = useCallback(() => {
+  const allowUseToken0Handler = useCallback(() => {
     dispatch(setWalletUseTokenPermission(input0.token));
   }, [dispatch, input0]);
 
-  const handleAllowUseToken1 = useCallback(() => {
+  const allowUseToken1Handler = useCallback(() => {
     dispatch(setWalletUseTokenPermission(input1.token));
   }, [dispatch, input1]);
 
@@ -307,7 +307,7 @@ export function AddLiquidityPage() {
             value={input0.amount}
             showMax={true}
             onSelect={selectTokenHandler.bind(null, 'input0')}
-            onChange={handleInput0TokenAmount}
+            onChange={input0TokenAmountHandler}
             selectable={true}
             editable={true}
             loading={txType === EstimateTxType.EXACT_OUT && loading}
@@ -322,7 +322,7 @@ export function AddLiquidityPage() {
             value={input1.amount}
             showMax={true}
             onSelect={selectTokenHandler.bind(null, 'input1')}
-            onChange={handleInput1TokenAmount}
+            onChange={input1TokenAmountHandler}
             selectable={true}
             editable={true}
             loading={txType === EstimateTxType.EXACT_IN && loading}
@@ -337,7 +337,7 @@ export function AddLiquidityPage() {
             isFilled &&
             !walletPermissions[input0.token?.symbol] &&
             !insufficientToken0Balance && (
-              <Button variant={'primary'} onClick={handleAllowUseToken0}>
+              <Button variant={'primary'} onClick={allowUseToken0Handler}>
                 <Trans>Allow the TONSwap Protocol to use your {{ symbol0: input0.token.symbol }}</Trans>
               </Button>
             )}
@@ -345,7 +345,7 @@ export function AddLiquidityPage() {
             isFilled &&
             !walletPermissions[input1.token?.symbol] &&
             !insufficientToken1Balance && (
-              <Button variant={'primary'} onClick={handleAllowUseToken1}>
+              <Button variant={'primary'} onClick={allowUseToken1Handler}>
                 <Trans>Allow the TONSwap Protocol to use your {{ symbol0: input1.token.symbol }}</Trans>
               </Button>
             )}

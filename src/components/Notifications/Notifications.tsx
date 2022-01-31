@@ -23,7 +23,7 @@ export function Notification({ children, type, onClose }: NotificationProps) {
     }, 100);
   }, []);
 
-  const handleClick = useCallback(() => {
+  const clickHandler = useCallback(() => {
     if (ref.current) {
       ref.current.classList.remove('enter');
       ref.current.classList.add('leave');
@@ -35,12 +35,12 @@ export function Notification({ children, type, onClose }: NotificationProps) {
 
   useEffect(() => {
     setTimeout(() => {
-      handleClick();
+      clickHandler();
     }, 5000);
-  }, [handleClick]);
+  }, [clickHandler]);
 
   return (
-    <div ref={ref} className={`notification enter notification-${type}`} onClick={handleClick}>
+    <div ref={ref} className={`notification enter notification-${type}`} onClick={clickHandler}>
       {children}
     </div>
   );

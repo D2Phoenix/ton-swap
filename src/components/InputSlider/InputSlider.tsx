@@ -16,7 +16,7 @@ export function InputSlider({ value, pnChange }: InputSliderProps) {
     }
   }, [value]);
 
-  const handleOnChange = useCallback(
+  const onChangeHandler = useCallback(
     (event) => {
       pnChange && pnChange(event.target.value);
     },
@@ -30,7 +30,7 @@ export function InputSlider({ value, pnChange }: InputSliderProps) {
         className="input-slider__range"
         type="range"
         value={value || 0}
-        onChange={handleOnChange}
+        onChange={onChangeHandler}
         min="0"
         max="100"
       />

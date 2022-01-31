@@ -66,7 +66,7 @@ export function SettingsModal() {
     };
   }, [settings.deadline]);
 
-  const handleSlippageChange = useCallback(
+  const slippageChangeHandler = useCallback(
     (event) => {
       const value = event.target.value.replace(/,/g, '.');
       if (SLIPPAGE_INPUT_REGEXP.test(value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))) {
@@ -76,7 +76,7 @@ export function SettingsModal() {
     [dispatch],
   );
 
-  const handleDeadlineChange = useCallback(
+  const deadlineChangeHandler = useCallback(
     (event) => {
       const value = event.target.value.replace(/,/g, '.');
       if (DEADLINE_INPUT_REGEXP.test(value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))) {
@@ -86,7 +86,7 @@ export function SettingsModal() {
     [dispatch],
   );
 
-  const handleSlippageBlur = useCallback(
+  const slippageBlurHandler = useCallback(
     (event) => {
       const value = parseFloat(event.target.value);
       if (!value || value > 50) {
@@ -96,7 +96,7 @@ export function SettingsModal() {
     [dispatch],
   );
 
-  const handleDeadlineBlur = useCallback(
+  const deadlineBlurHandler = useCallback(
     (event) => {
       const value = parseFloat(event.target.value);
       if (!value || value > 180) {
@@ -136,8 +136,8 @@ export function SettingsModal() {
             pattern="^[0-9]*[.,]?[0-9]*$"
             placeholder={DEFAULT_SLIPPAGE}
             value={settings.slippage}
-            onChange={handleSlippageChange}
-            onBlur={handleSlippageBlur}
+            onChange={slippageChangeHandler}
+            onBlur={slippageBlurHandler}
           />
           <p>%</p>
         </div>
@@ -165,8 +165,8 @@ export function SettingsModal() {
             pattern="^[0-9]*[.,]?[0-9]*$"
             placeholder={DEFAULT_DEADLINE}
             value={settings.deadline}
-            onChange={handleDeadlineChange}
-            onBlur={handleDeadlineBlur}
+            onChange={deadlineChangeHandler}
+            onBlur={deadlineBlurHandler}
           />
           <p>{t('minutes')}</p>
         </div>

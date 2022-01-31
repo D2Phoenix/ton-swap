@@ -62,7 +62,7 @@ function AddLiquidityConfirm({ onClose }: AddLiquidityConfirmProps) {
     return TokenUtils.toDisplay(pool);
   }, [pool]);
 
-  const handleConfirmSupply = useCallback(() => {
+  const confirmSupplyHandler = useCallback(() => {
     dispatch(walletAddLiquidity({ input0, input1 }));
     onClose(true);
   }, [dispatch]);
@@ -127,7 +127,7 @@ function AddLiquidityConfirm({ onClose }: AddLiquidityConfirmProps) {
           <p className="liquidity-pool__share">{shareDisplay}</p>
         </div>
       </div>
-      <Button variant={'primary'} onClick={handleConfirmSupply}>
+      <Button variant={'primary'} onClick={confirmSupplyHandler}>
         {t('Confirm Supply')}
       </Button>
     </div>

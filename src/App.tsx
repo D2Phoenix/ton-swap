@@ -46,7 +46,7 @@ function App() {
     return () => clearInterval(intervalId);
   }, [dispatch, walletAdapter, confirmedTransactions]);
 
-  const handleNotificationClose = useCallback(
+  const notificationCloseHandler = useCallback(
     (tx) => {
       dispatch(setNotified(tx));
     },
@@ -79,7 +79,7 @@ function App() {
               <Notification
                 key={tx.id}
                 type={tx.status === TxStatus.SUCCEED ? 'success' : 'error'}
-                onClose={handleNotificationClose.bind(null, tx)}
+                onClose={notificationCloseHandler.bind(null, tx)}
               >
                 {tx.type === TxType.SWAP && (
                   <p className="title-2">

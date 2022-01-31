@@ -35,7 +35,7 @@ function SwapConfirm({ onClose }: SwapConfirmProps) {
     return TokenUtils.toNumberDisplay(trade.rate);
   }, [trade]);
 
-  const handleConfirmSwap = useCallback(() => {
+  const confirmSwapHandler = useCallback(() => {
     dispatch(walletSwap({ input0, input1 }));
     onClose(true);
   }, [dispatch, onClose]);
@@ -94,7 +94,7 @@ function SwapConfirm({ onClose }: SwapConfirmProps) {
         </div>
         <SwapInfo />
       </div>
-      <Button variant={'primary'} onClick={handleConfirmSwap}>
+      <Button variant={'primary'} onClick={confirmSwapHandler}>
         {t('Confirm Swap')}
       </Button>
     </div>

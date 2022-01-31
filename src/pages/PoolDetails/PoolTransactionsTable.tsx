@@ -22,7 +22,7 @@ function PoolTransactionsTable() {
     return transactions.filter((tx) => !filter || tx.__typename === filter);
   }, [transactions, filter]);
 
-  const handleFilter = useCallback((value) => {
+  const filterHandler = useCallback((value) => {
     setFilter(value);
   }, []);
 

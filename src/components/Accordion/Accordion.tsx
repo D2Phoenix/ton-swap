@@ -52,7 +52,7 @@ interface AccordionProps {
 export function Accordion({ panels }: AccordionProps) {
   const [activeTab, setActiveTab] = useState(-1);
 
-  const handleActivateTab = useCallback((index) => {
+  const activateTabHandler = useCallback((index) => {
     setActiveTab((prev) => (prev === index ? -1 : index));
   }, []);
 
@@ -64,7 +64,7 @@ export function Accordion({ panels }: AccordionProps) {
           activeTab={activeTab}
           index={index}
           {...panel}
-          onActivateTab={handleActivateTab.bind(null, index)}
+          onActivateTab={activateTabHandler.bind(null, index)}
         />
       ))}
     </div>

@@ -36,14 +36,14 @@ function PoolsPage() {
     );
   }, [pools, query]);
 
-  const handleSelectPools = useCallback(
+  const selectPoolsHandler = useCallback(
     (pool: PoolItemInterface) => {
       navigate(pool.id);
     },
     [navigate],
   );
 
-  const handleQuery = useCallback((event) => {
+  const queryHandler = useCallback((event) => {
     setQuery(event.target.value);
   }, []);
 
@@ -55,11 +55,11 @@ function PoolsPage() {
         </div>
         <Button onClick={navigate.bind(null, '/pool/add')}>{t('Create a Pair')}</Button>
       </div>
-      <Input inputSize={'small'} placeholder={t('Search Pool')} value={query} onChange={handleQuery} />
+      <Input inputSize={'small'} placeholder={t('Search Pool')} value={query} onChange={queryHandler} />
       <Table
         items={filteredPools}
         defaultSort={'-totalValueLockedUSD'}
-        onRowSelect={handleSelectPools}
+        onRowSelect={selectPoolsHandler}
         emptyText={t('No pools found')}
       >
         <TableColumn
