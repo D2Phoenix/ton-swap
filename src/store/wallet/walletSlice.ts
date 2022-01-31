@@ -1,16 +1,17 @@
 import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit';
 
+import { InputPoolInterface } from 'types/inputPoolInterface';
+import { InputTokenInterface } from 'types/inputTokenInterface';
 import { TransactionInterface, TxStatus, TxType } from 'types/transactionInterfaces';
-import { WalletAdapterInterface, WalletStatus } from 'types/walletAdapterInterface';
+import { WalletAdapterInterface, WalletStatus, WalletType } from 'types/walletAdapterInterface';
 
 import TokenUtils from 'utils/tokenUtils';
 
 import StubWalletService from 'api/stubWalletService';
+import TonWalletService from 'api/tonWalletService';
 
 import type { RootState } from 'store/store';
 
-import { InputPoolInterface } from '../../types/inputPoolInterface';
-import { InputTokenInterface } from '../../types/inputTokenInterface';
 import {
   connectWallet,
   disconnectWallet,
@@ -75,7 +76,12 @@ export const walletSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(connectWallet.pending, (state, action) => {
-      state.adapter = new StubWalletService();
+      if (action.meta.arg === WalletType.stubWallet) {
+        state.adapter = new StubWalletService();
+      }
+      if (action.meta.arg === WalletType.tonWallet) {
+        state.adapter = new TonWalletService();
+      }
       state.connectionStatus = WalletStatus.CONNECTING;
     });
     builder.addCase(connectWallet.fulfilled, (state, action) => {

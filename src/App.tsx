@@ -82,22 +82,28 @@ function App() {
                 onClose={handleNotificationClose.bind(null, tx)}
               >
                 {tx.type === TxType.SWAP && (
-                  <Trans>
-                    Swap {{ amount0: tx.amount0 }} {{ symbol0: tx.token0.symbol }} for {{ amount1: tx.amount1 }}{' '}
-                    {{ symbol1: tx.token1.symbol }}
-                  </Trans>
+                  <p className="title-2">
+                    <Trans>
+                      Swap {{ amount0: tx.amount0 }} {{ symbol0: tx.token0.symbol }} for {{ amount1: tx.amount1 }}{' '}
+                      {{ symbol1: tx.token1.symbol }}
+                    </Trans>
+                  </p>
                 )}
                 {tx.type === TxType.MINT && (
-                  <Trans>
-                    Add {{ amount0: tx.amount0 }} {{ symbol0: tx.token0.symbol }} and {{ amount1: tx.amount1 }}{' '}
-                    {{ symbol1: tx.token1.symbol }}
-                  </Trans>
+                  <p className="title-2">
+                    <Trans>
+                      Add {{ amount0: tx.amount0 }} {{ symbol0: tx.token0.symbol }} and {{ amount1: tx.amount1 }}{' '}
+                      {{ symbol1: tx.token1.symbol }}
+                    </Trans>
+                  </p>
                 )}
                 {tx.type === TxType.BURN && (
-                  <Trans>
-                    Remove {{ amount0: tx.amount0 }} {{ symbol0: tx.token0.symbol }} and {{ amount1: tx.amount1 }}{' '}
-                    {{ symbol1: tx.token1.symbol }}
-                  </Trans>
+                  <p className="title-2">
+                    <Trans>
+                      Remove {{ amount0: tx.amount0 }} {{ symbol0: tx.token0.symbol }} and {{ amount1: tx.amount1 }}{' '}
+                      {{ symbol1: tx.token1.symbol }}
+                    </Trans>
+                  </p>
                 )}
                 <br />
                 <a>{t('View on Explorer')}</a>

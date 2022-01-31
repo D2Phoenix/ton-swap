@@ -61,4 +61,9 @@ $warning-color: rgb(253, 193, 64);
   --accordion-border-color: #{map-get($gray-palette, 2300)};
   // Card
   --card-background-color: #{map-get($gray-palette, 2300)};
+  // Notifications
+  --notification-info-background: #{transparentize(map-get($gray-palette, 2300), 0.85)};
+  --notification-error-background: #{transparentize(map-get($red-palette, 500), 0.85)};
+  --notification-success-background: #{transparentize(map-get($green-palette, 500), 0.85)};
+  --notification-warning-background: #{transparentize(map-get($yellow-palette, 500), 0.85)};
 }
