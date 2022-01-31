@@ -37,7 +37,6 @@ Open [http://localhost:1337](http://localhost:1337) to view it in the browser.
 - Math with [bignumber.js](https://github.com/MikeMcl/bignumber.js/)
 - Internationalization support with [react-i18n](https://github.com/i18next/react-i18next)
 - Progressive Web App support
-- Lazy loading of pages
 - Mobile friendly
 
 *Notice* For demo purpose [simple-uniswap-sdk](https://github.com/uniswap-integration/simple-uniswap-sdk) was used to mock exchange rates
