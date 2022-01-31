@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import BigNumber from 'bignumber.js';
+import React, { CSSProperties, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { TxType } from 'types/transactionInterfaces';
@@ -14,6 +15,9 @@ import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { selectWalletAddress, selectWalletTransactions } from 'store/wallet/walletSlice';
 import { disconnectWallet } from 'store/wallet/walletThunks';
 
+import { BALANCE_PRECISION } from '../../../constants/swap';
+import List, { ListItem } from '../../List';
+import TokenIcon from '../../TokenIcon';
 import './AccountModal.scss';
 
 interface AccountProps {
@@ -109,49 +113,26 @@ export function AccountModal({ onClose }: AccountProps) {
         </Button>
       </div>
       <div className="title-2">{t('Recent Transactions')}</div>
-      <div className="transactions-list">
-        {visibleTxs.length === 0 && (
-          <div className="transactions-empty sub-title-2">{t('Your transactions will appear here...')}</div>
-        )}
-        {visibleTxs.map((tx, index) => {
-          return (
-            <div key={tx.id} className="transaction-item sub-title-2">
-              {tx.type === TxType.SWAP && (
-                <Trans>
-                  Swap
-                  <label className="small">
-                    {{ amount0: tx.amount0 }} {{ symbol0: tx.token0.symbol }} to {{ amount1: tx.amount1 }}{' '}
-                    {{ symbol1: tx.token1.symbol }}
-                  </label>
-                </Trans>
-              )}
-              {tx.type === TxType.MINT && (
-                <Trans>
-                  Add Liquidity
-                  <br />
-                  <label className="small">
-                    {{ amount0: tx.amount0 }} {{ symbol0: tx.token0.symbol }}
-                    <br />
-                    {{ amount1: tx.amount1 }} {{ symbol1: tx.token1.symbol }}
-                  </label>
-                </Trans>
-              )}
-              {tx.type === TxType.BURN && (
-                <Trans>
-                  Remove Liquidity
-                  <br />
-                  <label className="small">
-                    {{ amount0: tx.amount0 }} {{ symbol0: tx.token0.symbol }}
-                    <br />
-                    {{ amount1: tx.amount1 }} {{ symbol1: tx.token1.symbol }}
-                  </label>
-                </Trans>
-              )}
-            </div>
-          );
-        })}
-        <div ref={loader} />
-      </div>
+      <List height={436} itemCount={visibleTxs.length} emptyText={t('No Transactions Found')}>
+        {(index: number, style: CSSProperties) => {
+          const tx = visibleTxs[index];
+          let title = '';
+          let subTitle = '';
+          if (tx.type === TxType.SWAP) {
+            title = t('Swap');
+            subTitle = `${tx.amount0} ${tx.token0.symbol} to ${tx.amount1} ${tx.token1.symbol}`;
+          }
+          if (tx.type === TxType.MINT) {
+            title = t('Add Liquidity');
+            subTitle = `${tx.amount0} ${tx.token0.symbol} and ${tx.amount1} ${tx.token1.symbol}`;
+          }
+          if (tx.type === TxType.BURN) {
+            title = t('Remove Liquidity');
+            subTitle = `${tx.amount0} ${tx.token0.symbol} and ${tx.amount1} ${tx.token1.symbol}`;
+          }
+          return <ListItem title={title} subtitle={subTitle} style={style} />;
+        }}
+      </List>
     </div>
   );
 }

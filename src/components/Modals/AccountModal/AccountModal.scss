@@ -29,26 +29,24 @@
     align-items: center;
     gap: 0.5rem;
     justify-content: space-between;
-    margin-bottom: 3rem;
+    margin-bottom: 24px;
     > button {
       flex: 1;
     }
   }
-  .transactions-list {
-    overflow: auto;
-    margin-top: 2rem;
-    padding-bottom: 8px;
-    .transactions-empty {
-      display: flex;
-      justify-content: center;
-    }
-    .transaction-item {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      min-height: 56px;
-      cursor: pointer;
-      padding: 8px 0;
+  > .title-2 {
+    margin-bottom: 20px;
+  }
+}
+
+@media screen and (max-width: 599px) {
+  .account-modal.modal__container {
+    .modal__background {
+      .modal {
+        height: 90% !important;
+        width: 100%;
+        max-width: 512px;
+      }
     }
   }
 }
