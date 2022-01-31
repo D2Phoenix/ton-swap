@@ -148,9 +148,9 @@ export function SelectTokenModal({ onClose, balancesFirst }: TokenSelectProps) {
               );
             }}
           </List>
-          <Button variant={'default'} onClick={toggleManageTokens}>
+          {/*<Button variant={'default'} onClick={toggleManageTokens}>
             {t('Manage')}
-          </Button>
+          </Button>*/}
         </div>
       )}
       {showTokenManage && <TokenManageList onBack={toggleManageTokens} />}
