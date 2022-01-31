@@ -1,0 +1,39 @@
+.box-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 512px;
+  width: 100%;
+  border-radius: 8px;
+  position: relative;
+
+  .box-header-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 40px;
+    .box-header {
+      display: flex;
+      flex-direction: column;
+      > div {
+        display: flex;
+        align-items: center;
+        .tooltip {
+          margin-left: 0.5rem;
+        }
+      }
+    }
+    .icon {
+      cursor: pointer;
+    }
+  }
+  .box-actions {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 40px;
+    gap: 16px;
+    align-items: stretch;
+  }
+}

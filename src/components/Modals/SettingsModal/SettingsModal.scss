@@ -1,0 +1,47 @@
+.swap-settings-modal.modal__container {
+  .modal__background {
+    .modal {
+      height: auto;
+      width: 50vw;
+      max-width: 512px;
+    }
+  }
+}
+.settings-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  border-radius: 8px;
+  h6 {
+    margin-bottom: 12px;
+  }
+  .setting-section {
+    display: flex;
+    flex-direction: column;
+    > p {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-bottom: 24px;
+      .tooltip {
+        margin-left: 8px;
+        height: 24px;
+      }
+      .icon {
+        cursor: pointer;
+      }
+    }
+    > div {
+      display: flex;
+      flex-direction: row;
+      > p {
+        line-height: 42px;
+        margin-left: 8px;
+      }
+      .input {
+        max-width: 150px;
+      }
+    }
+  }
+}

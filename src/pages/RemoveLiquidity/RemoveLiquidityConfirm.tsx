@@ -1,163 +1,138 @@
-import { useCallback, useMemo } from 'react';
+import BigNumber from 'bignumber.js';
+import React, { useCallback, useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import './RemoveLiquidityConfirm.scss';
-import Modal from 'components/Modal';
-import TokenInput from 'components/TokenInput';
-import LiquidityInfo from 'pages/AddLiquidity/LiquidityInfo';
+import { DEFAULT_SLIPPAGE } from 'constants/swap';
+
+import TokenUtils from 'utils/tokenUtils';
+
+import Button from 'components/Button';
+import TokenIcon from 'components/TokenIcon';
+
+import { selectSettings } from 'store/app/appSlice';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import {
-    selectLiquidityPool,
-    selectLiquidityInput0,
-    selectLiquidityInput1,
+  selectLiquidityInfo,
+  selectLiquidityInput0,
+  selectLiquidityInput1,
+  selectLiquidityPool,
 } from 'store/liquidity/liquiditySlice';
-import { resetTransaction, selectWalletTransaction } from 'store/wallet/walletSlice';
-import { DEFAULT_SLIPPAGE } from 'constants/swap';
-import { TxStatus } from 'types/transactionInterfaces';
-import {  walletRemoveLiquidity } from 'store/wallet/walletThunks';
-import Spinner from 'components/Spinner';
-import { selectSettings } from 'store/app/appSlice';
-import TokenUtils from 'utils/tokenUtils';
-import { getLiquidityPool } from 'store/liquidity/liquidityThunks';
+import { walletRemoveLiquidity } from 'store/wallet/walletThunks';
+
+import './RemoveLiquidityConfirm.scss';
 
 interface RemoveLiquidityConfirmProps {
-    onClose: Function;
+  onClose: (result?: boolean) => void;
 }
 
-function RemoveLiquidityConfirm({onClose}: RemoveLiquidityConfirmProps) {
-    const dispatch = useAppDispatch();
-    const { t } = useTranslation();
+export const RemoveLiquidityConfirmOptions = {
+  header: 'Confirm Remove Liquidity',
+  className: 'remove-liquidity-confirm-modal',
+};
 
-    const input0 = useAppSelector(selectLiquidityInput0);
-    const input1 = useAppSelector(selectLiquidityInput1);
-    const pool = useAppSelector(selectLiquidityPool);
-    const settings = useAppSelector(selectSettings);
-    const walletTransaction = useAppSelector(selectWalletTransaction);
+function RemoveLiquidityConfirm({ onClose }: RemoveLiquidityConfirmProps) {
+  const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
-    const className = useMemo(() => {
-        return walletTransaction.status !== TxStatus.INITIAL ? 'remove-liquidity-confirm-modal mini' : 'remove-liquidity-confirm-modal';
-    }, [walletTransaction]);
+  const input0 = useAppSelector(selectLiquidityInput0);
+  const input1 = useAppSelector(selectLiquidityInput1);
+  const pool = useAppSelector(selectLiquidityPool);
+  const settings = useAppSelector(selectSettings);
+  const info = useAppSelector(selectLiquidityInfo);
 
-    const token0RemoveDisplay = useMemo(() => {
-        return TokenUtils.getNumberDisplay(input0.removeAmount!);
-    }, [input0]);
+  const token0PerToken1Display = useMemo(() => {
+    return TokenUtils.toNumberDisplay(info.token0PerToken1);
+  }, [info.token0PerToken1]);
 
-    const token1RemoveDisplay = useMemo(() => {
-        return TokenUtils.getNumberDisplay(input1.removeAmount!);
-    }, [input1]);
+  const token1PerToken0Display = useMemo(() => {
+    return TokenUtils.toNumberDisplay(info.token1PerToken0);
+  }, [info.token1PerToken0]);
 
-    const poolRemoveDisplay = useMemo(() => {
-        return TokenUtils.getNumberDisplay(pool.removeAmount!);
-    }, [pool]);
+  const shareDisplay = useMemo(() => {
+    if (!info.share) {
+      return '0%';
+    }
+    const result = new BigNumber(info.share).precision(2);
+    if (result.lt('0.01')) {
+      return '<0.01%';
+    }
+    return `${result.toFixed()}%`;
+  }, [info.share]);
 
-    const handleConfirmRemove = useCallback(() => {
-        dispatch(walletRemoveLiquidity());
-    }, [dispatch]);
+  const poolRemoveDisplay = useMemo(() => {
+    return TokenUtils.toNumberDisplay(pool.removeAmount);
+  }, [pool]);
 
-    const handleClose = useCallback(() => {
-        dispatch(resetTransaction());
-        if (walletTransaction.status === TxStatus.CONFIRMED) {
-            dispatch(getLiquidityPool({
-                token0: input0.token.address,
-                token1: input1.token.address,
-            }));
-        }
-        onClose && onClose();
-    }, [dispatch, input0, input1, walletTransaction, onClose]);
+  const confirmRemoveHandler = useCallback(() => {
+    dispatch(walletRemoveLiquidity({ input0, input1, pool }));
+    onClose && onClose(true);
+  }, [dispatch]);
 
-    return (
-        <Modal className={className} onClose={handleClose}>
-            {
-                walletTransaction.status === TxStatus.INITIAL && <>
-                  <h4>{t('Confirm Remove Liquidity')}</h4>
-                  <div className="remove-liquidity-confirm-wrapper">
-                    <span>{t('You will receive')}</span>
-                    <TokenInput token={input0.token}
-                                value={input0.removeAmount}
-                                showMax={true}
-                                selectable={false}
-                                editable={false}
-                    />
-                    <div className="btn-icon">
-                      +
-                    </div>
-                    <TokenInput token={input1.token}
-                                value={input1.removeAmount}
-                                showMax={false}
-                                selectable={false}
-                                editable={false}
-                    />
-                    <LiquidityInfo/>
-                    <div className="pool-tokens-info">
-                      <Trans>
-                        <span>You will burn </span>
-                        <span className="text-semibold">{{amount: poolRemoveDisplay}}</span>
-                        <span> {{symbol0: input0.token.symbol}}/{{symbol1: input1.token.symbol}} Pool Tokens</span>
-                      </Trans>
-                    </div>
-                    <span className="help-text text-small">
-                      <Trans>
-                        Output is estimated. If the price changes by more than {{slippage: settings.slippage || DEFAULT_SLIPPAGE}}% your transaction will revert.
-                      </Trans>
-                    </span>
-                    <button className="btn btn-primary remove__btn"
-                            onClick={handleConfirmRemove}>
-                        {t('Confirm Remove Liquidity')}
-                    </button>
-                  </div>
-                </>
-            }
-            {
-                walletTransaction.status === TxStatus.PENDING && <>
-                    <div className="remove-liquidity-confirm-wrapper">
-                      <div className="remove-liquidity-status">
-                        <Spinner />
-                        <span>
-                            <Trans>
-                              Removing {{amount0: token0RemoveDisplay}} {{symbol0: input0.token.symbol}} and {{amount1: token1RemoveDisplay}} {{symbol1: input1.token.symbol}}
-                            </Trans>
-                        </span>
-                        <span className="text-small">
-                          {t('Confirm this transaction in your wallet')}
-                        </span>
-                      </div>
-                    </div>
-                </>
-            }
-            {
-                walletTransaction.status === TxStatus.CONFIRMED && <>
-                  <div className="remove-liquidity-confirm-wrapper">
-                    <div className="remove-liquidity-status">
-                      <h2 className="text-semibold">
-                          {t('Transaction submitted')}
-                      </h2>
-                      <a>{t('View on Explorer')}</a>
-                      <button className="btn btn-primary"
-                              onClick={handleClose}>
-                          {t('Close')}
-                      </button>
-                    </div>
-                  </div>
-                </>
-            }
-            {
-                walletTransaction.status === TxStatus.REJECTED && <>
-                  <h4 className="text-error">{t('Error')}</h4>
-                  <div className="remove-liquidity-confirm-wrapper">
-                    <div className="remove-liquidity-status">
-                      <h2 className="text-semibold text-error">
-                          {t('Transaction rejected')}
-                      </h2>
-                      <button className="btn btn-primary"
-                              onClick={handleClose}>
-                          {t('Dismiss')}
-                      </button>
-                    </div>
-                  </div>
-                </>
-            }
-        </Modal>
-    )
+  return (
+    <div className="remove-liquidity-confirm-wrapper">
+      <div className="remove-liquidity-list">
+        <div className="remove-liquidity-list-item">
+          <div className="title-2">{t('Input')}</div>
+          <div className="remove-liquidity-item-token">
+            <div className="title-2">
+              {TokenUtils.toNumberDisplay(input0.removeAmount)} {input0.token.symbol}
+            </div>
+            <TokenIcon address={input0.token.address} name={input0.token.name} url={input0.token.logoURI} />
+          </div>
+        </div>
+        <div className="remove-liquidity-list-item">
+          <div className="title-2">{t('Input')}</div>
+          <div className="remove-liquidity-item-token">
+            <div className="title-2">
+              {TokenUtils.toNumberDisplay(input1.removeAmount)} {input1.token.symbol}
+            </div>
+            <TokenIcon address={input1.token.address} name={input1.token.name} url={input1.token.logoURI} />
+          </div>
+        </div>
+      </div>
+      <label className="help-text small">
+        <Trans>
+          Output is estimated. If the price changes by more than{' '}
+          <label className="large">{{ slippage: settings.slippage || DEFAULT_SLIPPAGE }}%</label> your transaction will
+          revert.
+        </Trans>
+      </label>
+      <div className="remove-liquidity-info">
+        <div className="remove-liquidity-info__item">
+          <p>
+            {input0.token.symbol}/{input1.token.symbol} {t('Burned')}
+          </p>
+          <p className="remove-liquidity-pool__tokens">
+            {poolRemoveDisplay}
+            <TokenIcon address={input0.token.address} name={input0.token.name} url={input0.token.logoURI} />
+            <TokenIcon address={input1.token.address} name={input1.token.name} url={input1.token.logoURI} />
+          </p>
+        </div>
+        <div className="remove-liquidity-info__item">
+          <p>{t('Price')}</p>
+          <p className="remove-liquidity-pool__price">
+            <p>
+              <Trans>
+                {token1PerToken0Display} {{ symbol0: input1.token.symbol }} per 1 {{ symbol1: input0.token.symbol }}
+              </Trans>
+            </p>
+            <p>
+              <Trans>
+                {token0PerToken1Display} {{ symbol0: input0.token.symbol }} per 1 {{ symbol1: input1.token.symbol }}
+              </Trans>
+            </p>
+          </p>
+        </div>
+        <div className="remove-liquidity-info__item">
+          <p>{t('Share of Pool')}</p>
+          <p className="remove-liquidity-pool__share">{shareDisplay}</p>
+        </div>
+      </div>
+      <Button variant={'primary'} onClick={confirmRemoveHandler}>
+        {t('Confirm Remove Liquidity')}
+      </Button>
+    </div>
+  );
 }
 
 export default RemoveLiquidityConfirm;

@@ -1,4 +1,4 @@
 export interface SettingsInterface {
-    slippage: string,
-    deadline: string,
+  slippage: string;
+  deadline: string;
 }

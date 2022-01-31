@@ -11,6 +11,8 @@
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "@types/react-virtualized-auto-sizer": "^1.0.1",
+    "@types/react-window": "^1.8.5",
     "bignumber.js": "^9.0.1",
     "i18next": "^21.5.3",
     "node-sass": "^4.14.1",
@@ -19,7 +21,9 @@
     "react-i18next": "^11.14.3",
     "react-redux": "^7.2.6",
     "react-router-dom": "6",
-    "react-scripts": "4.0.3",
+    "react-scripts": "^5.0.0",
+    "react-virtualized-auto-sizer": "^1.0.6",
+    "react-window": "^1.8.6",
     "recharts": "^2.1.6",
     "redux-thunk": "^2.4.0",
     "simple-uniswap-sdk": "^3.6.2",
@@ -30,12 +34,17 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:coverage": "yarn test --coverage --watchAll=false",
     "docker:build": "docker build -f Dockerfile.prod -t  ton-swap:prod .",
     "docker:build:dev": "docker build -t ton-swap:dev .",
     "docker:run": "docker run -it --rm -p 1337:80 ton-swap:prod",
     "docker:run:dev": "docker run -it --rm -v ${PWD}:/app -v /app/node_modules -p 3001:3000 -e CHOKIDAR_USEPOLLING=true ton-swap:dev",
     "i18n": "i18next-scanner",
-    "analyze": "source-map-explorer 'build/static/js/*.js'"
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
+    "lint": "lint",
+    "prettier": "prettier \"src/**/*\" --write --ignore-unknown",
+    "storybook": "start-storybook -p 6006 -s public",
+    "build-storybook": "build-storybook -s public"
   },
   "eslintConfig": {
     "extends": [
@@ -56,8 +65,20 @@
     ]
   },
   "devDependencies": {
+    "@storybook/addon-actions": "^6.4.14",
+    "@storybook/addon-essentials": "^6.4.14",
+    "@storybook/addon-links": "^6.4.14",
+    "@storybook/builder-webpack5": "^6.4.14",
+    "@storybook/manager-webpack5": "^6.4.14",
+    "@storybook/node-logger": "^6.4.14",
+    "@storybook/preset-create-react-app": "^4.0.0",
+    "@storybook/react": "^6.4.14",
+    "@trivago/prettier-plugin-sort-imports": "^3.1.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "i18next-scanner": "^3.1.0",
     "i18next-scanner-typescript": "^1.0.6",
+    "prettier": "^2.5.1",
     "source-map-explorer": "^2.5.2"
   }
 }

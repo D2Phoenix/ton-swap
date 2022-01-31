@@ -1,41 +1,73 @@
-@import "../../styles/vars";
-.remove-liquidity-confirm-modal.modal-container {
-  .modal-content {
-    height: 526px;
-    width: 50vw;
-    max-width: 420px;
-  }
-  &.mini {
-    .modal-content {
-      height: 226px;
-      .remove-liquidity-confirm-wrapper {
-        height: 100%;
-      }
+.remove-liquidity-confirm-modal.modal__container {
+  .modal__background {
+    .modal {
+      width: 100%;
+      max-width: 512px;
     }
   }
 }
 .remove-liquidity-confirm-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 8px;
   width: 100%;
-  background-color: white;
-  border-radius: 8px;
-  overflow: auto;
-  height: calc(100% - 20px);
-  padding-top: 2px;
-  > span:not(.help-text) {
-    border-bottom: 1px solid $border-color;
-    padding: 0 0 8px;
+  .remove-liquidity-list {
+    display: flex;
+    flex-direction: column;
+    > .remove-liquidity-list-item {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      > .remove-liquidity-item-token {
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+      }
+    }
   }
-  .btn-icon {
-    align-self: center;
+  .help-text {
+    padding: 24px 0;
+    font-weight: 400;
   }
-  .liquidity-info-wrapper {
+  .remove-liquidity-info {
+    padding: 8px 16px;
+    border: 1px solid var(--list-border-color);
+    border-radius: 8px;
+    margin-bottom: 24px;
+    .remove-liquidity-info__item {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 8px 0;
+      .remove-liquidity-pool__tokens {
+        display: flex;
+        align-items: flex-end;
+        margin-left: auto;
+        .token-icon:first-of-type {
+          margin-left: 8px;
+        }
+        .token-icon:not(:first-of-type) {
+          margin-left: 2px;
+        }
+      }
+      .remove-liquidity-pool__price, .liquidity-pool__share {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+      }
+      .remvoe-liquidity-pool__price {
+        margin-bottom: 8px;
+      }
+    }
+  }
+
+  .remove-liquidity-info-wrapper {
     > span {
       padding: 0 0 8px;
     }
-    .liquidity-price {
+    .remove-liquidity-price {
       padding: 0.5rem 0;
     }
   }
@@ -43,12 +75,7 @@
     text-align: center;
     margin-top: auto;
   }
-  .help-text {
-    padding: 8px 0;
-    text-align: center;
-    margin-top: auto;
-  }
-  .remove__btn {
+  .supply__btn {
     margin-top: auto;
   }
   .remove-liquidity-status {
@@ -70,14 +97,11 @@
 }
 
 @media screen and (max-width: 599px) {
-  .remove-liquidity-confirm-modal.modal-container  {
-    .modal-content {
-      height: 82% !important;
-      max-height: 82%;
-    }
-    &.mini {
-      .modal-content {
-        height: 40% !important;
+  .remove-liquidity-confirm-modal.modal__container {
+    .modal__background {
+      .modal {
+        height: 82% !important;
+        max-height: 82%;
       }
     }
   }

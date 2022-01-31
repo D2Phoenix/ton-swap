@@ -1,72 +1,81 @@
-@import "../../styles/vars";
-.swap-confirm-modal.modal-container {
-  .modal-content {
-    height: 526px;
-    width: 50vw;
-    max-width: 420px;
-  }
-  &.mini {
-    .modal-content {
-      height: 226px;
-      .swap-confirm-wrapper {
-        height: 100%;
-      }
+.swap-confirm-modal.modal__container {
+  .modal__background {
+    .modal {
+      width: 100%;
+      max-width: 512px;
     }
   }
 }
+
 .swap-confirm-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 8px;
   width: 100%;
-  background-color: white;
-  border-radius: 8px;
-  overflow: auto;
-  height: calc(100% - 20px);
-  padding-top: 2px;
-  .switch__btn {
-    align-self: center;
-  }
-  .swap-info {
+
+  .swap-list {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    flex-direction: column;
+
+    > .swap-list-item {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+
+      > .swap-item-token {
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+      }
+    }
   }
+
   .help-text {
-    padding: 8px 0;
-    text-align: center;
+    padding: 24px 0;
+    font-weight: 400;
   }
+
+  .swap-info {
+    padding: 8px 16px;
+    border: 1px solid var(--list-border-color);
+    border-radius: 8px;
+    margin-bottom: 24px;
+
+    .swap-price {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      margin-bottom: 8px;
+
+      .swap-price-text {
+        margin-left: auto;
+        margin-right: 8px;
+      }
+    }
+  }
+
   .swap-status {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100%;
-    gap: 8px;
     padding-top: 20px;
-    > span {
-      text-align: center;
-    }
-    .btn {
-      width: 100%;
-      margin-top: auto;
-    }
-  }
-  .swap__btn {
-    margin-top: auto;
-  }
-}
 
-@media screen and (max-width: 599px) {
-  .swap-confirm-modal.modal-container  {
-    .modal-content {
-      height: 82% !important;
-      max-height: 82%;
+    > h5 {
+      margin-top: 40px;
+      margin-bottom: 16px;
     }
-    &.mini {
-      .modal-content {
-        height: 40% !important;
-      }
+
+    > p {
+      margin-bottom: 8px;
+    }
+
+    > label, > .btn {
+      margin-bottom: 56px;
     }
   }
 }

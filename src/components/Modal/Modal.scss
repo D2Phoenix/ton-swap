@@ -1,0 +1,177 @@
+body {
+  &.modal--active {
+    overflow: hidden;
+    #root {
+      filter: blur(4px);
+      animation: blurIn 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+      will-change: filter;
+    }
+  }
+  &.modal--inactive {
+    #root {
+      filter: blur(0);
+      animation: blurOut 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+      will-change: filter;
+    }
+  }
+}
+
+.modal__container {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  transform: scale(1);
+  will-change: transform;
+
+  .modal__background {
+    background: rgba(0, 0, 0, 0);
+    animation: fadeIn 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+    transform: translate3d(0, 0, 0);
+
+    .modal {
+      animation: scaleUp 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  &.out {
+    animation: quickScaleDown 0s 0.5s linear forwards;
+
+    .modal__background {
+      animation: fadeOut 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+
+      .modal {
+        animation: scaleDown 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+      }
+    }
+  }
+
+  .modal__background {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    vertical-align: middle;
+    will-change: background;
+
+    .modal {
+      margin: auto;
+      background-color: var(--modal-background-color);
+      border-radius: 1rem;
+      position: relative;
+      padding: 24px;
+      min-height: 50px;
+      min-width: 50px;
+      max-height: 80%;
+      max-width: 80%;
+      will-change: transform;
+    }
+  }
+
+  .modal__content {
+    position: relative;
+    height: calc(100% - 60px);
+  }
+
+  .modal__header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--modal-text-color);
+    margin-bottom: 2rem;
+
+    .modal__close {
+      cursor: pointer;
+      margin-left: auto;
+
+      svg {
+        display: block;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 599px) {
+  .modal__container {
+    .modal__background {
+      .modal {
+        position: absolute;
+        bottom: 0;
+        width: 100% !important;
+        height: auto !important;
+        max-height: 100% !important;
+        max-width: 100% !important;
+        padding: 16px;
+      }
+    }
+  }
+}
+
+@keyframes blurIn {
+  0% {
+    filter: blur(0);
+  }
+  100% {
+    filter: blur(4px);
+  }
+}
+
+@keyframes blurOut {
+  0% {
+    filter: blur(4px);
+  }
+  100% {
+    filter: blur(0);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    background: rgba(0, 0, 0, 0);
+  }
+  100% {
+    background: rgba(0, 0, 0, 0.4);
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    background: rgba(0, 0, 0, 0.4);
+  }
+  100% {
+    background: rgba(0, 0, 0, 0);
+  }
+}
+
+@keyframes scaleUp {
+  0% {
+    transform: scale(0.8) translateY(1000px);
+  }
+  100% {
+    transform: scale(1) translateY(0px);
+  }
+}
+
+@keyframes scaleDown {
+  0% {
+    transform: scale(1) translateY(0px);
+  }
+  100% {
+    transform: scale(0.8) translateY(1000px);
+  }
+}
+
+@keyframes quickScaleDown {
+  0% {
+    transform: scale(1);
+  }
+  99.9% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}

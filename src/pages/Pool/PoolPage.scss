@@ -1,35 +1,22 @@
-@import "../../styles/vars";
-
 .pool-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  max-width: 480px;
+  max-width: 832px;
   width: 100%;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
   position: relative;
-  .btn {
-    width: 100%;
-    margin: 8px 0;
-  }
-}
 
-.pool-header-wrapper {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  padding: 0 1rem;
-  .pool-header {
+  .pool-header-wrapper {
     display: flex;
-    flex-direction: column;
-    > div {
+    align-items: center;
+    width: 100%;
+    margin-bottom: 30px;
+    .pool-header {
       display: flex;
-      align-items: center;
-      .tooltip-wrapper {
-        margin-left: 0.5rem;
-      }
+      flex-direction: column;
+    }
+    > .btn {
+      margin-left: auto;
     }
   }
 }
@@ -41,11 +28,25 @@
   text-align: center;
   gap: 8px;
   width: 100%;
-  padding: 0 1rem;
-  border: 1px solid $border-color;
-  border-radius: 0.25rem;
-  > span {
-    padding: 1rem;
+  padding: 16px 32px;
+  border: 1px solid var(--accordion-border-color);
+  border-radius: 8px;
+  margin-bottom: 40px;
+  > p {
+    padding: 16px;
+    color: var(--list-empty-text-color);
+  }
+  > .pool-list--empty {
+    padding: 16px;
+    .icon {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 8px;
+      color: var(--list-empty-text-color);
+    }
+    p {
+      color: var(--list-empty-text-color);
+    }
   }
   .pool-item-wrapper {
     display: flex;
@@ -53,51 +54,44 @@
     align-self: flex-start;
     align-items: center;
     width: 100%;
-    padding: 1rem 0;
-    > div {
+    padding: 16px 0;
+    > .pool-item-tokens {
       position: relative;
       display: flex;
       flex-direction: row;
+      gap: 6px;
       align-items: center;
-      > div {
-        position: absolute;
-        left: 0;
-        + div {
-          left: 1rem;
-        }
-      }
     }
     > span {
-      margin-left: 3rem;
+      margin-left: 32px;
     }
   }
   .pool-item-details-wrapper {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    gap: 0.5rem;
     > div {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
-      gap: 1rem;
-      > div {
+      padding: 8px 0;
+      > p {
         display: flex;
         flex-direction: row;
         align-items: center;
       }
     }
-    .token-icon-wrapper {
-      margin-left: 0.25rem;
+    .token-icon {
+      margin-left: 10px;
+    }
+    .pool-item-details-actions {
+      margin-top: 20px;
+      padding: 0;
+      gap: 8px;
+      > .btn {
+        flex: 1 1 auto;
+      }
     }
   }
-}
-
-.import-pool {
-  margin-top: 24px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
 }

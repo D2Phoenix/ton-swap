@@ -1,168 +1,104 @@
-import { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import './SwapConfirm.scss';
-import Modal from 'components/Modal';
-import TokenInput from 'components/TokenInput';
-import ChevronDownIcon from 'components/icons/ChevronDownIcon';
-import SwapInfo from './SwapInfo';
-import { useAppDispatch, useAppSelector } from 'store/hooks';
-import {
-    resetSwap,
-    selectSwapInput0,
-    selectSwapInput1, selectSwapTrade,
-} from 'store/swap/swapSlice';
-import { resetTransaction, selectWalletTransaction } from 'store/wallet/walletSlice';
-import { TxStatus } from 'types/transactionInterfaces';
-import { walletSwap } from 'store/wallet/walletThunks';
-import Spinner from 'components/Spinner';
 import TokenUtils from 'utils/tokenUtils';
 
+import Button from 'components/Button';
+import SwapIcon from 'components/Icons/SwapIcon';
+import TokenIcon from 'components/TokenIcon';
+
+import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { selectSwapInput0, selectSwapInput1, selectSwapTrade } from 'store/swap/swapSlice';
+import { walletSwap } from 'store/wallet/walletThunks';
+
+import './SwapConfirm.scss';
+import SwapInfo from './SwapInfo';
+
 interface SwapConfirmProps {
-    onClose: Function;
+  onClose: (result?: boolean) => void;
 }
 
-function SwapConfirm({onClose}: SwapConfirmProps) {
-    const dispatch = useAppDispatch();
-    const {t} = useTranslation();
+export const SwapConfirmOptions = {
+  header: 'Confirm Swap',
+  className: 'swap-confirm-modal',
+};
 
-    const input0 = useAppSelector(selectSwapInput0);
-    const input1 = useAppSelector(selectSwapInput1);
-    const trade = useAppSelector(selectSwapTrade);
-    const walletTransaction = useAppSelector(selectWalletTransaction);
+function SwapConfirm({ onClose }: SwapConfirmProps) {
+  const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
-    const className = useMemo(() => {
-        return walletTransaction.status !== TxStatus.INITIAL ? 'swap-confirm-modal mini' : 'swap-confirm-modal';
-    }, [walletTransaction]);
+  const input0 = useAppSelector(selectSwapInput0);
+  const input1 = useAppSelector(selectSwapInput1);
+  const trade = useAppSelector(selectSwapTrade);
 
-    const tokenSwapRate = useMemo(() => {
-        return TokenUtils.getNumberDisplay(trade.rate);
-    }, [trade]);
+  const tokenSwapRate = useMemo(() => {
+    return TokenUtils.toNumberDisplay(trade.rate);
+  }, [trade]);
 
-    const token0Amount = useMemo(() => {
-        return TokenUtils.getDisplay(input1);
-    }, [input1]);
+  const handleConfirmSwap = useCallback(() => {
+    dispatch(walletSwap({ input0, input1 }));
+    onClose(true);
+  }, [dispatch, onClose]);
 
-    const token1Amount = useMemo(() => {
-        return TokenUtils.getDisplay(input0);
-    }, [input0]);
-
-    const handleConfirmSwap = useCallback(() => {
-        dispatch(walletSwap());
-    }, [dispatch]);
-
-    const handleClose = useCallback(() => {
-        dispatch(resetTransaction());
-        if (walletTransaction.status === TxStatus.CONFIRMED) {
-            dispatch(resetSwap());
-        }
-        onClose && onClose();
-    }, [dispatch, walletTransaction, onClose]);
-
-    return (
-        <Modal className={className} onClose={handleClose}>
-            {
-                walletTransaction.status === TxStatus.INITIAL && <>
-                  <h4>{t('Confirm Swap')}</h4>
-                  <div className="swap-confirm-wrapper">
-                    <TokenInput token={input0.token}
-                                value={input0.amount}
-                                showMax={true}
-                                selectable={false}
-                                editable={false}
-                    />
-                    <div className="switch__btn btn-icon">
-                      <ChevronDownIcon/>
-                    </div>
-                    <TokenInput token={input1.token}
-                                value={input1.amount}
-                                showMax={false}
-                                selectable={false}
-                                editable={false}
-                    />
-                    <div className="swap-info">
-                      <span className="text-small">{t('Price')}</span>
-                      <span className="text-small">
-                1 {input1.token.symbol} = {tokenSwapRate} {input0.token.symbol}
-                </span>
-                    </div>
-                    <SwapInfo/>
-                      {
-                          trade.minimumReceived &&
-                          <span className="help-text text-small">
-                            <Trans>
-                              Output is estimated. You will receive at least <span
-                              className="text-semibold text-small">{{amount0: TokenUtils.getNumberDisplay(trade.minimumReceived)}} {{symbol0: input1.token.symbol}}</span>  or the transaction will revert.
-                            </Trans>
-                          </span>
-                      }
-                      {
-                          trade.maximumSent &&
-                          <span className="help-text text-small">
-                            <Trans>
-                              Input is estimated. You will sell at most <span
-                              className="text-semibold text-small">{{amount0: TokenUtils.getNumberDisplay(trade.maximumSent)}} {{symbol0: input0.token.symbol}}</span> or the transaction will revert.
-                            </Trans>
-                          </span>
-                      }
-                    <button className="btn btn-primary swap__btn"
-                            onClick={handleConfirmSwap}>
-                        {t('Confirm Swap')}
-                    </button>
-                  </div>
-                </>
-            }
-            {
-                walletTransaction.status === TxStatus.PENDING && <>
-                  <div className="swap-confirm-wrapper">
-                    <div className="swap-status">
-                      <Spinner/>
-                      <span>
-                        <Trans>
-                           Swapping {{amount0: token1Amount}} {{symbol0: input0.token.symbol}} for {{amount1: token0Amount}} {{symbol1: input1.token.symbol}}
-                        </Trans>
-                      </span>
-                      <span className="text-small">
-                         {t('Confirm this transaction in your wallet')}
-                      </span>
-                    </div>
-                  </div>
-                </>
-            }
-            {
-                walletTransaction.status === TxStatus.CONFIRMED && <>
-                  <div className="swap-confirm-wrapper">
-                    <div className="swap-status">
-                      <h2 className="text-semibold">
-                          {t('Transaction submitted')}
-                      </h2>
-                      <a>{t('View on Explorer')}</a>
-                      <button className="btn btn-primary"
-                              onClick={handleClose}>
-                          {t('Close')}
-                      </button>
-                    </div>
-                  </div>
-                </>
-            }
-            {
-                walletTransaction.status === TxStatus.REJECTED && <>
-                  <h4 className="text-error">{t('Error')}</h4>
-                  <div className="swap-confirm-wrapper">
-                    <div className="swap-status">
-                      <h2 className="text-semibold text-error">
-                          {t('Transaction rejected')}
-                      </h2>
-                      <button className="btn btn-primary"
-                              onClick={handleClose}>
-                          {t('Dismiss')}
-                      </button>
-                    </div>
-                  </div>
-                </>
-            }
-        </Modal>
-    )
+  return (
+    <div className="swap-confirm-wrapper">
+      <div className="swap-list">
+        <div className="swap-list-item">
+          <div className="title-2">{t('From')}</div>
+          <div className="swap-item-token">
+            <div className="title-2">
+              {TokenUtils.toNumberDisplay(input0.amount)} {input0.token.symbol}
+            </div>
+            <TokenIcon address={input0.token.address} name={input0.token.name} url={input0.token.logoURI} />
+          </div>
+        </div>
+        <div className="swap-list-item">
+          <div className="title-2">{t('To')}</div>
+          <div className="swap-item-token">
+            <div className="title-2">
+              {TokenUtils.toNumberDisplay(input1.amount)} {input1.token.symbol}
+            </div>
+            <TokenIcon address={input1.token.address} name={input1.token.name} url={input1.token.logoURI} />
+          </div>
+        </div>
+      </div>
+      {trade.minimumReceived && (
+        <label className="help-text small">
+          <Trans>
+            Output is estimated. You will receive at least{' '}
+            <label className="large">
+              {{ amount0: TokenUtils.toNumberDisplay(trade.minimumReceived) }} {{ symbol0: input1.token.symbol }}
+            </label>{' '}
+            or the transaction will revert.
+          </Trans>
+        </label>
+      )}
+      {trade.maximumSent && (
+        <label className="help-text small">
+          <Trans>
+            Input is estimated. You will sell at most{' '}
+            <label className="large">
+              {{ amount0: TokenUtils.toNumberDisplay(trade.maximumSent) }} {{ symbol0: input0.token.symbol }}
+            </label>{' '}
+            or the transaction will revert.
+          </Trans>
+        </label>
+      )}
+      <div className="swap-info">
+        <div className="swap-price">
+          <p>{t('Price')}</p>
+          <p className="swap-price-text">
+            {tokenSwapRate} {input0.token.symbol} per 1 {input1.token.symbol}
+          </p>
+          <SwapIcon />
+        </div>
+        <SwapInfo />
+      </div>
+      <Button variant={'primary'} onClick={handleConfirmSwap}>
+        {t('Confirm Swap')}
+      </Button>
+    </div>
+  );
 }
 
 export default SwapConfirm;

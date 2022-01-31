@@ -1,17 +1,13 @@
-@import "../../styles/vars";
-
 .swap-info-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  > span {
-    border-bottom: 1px solid $border-color;
-    padding: 0 0 8px;
-  }
   > div {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    padding: 8px 0;
+    gap: 16px;
+    white-space: nowrap;
     > span:not(:first-child) {
       text-align: end;
     }
@@ -21,18 +17,20 @@
       display: flex;
       align-items: center;
       svg {
-        stroke: $success-color;
+        stroke: var(--success-color);
       }
-      span {
-        color: $success-color;
+      p {
+        color: var(--success-color);
       }
     }
     .negative {
+      display: flex;
+      align-items: center;
       svg {
-        stroke: $error-color;
+        stroke: var(--error-color);
       }
-      span {
-        color: $error-color;
+      p {
+        color: var(--error-color);
       }
     }
   }

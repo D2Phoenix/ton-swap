@@ -1,34 +1,15 @@
-a {
-  color: $primary-color;
-  text-decoration: none;
-  -webkit-transition: color .3s;
-  -o-transition: color .3s;
-  transition: color .3s;
+a:not(.nav-item__btn) {
+  color: var(--link-color);
+  text-decoration: underline;
+  transition: color 0.3s;
+  font-size: 14px;
   &:hover {
-    color: $secondary-color;
-    -webkit-transition: color .3s;
-    -o-transition: color .3s;
-    transition: color .3s;
+    color: var(--link-hover-color);
+  }
+  &:disabled {
+    color: var(--link-disabled-color);
   }
   &.active {
-    color: $secondary-color;
-  }
-}
-
-.link__btn {
-  display: inline-block;
-  color: $primary-color;
-  cursor: pointer;
-  -webkit-transition: color .3s;
-  -o-transition: color .3s;
-  transition: color .3s;
-  font-family: 'Mulish', sans-serif;
-  font-weight: 700;
-  text-decoration: none;
-  &.active {
-    color: $secondary-color;
-  }
-  &:hover {
-    color: $secondary-color;
+    color: var(--link-hover-color);
   }
 }
