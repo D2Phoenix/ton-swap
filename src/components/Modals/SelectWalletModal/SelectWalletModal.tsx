@@ -38,11 +38,11 @@ export function SelectWalletModal({ onClose }: ConnectWalletProps) {
   );
 
   return (
-    <div className="connect-wallet-wrapper">
-      <div className="wallet-item title-2" onClick={connectHandler.bind(null, WalletType.stubWallet)}>
+    <div className="connect-wallet">
+      <div className="connect-wallet__item title-2" onClick={connectHandler.bind(null, WalletType.stubWallet)}>
         <p className="title-2">Stub Wallet</p>
       </div>
-      <div className="wallet-item" onClick={connectHandler.bind(null, WalletType.tonWallet)}>
+      <div className="connect-wallet__item" onClick={connectHandler.bind(null, WalletType.tonWallet)}>
         <p className="title-2">
           TON Wallet
           <label className="medium">

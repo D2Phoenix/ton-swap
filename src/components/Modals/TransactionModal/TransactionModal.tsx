@@ -37,8 +37,8 @@ export function TransactionModal() {
   }, [walletTransaction]);
 
   return (
-    <div className="tx-wrapper">
-      <div className="tx-status">
+    <div className="tx">
+      <div className="tx__status">
         <Spinner status={walletTransaction.status} />
         {walletTransaction.status === TxStatus.PENDING && (
           <>

@@ -1,13 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 
+import ArrowLeftIcon from 'components/Icons/ArrowLeftIcon';
 import QuestionIcon from 'components/Icons/QuestionIcon';
 import SettingsIcon from 'components/Icons/SettingsIcon';
 import { useModal } from 'components/Modal';
 import SettingsModal, { SettingsModalOptions } from 'components/Modals/SettingsModal';
 import Tooltip from 'components/Tooltip';
 
-import Button from '../Button';
-import ArrowLeftIcon from '../Icons/ArrowLeftIcon';
 import './DexForm.scss';
 
 interface DexFormProps {
@@ -26,14 +25,14 @@ export function DexForm({ header, headerTooltip, backLink, content, actions, cla
 
   return (
     <form
-      className={`box-wrapper ${className}`}
+      className={`dex-form ${className}`}
       onSubmit={(e) => {
         e.preventDefault();
       }}
     >
-      <div className="box-header-wrapper">
+      <div className="dex-form__header">
         {backLink && <ArrowLeftIcon onClick={navigate.bind(null, backLink)} />}
-        <div className="box-header">
+        <div className="dex-form__header-content">
           <div>
             <h5>{header}</h5>
             {headerTooltip && (
@@ -48,7 +47,7 @@ export function DexForm({ header, headerTooltip, backLink, content, actions, cla
         </div>
       </div>
       {content}
-      <div className="box-actions">{actions}</div>
+      <div className="dex-form__actions">{actions}</div>
     </form>
   );
 }

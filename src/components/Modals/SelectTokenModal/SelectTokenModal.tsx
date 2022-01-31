@@ -30,8 +30,8 @@ function TokenManageList({ onBack }: TokenManageListParams) {
   const tokenLists = useAppSelector(selectTokenLists);
 
   return (
-    <div className="token-select-wrapper">
-      <div className="token-select-header">
+    <div className="token-select">
+      <div className="token-select__header">
         <Button variant={'default'} icon={<ChevronRightIcon revert={true} />} onClick={onBack} />
         <span className="text-semibold">{t('Managa tokens')}</span>
       </div>
@@ -128,7 +128,7 @@ export function SelectTokenModal({ onClose, balancesFirst }: TokenSelectProps) {
   return (
     <>
       {!showTokenManage && (
-        <div className="token-select-wrapper">
+        <div className="token-select">
           <Input placeholder={t('Search name or paste address')} value={query} onChange={changeHandler} />
           <List height={436} itemCount={visibleTokens.length} emptyText={t('No Tokens found')}>
             {(index: number, style: CSSProperties) => {

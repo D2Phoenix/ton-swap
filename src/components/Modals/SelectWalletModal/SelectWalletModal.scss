@@ -8,13 +8,13 @@
   }
 }
 
-.connect-wallet-wrapper {
+.connect-wallet {
   display: flex;
   flex-direction: column;
   height: 100%;
   gap: 2rem;
 
-  .wallet-item {
+  .connect-wallet__item {
     display: flex;
     flex-direction: row;
     justify-content: space-between;

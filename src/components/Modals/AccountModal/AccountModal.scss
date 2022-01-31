@@ -8,12 +8,12 @@
   }
 }
 
-.account-wrapper {
+.account {
   display: flex;
   flex-direction: column;
   height: 100%;
   gap: 0.5em;
-  .account-info {
+  .account__info {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -23,7 +23,7 @@
       margin-left: auto;
     }
   }
-  .account-actions {
+  .account__actions {
     display: flex;
     flex-direction: row;
     align-items: center;

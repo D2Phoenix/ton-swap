@@ -84,8 +84,8 @@ export function AccountModal({ onClose }: AccountProps) {
   }, [onClose]);
 
   return (
-    <div className="account-wrapper">
-      <div className="account-info">
+    <div className="account">
+      <div className="account__info">
         <div className="title-1">{visibleWalletAddress}</div>
         <Button
           variant={'secondary'}
@@ -100,7 +100,7 @@ export function AccountModal({ onClose }: AccountProps) {
           onClick={copyToClipboardHandler}
         />
       </div>
-      <div className="account-actions">
+      <div className="account__actions">
         <Button variant={'secondary'} className="title-2" icon={<SwitchExchangeIcon />} onClick={switchWalletHandler}>
           {t('Switch Wallet')}
         </Button>

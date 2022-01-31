@@ -7,7 +7,7 @@
     }
   }
 }
-.settings-wrapper {
+.settings {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -16,7 +16,7 @@
   h6 {
     margin-bottom: 12px;
   }
-  .setting-section {
+  .setting__section {
     display: flex;
     flex-direction: column;
     > p {

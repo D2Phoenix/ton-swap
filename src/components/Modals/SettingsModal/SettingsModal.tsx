@@ -107,9 +107,9 @@ export function SettingsModal() {
   );
 
   return (
-    <div className="settings-wrapper">
+    <div className="settings">
       <h6>{t('Transaction Settings')}</h6>
-      <div className="setting-section">
+      <div className="setting__section">
         <p>
           {t('Slippage tolerance')}
           <Tooltip
@@ -142,7 +142,7 @@ export function SettingsModal() {
           <p>%</p>
         </div>
       </div>
-      <div className="setting-section">
+      <div className="setting__section">
         <p>
           {t('Transaction deadline')}
           <Tooltip

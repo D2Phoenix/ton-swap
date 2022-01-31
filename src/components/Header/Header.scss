@@ -31,7 +31,7 @@ header {
     margin-left: auto;
     display: flex;
   }
-  .nav-item.theme {
+  .theme {
     display: block;
   }
 }
@@ -51,7 +51,7 @@ header {
     }
   }
 }
-.nav-item.balance, .nav-item.theme {
+.balance, .theme {
   display: none;
 }
 
@@ -89,7 +89,7 @@ header {
     flex: 0 0 380px;
     justify-content: flex-end;
   }
-  .nav-item.balance, .nav-item.theme {
+  .balance, .theme {
     display: block;
   }
 }

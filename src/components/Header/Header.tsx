@@ -67,7 +67,7 @@ export function Header() {
           <h4>Dex</h4>
         </a>
         <div className="header__buttons">
-          <div className="nav-item wallet">
+          <div className="wallet">
             {!walletAddress && (
               <Button variant={'secondary'} onClick={selectWalletModal.open}>
                 {t('Connect Wallet')}
@@ -79,7 +79,7 @@ export function Header() {
               </Button>
             )}
           </div>
-          <div className="nav-item theme" onClick={switchThemeHandler}>
+          <div className="theme" onClick={switchThemeHandler}>
             <Button variant={'secondary'} icon={<SunIcon />} />
           </div>
         </div>
@@ -87,11 +87,11 @@ export function Header() {
       <NavList links={links} />
       <div className="header__buttons">
         {balances['TON'] && (
-          <div className="nav-item balance">
+          <div className="balance">
             <Button variant={'primary'}>{TokenUtils.toNumberDisplay(balances['TON'], 2)} TON</Button>
           </div>
         )}
-        <div className="nav-item wallet">
+        <div className="wallet">
           {!walletAddress && (
             <Button variant={'secondary'} onClick={selectWalletModal.open}>
               {t('Connect Wallet')}
@@ -103,7 +103,7 @@ export function Header() {
             </Button>
           )}
         </div>
-        <div className="nav-item theme" onClick={switchThemeHandler}>
+        <div className="theme" onClick={switchThemeHandler}>
           <Button variant={'secondary'} icon={<SunIcon />} />
         </div>
       </div>

@@ -30,7 +30,7 @@
     }
   }
   // Primary
-  &.btn-primary {
+  &.btn--primary {
     background-color: var(--primary-color);
     color: var(--primary-text-color);
     &:hover {
@@ -48,7 +48,7 @@
     }
   }
   // Secondary
-  &.btn-secondary {
+  &.btn--secondary {
     background-color: var(--secondary-color);
     &:hover {
       background-color: var(--secondary-hover-color);
@@ -58,7 +58,7 @@
     }
   }
   // Outline
-  &.btn-outline {
+  &.btn--outline {
     background-color: transparent;
     outline: 1px solid var(--primary-color);
     &:hover {
@@ -71,18 +71,18 @@
     }
   }
   // Button sizes
-  &.btn-small {
+  &.btn--small {
     padding: 8px 16px;
     border-radius: 8px;
     > span {
       font-size: 14px;
     }
   }
-  &.btn-medium {
+  &.btn--medium {
     padding: 12px 16px;
     border-radius: 8px;
   }
-  &.btn-large {
+  &.btn--large {
     padding: 16px;
     border-radius: 12px;
   }
@@ -91,12 +91,12 @@
     height: 24px;
     color: var(--primary-color);
   }
-  &.btn-icon-start {
+  &.btn-icon--start {
     > .icon:not(:only-child) {
       margin-right: 11px;
     }
   }
-  &.btn-icon-end {
+  &.btn-icon--end {
     > .icon:not(:only-child)  {
       margin-left: 11px;
     }

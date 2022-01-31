@@ -18,9 +18,9 @@ export function Button({
   className,
   ...props
 }: ButtonProps & ButtonHTMLAttributes<HTMLButtonElement>) {
-  const calcClassName = ['btn', `btn-${variant}`, `btn-${size}`];
+  const calcClassName = ['btn', `btn--${variant}`, `btn--${size}`];
   if (!!icon) {
-    calcClassName.push('btn-icon-' + iconPosition);
+    calcClassName.push('btn-icon--' + iconPosition);
   }
   if (className) {
     calcClassName.push(className);

@@ -1,4 +1,4 @@
-.box-wrapper {
+.dex-form {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -7,13 +7,13 @@
   border-radius: 8px;
   position: relative;
 
-  .box-header-wrapper {
+  .dex-form__header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
     margin-bottom: 40px;
-    .box-header {
+    .dex-form__header-content {
       display: flex;
       flex-direction: column;
       > div {
@@ -28,7 +28,7 @@
       cursor: pointer;
     }
   }
-  .box-actions {
+  .dex-form__actions {
     display: flex;
     flex-direction: column;
     width: 100%;
