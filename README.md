@@ -96,3 +96,11 @@ Extract translations to 'src/i18n' folder
 ### `yarn analyze`
 
 Analyze bundle size. Build app first (yarn build)
+
+### `yarn storybook`
+
+Run storybook for UI
+
+### `yarn storybook:build`
+
+Build storybook for UI

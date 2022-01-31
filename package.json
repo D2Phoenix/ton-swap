@@ -44,7 +44,7 @@
     "lint": "lint",
     "prettier": "prettier \"src/**/*\" --write --ignore-unknown",
     "storybook": "start-storybook -p 6006 -s public",
-    "build-storybook": "build-storybook -s public"
+    "storybook:build": "build-storybook -s public"
   },
   "eslintConfig": {
     "extends": [
