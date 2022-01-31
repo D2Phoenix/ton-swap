@@ -27,9 +27,9 @@ export function Modal({
   const backgroundRef = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
     const target = document.body;
-    const classList = ['modal-container'];
-    target.classList.remove('modal-inactive');
-    target.classList.add('modal-active');
+    const classList = ['modal__container'];
+    target.classList.remove('modal--inactive');
+    target.classList.add('modal--active');
     if (className) {
       className.split(' ').forEach((item: string) => classList.push(item));
     }
@@ -37,8 +37,8 @@ export function Modal({
   }, [container, className]);
 
   const onCloseHandler = useCallback(() => {
-    document.body.classList.remove('modal-active');
-    document.body.classList.add('modal-inactive');
+    document.body.classList.remove('modal--active');
+    document.body.classList.add('modal--inactive');
     container.classList.add('out');
     onClose && onClose();
     setTimeout(() => {
@@ -63,15 +63,15 @@ export function Modal({
   );
 
   return (
-    <div ref={backgroundRef} className="modal-background" onClick={onBackgroundClickHandler}>
+    <div ref={backgroundRef} className="modal__background" onClick={onBackgroundClickHandler}>
       <div className="modal">
-        <div className="modal-header">
+        <div className="modal__header">
           <h5>{header}</h5>
-          <div className="modal-close" onClick={onCloseHandler}>
+          <div className="modal__close" onClick={onCloseHandler}>
             <CloseIcon />
           </div>
         </div>
-        <div className="modal-content">{children}</div>
+        <div className="modal__content">{children}</div>
       </div>
     </div>
   );

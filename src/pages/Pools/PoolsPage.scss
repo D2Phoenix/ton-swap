@@ -39,11 +39,10 @@
 }
 
 @media screen and (max-width: 599px) {
-  .pool-list__item,
-  .pools-list-header {
-    .position__column,
-    .total-day__column,
-    .total-7day__column {
+  .table {
+    .table__column-position,
+    .table__column-volume24usd,
+    .table__column-volume7dusd {
       display: none !important;
     }
   }

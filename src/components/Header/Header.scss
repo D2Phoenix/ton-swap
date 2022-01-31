@@ -2,7 +2,8 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  padding: 1rem 4rem;
+  padding: 12px 0;
+  gap: 16px;
 }
 
 header {
@@ -29,17 +30,24 @@ header {
     vertical-align: middle;
   }
 }
+.nav-wrapper {
+  margin-left: initial;
+  justify-content: center;
+}
 .header-buttons {
   flex: 0 0 auto;
   display: flex;
   flex-direction: row;
-  margin-left: auto;
+  justify-content: center;
   gap: 8px;
   .wallet {
     .btn {
       width: 190px;
     }
   }
+}
+.nav-item.balance, .nav-item.theme {
+  display: none;
 }
 
 @media screen and (min-width: 1000px) {
@@ -54,8 +62,20 @@ header {
   }
 }
 
-@media screen and (min-width: 700px) {
+@media screen and (min-width: 828px) {
   .header-wrapper {
     flex-direction: row;
+    padding: 12px 48px;
+    gap: 0;
+  }
+  .nav-wrapper {
+    margin-left: auto;
+    justify-content: initial;
+  }
+  .header-buttons {
+    margin-left: auto;
+  }
+  .nav-item.balance, .nav-item.theme {
+    display: block;
   }
 }

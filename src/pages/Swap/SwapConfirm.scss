@@ -1,24 +1,28 @@
-.swap-confirm-modal.modal-container {
-  .modal-background {
+.swap-confirm-modal.modal__container {
+  .modal__background {
     .modal {
       width: 100%;
       max-width: 512px;
     }
   }
 }
+
 .swap-confirm-wrapper {
   display: flex;
   flex-direction: column;
   width: 100%;
+
   .swap-list {
     display: flex;
     flex-direction: column;
+
     > .swap-list-item {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
       padding: 8px 0;
+
       > .swap-item-token {
         display: flex;
         flex-direction: row;
@@ -26,15 +30,18 @@
       }
     }
   }
+
   .help-text {
     padding: 24px 0;
     font-weight: 400;
   }
+
   .swap-info {
     padding: 8px 16px;
     border: 1px solid var(--list-border-color);
     border-radius: 8px;
     margin-bottom: 24px;
+
     .swap-price {
       display: flex;
       flex-direction: row;
@@ -42,12 +49,14 @@
       align-items: center;
       padding: 8px 0;
       margin-bottom: 8px;
+
       .swap-price-text {
         margin-left: auto;
         margin-right: 8px;
       }
     }
   }
+
   .swap-status {
     display: flex;
     flex-direction: column;
@@ -55,29 +64,18 @@
     justify-content: center;
     height: 100%;
     padding-top: 20px;
+
     > h5 {
       margin-top: 40px;
       margin-bottom: 16px;
     }
+
     > p {
       margin-bottom: 8px;
     }
+
     > label, > .btn {
       margin-bottom: 56px;
-    }
-  }
-}
-
-@media screen and (max-width: 599px) {
-  .swap-confirm-modal.modal-container {
-    .modal-content {
-      height: 82% !important;
-      max-height: 82%;
-    }
-    &.mini {
-      .modal-content {
-        height: 40% !important;
-      }
     }
   }
 }

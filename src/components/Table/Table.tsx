@@ -147,7 +147,7 @@ export function Table<T>({
                 return (
                   <div
                     key={column.field}
-                    className="table__cell"
+                    className={`table__cell table__column-${column.field.toLowerCase()}`}
                     style={{ flex: column.flex, justifyContent: column.position }}
                   >
                     {column.template ? (

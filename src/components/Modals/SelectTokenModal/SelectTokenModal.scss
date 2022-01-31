@@ -1,5 +1,5 @@
-.token-select-modal.modal-container {
-  .modal-background {
+.token-select-modal.modal__container {
+  .modal__background {
     .modal {
       height: 712px;
       width: 100%;
@@ -20,6 +20,18 @@
     margin-bottom: 8px;
     svg {
       height: 20px;
+    }
+  }
+}
+
+@media screen and (max-width: 599px) {
+  .token-select-modal.modal__container {
+    .modal__background {
+      .modal {
+        height: 80% !important;
+        width: 100%;
+        max-width: 512px;
+      }
     }
   }
 }

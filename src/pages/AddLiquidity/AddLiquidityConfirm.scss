@@ -1,5 +1,5 @@
-.add-liquidity-confirm-modal.modal-container {
-  .modal-background {
+.add-liquidity-confirm-modal.modal__container {
+  .modal__background {
     .modal {
       width: 100%;
       max-width: 512px;
@@ -97,14 +97,11 @@
 }
 
 @media screen and (max-width: 599px) {
-  .add-liquidity-confirm-modal.modal-container {
-    .modal-content {
-      height: 83% !important;
-      max-height: 83%;
-    }
-    &.mini {
-      .modal-content {
-        height: 40% !important;
+  .add-liquidity-confirm-modal.modal__container {
+    .modal__background {
+      .modal {
+        height: 83% !important;
+        max-height: 83%;
       }
     }
   }

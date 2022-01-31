@@ -82,7 +82,7 @@ export function Header() {
             </Button>
           )}
         </div>
-        <div className="nav-item">
+        <div className="nav-item theme">
           <Button variant={'secondary'} icon={<SunIcon />} />
         </div>
       </div>

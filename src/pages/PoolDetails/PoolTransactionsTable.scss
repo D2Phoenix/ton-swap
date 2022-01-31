@@ -12,15 +12,27 @@
 }
 
 @media screen and (max-width: 599px) {
-  .pool-transactions__item,
-  .pool-transactions-header {
+  .pool-details__header {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .pool-details__header-actions {
+    margin-left: initial;
+  }
+  .pool__info {
+    flex-direction: column;
+  }
+  .table {
     .column:not(:last-child) {
       display: none;
     }
     .column:last-child {
       flex: 1 1 auto;
     }
-    .account__column {
+    .table__column-account,
+    .table__column-amount0,
+    .table__column-amount1,
+    .table__column-amountusd {
       display: none !important;
     }
     .link__btn {
