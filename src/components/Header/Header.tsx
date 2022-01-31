@@ -55,6 +55,10 @@ export function Header() {
     return '';
   }, [walletAddress]);
 
+  const switchThemeHandler = useCallback(() => {
+    document.body.classList.toggle('light-theme');
+  }, []);
+
   return (
     <div className="header-wrapper">
       <header>
@@ -82,7 +86,7 @@ export function Header() {
             </Button>
           )}
         </div>
-        <div className="nav-item theme">
+        <div className="nav-item theme" onClick={switchThemeHandler}>
           <Button variant={'secondary'} icon={<SunIcon />} />
         </div>
       </div>

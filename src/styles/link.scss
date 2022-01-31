@@ -13,21 +13,3 @@ a:not(.nav-item__btn) {
     color: var(--link-hover-color);
   }
 }
-
-.link__btn {
-  display: inline-block;
-  color: $primary-color;
-  cursor: pointer;
-  -webkit-transition: color 0.3s;
-  -o-transition: color 0.3s;
-  transition: color 0.3s;
-  font-family: 'Mulish', sans-serif;
-  font-weight: 700;
-  text-decoration: none;
-  &.active {
-    color: $secondary-color;
-  }
-  &:hover {
-    color: $secondary-color;
-  }
-}

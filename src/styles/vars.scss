@@ -1,12 +1,5 @@
 @import 'palletes';
 
-$primary-color: #0088cc;
-$secondary-color: #303757;
-$border-color: rgba(48, 55, 87, 0.16);
-$error-color: rgb(253, 64, 64);
-$success-color: rgb(39, 174, 96);
-$warning-color: rgb(253, 193, 64);
-
 :root {
   // Common
   --background-color: #{map-get($gray-palette, 2400)};
@@ -61,6 +54,67 @@ $warning-color: rgb(253, 193, 64);
   --accordion-border-color: #{map-get($gray-palette, 2300)};
   // Card
   --card-background-color: #{map-get($gray-palette, 2300)};
+  // Notifications
+  --notification-info-background: #{transparentize(map-get($gray-palette, 2300), 0.85)};
+  --notification-error-background: #{transparentize(map-get($red-palette, 500), 0.85)};
+  --notification-success-background: #{transparentize(map-get($green-palette, 500), 0.85)};
+  --notification-warning-background: #{transparentize(map-get($yellow-palette, 500), 0.85)};
+}
+
+.light-theme {
+  // Common
+  --background-color: #{map-get($gray-palette, 'white')};
+  --text-color: #303757;
+  --label-color: rgba(48, 55, 87, 0.56);
+  --primary-color: #0088CC;
+  --primary-hover-color: #0072ab;
+  --primary-disabled-color: #{map-get($gray-palette, 1800)};
+  --primary-text-color: #{map-get($gray-palette, 'white')};
+  --secondary-color: #f4f4f4;
+  --secondary-hover-color: #e4e4e4;
+  --error-color: #{map-get($red-palette, 500)};
+  --success-color: #{map-get($green-palette, 500)};
+  --warning-color: #{map-get($yellow-palette, 500)};
+  // Header navigation
+  --nav-text-color: #{map-get($gray-palette, 900)};
+  --nav-active-text-color: #0088CC;
+  // Modals
+  --modal-background-color: #{map-get($gray-palette, 'white')};
+  --modal-text-color: #303757;
+  --modal-scrollbar-track-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  --modal-scrollbar-track-background: #{map-get($gray-palette, 'white')};
+  --modal-scrollbar-width: 6px;
+  --modal-scrollbar-background: #{map-get($gray-palette, 'white')};
+  --modal-scrollbar-thumb-background: #0088CC;
+  // Links
+  --link-color: #0088CC;
+  --link-hover-color: #333;
+  --link-disabled-color: #{map-get($gray-palette, 1800)};
+  // Inputs
+  --input-border-color: #f4f4f4;
+  --input-hover-color: #f4f4f4;
+  --input-focus-color: #08c;
+  --input-text-color: #303757;
+  --input-placeholder-color: #9ba9b0;
+  --input-background-color: #f2f5f7;
+  --input-help-text-color: #{map-get($gray-palette, 1200)};
+  // Dropdown
+  --dropdown-border-color: rgba(48,55,87,.26);
+  --dropdown-hover-color: rgba(48,55,87,.26);
+  --dropdown-focus-color: rgba(48,55,87,.26);
+  // List
+  --list-hover-color: #f4f4f4;
+  --list-border-color: #f4f4f4;
+  --list-empty-text-color: rgba(48,55,87,.56);
+  // Spinner
+  --spinner-color: #{map-get($green-palette, 500)};
+  --spinner-failed-color: #{map-get($red-palette, 500)};
+  // Tooltip
+  --tooltip-background-color: #eaeaea;
+  // Accordion
+  --accordion-border-color: #f4f4f4;
+  // Card
+  --card-background-color: #f4f4f4;
   // Notifications
   --notification-info-background: #{transparentize(map-get($gray-palette, 2300), 0.85)};
   --notification-error-background: #{transparentize(map-get($red-palette, 500), 0.85)};
