@@ -56,7 +56,12 @@ export function Header() {
   }, [walletAddress]);
 
   const switchThemeHandler = useCallback(() => {
-    document.body.classList.toggle('light-theme');
+    const result = document.body.classList.toggle('light-theme');
+    if (result) {
+      localStorage.setItem('theme', 'light-theme');
+    } else {
+      localStorage.setItem('theme', 'dark-theme');
+    }
   }, []);
 
   return (

@@ -31,6 +31,12 @@ i18n.use(initReactI18next).init({
   },
 });
 
+const theme = localStorage.getItem('theme');
+
+if (theme) {
+  document.body.classList.toggle(theme);
+}
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
