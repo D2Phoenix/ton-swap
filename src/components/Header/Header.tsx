@@ -62,13 +62,30 @@ export function Header() {
   return (
     <div className="header-wrapper">
       <header>
-        <a href="/" className="logo">
+        <a href="/" className="header__logo">
           <img src="/images/toncoin_symbol.svg" alt="" />
           <h4>Dex</h4>
         </a>
+        <div className="header__buttons">
+          <div className="nav-item wallet">
+            {!walletAddress && (
+              <Button variant={'secondary'} onClick={selectWalletModal.open}>
+                {t('Connect Wallet')}
+              </Button>
+            )}
+            {walletAddress && (
+              <Button variant={'secondary'} onClick={accountModal.open}>
+                {visibleWalletAddress}
+              </Button>
+            )}
+          </div>
+          <div className="nav-item theme" onClick={switchThemeHandler}>
+            <Button variant={'secondary'} icon={<SunIcon />} />
+          </div>
+        </div>
       </header>
       <NavList links={links} />
-      <div className="header-buttons">
+      <div className="header__buttons">
         {balances['TON'] && (
           <div className="nav-item balance">
             <Button variant={'primary'}>{TokenUtils.toNumberDisplay(balances['TON'], 2)} TON</Button>

@@ -8,7 +8,6 @@ import TokenUtils from 'utils/tokenUtils';
 
 import Button from 'components/Button';
 import DexForm from 'components/DexForm';
-import ChevronDownIcon from 'components/Icons/ChevronDownIcon';
 import { useModal } from 'components/Modal';
 import SelectWalletModal, { SelectWalletModalOptions } from 'components/Modals/SelectWalletModal';
 import TokenInput from 'components/TokenInput';

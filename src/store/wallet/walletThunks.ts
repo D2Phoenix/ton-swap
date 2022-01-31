@@ -6,11 +6,21 @@ import TokenInterface from 'types/tokenInterface';
 import { TransactionInterface, TxStatus } from 'types/transactionInterfaces';
 import { WalletType } from 'types/walletAdapterInterface';
 
+import StubWalletService from 'api/stubWalletService';
+import TonWalletService from 'api/tonWalletService';
+
 import { RootState } from 'store/store';
 
 export const connectWallet = createAsyncThunk('wallet/connect', async (type: WalletType, thunkAPI) => {
   const state = thunkAPI.getState() as RootState;
-  const adapter = state.wallet.adapter!;
+  let adapter = state.wallet.adapter;
+  if (adapter === null) {
+    if (type === WalletType.stubWallet) {
+      adapter = new StubWalletService();
+    } else {
+      adapter = new TonWalletService();
+    }
+  }
   const balances: Record<string, string> = {};
   const permissions: Record<string, boolean> = {};
   if (state.swap.input0.token) {
@@ -41,7 +51,7 @@ export const connectWallet = createAsyncThunk('wallet/connect', async (type: Wal
   };
 });
 
-export const disconnectWallet = createAsyncThunk('wallet/disconnect', async (request, thunkAPI) => {
+export const disconnectWallet = createAsyncThunk('wallet/disconnect', async () => {
   return true;
 });
 
