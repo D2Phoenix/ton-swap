@@ -55,6 +55,7 @@
   // Card
   --card-background-color: #{map-get($gray-palette, 2300)};
   // Notifications
+  --notification-text-color: #{map-get($gray-palette, 'white')};
   --notification-info-background: #{transparentize(map-get($gray-palette, 2300), 0.15)};
   --notification-error-background: #{transparentize(map-get($red-palette, 700), 0.15)};
   --notification-success-background: #{transparentize(map-get($green-palette, 700), 0.15)};
@@ -116,6 +117,7 @@
   // Card
   --card-background-color: #f4f4f4;
   // Notifications
+  --notification-text-color: #{map-get($gray-palette, 'white')};
   --notification-info-background: #{transparentize(map-get($gray-palette, 2300), 0.15)};
   --notification-error-background: #{transparentize(map-get($red-palette, 700), 0.15)};
   --notification-success-background: #{transparentize(map-get($green-palette, 700), 0.15)};
