@@ -21,8 +21,9 @@ import {
   selectWalletNotNotifiedTransactions,
   setNotified,
 } from './store/wallet/walletSlice';
-import { walletCheckTransactions } from './store/wallet/walletThunks';
+import { connectWallet, walletCheckTransactions } from './store/wallet/walletThunks';
 import { TxStatus, TxType } from './types/transactionInterfaces';
+import { WalletType } from './types/walletAdapterInterface';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -33,6 +34,10 @@ function App() {
 
   useEffect(() => {
     dispatch(fetchTokens());
+    const walletType = localStorage.getItem('walletType');
+    if (walletType) {
+      dispatch(connectWallet(walletType as WalletType));
+    }
   }, [dispatch]);
 
   // Update CONFIRMED transaction every {WALLET_TX_UPDATE_INTERVAL} milliseconds
