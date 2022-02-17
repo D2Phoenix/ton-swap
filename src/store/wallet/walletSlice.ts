@@ -82,6 +82,7 @@ export const walletSlice = createSlice({
       if (action.meta.arg === WalletType.tonWallet) {
         state.adapter = new TonWalletService();
       }
+      localStorage.setItem('walletType', action.meta.arg);
       state.connectionStatus = WalletStatus.CONNECTING;
     });
     builder.addCase(connectWallet.fulfilled, (state, action) => {
@@ -96,6 +97,7 @@ export const walletSlice = createSlice({
       state.address = '';
       state.balances = {};
       state.connectionStatus = WalletStatus.DISCONNECTED;
+      localStorage.removeItem('walletType');
     });
     builder.addCase(getWalletBalance.fulfilled, (state, action) => {
       state.balances[action.payload.token.symbol] = action.payload.value;
